@@ -1,0 +1,7 @@
+{
+  "song": "chaconne-excerpt (e2e fixture)",
+  "entries": [
+    { "mode": "recompose", "tabBars": [1, 4], "sourceBars": [1, 4], "note": "bars 1-4: A F# D G" },
+    { "mode": "recompose", "tabBars": [5, 8], "sourceBars": [5, 8], "note": "bars 5-8: A F# D G" }
+  ]
+}

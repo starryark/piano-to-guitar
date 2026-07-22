@@ -1,0 +1,14 @@
+\title "Declared ks c but sounds D (key-lie fixture)"
+\hideDynamics
+\track ("Piano" "Pno.") {
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 120
+    \clef g2
+    \ks c
+      D4.2 F#4.2 A4.2 D5.2 |
+      E4.2 G4.2 B4.2 E5.2 |

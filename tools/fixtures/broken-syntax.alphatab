@@ -1,0 +1,5 @@
+\title "Broken syntax — unclosed chord paren"
+\tempo 120
+.
+\ts 4 4
+(3.3 2.4 |

@@ -1,0 +1,14 @@
+{
+  "name": "piano-to-guitar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Arrange a piano score written in AlphaTex into a playable solo electric-guitar rock cover in AlphaTex.",
+  "scripts": {
+    "test": "node tools/lib/fretboard.test.mjs && node tools/lib/analysis.test.mjs && node tools/lib/piano-source.test.mjs",
+    "smoke": "node tools/smoke.mjs"
+  },
+  "dependencies": {
+    "@coderline/alphatab": "^1.5.0"
+  }
+}

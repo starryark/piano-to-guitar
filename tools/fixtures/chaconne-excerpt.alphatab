@@ -1,0 +1,61 @@
+\title "Chaconne excerpt — D|A Bm|F#m G|D G|A ground bass"
+\track ("Piano" "Pno.") {
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 120
+    \clef g2
+    \ks d
+    \voice
+      F#5.2
+      A4.2
+    |
+      E5.2
+      C#5.2
+      A4.2
+    |
+      D5.2
+      B4.2
+      G4.2
+    |
+      E5.2
+      C#5.2
+      A4.2
+    |
+      F#5.2
+      D5.2
+      A4.2
+    |
+      E5.2
+      C#5.2
+      A4.2
+    |
+      D5.2
+      B4.2
+      G4.2
+    |
+      E5.2
+      C#5.2
+      A4.2
+    |
+    \voice
+      \clef f4
+      A1.4
+    |
+      F#1.4
+    |
+      D2.4
+    |
+      G1.4
+    |
+      A1.4
+    |
+      F#1.4
+    |
+      D2.4
+    |
+      G1.4
+    |

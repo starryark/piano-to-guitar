@@ -1,0 +1,30 @@
+\title "AT218 fixture — pitched -1.N tokens where rests belong"
+\hideDynamics
+\track ("Piano" "Pno.") {
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 100
+    \accidentals auto
+    \clef g2
+    \ks d
+      r.1
+    |
+      D4.4{beam Up}
+      B3.4{beam Up}
+      -1.1.4{beam Up}
+      A4.4{beam Up}
+    |
+      G4.4{beam Up}
+      B4.4{beam Down}
+      A4.4{beam Up}
+      -1.1.4{beam Up}
+    |
+      -1.1.4{beam Down}
+      Gb5.4{beam Down}
+      A5.4{beam Down}
+      A4.4{beam Up}
+    |

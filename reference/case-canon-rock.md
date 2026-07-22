@@ -1,4 +1,8 @@
-# Case study — *Canon Rock*: what a piano→guitar rock cover actually does
+# Case study (worked example) — *Canon Rock*: what a piano→guitar rock cover actually does
+
+> **Canon Rock is the documented worked example.** The toolchain is piece-general;
+> supply your own piano source for other pieces. This file stays as the reference
+> worked example — its numbers are magnitudes to expect, not values to copy.
 
 This is a **case study of one piece**, not a rulebook. Everything below was derived from the six
 files in `CanonRock/`. No number here is a value to copy into your own arrangement; each is a

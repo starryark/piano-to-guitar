@@ -55,7 +55,7 @@ Drop `yourpiece.alphatab` into `source/` (a piano AlphaTex export is fine), then
 ```
 node tools/piano-validate.mjs source/yourpiece.alphatab   # exit 0; reports AT218 rewrites, flags a lying \ks
 node tools/piano-extract.mjs source/yourpiece.alphatab    # writes analysis/yourpiece.json + -map.md
-node tools/midi.mjs source/yourpiece.alphatab             # writes out/yourpiece.mid — listen to this
+# Audition: open source/yourpiece.alphatab in VS Code (alphaTab extension) and play it
 ```
 Read `analysis/yourpiece-map.md` (the human-readable bar map), not the raw AlphaTex file,
 and establish the source's properties from it — key, meter changes, range, which voice
@@ -78,10 +78,11 @@ node tools/check.mjs tabs/yourpiece.alphatab --map analysis/yourpiece-sidecar.js
 node tools/check.mjs tabs/yourpiece.alphatab --bars 9-16
 ```
 `check.mjs` is the **heartbeat**: it runs syntax + bar-fill validation, the playability
-check, and the fidelity gate, writes a fresh `out/*.mid`, prints one report, and exits
-nonzero if any **hard** gate fails. Only after it passes does the assistant present the
-chunk — you A/B `out/yourpiece.mid` against the source reference and give a verdict.
-Repeat until the chunk is approved, then move to the next.
+check, and the fidelity gate, prints one report, and exits nonzero if any **hard** gate
+fails. Only after it passes does the assistant present the chunk — you open
+`tabs/yourpiece.alphatab` in VS Code (alphaTab extension), A/B it against the source
+opened the same way, and give a verdict. Repeat until the chunk is approved, then move
+to the next.
 
 The span sidecar is **mandatory, not optional**: a cover expands 2–4× (the corpus's
 57-bar source became a 210-bar tab), so source and tab bar numbers do not line up and a
@@ -112,7 +113,7 @@ written N semitones above the source — derive N from the key you chose at Gate
 source/      you drop .alphatab files here (gitignored — your inputs are yours)
 analysis/    generated digests (.json) + bar maps (-map.md) (gitignored)
 tabs/        the .alphatab arrangement being built — one file per song
-out/         generated .mid for auditioning (gitignored)
+out/         scratch dir for smoke.mjs (gitignored)
 logs/        per-song verdict history
 tools/       the gate tools + tools/lib helpers + tools/fixtures + smoke.mjs
 reference/   the craft library the assistant reads to arrange

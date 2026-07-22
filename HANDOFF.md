@@ -1,5 +1,10 @@
 # Piano-to-guitar — handoff to a cold-context orchestrator (WP2b + WP3 done)
 
+> **Canon-in-D is the worked example throughout.** The toolchain is piece-general; the
+> `CanonRock/` corpus is gitignored and optional (corpus tests skip cleanly when absent —
+> see `DECISIONS-GENERALIZATION.md`). Every measured number below is a corpus magnitude,
+> not a value to copy.
+
 > **You are picking this up with no prior context. Everything you need is in this file.**
 >
 > **Earlier handoffs.** A predecessor handoff document once lived in this repo but has been
@@ -55,10 +60,11 @@ quarter-step bend values, power-of-two durations, inverted `\note.string` number
 
 ### 0.3 What WP3 changed in the tool surface
 
-- **`tools/midi.mjs`** was cut from 542 → 102 lines: the ABC branch (abcjs), the
-  `--backing` two-track mode, and `--force` are all GONE. It is now a single
-  AlphaTex→MIDI exporter serving **both** the piano source and the guitar tab. `.abc`
-  input is rejected (exit 1). One dependency: `@coderline/alphatab`.
+- **`tools/midi.mjs`** was cut from 542 → 102 lines in WP3 (the ABC branch, the
+  `--backing` two-track mode, and `--force` all deleted), then **removed entirely** in the
+  alphatab-only generalization: the VS Code alphaTab extension renders/plays `.alphatab`
+  directly, so the MIDI render path was vestigial. It was never part of the gate verdict.
+  One dependency: `@coderline/alphatab` (retained — 4 other files import it).
 - **`tools/check.mjs`** line ~113 and **`tools/compare.mjs`** line ~573: the missing-digest
   hints were reworded from `python tools/abc-extract.py …` to
   `node tools/piano-extract.mjs …`. No functional change to either tool's gate logic.
@@ -101,9 +107,8 @@ the baseline is green on your machine.
     ├─ validate.mjs              107  vendored
     ├─ playability.mjs           366  vendored
     ├─ compare.mjs               630  vendored (ABC hint reworded only)
-    ├─ check.mjs                 341  vendored (ABC hint reworded only)
-    ├─ midi.mjs                   98  [WP3]  was 542 — ABC/backing/--force deleted; single AlphaTex→MIDI exporter
-    ├─ smoke.mjs                 235  [WP3]  NEW — 7 checks
+    ├─ check.mjs                 312  vendored (ABC hint reworded; MIDI render path removed)
+    ├─ smoke.mjs                 231  [WP3]  NEW — 7 checks (check #7 MIDI-free)
     └─ fixtures/                          [WP3]  8 fixtures (committed)
         ├─ at218-pitched-rest.alphatab    3 rewrites contract
         ├─ chaconne-excerpt.alphatab      8 bars, roots A F# D G A F# D G
@@ -127,8 +132,6 @@ node tools/piano-validate.mjs "CanonRock/Canon in D/canon-in-d-easy.alphatab"
 #   -> exit 0; exactly 11 rewrites
 node tools/piano-extract.mjs "CanonRock/Canon in D/canon-in-d-hard.alphatab"
 #   -> 57 bars; melodySkeleton 57/57; harmony.root 57/57; mean pcset width 2.65
-node tools/midi.mjs "CanonRock/Canon in D/canon-in-d-hard.alphatab"
-#   -> wrote out/canon-in-d-hard.mid (source side renders)
 # WP2b width check (the gate against re-widening):
 node -e "const d=require('./analysis/canon-in-d-hard.json');const w=d.bars.map(b=>(b.harmony.pcset||[]).length);console.log('mean',(w.reduce((a,b)=>a+b,0)/w.length).toFixed(2),'max',Math.max(...w),'at7',w.filter(x=>x===7).length)"
 #   -> mean 2.65 max 4 at7 0
@@ -193,8 +196,9 @@ spec is the §C.2 subagent prompts below (W6-A, W6-B, E6).
 - **`.claude/skills/piano-to-guitar/SKILL.md`** — frontmatter `name: piano-to-guitar`,
   `allowed-tools: [Read, Write, Edit, Glob, Grep, "Bash(node tools/*)"]` (**no Python**).
   Carry the seven non-negotiable rules, reference task table, Step 0 / Gate A / Gate B /
-  Final workflow. Two changes: Step 0 = `piano-validate.mjs` → `piano-extract.mjs` → source
-  `midi.mjs`; and **the span sidecar is mandatory** (§2.2 fact 3 — a cover expands 2–4×),
+  Final workflow. Two changes: Step 0 = `piano-validate.mjs` → `piano-extract.mjs` →
+  audition the source in VS Code (alphaTab extension); and **the span sidecar is
+  mandatory** (§2.2 fact 3 — a cover expands 2–4×),
   so `check.mjs --map <sidecar>` is THE gate command and `--bars N-M` is debugging only.
 - **`gate-templates.md`** — port Gate A plan / Form plan / Groove plan / Gate B / `PROPOSAL:`
   templates. The transposition table is **craft, not corpus-derived** (§2.2 fact 1
@@ -418,7 +422,7 @@ FILE 1: SKILL.md
   and the workflow: Step 0 (ingest) / Gate A (plan, human approval) / Gate B (per-chunk ≤8
   bars, human audition) / Final (assemble + full check). TWO CHANGES from the abc version:
     - Step 0 becomes: piano-validate.mjs <source> → piano-extract.mjs <source> →
-      midi.mjs <source> (renders the reference recording).
+      audition <source> in VS Code (alphaTab extension plays .alphatab directly).
     - THE SPAN SIDECAR IS MANDATORY, not optional. A cover expands 2-4x (§2.2 fact 3:
       57 source bars → 210 tab bars), so `check.mjs <tab> --map <sidecar>` is THE gate
       command. `--bars N-M` is a debugging fallback only.
@@ -504,9 +508,10 @@ ABC residue list (abc, abcjs, abc2xml, [K:, [M:, [Q:, V:1, V:2, !ped!, !arpeggio
 only acceptable hit is "alphatab". Every other hit is a failure.
 
 AUDIT 5 — CONSISTENCY WITH REALITY. CLAUDE.md's tool table and exit contracts must match
-what the tools actually do TODAY (HANDOFF.md §A.1). In particular: midi.mjs takes ONLY
-.alphatab (no .abc, no --backing, no --force); the digest contract includes harmonySpans;
-npm test runs three suites. Flag any claim that contradicts the shipped tools.
+what the tools actually do TODAY (HANDOFF.md §A.1). In particular: there is no midi.mjs
+(it was removed — `.alphatab` is auditioned in VS Code via the alphaTab extension); the
+digest contract includes harmonySpans; npm test runs three suites. Flag any claim that
+contradicts the shipped tools.
 
 AUDIT 6 — PROVENANCE + FAIL-OPEN. Confirm CLAUDE.md states vendoring from
 abc-to-guitar@ba7e29c, local edits marked // PTG:. Confirm the fail-open warning (0/0 is a

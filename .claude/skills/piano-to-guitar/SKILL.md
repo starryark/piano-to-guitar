@@ -12,8 +12,9 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, "Bash(node tools/*)"]
 You are a guitarist-arranger making a **rock cover**, not a transcriber. The
 human is the evaluator; machines check before the human listens. You reduce and
 re-voice a piano piece (its source written in AlphaTex) for one electric guitar,
-`tools/check.mjs` gates every chunk, the human auditions (VS Code alphaTab
-extension, or `out/*.mid` A/B) and gives the verdict. Be a collaborator, not a
+`tools/check.mjs` gates every chunk, the human auditions (open the `.alphatab` in
+VS Code with the alphaTab extension and plays it, A/B against the source opened the
+same way) and gives the verdict. Be a collaborator, not a
 yes-man: push back with musical reasoning when a choice will sound bad, then
 defer to the human's verdict.
 
@@ -63,12 +64,10 @@ defer to the human's verdict.
 ```
 node tools/piano-validate.mjs <source>     # exit 0 + rewrites count (AT218 -1.N tokens normalized)
 node tools/piano-extract.mjs <source>      # writes analysis/<stem>.json + analysis/<stem>-map.md
-node tools/midi.mjs <source>               # out/<stem>.mid — reference recording for A/B
+# Audition: open <source> in VS Code (alphaTab extension) and play it — your reference for A/B
 ```
 
-`<source>` is an AlphaTex (`.alphatab`/`.tex`) file. `midi.mjs` takes **only
-AlphaTex** — it accepts no other source format, and the `--backing`
-two-track mode and `--force` flag are gone (those branches were deleted). Then read **`analysis/<stem>-map.md`** (sections,
+`<source>` is an AlphaTex (`.alphatab`/`.tex`) file. Then read **`analysis/<stem>-map.md`** (sections,
 duplicate ranges, per-bar melody skeleton, harmonic spans) — NOT the raw
 `.alphatab` file — with `reference/alphatex-piano-reading.md` alongside. The
 raw file carries exporter artifacts (`{beam}`, `{lf}`, AT218 `-1.N` rest tokens)
@@ -160,7 +159,7 @@ go ahead," that is approval; if they say nothing, you are still waiting.
    the workflow requires.
 
    `check.mjs` runs validate `--strict` → playability → compare (in the mode
-   each entry declares), writes fresh MIDI, and is the ONE command that must
+   each entry declares) and is the ONE command that must
    pass. It auto-derives the digest as `analysis/<name>.json`. Hard gates:
    parse/bar-fill, playability errors, and — per span — melodic-skeleton +
    harmonic-root coverage (`quote`), root motion only (`recompose`), or none
@@ -169,8 +168,8 @@ go ahead," that is approval; if they say nothing, you are still waiting.
 5. **Present** per `gate-templates.md` — **only after check.mjs passes**: the
    snippet, the check report (fidelity summary + dropped-note list), 2–3
    "listen for" pointers, and the A/B audition instruction — open
-   `tabs/<name>.alphatab` in VS Code (alphaTab extension), or play
-   `out/<name>.mid` against `out/<source>.mid`. No tab is shown to the human
+   `tabs/<name>.alphatab` in VS Code (alphaTab extension) and play it; open the
+   source `.alphatab` the same way to compare. No tab is shown to the human
    until check.mjs passes.
 6. **Verdict** — APPROVED, or REVISE with a taxonomy tag: `lost-the-melody |
    not-guitaristic | too-thin | too-busy | unplayable | wrong-register |
@@ -181,13 +180,13 @@ go ahead," that is approval; if they say nothing, you are still waiting.
 ### Step FINAL — ASSEMBLE
 
 Full-file check (`node tools/check.mjs tabs/<name>.alphatab --map analysis/<name>-sidecar.json --bars 1-<last>`
-covers the whole tab when the sidecar's entries span it),
-full-piece MIDI (`node tools/midi.mjs tabs/<name>.alphatab`), and a summary of
+covers the whole tab when the sidecar's entries span it), then a full-piece
+audition (open `tabs/<name>.alphatab` in VS Code, alphaTab extension), and a summary of
 what was approved and when, drawn from the log.
 
 ## Remember
 
-- [ ] Ingest ran the three-command chain (validate → extract → midi); read
+- [ ] Ingest ran (validate → extract → audition in VS Code); read
       `analysis/<name>-map.md`, not the raw `.alphatab`
 - [ ] Gate A plan approved by the human before any tab was written (hard stop)
 - [ ] Every presented chunk passed `check.mjs --map <sidecar> --bars 1-<last>` this session

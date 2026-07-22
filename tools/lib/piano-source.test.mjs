@@ -7,7 +7,7 @@
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import {
   STAFF_KIND,
   readPianoSource,
@@ -28,8 +28,19 @@ import {
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const corpus = (rel) => join(REPO, 'CanonRock', rel);
 
+// The CanonRock corpus is gitignored and optional. When absent, the corpus
+// tests below can't run (they read real source files) — so they register via
+// corpusTest, which records their names in `skipped` and exits 0 with a
+// notice instead of failing on a missing file. Portable tests always run.
+const HAVE_CORPUS = existsSync(join(REPO, 'CanonRock'));
+
 const tests = [];
 const test = (name, fn) => tests.push([name, fn]);
+const skipped = [];
+const corpusTest = (name, fn) => {
+  if (HAVE_CORPUS) tests.push([name, fn]);
+  else skipped.push(name);
+};
 
 // --- fixtures ----------------------------------------------------------
 // Minimal, hand-written, and deliberately NOT copied from the corpus, so a
@@ -73,14 +84,14 @@ const FRETTED_GUITAR = `\\track ("Gt" "Gt") {
 
 // --- reading -----------------------------------------------------------
 
-test('readPianoSource reports the encoding rather than assuming it', () => {
+corpusTest('readPianoSource reports the encoding rather than assuming it', () => {
   const r = readPianoSource(corpus('Canon in D/canon-in-d-easy.alphatab'));
   assert.equal(r.encoding, 'utf-8');
   assert.ok(r.byteLength > 0);
   assert.ok(r.text.startsWith('\\artist'));
 });
 
-test('readPianoSource decodes a non-ASCII (Korean) track name intact', () => {
+corpusTest('readPianoSource decodes a non-ASCII (Korean) track name intact', () => {
   const r = readPianoSource(corpus('Canon in D/cannon-rock-Piano.alphatab'));
   assert.ok(r.text.includes('일렉'), 'Korean track name survives the read');
   assert.ok(r.text.includes('기타'));
@@ -289,7 +300,7 @@ test('keyAccidentals treats a minor key as its relative major', () => {
 
 // --- corpus contracts (CanonRock/ is READ-ONLY) ------------------------
 
-test('CORPUS: canon-in-d-easy needs exactly 11 rewrites and then parses', () => {
+corpusTest('CORPUS: canon-in-d-easy needs exactly 11 rewrites and then parses', () => {
   const file = corpus('Canon in D/canon-in-d-easy.alphatab');
   const before = readFileSync(file);
   const r = loadPianoSource(file);
@@ -302,7 +313,7 @@ test('CORPUS: canon-in-d-easy needs exactly 11 rewrites and then parses', () => 
   assert.deepEqual(readFileSync(file), before, 'the corpus file on disk is untouched');
 });
 
-test('CORPUS: the other five files normalize to a no-op and still parse', () => {
+corpusTest('CORPUS: the other five files normalize to a no-op and still parse', () => {
   const expected = [
     ['Canon in D/canon-in-d-intermediate.alphatab', 1, [2], 102, 100, 1599],
     ['Canon in D/canon-in-d-hard.alphatab', 1, [2], 57, 120, 3023],
@@ -325,7 +336,7 @@ test('CORPUS: the other five files normalize to a no-op and still parse', () => 
   }
 });
 
-test('CORPUS: staff kinds are detected correctly across all six files', () => {
+corpusTest('CORPUS: staff kinds are detected correctly across all six files', () => {
   const expected = {
     'Canon in D/canon-in-d-easy.alphatab': ['pitched', 'pitched'],
     'Canon in D/canon-in-d-intermediate.alphatab': ['pitched', 'pitched'],
@@ -340,7 +351,7 @@ test('CORPUS: staff kinds are detected correctly across all six files', () => {
   }
 });
 
-test('CORPUS: piano voice indices are staff-global — staff 1 of canon-in-d-hard uses 4-7', () => {
+corpusTest('CORPUS: piano voice indices are staff-global — staff 1 of canon-in-d-hard uses 4-7', () => {
   // Nothing in this module keys off a voice index; this asserts WHY.
   const r = loadPianoSource(corpus('Canon in D/canon-in-d-hard.alphatab'));
   const used = r.score.tracks[0].staves.map((st) => {
@@ -365,4 +376,8 @@ for (const [name, fn] of tests) {
   }
 }
 process.stdout.write(`\n${tests.length - failed}/${tests.length} passed\n`);
+if (skipped.length) {
+  process.stdout.write(`\nSKIP: ${skipped.length} corpus test(s) (CanonRock/ absent — supply the corpus to run them):\n`);
+  for (const s of skipped) process.stdout.write(`  SKIP ${s}\n`);
+}
 process.exit(failed ? 1 : 0);

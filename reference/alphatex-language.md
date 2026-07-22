@@ -97,8 +97,8 @@ not what you want for pitched or fretted music.
 ## Multi-staff / multi-voice piano layout (the source side)
 
 A piano source is **one `\track`** containing **two `\staff { score }` blocks** — the
-right hand (RH) on a treble staff and the left hand (LH) on a bass staff. This is the
-exact shape of `canon-in-d-hard.alphatab`:
+right hand (RH) on a treble staff and the left hand (LH) on a bass staff. An instance
+is `canon-in-d-hard.alphatab`:
 
 ```
 \track ("Piano" "Pno.") { instrument acousticgrandpiano }

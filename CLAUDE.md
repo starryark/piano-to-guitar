@@ -8,8 +8,9 @@ and additions are first-class and named at the gate. A fidelity gate enforces ex
 that skeleton; every other departure from the source is *reported as information*, never
 a failure.
 
-The human auditions each chunk (an A/B against a MIDI reference) and decides. No tab is
-shown to the human until `check.mjs` passes. Follow the **`piano-to-guitar` skill**
+The human auditions each chunk (open the `.alphatab` in VS Code with the alphaTab
+extension and play it, A/B against the source opened the same way) and decides. No tab
+is shown to the human until `check.mjs` passes. Follow the **`piano-to-guitar` skill**
 (`.claude/skills/piano-to-guitar/SKILL.md`) for the gated workflow; this file is the
 orientation you read first.
 
@@ -22,8 +23,8 @@ arrangement.
 **The band decision, stated honestly.** The guitar tab is the product. The source piano
 is the *implied backing* — what the listener mentally fills in against the guitar — not a
 part the guitar has to double. There is no separate backing render in this project: the
-shipped artefact is the guitar tab plus the human's verdict on it. When you need to hear
-the source to A/B against it, render it with `midi.mjs <source>`.
+shipped artefact is the guitar tab plus the human's verdict on it. To hear the source for
+an A/B, open its `.alphatab` in VS Code (alphaTab extension) and play it.
 
 Environment: Windows, PowerShell + Bash both available. Node ESM (`"type":"module"`).
 **One runtime (Node) and one dependency (`@coderline/alphatab`).** No Python, no second
@@ -45,7 +46,7 @@ AlphaTex error **AT218** and the source will not parse.
 The fix is shipped in **`tools/lib/piano-source.mjs`**: `normalizePianoSource` rewrites
 `-1.<string>.<dur>` → `r.<dur>` in pitched staves only (a fret-hole inside a real fretted
 chord is *not* rewritten — it is reported as `skipped`, since a chord member cannot become
-a rest). On the corpus this fires **exactly 11 times on `canon-in-d-easy`** (lines 64, 74,
+a rest). Measured on the corpus this fires **11 times on `canon-in-d-easy`** (lines 64, 74,
 77, 95, 116, 121, 144, 152, 249, 263, 295) and is a byte-identical no-op on the other five
 files. The digest pipeline always normalizes **in memory** before parsing, so `piano-extract`
 is unaffected even on a raw file.
@@ -109,8 +110,9 @@ and by smoke check #2 (the bound asserted at the tool level).
 ## The workflow (one heartbeat: `check.mjs`)
 
 1. **Step 0 — Ingest** a `source/*.alphatab`: `piano-validate.mjs` → `piano-extract.mjs` →
-   audition the source with `midi.mjs`. Read the generated `analysis/<name>-map.md`, never
-   the raw AlphaTex. Establish the source's properties (below) before planning anything.
+   audition the source (open its `.alphatab` in VS Code, alphaTab extension). Read the
+   generated `analysis/<name>-map.md`, never the raw AlphaTex. Establish the source's
+   properties (below) before planning anything.
 2. **Gate A — Plan** the arrangement — register, gain, key/transpose, **target tempo,
    groove, and form** — and get the human's sign-off. Tempo, groove and form are Gate A
    *decisions* (proposed, then locked on approval), not inheritances from the source.
@@ -121,8 +123,8 @@ and by smoke check #2 (the bound asserted at the tool level).
    full-length `check.mjs` + audition.
 
 **`check.mjs` is the gate.** It runs `validate --strict` → `playability` → `compare`,
-writes fresh MIDI, prints one report, and exits nonzero iff any **HARD** gate fails.
-Never hand-run the sub-tools as the verdict; run `check.mjs`.
+prints one report, and exits nonzero iff any **HARD** gate fails. Never hand-run the
+sub-tools as the verdict; run `check.mjs`.
 
 ---
 
@@ -160,11 +162,10 @@ below for detail.
 |---|---|---|
 | **piano-validate** | `node tools/piano-validate.mjs <source.alphatab>` | Source-side validator. Normalizes in memory, parses, reports rewrites/skips, flags a `\ks` that disagrees with the sounding key. `0` clean, `1` any error (incl. "still fails after normalization"), `2` usage. **The AT218 check (§A.1):** exit `0` with `rewrites: N` means the normalizer handled the `-1.<str>.<dur>` tokens. |
 | **piano-extract** | `node tools/piano-extract.mjs <source.alphatab>` | Writes `analysis/<name>.json` (the **digest** — the contract `compare` consumes) + `analysis/<name>-map.md` (human-readable bar map). |
-| **midi** | `node tools/midi.mjs <file.alphatab> [-o out.mid]` | Single AlphaTex→MIDI exporter, serves **both** the piano source and the guitar tab. Writes `out/<name>.mid` for the A/B audition. `0` ok, `1` at least one failure, `2` usage. **Non-AlphaTex input is rejected (exit 1)** — there is no second-parser branch, no `--backing`, no `--force` (they were deleted along with the extra dependency). |
 | **validate** | `node tools/validate.mjs [--strict] <tab.alphatab>` | AlphaTex syntax + per-voice bar-fill. `1` on error; `--strict` makes fill warnings fatal (`check.mjs` always uses `--strict`). |
 | **playability** | `node tools/playability.mjs <tab> [--bars N-M] [--gain high\|crunch\|clean]` | Mechanical + gain/tonal check. Emits `errors[]` (hard) **and** `warnings[]` (soft) — but **EXITS 1 on EITHER**. Default gain `high`. See the exit-code caveat below. |
 | **compare** | `node tools/compare.mjs <tab> <digest.json> --bars N-M [--transpose N] [--json] [--map <sidecar.json>]` | **The fidelity gate.** `--bars N-M` is always required (scopes the tab range). Without `--map`: bar-locked 1:1 — HARD on melodic-skeleton + harmonic-root coverage. With `--map <sidecar.json>`: per-entry, mode-aware — `quote` enforces in-order skeleton + root motion, `recompose` enforces root motion only, `free` enforces nothing (added material). SOFT in both modes: chord quality, density %, dropped notes, contour. `0` all hard gates pass, `1` any hard-fail, `2` IO/usage or a digest missing required fields. |
-| **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--digest …] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), writes MIDI, prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. |
+| **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--digest …] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. |
 | **smoke** | `npm run smoke` | End-to-end toolchain health check (7 checks) over `tools/fixtures/`. Run after a clone or any change to `tools/`. `npm test` runs the fretboard + analysis + piano-source unit suites. |
 
 **`--transpose N` convention:** N = the tab is written N semitones **above** the source
@@ -272,5 +273,5 @@ Piano-to-guitar/
 ├─ analysis/        generated digests (.json) + bar maps (-map.md) (gitignored)
 ├─ tabs/            the growing .alphatab arrangement
 ├─ logs/            per-song verdict history
-└─ out/             generated .mid (gitignored)
+└─ out/             scratch dir for smoke.mjs (gitignored)
 ```

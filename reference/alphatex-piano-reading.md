@@ -1,6 +1,10 @@
 # Reading a piano source written in AlphaTex
 
-How to read the `.alphatab` source in `CanonRock/`. **This project consumes AlphaTex and
+> **Canon-in-D is the running example throughout.** Every rule below is general;
+> parenthesized measurements (11 rewrites, voices 4-7, …) are specific to it.
+> Substitute your own piano source.
+
+How to read a piano `.alphatab` source (illustrated on Canon-in-D). **This project consumes AlphaTex and
 never writes a piano score** — nothing here is about authoring a piano score, only about
 decoding what an exporter (MuseScore's AlphaTex writer) actually put in the file. The
 companion reference for the AlphaTex language itself is
@@ -24,8 +28,8 @@ row per bar. The map is the truth; the raw text is evidence, not a score table.
 Concretely, the raw file has:
 
 - **AT218 tokens** — `-1.<string>.<duration>{beam …}` beats inside a pitched staff that
-  are rests written as fretted notes. `canon-in-d-easy` carries 11 of them; the file
-  fails to parse outright (every one raises
+  are rests written as fretted notes. A pitched source can carry any number of them
+  (`canon-in-d-easy` carries 11); the file fails to parse outright (every one raises
   `AT218: Wrong note kind 'Fretted' for staff with note kind 'Pitched'`) until the
   normalizer rewrites each to `r.<duration>`. The map shows the rewritten rests; the raw
   file shows the broken tokens. See §2.
@@ -34,11 +38,13 @@ Concretely, the raw file has:
   but are not music.
 - **`{lf N}` / `{rf N}` fingering** annotations on individual notes. Useful context,
   but they are not pitches and do not belong in the harmonic analysis.
-- **A `\ks` that lies** — `Canon Rock 1` declares `\ks c` while sounding in D major.
-  The map reports `key` (inferred from pitch content) and `keyDeclared` side by side.
-- **A `\tempo` that lies** — `canon-in-d-easy` declares `\tempo 100` then `\tempo 25`
-  on the next line; alphaTab keeps the last, so the file nominally plays for 7:50. The
-  map's per-bar `tempo` column shows the value actually in force.
+- **A `\ks` that lies** — exporters sometimes declare the wrong key signature
+  (`Canon Rock 1` declares `\ks c` while sounding in D major). The map reports `key`
+  (inferred from pitch content) and `keyDeclared` side by side.
+- **A `\tempo` that lies** — a source can carry multiple `\tempo` directives and
+  alphaTab keeps the last (`canon-in-d-easy` declares `\tempo 100` then `\tempo 25` on
+  the next line, so the file nominally plays for 7:50). The map's per-bar `tempo`
+  column shows the value actually in force.
 
 The map is produced by `node tools/piano-extract.mjs <file.alphatab>`, which writes a
 pair to `analysis/`: `<stem>.json` (the digest `compare.mjs` consumes) and
@@ -59,7 +65,7 @@ lives in `classifyStaff` in `tools/lib/piano-source.mjs`:
 | 4 | note evidence, only when **unanimous** | pitched or fretted | all pitched tokens and no fretted → pitched; vice-versa |
 | — | mixed pitched+fretted tokens, no `\tuning`, no `tabs` | **unknown** | left alone and reported; the rewriter never fires inside an unknown staff |
 
-### The `-1` fret exclusion — why `canon-in-d-easy` resolves
+### The `-1` fret exclusion — why a pitched source resolves (illustrated on `canon-in-d-easy`)
 
 Note tokens are classified by their head atom (everything before the first `.` or `{`):
 
@@ -88,20 +94,20 @@ negativeFret: 11` is the textbook pitched-with-artifacts case.
 
 ### Combined staves (`score tabs`)
 
-`Canon Rock 1.alphatab` opens one track with `\staff { score tabs }` — a standard-
-notation staff *and* a tab staff for the same electric guitar. The classifier detects
-this as **fretted** at priority 3 (the body contains the word `tabs`), and the rewriter
-leaves it alone: a fretted staff legitimately contains `<fret>.<string>` tokens. This is
-the **output** shape you are aiming for, not a piano source; see
-[electric-guitar-voice.md](electric-guitar-voice.md) and
+A fretted source can open one track with `\staff { score tabs }` — a standard-
+notation staff *and* a tab staff for the same electric guitar (`Canon Rock 1.alphatab`
+is an instance). The classifier detects this as **fretted** at priority 3 (the body
+contains the word `tabs`), and the rewriter leaves it alone: a fretted staff legitimately
+contains `<fret>.<string>` tokens. This is the **output** shape you are aiming for, not a
+piano source; see [electric-guitar-voice.md](electric-guitar-voice.md) and
 [rock-riff-construction.md](rock-riff-construction.md).
 
 ## 2. The AT218 hazard — `-1.N` tokens and the one rewrite
 
 Inside a **pitched** staff, alphaTab locks the staff's note kind to the first pitched
 note it sees. Every subsequent fretted token then raises AT218 and the whole file fails
-to parse. Measured on `canon-in-d-easy`: 11 such tokens, 11 AT218 errors, 0 bars
-readable.
+to parse. A pitched source can carry any number of such tokens (measured on
+`canon-in-d-easy`: 11 tokens, 11 AT218 errors, 0 bars readable).
 
 Every one of those tokens has the shape `-1.<string>.<duration>` (often followed by a
 `{beam …}` tail) and sits exactly where a **rest** belongs. The normalizer's entire job
@@ -166,17 +172,15 @@ Facts you can rely on (all measured on the corpus; see
 
 ## 4. Piano voice indices are STAFF-GLOBAL — never key logic off a voice or staff index
 
-This is the trap that costs the most time. In `canon-in-d-hard`:
-
-- Treble staff (staff 0) uses voices **0, 1, 2, 3**
-- Bass staff (staff 1) uses voices **4, 5, 6, 7**
-
-Voice indices are **staff-global**: they keep counting up across staves within the same
-track, they do not reset to 0 at each staff. (Across tracks there is an additional
-`trackIndex * 100` offset; for a single-track piano source this is just `voice.index`.)
-The extractor's voice id is therefore `globalVoiceId = trackIndex * 100 + voice.index`,
-so the RH voices are `s0v0..s0v3` and the LH voices are `s1v4..s1v7` — exactly the
-labels in the corpus table in [case-canon-rock.md](case-canon-rock.md) §1.1.
+This is the trap that costs the most time. Voice indices are staff-global: they keep
+counting up across staves within the same track and do not reset to 0 at each staff.
+For example, in `canon-in-d-hard` the treble staff (staff 0) uses voices **0, 1, 2, 3**
+and the bass staff (staff 1) uses voices **4, 5, 6, 7** — the count does not reset.
+(Across tracks there is an additional `trackIndex * 100` offset; for a single-track
+piano source this is just `voice.index`.) The extractor's voice id is therefore
+`globalVoiceId = trackIndex * 100 + voice.index`, so the RH voices are `s0v0..s0v3` and
+the LH voices are `s1v4..s1v7` — exactly the labels in the corpus table in
+[case-canon-rock.md](case-canon-rock.md) §1.1.
 
 **Consequence for any logic you write:** melody and bass are chosen by **sounding
 register**, never by voice number, staff number, or track name:

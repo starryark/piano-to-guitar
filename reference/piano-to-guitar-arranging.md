@@ -360,8 +360,8 @@ about a minute together.
 
 **1. AT218 — pitched/fretted note mix.** Exporters emit `-1.<str>.<dur>` tokens (a
 fretted-style note with fret −1) inside a pitched (`score`) staff where a rest belongs.
-canon-in-d-easy has 11 of them; the normalizer in `tools/lib/piano-source.mjs` rewrites
-them to rests in memory before analysis.
+A source can carry any number of them (`canon-in-d-easy` has 11); the normalizer in
+`tools/lib/piano-source.mjs` rewrites them to rests in memory before analysis.
 > **Check:** `node tools/piano-validate.mjs <file>` — expect exit 0 and a report of
 > `"rewrites": N` (11 for canon-in-d-easy). Non-zero rewrites are expected and benign;
 > a non-zero exit or rewrites the normalizer cannot resolve is a real defect.

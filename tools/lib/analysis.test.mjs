@@ -22,6 +22,7 @@
 // is NON-ZERO. A clean 0/0 is a failure, not a success.
 
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -57,8 +58,19 @@ import {
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CORPUS = (rel) => path.join(REPO, 'CanonRock', rel);
 
+// The CanonRock corpus is gitignored and optional. When absent, the 17 E2E
+// tests below can't run (they read real source files) — so they register via
+// corpusTest, which records their names in `skipped` and exits 0 with a
+// notice instead of failing on a missing file. Portable tests always run.
+const HAVE_CORPUS = existsSync(path.join(REPO, 'CanonRock'));
+
 const tests = [];
 const test = (name, fn) => tests.push([name, fn]);
+const skipped = [];
+const corpusTest = (name, fn) => {
+  if (HAVE_CORPUS) tests.push([name, fn]);
+  else skipped.push(name);
+};
 
 /** A note as the analysis functions consume it. */
 const n = (onset, midi, beats = 0.5, name = midiName(midi, false)) => ({ onset, midi, beats, name });
@@ -657,7 +669,7 @@ test('contour_string draws / \\ = between consecutive skeleton notes', () => {
 
 let hardDigest = null;
 
-test('E2E: canon-in-d-hard extracts to a 57-bar digest', async () => {
+corpusTest('E2E: canon-in-d-hard extracts to a 57-bar digest', async () => {
   const { digest } = await extractDigest(CORPUS('Canon in D/canon-in-d-hard.alphatab'));
   hardDigest = digest;
   assert.equal(digest.bars.length, 57, 'measured: 57 bars');
@@ -666,7 +678,7 @@ test('E2E: canon-in-d-hard extracts to a 57-bar digest', async () => {
   assert.equal(digest.partCount, 1);
 });
 
-test('E2E: every top-level contract field is present (build plan §2.5)', () => {
+corpusTest('E2E: every top-level contract field is present (build plan §2.5)', () => {
   for (const key of [
     'song', 'sourceFile', 'key', 'meterInitial', 'tempoInitial', 'guitarRange',
     'pitchRange', 'rangeDeficit', 'partCount', 'pickup', 'sections',
@@ -677,7 +689,7 @@ test('E2E: every top-level contract field is present (build plan §2.5)', () => 
   assert.equal(typeof hardDigest.rangeDeficit.aboveHighCount, 'number');
 });
 
-test('E2E: every per-bar contract field is present on EVERY bar', () => {
+corpusTest('E2E: every per-bar contract field is present on EVERY bar', () => {
   const required = [
     'bar', 'sourceBarNumber', 'timeSig', 'tempo', 'tempoChanged', 'voices',
     'melodyVoice', 'bassVoice', 'melody', 'melodySkeleton', 'bass', 'bassFolded',
@@ -695,7 +707,7 @@ test('E2E: every per-bar contract field is present on EVERY bar', () => {
     Array.from({ length: 57 }, (_, i) => i + 1));
 });
 
-test('E2E: WP2b — pcset is NARROWED so the harmonic gate is not vacuous (§0.1)', () => {
+corpusTest('E2E: WP2b — pcset is NARROWED so the harmonic gate is not vacuous (§0.1)', () => {
   // The blocking defect this project shipped with (build plan §0.1): with one
   // harmony per bar, a chaconne's two chords plus passing tones merge into a
   // pcset spanning the whole D-major scale — mean width 6.33 of 12, 32 of 57
@@ -720,7 +732,7 @@ test('E2E: WP2b — pcset is NARROWED so the harmonic gate is not vacuous (§0.1
   assert.ok(worst <= 6, `widest pcset is ${worst}; expected <= 6`);
 });
 
-test('E2E: WP2b — harmonySpans carries the half-bar chords a chaconne actually has', () => {
+corpusTest('E2E: WP2b — harmonySpans carries the half-bar chords a chaconne actually has', () => {
   // harmonySpans[] is the additive contract surface WP2b ships alongside the
   // narrowed per-bar harmony. compare.mjs does not read it yet (the narrowed
   // `harmony` already fixes §0.1); it exists for the bar map and any future
@@ -740,7 +752,7 @@ test('E2E: WP2b — harmonySpans carries the half-bar chords a chaconne actually
   assert.equal(nameToPc(hardDigest.bars[0].harmony.root), 9);
 });
 
-test('E2E: NON-ZERO coverage — 57/57 melodySkeleton and 57/57 harmony.root', () => {
+corpusTest('E2E: NON-ZERO coverage — 57/57 melodySkeleton and 57/57 harmony.root', () => {
   const total = hardDigest.bars.length;
   const skel = hardDigest.bars.filter((b) => b.melodySkeleton.length > 0).length;
   const root = hardDigest.bars.filter((b) => b.harmony && b.harmony.root !== null).length;
@@ -753,7 +765,7 @@ test('E2E: NON-ZERO coverage — 57/57 melodySkeleton and 57/57 harmony.root', (
   assert.equal(root, 57, `every bar must carry a harmony.root (got ${root}/${total})`);
 });
 
-test('E2E: harmony.root over bars 1-20 reproduces the MEASURED D-major chaconne', () => {
+corpusTest('E2E: harmony.root over bars 1-20 reproduces the MEASURED D-major chaconne', () => {
   // Build plan §2.1, measured by probing the source (lowest sounding note per
   // bar). If this comes back as maj7 mush or nulls, the PORT is wrong — never
   // the source.
@@ -762,7 +774,7 @@ test('E2E: harmony.root over bars 1-20 reproduces the MEASURED D-major chaconne'
   assert.deepEqual(got, expected);
 });
 
-test('E2E: harmony.root equals the lowest sounding pitch class in EVERY bar', () => {
+corpusTest('E2E: harmony.root equals the lowest sounding pitch class in EVERY bar', () => {
   // The stronger form of the assertion above, across all 57 bars. This is what
   // the anchorBass divergence buys, and it is the property the arranger relies
   // on when reading root motion off the bar map.
@@ -778,7 +790,7 @@ test('E2E: harmony.root equals the lowest sounding pitch class in EVERY bar', ()
   assert.ok(checked >= 57, `expected all 57 bars to sound; only ${checked} did`);
 });
 
-test('E2E: melodySkeleton is a subset of melody, and both are octave-real MIDI', () => {
+corpusTest('E2E: melodySkeleton is a subset of melody, and both are octave-real MIDI', () => {
   let skeletonNotes = 0;
   for (const b of hardDigest.bars) {
     const melOnsets = new Set(b.melody.map((x) => `${x.onset}:${x.midi}`));
@@ -793,7 +805,7 @@ test('E2E: melodySkeleton is a subset of melody, and both are octave-real MIDI',
   assert.ok(skeletonNotes > 100, `expected a substantial skeleton, got ${skeletonNotes} notes`);
 });
 
-test('E2E: TRAP — no string/fret leaks onto the source side (§2.6)', () => {
+corpusTest('E2E: TRAP — no string/fret leaks onto the source side (§2.6)', () => {
   // fromAlphaTabNote() returns {string: 8, fret: -1} on a pitched note without
   // throwing. If it were ever called here, these keys would appear.
   for (const b of hardDigest.bars) {
@@ -806,7 +818,7 @@ test('E2E: TRAP — no string/fret leaks onto the source side (§2.6)', () => {
   }
 });
 
-test('E2E: TRAP — melody/bass voices come from register, and staff 1 uses voices 4-7', () => {
+corpusTest('E2E: TRAP — melody/bass voices come from register, and staff 1 uses voices 4-7', () => {
   // Measured (§2.6): staff 0 uses voices 0-3, staff 1 uses voices 4-7. If the
   // selection ever keyed off voice INDEX, bassVoice would be a low number.
   const bassVoices = new Set(hardDigest.bars.map((b) => b.bassVoice).filter((v) => v !== null));
@@ -826,7 +838,7 @@ test('E2E: TRAP — melody/bass voices come from register, and staff 1 uses voic
   }
 });
 
-test('E2E: bassFolded lifts every bass note into the guitar range', () => {
+corpusTest('E2E: bassFolded lifts every bass note into the guitar range', () => {
   let folded = 0;
   for (const b of hardDigest.bars) {
     assert.equal(b.bassFolded.length, b.bass.length, `bar ${b.bar}: 1:1 with bass[]`);
@@ -840,7 +852,7 @@ test('E2E: bassFolded lifts every bass note into the guitar range', () => {
   assert.ok(folded > 0, 'canon-in-d-hard has bass below E2; something must have folded');
 });
 
-test('E2E: durations are in QUARTER-NOTE BEATS (a whole note in 4/4 is 4.0)', () => {
+corpusTest('E2E: durations are in QUARTER-NOTE BEATS (a whole note in 4/4 is 4.0)', () => {
   const all = hardDigest.bars.flatMap((b) => b.voices.flatMap((v) => v.notes));
   assert.ok(all.length > 2000, `measured: ~3023 notes, got ${all.length}`);
   assert.ok(all.every((x) => x.beats > 0 && x.beats <= 8), 'no tick-scale durations leaked');
@@ -849,7 +861,7 @@ test('E2E: durations are in QUARTER-NOTE BEATS (a whole note in 4/4 is 4.0)', ()
   assert.ok(all.some((x) => x.beats === 4), 'whole notes read as 4.0 beats');
 });
 
-test('E2E: onsets are BAR-RELATIVE, not absolute score positions', () => {
+corpusTest('E2E: onsets are BAR-RELATIVE, not absolute score positions', () => {
   // alphaTab's beat.playbackStart is relative to its own bar. If it were ever
   // read as an absolute tick position, the last bar's onsets would be ~224
   // beats (56 bars x 4), not ~0-4. This is the assertion that catches it.
@@ -874,7 +886,7 @@ test('E2E: onsets are BAR-RELATIVE, not absolute score positions', () => {
     'measured: canon-in-d-hard bar 45 is overfull — the flag must actually fire');
 });
 
-test('E2E: the declared \\ks is reported but never trusted (§2.1 fact 3)', async () => {
+corpusTest('E2E: the declared \\ks is reported but never trusted (§2.1 fact 3)', async () => {
   assert.equal(hardDigest.key, 'D', 'inferred from pitch content');
   assert.equal(hardDigest.keyDeclared, 'D');
   assert.equal(hardDigest.keyDisagrees, false);
@@ -888,7 +900,7 @@ test('E2E: the declared \\ks is reported but never trusted (§2.1 fact 3)', asyn
   assert.equal(digest.bars.length, 210);
 });
 
-test('E2E: a multi-TRACK source is merged, not truncated (cannon-rock-Piano)', async () => {
+corpusTest('E2E: a multi-TRACK source is merged, not truncated (cannon-rock-Piano)', async () => {
   // Two tracks with Korean names (일렉 기타 / 일렉트릭 베이스). The Python
   // REFUSES more than one <part>; this port merges them, because the bass
   // track is where the root motion lives.
@@ -903,7 +915,7 @@ test('E2E: a multi-TRACK source is merged, not truncated (cannon-rock-Piano)', a
   assert.ok(withNotes > 200, 'both tracks must contribute notes');
 });
 
-test('E2E: renderMap produces a bar map with one row per bar', () => {
+corpusTest('E2E: renderMap produces a bar map with one row per bar', () => {
   const md = renderMap(hardDigest, false);
   assert.match(md, /^# Bar map -- /);
   assert.match(md, /## Sections/);
@@ -930,4 +942,8 @@ for (const [name, fn] of tests) {
   }
 }
 process.stdout.write(`\n${tests.length - failed}/${tests.length} passed\n`);
+if (skipped.length) {
+  process.stdout.write(`\nSKIP: ${skipped.length} corpus test(s) (CanonRock/ absent — supply the corpus to run them):\n`);
+  for (const s of skipped) process.stdout.write(`  SKIP ${s}\n`);
+}
 process.exit(failed ? 1 : 0);

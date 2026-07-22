@@ -123,8 +123,8 @@ Listen for:
 - <pointer 1>
 - <pointer 2>
 
-Audition: open tabs/<name>.alphatab in VS Code (alphaTab extension), or play
-out/<name>.mid against out/<source>.mid.
+Audition: open `tabs/<name>.alphatab` in VS Code (alphaTab extension) and play it.
+Open the source `.alphatab` the same way to compare.
 Verdict? APPROVED / REVISE (tag + why) / PROPOSAL (param change)
 ```
 

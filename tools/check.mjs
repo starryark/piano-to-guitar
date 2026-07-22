@@ -8,9 +8,8 @@
 //        [--map <sidecar.json>] [--json]
 //
 // Runs validate --strict -> playability -> compare in order, prints ONE
-// consolidated report, writes fresh MIDI for auditioning, and exits non-zero if
-// any HARD gate fails. The skill requires this to pass before any tab is shown
-// to the human.
+// consolidated report, and exits non-zero if any HARD gate fails. The skill
+// requires this to pass before any tab is shown to the human.
 //
 // --map <file> is passed straight through to compare.mjs and switches the
 // fidelity gate from bar-aligned to correspondence-aware mode. In map mode
@@ -21,9 +20,9 @@
 //
 // The three sub-tools are invoked as CHILD PROCESSES (never imported — they each
 // call process.exit) and their stdout JSON is parsed. validate/playability/
-// compare/midi live next to this file and are resolved relative to it, so the
-// gate works regardless of the caller's cwd. Digests, however, are resolved
-// relative to cwd (matching the `analysis/<name>.json` convention in the plan).
+// compare live next to this file and are resolved relative to it, so the gate
+// works regardless of the caller's cwd. Digests, however, are resolved relative
+// to cwd (matching the `analysis/<name>.json` convention in the plan).
 //
 // HARD vs SOFT split (get this EXACTLY right):
 //   HARD fail (=> overall exit 1) is ANY of:
@@ -42,10 +41,7 @@
 //
 // Exit codes: 0 = no hard failure, 1 = a hard gate failed, 2 = usage / IO error
 // (bad args, missing --bars, unresolvable digest, or a sub-tool that could not
-// run). MIDI writing is a convenience, never a gate: a MIDI failure is reported
-// but the hard-gate verdict stands. MIDI is still written on hard-fail runs (so
-// the human can audition a rejected take) whenever the tab actually parses; it
-// is only skipped when validate reports the tab is unparseable.
+// run).
 
 import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
@@ -54,7 +50,6 @@ import { fileURLToPath } from 'node:url';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.dirname(TOOLS_DIR);
-const OUT_DIR = path.join(REPO_ROOT, 'out');
 const tool = (name) => path.join(TOOLS_DIR, name);
 
 // ---- CLI ------------------------------------------------------------------
@@ -134,7 +129,7 @@ function run(script, args) {
 // ---- STAGE 1: validate --strict (its exit code IS trustworthy) ------------
 const V = run('validate.mjs', ['--strict', file]);
 // A hard parse failure prints { ok:false, errors:[...] } (no stats) — the tab is
-// unparseable, so playability/compare/midi cannot run meaningfully downstream.
+// unparseable, so playability/compare cannot run meaningfully downstream.
 const parseFailed = !!(V.json && V.json.errors !== undefined);
 const validateOk = V.code === 0;               // trust the exit code directly
 const validateHard = { ok: validateOk, code: V.code, parseFailed };
@@ -174,24 +169,6 @@ if (!parseFailed) {
     toolError = toolError ?? `compare.mjs produced no JSON:\n${(C.stderr || C.stdout || '').trim()}`;
   } else {
     cmpHard = { ok: C.code === 0, ...C.json };   // C.json.ok already === (code===0)
-  }
-}
-
-// ---- MIDI (convenience, never a gate) -------------------------------------
-// Written even on hard-fail runs so the human can still audition a rejected
-// take — but skipped when the tab is unparseable (midi.mjs would only fail).
-let midi = { written: false, path: null, skipped: false, error: null };
-if (parseFailed) {
-  midi.skipped = true;
-  midi.error = 'skipped — tab did not parse';
-} else {
-  const M = run('midi.mjs', [file]);
-  const midiPath = path.join(OUT_DIR, `${tabBase}.mid`);
-  if (M.code === 0 && fs.existsSync(midiPath)) {
-    midi.written = true;
-    midi.path = path.relative(REPO_ROOT, midiPath);
-  } else {
-    midi.error = (M.stderr || M.stdout || 'midi.mjs failed').trim();
   }
 }
 
@@ -249,7 +226,6 @@ const machine = {
     playability: playHard ? playHard.warnings : [],
     compare: cmpHard ? (cmpHard.mapResults ? null : cmpHard.soft) : null,
   },
-  midi,
   failReasons: hardFailReasons,
 };
 
@@ -328,11 +304,6 @@ if (cmpHard) {
 } else {
   L.push(`  compare (fidelity)   SKIPPED   (tab did not parse)`);
 }
-
-// -- midi --
-if (midi.written) L.push(`  midi                 wrote ${midi.path}`);
-else if (midi.skipped) L.push(`  midi                 SKIPPED (${midi.error})`);
-else L.push(`  midi                 FAILED to write — ${midi.error}`);
 
 L.push('');
 L.push(gateOk ? 'GATE: PASS' : `GATE: FAIL — ${hardFailReasons.join(', ')}`);

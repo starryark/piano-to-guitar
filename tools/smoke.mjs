@@ -15,8 +15,8 @@
 //
 // Modeled on abc-to-guitar/tools/smoke.mjs, but song-neutral and self-contained
 // for THIS project: no Python, no ABC, no file in source/ or analysis/ is
-// required. Generated digests and MIDI land in the gitignored out/smoke/
-// directory — never in analysis/, which holds the user's current piece. That
+// required. Generated digests land in the gitignored out/smoke/ directory —
+// never in analysis/, which holds the user's current piece. That
 // directory is wiped at the start of every run, so a stale digest from a
 // previous run can never satisfy an assertion for a broken extractor.
 
@@ -182,15 +182,15 @@ check('playability: non-adjacent strings are an error', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 7. End-to-end: check.mjs --map runs the whole pipeline and writes MIDI
+// 7. End-to-end: check.mjs --map runs the whole pipeline and reaches a verdict
 // ---------------------------------------------------------------------------
 // The acceptance criterion from the build plan: a hand-written tab + 2-entry
-// sidecar passes check.mjs end to end, with MIDI landing in out/. This is the
-// one command a human runs at every gate; if it cannot complete, the project
-// has no gate. Verifies validate -> playability -> compare -> midi in order,
-// a well-formed verdict (never exit 2, never 0/0), and a written .mid.
+// sidecar passes check.mjs end to end. This is the one command a human runs at
+// every gate; if it cannot complete, the project has no gate. Verifies validate
+// -> playability -> compare in order, and a well-formed verdict (never exit 2,
+// never 0/0).
 
-check('end-to-end: check.mjs --map passes and writes MIDI to out/', () => {
+check('end-to-end: check.mjs --map passes (validate → playability → compare)', () => {
   // The digest must be regenerated into SMOKE_OUT so the test is self-contained.
   const ex = node([tool('piano-extract.mjs'), fix('chaconne-excerpt.alphatab'), '--out', SMOKE_OUT]);
   assert(ex.code === 0, `piano-extract exit ${ex.code}`);
@@ -206,15 +206,11 @@ check('end-to-end: check.mjs --map passes and writes MIDI to out/', () => {
   assert(json?.hard?.validate?.ok === true, 'validate should pass');
   assert(json?.hard?.playability?.ok === true, 'playability should pass (no errors)');
   assert(json?.hard?.compare?.ok === true, 'compare should pass');
-  assert(json?.midi?.written === true, `MIDI should be written, got: ${JSON.stringify(json?.midi)}`);
   // The map mode result carries per-entry verdicts — both must pass.
   const mapResults = json?.hard?.compare?.mapResults ?? [];
   assert(mapResults.length === 2, `expected 2 map entries, got ${mapResults.length}`);
   assert(mapResults.every((r) => r.ok), 'every map entry should pass');
-  // MIDI file actually exists on disk.
-  const midiPath = path.join(OUT, 'e2e-tab.mid');
-  assert(fs.existsSync(midiPath), `expected MIDI at ${midiPath}`);
-  return `GATE: PASS — 2/2 map entries, MIDI written`;
+  return `GATE: PASS — 2/2 map entries`;
 });
 
 // ---------------------------------------------------------------------------

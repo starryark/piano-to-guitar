@@ -118,6 +118,7 @@ const range = parseBarRange(bars);
 // ---- pitch-class helpers --------------------------------------------------
 const pc = (midi) => (((midi % 12) + 12) % 12);
 const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+const CONTOUR_WARN_R = -0.5;   // PTG: strongly-negative Pearson => surface a recognizability warning
 
 /** Note-name string ("Eb", "F#", "Bb", "C") -> pitch class 0..11. */
 function noteNameToPc(name) {
@@ -326,6 +327,31 @@ function tabTopPcSeq(lo, hi, tabBars, transpose) {
   return seq;
 }
 
+// PTG: per-quote-entry contour, reusing proportionalSlice (root-motion alignment)
+// and pearson. Source skeleton midis vs tab top-line midis (already source-space
+// via tb.topSeq), aligned per source-bar by index — the same heuristic the
+// bar-locked contour uses (compare.mjs:532-535). Returns number|null.
+function entryContourR(entry, tabBars, digestByBar, transpose) {
+  const [tS, tE] = entry.tabBars;
+  const [sS, sE] = entry.sourceBars;
+  const src = [], tab = [];
+  const bars = [];
+  for (let b = sS; b <= sE; b++) bars.push(digestByBar.get(b));
+  const N = bars.length;
+  for (let i = 0; i < N; i++) {
+    const sk = (bars[i]?.melodySkeleton || []).map((n) => n.midi);
+    const [lo, hi] = proportionalSlice(tS, tE, i, N);
+    const tabMidi = [];
+    for (let b = lo; b <= hi; b++) {
+      const tb = tabBars.get(b);
+      if (tb) for (const m of tb.topSeq) tabMidi.push(m); // tb.topSeq is already source-space
+    }
+    const k = Math.min(sk.length, tabMidi.length);
+    for (let j = 0; j < k; j++) { src.push(sk[j]); tab.push(tabMidi[j]); }
+  }
+  return pearson(src, tab);
+}
+
 /**
  * In-order subsequence test: every element of `needle` must appear in
  * `haystack` in the same relative order (not necessarily contiguous).
@@ -423,6 +449,17 @@ if (mapPath) {
   })));
   const mapOk = mapResults.every((r) => r.ok);
 
+  // PTG: contour is SOFT/advisory — computed only for `quote` entries (the
+  // only mode carrying an in-order melodic obligation), never gates.
+  const contourWarnings = [];
+  for (const e of activeEntries) {
+    if (e.mode !== 'quote') continue;
+    const r = entryContourR(e, tabBars, digestByBar, transpose);
+    if (r !== null && r < CONTOUR_WARN_R) {
+      contourWarnings.push({ tabBars: e.tabBars, sourceBars: e.sourceBars, r: Number(r.toFixed(3)) });
+    }
+  }
+
   const mapResult = {
     ok: mapOk,
     file,
@@ -431,6 +468,7 @@ if (mapPath) {
     transpose,
     map: mapPath,
     mapResults,
+    soft: { contourWarnings },
     failures: aggregated,
   };
 
@@ -449,6 +487,12 @@ if (mapPath) {
     const tail = r.ok ? 'PASS' : `FAIL: ${r.failures[0].message}`;
     lines.push(`  ${r.mode.padEnd(9)} tabBars=[${r.tabBars.join(',')}]${tag}  ${tail}`);
     for (const f of r.failures.slice(1)) lines.push(`                     ${f.message}`);
+  }
+  // PTG: SOFT, non-gating contour advisory — quote entries whose top line runs
+  // strongly opposite the quoted source melody.
+  for (const cw of contourWarnings) {
+    lines.push(`  ~ contour  tabBars=[${cw.tabBars.join(',')}] r=${cw.r} — top line runs opposite ` +
+      `the quoted source melody; confirm this inversion is intended (soft, non-gating).`);
   }
   console.log(lines.join('\n'));
   process.exit(mapOk ? 0 : 1);
@@ -591,7 +635,8 @@ const result = {
     chordQuality: { power: powerCount, exact: exactCount },
     density: { tabNotes: tabNoteCount, sourceNotes: sourceNoteCount, percent: densityPercent },
     dropped,
-    contour: { r: contourR === null ? null : Number(contourR.toFixed(3)) },
+    contour: { r: contourR === null ? null : Number(contourR.toFixed(3)),  // PTG: + warn flag
+               warn: contourR !== null && contourR < CONTOUR_WARN_R },
   },
   failures,
 };
@@ -612,6 +657,9 @@ lines.push(`  harmonic roots     ${harmonicRoots.covered}/${harmonicRoots.total}
 lines.push(`  chord quality      ${powerCount} power-chord (major/minor neutral), ${exactCount} exact`);
 lines.push(`  density            ${densityPercent === null ? 'n/a' : `${densityPercent}%`} of source notes retained`);
 lines.push(`  contour            ${contourR === null ? 'n/a' : contourR.toFixed(2)} correlation with source top line`);
+if (contourR !== null && contourR < CONTOUR_WARN_R) {  // PTG: SOFT, non-gating contour advisory
+  lines.push(`  contour WARNING    strongly negative (r < -0.5): tab top line runs opposite the source — confirm intended (soft, non-gating).`);
+}
 if (dropped.length) {
   const cap = 8;
   const fmt = ({ bar, notes }) => {

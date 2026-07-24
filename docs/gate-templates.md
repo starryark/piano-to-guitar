@@ -1,7 +1,7 @@
 # Gate presentation templates
 
 Copy-paste these; fill the brackets. Nothing here is optional decoration — each
-block maps to a Critical Rule in `SKILL.md`.
+block maps to a Critical Rule in `docs/workflow.md`.
 
 ## Gate A — Arrangement Plan (before any tab is written; HARD STOP for approval)
 
@@ -12,16 +12,20 @@ block maps to a Critical Rule in `SKILL.md`.
 |---|---|---|
 | Key | <source key> → <target key> (<±N>) | <what the target key puts on open strings; cite the candidate table you filled> |
 | Tuning | <Standard E, unless justified> | <why standard cannot reach a required low root, if proposing otherwise> |
+| Instrument / physical | <fret count, e.g. 22> · <scale length, e.g. 25.5"> · <pickups: HH / SSS / HSS> · <whammy: fixed / floating / none> | <the physical envelope this arrangement writes inside — highest usable fret, and whether dives/floats are available> |
 | Tempo | <proposed target BPM; the source tempo is the reference point, not a lock> | <the musical reason for any move; a mid-song \tempo dip is its own decision — carry it only if the arrangement keeps that ritardando as an event> |
 | Gain / tone | <high \| crunch \| clean> | <what the material needs — definition, weight, or clarity> |
-| Section map | <section (bars N-M) → guitar role> · … | roles derived from analysis/<name>-map.md sections[] |
+| Section map | <section (bars N-M) → guitar role> · … | roles derived from projects/<slug>/source-map.md sections[] |
 | Right-hand identity | <which remedy from the remedy set, and why this texture> | per piano-to-guitar-arranging.md → "The remedy set" |
 | Technique palette | <the devices this piece actually needs> | per piano-to-guitar-arranging.md + electric-guitar-voice.md |
 | Deliberate losses | <what the reduction drops, per section> | <why one guitar cannot hold it; what is kept instead> |
 
 Every cell must be derived from this source's map — a value carried over from
 another arrangement is not a plan. `<±N>` in the Key row is the `--transpose`
-value for check.mjs; zero is a legitimate answer.
+value for check.mjs; zero is a legitimate answer. The **fret count** in the
+Instrument / physical row is mechanical, not decorative: pass it as
+`node tools/fret.mjs <note> --maxfret <count>` while writing, and any note that
+needs a fret beyond the declared limit is flagged (exit 1) before it is written.
 
 **Tempo, groove, and form are Gate A decisions, not inheritances from the
 source.** You propose a target tempo, a feel, and a section form; they are
@@ -78,9 +82,43 @@ Each span becomes one entry in the sidecar you later pass to
 `check.mjs --map`. Additions are first-class — `free` spans are named here at
 the gate, not smuggled in later.
 
-When `analysis/<name>-map.md` reports a Harmonic loop (`harmonicLoop`), plan
+When `projects/<slug>/source-map.md` reports a Harmonic loop (`harmonicLoop`), plan
 pass-by-pass texture escalation — one texture per pass, escalating toward the
 climax. See `reference/rock-riff-construction.md` → "Passes over a loop".
+
+## Sidecar template (`projects/<slug>/sidecar.json`)
+
+Initialize this at Step 0 as an empty shell, then append one entry per Gate-B
+chunk. The schema — never re-invent it mid-session:
+
+```json
+{
+  "song": "<name>",
+  "entries": [
+    { "tabBars": [1, 8],  "mode": "free",      "note": "intro riff — added material" },
+    { "tabBars": [9, 16], "mode": "quote",     "sourceBars": [1, 4], "note": "theme, stated straight" },
+    { "tabBars": [17, 24],"mode": "recompose", "sourceBars": [5, 8], "note": "chorus over the same roots" }
+  ]
+}
+```
+
+- `tabBars: [a, b]` — the inclusive tab-bar span this entry governs (required).
+- `mode` — the fidelity contract for the span (required):
+  - **`free`** — no fidelity gate; added material, the guitar's own contribution.
+    Omit `sourceBars`.
+  - **`quote`** — in-order melodic **skeleton** + harmonic **root motion** are
+    protected. Requires `sourceBars`.
+  - **`recompose`** — harmonic **root motion only** is protected (melody may be
+    re-voiced). Requires `sourceBars`.
+- `sourceBars: [c, d]` — the inclusive source-bar range this entry answers
+  (required for `quote` / `recompose`, omitted for `free`).
+- `note` — a one-line human label; also where you **name a deliberate contour
+  inversion** so the soft contour warning is pre-explained (see `docs/workflow.md`
+  Gate B, step 5).
+
+`check.mjs --map sidecar.json --bars 1-<last>` reads these entries and gates each
+span in its declared mode. Additions are first-class — a `free` span is a named
+entry here, not silent material smuggled past the gate.
 
 ## Gate A — Groove plan (table to fill alongside the arrangement plan)
 
@@ -102,7 +140,7 @@ riff at doubled tempo. See `reference/piano-to-guitar-arranging.md` →
 ## Gate B — Chunk presentation (only after check.mjs --map passes)
 
 ```
-## Bars <N>-<M> of tabs/<name>.alphatab   (check.mjs --map: PASS)
+## Bars <N>-<M> of projects/<slug>/cover.alphatab   (check.mjs --map: PASS)
 
 Intent: <one sentence tying this chunk to its section role from the plan>
 
@@ -123,7 +161,7 @@ Listen for:
 - <pointer 1>
 - <pointer 2>
 
-Audition: open `tabs/<name>.alphatab` in VS Code (alphaTab extension) and play it.
+Audition: open `projects/<slug>/cover.alphatab` in VS Code (alphaTab extension) and play it.
 Open the source `.alphatab` the same way to compare.
 Verdict? APPROVED / REVISE (tag + why) / PROPOSAL (param change)
 ```
@@ -165,7 +203,7 @@ A 0/0 covered/total is a trivial PASS (the fail-open trap): always assert the
 totals are non-zero before trusting a row. An empty span or a lost digest
 field will otherwise report success while protecting nothing.
 
-## Log entry format (`logs/<song>-sessions.md`)
+## Log entry format (`projects/<slug>/sessions.md`)
 
 ```
 ## <date> session

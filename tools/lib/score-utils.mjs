@@ -84,3 +84,18 @@ export const QUARTER_TICKS = 960;
 export function expectedBarTicks(masterBar) {
   return masterBar.timeSignatureNumerator * (4 / masterBar.timeSignatureDenominator) * QUARTER_TICKS;
 }
+
+// PTG: shared bar-fill math, extracted from validate.mjs so barfill.mjs reuses it.
+export function barTickSum(beats) {
+  let sum = 0;
+  for (const beat of beats || []) sum += beat.playbackDuration;   // raw, matches validate exactly
+  return sum;
+}
+
+// PTG: shared bar-fill math, extracted from validate.mjs so barfill.mjs reuses it.
+export function barFillOk(beats, masterBar) {
+  const actual = barTickSum(beats);
+  const expected = expectedBarTicks(masterBar);
+  const dir = actual === expected ? 'exact' : actual > expected ? 'overfull' : 'underfull';
+  return { ok: actual === expected, actual, expected, delta: actual - expected, dir };
+}

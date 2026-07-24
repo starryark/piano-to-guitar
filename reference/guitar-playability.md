@@ -42,9 +42,20 @@ yours.
 
 ## Position shifts
 
-4. Between consecutive 16th notes (or faster): **no jumps > 5 frets** on the
-   same string without a slide (`sl`/`ss`) or an intervening rest/open string.
-   At 8th-note pace, up to ~7 frets is possible; at quarter pace, anything goes.
+4. **Between consecutive 16th notes (or faster):** **no jumps > 5 frets** on the
+   same string without a slide (`sl`/`ss`) or an intervening rest/open string —
+   `playability.mjs` fails these as a `position-jump` **error** (hard).
+   **At 8th-note or slower pace** a big shift is *reachable* but is still a full
+   hand-station relocation, and the recurring trap is a **low-pedal-vs-high-stab
+   alternation** — an open-position pedal (say fret 3) answered by a stab up the
+   neck (say fret 13), so the hand ping-pongs across the neck once per eighth.
+   `playability.mjs` now raises a **`position-jump-slow` warning** when two
+   consecutive beats slower than a 16th have a `minFret` gap **> 6** with no
+   slide/hammer legato (surfaced by `check.mjs`, **non-gating** — an advisory to
+   reconsider, not a hard fail). The remedy is not to slide faster: **keep the
+   pedal inside the stab's fret position** — voice it as a *string-cross within one
+   hand station* rather than a hand-jump — or anchor one station, use an open
+   string, or slide (`sl`) the move.
 5. String skips at speed: crossing 1 string between fast notes is fine; skipping
    2+ strings between consecutive 16ths is a red flag unless it's a repeating
    pattern (pedal-point licks earn it).

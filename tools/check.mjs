@@ -99,13 +99,18 @@ if (!Number.isFinite(transposeNum)) usage(`Bad --transpose "${transpose}"; expec
 if (!fs.existsSync(file)) usage(`No tab at "${file}".`);
 
 // ---- digest resolution ----------------------------------------------------
-// Default: analysis/<tabBasename>.json derived from the tab path. --digest wins.
+// Resolution order: --digest (explicit, wins) -> co-located ./source.json next
+// to the tab (the project-local convention, projects/<slug>/) -> legacy
+// analysis/<tabBasename>.json. The first of the co-located/legacy pair that
+// exists is used.  // PTG: project-layout fallback (was analysis/-only)
 const tabBase = path.basename(file, path.extname(file));
-const digestPath = digestArg ?? path.join('analysis', `${tabBase}.json`);
+const coLocatedDigestPath = path.join(path.dirname(file), 'source.json');  // PTG: project-local convention
+const legacyDigestPath = path.join('analysis', `${tabBase}.json`);  // PTG: legacy fallback
+const digestPath = digestArg ?? (fs.existsSync(coLocatedDigestPath) ? coLocatedDigestPath : legacyDigestPath);  // PTG: new resolution order
 if (!fs.existsSync(digestPath)) {
   usage(
     `No digest at ${digestPath} — pass --digest <path> or run: ` +
-    `node tools/piano-extract.mjs source/${tabBase}.alphatab`);  // PTG: was abc-extract.py
+    `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>`);  // PTG: project-layout hint
 }
 
 // ---- map resolution -------------------------------------------------------

@@ -38,6 +38,14 @@ in [guitar-playability.md](guitar-playability.md).
 | 5 | A2 | A#2 | B2 | C3 | C#3 | D3 | D#3 | E3 | F3 | F#3 | G3 | G#3 | A3 | A#3 | B3 | C4 |
 | 6 | E2 | F2 | F#2 | G2 | G#2 | A2 | A#2 | B2 | C3 | C#3 | D3 | D#3 | E3 | F3 | F#3 | G3 |
 
+The grid runs higher than fret 15, but **only to the project's declared fret
+limit** — the fret count recorded in the Gate-A *Instrument / physical* row (`docs/gate-templates.md`).
+A 22-fret neck tops out at G5 on string 1; a 24-fret neck reaches A5. `node tools/fret.mjs
+<note> --maxfret <count>` enforces that ceiling mechanically: any note that would need a
+fret above the declared limit is flagged (exit 1) before it is written, and
+`node tools/fret.mjs <fret>.<string>` names the pitch at any position so a token is never
+hand-computed.
+
 ## Same pitch, multiple positions
 
 Every pitch above ~A2 exists in 2–4 places. Adjacent-string unison offsets:

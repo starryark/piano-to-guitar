@@ -10,7 +10,7 @@
 //      tools/check.mjs always passes --strict.
 //   2. The fill check walks EVERY voice, not just bar.voices[0]. Multi-voice
 //      bars were previously unvalidated past the first voice.
-import { loadTex, walkBeats, midiToName, expectedBarTicks } from './lib/score-utils.mjs';
+import { loadTex, walkBeats, midiToName, barFillOk } from './lib/score-utils.mjs';  // PTG: barFillOk replaces inline sum
 import { STRING_COUNT } from './lib/fretboard.mjs';
 
 const args = process.argv.slice(2);
@@ -35,18 +35,15 @@ for (const track of score.tracks) {
   for (const staff of track.staves) {
     for (const bar of staff.bars) {
       const masterBar = bar.masterBar;
-      const expected = expectedBarTicks(masterBar);
-      bar.voices.forEach((voice, vi) => {
-        if (!voice || voice.isEmpty) return;
-        let actual = 0;
-        for (const beat of voice.beats) actual += beat.playbackDuration;
-        if (actual === expected) return;
-        const dir = actual > expected ? 'overfull' : 'underfull';
+      bar.voices.forEach((voice, vi) => {                // PTG: barFillOk replaces inline sum
+        if (!voice || voice.isEmpty) return;               // unchanged guard, stays in validate
+        const fill = barFillOk(voice.beats, masterBar);
+        if (fill.ok) return;
         warnings.push({
           type: 'bar-fill',
           message: `Bar ${bar.index + 1} (track "${track.name || track.index}"` +
-            `${bar.voices.length > 1 ? `, voice ${vi}` : ''}) is ${dir}: ` +
-            `${actual}/${expected} ticks (${(actual / 960).toFixed(2)} vs ${(expected / 960).toFixed(2)} quarter beats in ` +
+            `${bar.voices.length > 1 ? `, voice ${vi}` : ''}) is ${fill.dir}: ` +
+            `${fill.actual}/${fill.expected} ticks (${(fill.actual / 960).toFixed(2)} vs ${(fill.expected / 960).toFixed(2)} quarter beats in ` +
             `${masterBar.timeSignatureNumerator}/${masterBar.timeSignatureDenominator})`,
           bar: bar.index + 1,
           voice: vi,

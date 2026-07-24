@@ -293,7 +293,7 @@ When the source is one repeating progression — a chaconne, a pop loop, a groun
 the section-form table above is not enough on its own: the guitar needs a plan for how
 the *same* harmony escalates across repetitions. The digest surfaces this directly: a
 non-null `harmonicLoop` field (`{length, firstBar, passes[], coverage, cycle[]}`,
-reported in `analysis/<name>-map.md`'s "Harmonic loop" section) means the source is
+reported in `projects/<slug>/source-map.md`'s "Harmonic loop" section) means the source is
 structurally a loop, and each entry in `passes[]` is one traversal you can assign a
 distinct texture to.
 

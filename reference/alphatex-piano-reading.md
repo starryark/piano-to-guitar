@@ -17,7 +17,7 @@ and almost every trap below exists because exporters are sloppy about the bounda
 
 ## 0. The one rule that prevents every other bug
 
-> **Read the extractor's bar map (`analysis/<stem>-map.md`), NOT the raw
+> **Read the extractor's bar map (`projects/<slug>/source-map.md`), NOT the raw
 > `.alphatab` file.**
 
 The raw file on disk is **not what the parser sees.** It carries exporter artifacts the
@@ -46,9 +46,10 @@ Concretely, the raw file has:
   the next line, so the file nominally plays for 7:50). The map's per-bar `tempo`
   column shows the value actually in force.
 
-The map is produced by `node tools/piano-extract.mjs <file.alphatab>`, which writes a
-pair to `analysis/`: `<stem>.json` (the digest `compare.mjs` consumes) and
-`<stem>-map.md` (the human-readable bar table you read). If `analysis/<stem>-map.md`
+The map is produced by
+`node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>`, which
+writes a pair into the project folder: `source.json` (the digest `compare.mjs` consumes) and
+`source-map.md` (the human-readable bar table you read). If `projects/<slug>/source-map.md`
 does not exist, **run the extractor** — do not fall back to reading the raw file.
 
 ## 1. Pitched vs fretted: the staff-kind decision
@@ -189,8 +190,7 @@ register**, never by voice number, staff number, or track name:
 - **bassVoice** = the voice with the lowest mean MIDI.
 - Track names are non-ASCII (the corpus carries Korean `일렉<NBSP>기타` with a U+00A0
   no-break space, not U+0020), so a hand-typed equality match on a track name fails;
-  never use one. See the Gotchas in [alphatex-language.md](alphatex-language.md) and
-  HANDOFF.md §0.2.
+  never use one. See the Gotchas in [alphatex-language.md](alphatex-language.md).
 
 The map prints the winning `Melody voice` and `Bass voice` once in its header (chosen by
 majority vote across bars, by register), and a per-bar `melodyVoice`/`bassVoice` in the
@@ -220,8 +220,8 @@ underlying music theory.
 
 ## 6. Summary — the source-side reading protocol
 
-1. **Do not open the raw `.alphatab`.** Open `analysis/<stem>-map.md`. If it is missing,
-   run `node tools/piano-extract.mjs <file.alphatab>` first.
+1. **Do not open the raw `.alphatab`.** Open `projects/<slug>/source-map.md`. If it is missing,
+   run `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>` first.
 2. Read the **header**: `Key (inferred)` vs `Key declared by \ks` (the disagreement
    flag is load-bearing), `Melody voice`/`Bass voice` (by register, not index), pitch
    range vs guitar range, `Tracks/parts`, `Bars`.

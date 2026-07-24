@@ -46,6 +46,7 @@ const G3 = 55;                       // ~G3: below this a 3rd muds under gain
 const SUSTAIN_TICKS = 2 * QUARTER_TICKS; // "longer than ~2 beats"
 const PICK_CEILING_NPS = 16;         // sustained single-picking ceiling, notes/sec
 const FAST_JUMP_FRETS = 5;           // position jump > this between fast notes
+const SLOW_JUMP_FRETS = 6;   // PTG: hand-station shift > this between sub-16th beats warns
 const HAMMER_MAX_FRETS = 4;          // hammer/pull reach on one string
 const BEND_MAX_QUARTERS = 4;         // max bend depth (a whole step)
 const NAT_HARMONIC_NODES = new Set([5, 7, 12, 19]);
@@ -307,6 +308,25 @@ function analyzeSequence(seq, ctx) {
             add(errors, 'position-jump',
               `Bar ${barNum}: position jump of ${jump} frets (fret ${a.minFret} -> ${b.minFret}) ` +
               `between consecutive 16th notes with no slide {sl} — unplayable at speed.`, loc);
+          }
+        }
+      }
+
+      // PTG: slow-pace hand-station jump (pedal-vs-stab). The fast check above only
+      // covers 16th+; this covers eighth/quarter pace, which forces the same big
+      // shift with more time but still a full hand reposition. WARNING only — never gates.
+      if (beat.duration < 16 && next.beat.duration < 16 && !next.beat.isRest) {
+        const a = spanOf(notes.map(({ string, fret }) => ({ string, fret })));
+        const b = spanOf(next.notes.map(({ string, fret }) => ({ string, fret })));
+        if (a.frettedCount > 0 && b.frettedCount > 0) {
+          const jump = Math.abs(b.minFret - a.minFret);
+          const legato = beatSlidesOut(beat) || notes.some((n) => n.raw.isHammerPullOrigin);
+          if (jump > SLOW_JUMP_FRETS && !legato) {
+            add(warnings, 'position-jump-slow',
+              `Bar ${barNum}: slow position jump of ${jump} frets (fret ${a.minFret} -> ${b.minFret}) ` +
+              `between consecutive beats slower than a 16th — a hand-station shift this large at ` +
+              `eighth-note pace (pedal-vs-stab) forces a big reposition; anchor one hand station, ` +
+              `use an open string, or slide {sl}.`, loc);
           }
         }
       }

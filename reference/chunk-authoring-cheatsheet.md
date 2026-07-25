@@ -43,6 +43,14 @@ Two CLIs answer the two questions that cost the most rework. Use them per bar, n
 - Exit 1 = at least one bar over/underfull. Tuplets are the usual culprit (three `{tu 3}`
   eighths fill ONE beat, not 1.5).
 
+**Versioning the loop — never lose a take.** The Gate-B command is
+`node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-N`: it runs the
+`check.mjs` gate (same report + exit code) **and** snapshots each gated iteration into
+`projects/<slug>/history/` (de-duped by content). `history.mjs list` shows the lineage,
+`history.mjs diff <a> <b>` names what changed bar-by-bar, `history.mjs restore <seq>` reverts
+non-destructively, and `history.mjs verdict <APPROVED|REVISE:tag>` records the human's call.
+Checkpoint a tab you are about to hand-edit with `history.mjs snap` first.
+
 ---
 
 ## 2. AlphaTex gotchas (verified with `validate.mjs`)

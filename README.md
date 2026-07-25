@@ -76,10 +76,15 @@ then runs the one gate command until it passes (from inside the project folder):
 ```
 cd projects/<slug>
 # THE gate command (recomposition-aware, with a span sidecar):
-node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-<last>
+node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last>
 # debugging fallback only (bar-locked 1:1, no sidecar):
 node ../../tools/check.mjs cover.alphatab --bars 9-16
 ```
+`history.mjs check` **wraps** `check.mjs` (the gate engine) — same report, same exit code —
+and additionally snapshots every gated iteration of the tab into `projects/<slug>/history/`,
+so no version is ever lost. Compare any two takes with `history.mjs diff`, and revert
+non-destructively with `history.mjs restore`. Record each human verdict with
+`history.mjs verdict <APPROVED|REVISE:tag>`.
 `check.mjs` is the **heartbeat**: it runs syntax + bar-fill validation, the playability
 check, and the fidelity gate, prints one report, and exits nonzero if any **hard** gate
 fails. Only after it passes does the assistant present the chunk — you open
@@ -102,8 +107,10 @@ one last full-length `check.mjs` + audition.
 
 ### The one command to remember
 ```
-cd projects/<slug> && node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean]
+cd projects/<slug> && node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean]
 ```
+(`history.mjs check` runs the `check.mjs` gate and versions the result; run bare `check.mjs`
+only for the `--bars`-only debugging fallback.)
 (`source.json` auto-resolves next to `cover.alphatab`; pass `--digest <path>` only to override.)
 Exit `0` = no hard failure, `1` = a hard gate failed, `2` = usage / IO error. Soft
 findings (tone advisories, reduction density, dropped notes, chord quality, contour) are
@@ -118,11 +125,12 @@ written N semitones above the source — derive N from the key you chose at Gate
 projects/<slug>/   one folder per song — ALL of it local/gitignored (a source is often
                    copyrighted and a cover is a derivative of it). Holds source.alphatab,
                    source.json, source-map.md, cover.alphatab, sidecar.json, sessions.md,
-                   scratch/. Only projects/README.md (the layout scaffold) is tracked.
+                   history/ (the local tab version store), scratch/. Only projects/README.md
+                   (the layout scaffold) is tracked.
 AGENTS.md    the canonical, vendor-neutral orientation every coding-agent CLI reads first
 docs/        the vendor-neutral workflow (workflow.md) + gate templates (gate-templates.md)
 reference/   the craft library the assistant reads to arrange
-tools/       the gate tools + tools/lib helpers + tools/fixtures + smoke.mjs
+tools/       the gate tools + history.mjs (tab version store) + tools/lib helpers + fixtures + smoke.mjs
 out/         scratch dir for smoke.mjs (gitignored)
 CanonRock/   the corpus — READ-ONLY, never write to it
 .claude/skills/piano-to-guitar/   a thin Claude Code skill that points at docs/workflow.md

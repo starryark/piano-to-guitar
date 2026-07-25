@@ -123,14 +123,18 @@ and by smoke check #2 (the bound asserted at the tool level).
    *decisions* (proposed, then locked on approval), not inheritances from the source.
 3. **Gate B — Per chunk**, declare the span's sidecar entry (mode + source-bar tie-in) in
    `projects/<slug>/sidecar.json`, write the tab bars into `projects/<slug>/cover.alphatab`,
-   then run **`check.mjs --map sidecar.json --bars 1-<last>`** until it passes, then present
-   to the human for the A/B audition and verdict. Loop.
+   then run the gate — **`history.mjs check cover.alphatab --map sidecar.json --bars 1-<last>`**
+   — until it passes, present to the human for the A/B audition and verdict, and record that
+   verdict with **`history.mjs verdict <call>`**. Loop.
 4. **Final — Assemble** the approved chunks into the full tab and give it one last
-   full-length `check.mjs` + audition.
+   full-length gate + audition.
 
-**`check.mjs` is the gate.** It runs `validate --strict` → `playability` → `compare`,
-prints one report, and exits nonzero iff any **HARD** gate fails. Never hand-run the
-sub-tools as the verdict; run `check.mjs`.
+**`check.mjs` is the gate engine; `history.mjs check` is the Gate-B command.** check.mjs runs
+`validate --strict` → `playability` → `compare`, prints one report, and exits nonzero iff any
+**HARD** gate fails. `history.mjs check` **wraps** it (identical report, args, and exit code)
+and additionally snapshots each gated iteration into `projects/<slug>/history/`, so no tab
+version is ever lost and any two can be compared (`history.mjs diff`) or recovered
+(`history.mjs restore`). Never hand-run the sub-tools as the verdict.
 
 ---
 
@@ -172,7 +176,8 @@ below for detail.
 | **playability** | `node tools/playability.mjs <tab> [--bars N-M] [--gain high\|crunch\|clean]` | Mechanical + gain/tonal check. Emits `errors[]` (hard) **and** `warnings[]` (soft) — but **EXITS 1 on EITHER**. Default gain `high`. See the exit-code caveat below. |
 | **compare** | `node tools/compare.mjs <tab> <digest.json> --bars N-M [--transpose N] [--json] [--map <sidecar.json>]` | **The fidelity gate.** `--bars N-M` is always required (scopes the tab range). Without `--map`: bar-locked 1:1 — HARD on melodic-skeleton + harmonic-root coverage. With `--map <sidecar.json>`: per-entry, mode-aware — `quote` enforces in-order skeleton + root motion, `recompose` enforces root motion only, `free` enforces nothing (added material). SOFT in both modes: chord quality, density %, dropped notes, contour. `0` all hard gates pass, `1` any hard-fail, `2` IO/usage or a digest missing required fields. |
 | **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--digest …] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. **Digest resolution:** the co-located `projects/<slug>/source.json` auto-resolves when you run from inside the project dir (`node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-N`); pass `--digest projects/<slug>/source.json` explicitly when running from repo root. |
-| **smoke** | `npm run smoke` | End-to-end toolchain health check (7 checks) over `tools/fixtures/`. Run after a clone or any change to `tools/`. `npm test` runs the fretboard + analysis + piano-source unit suites. |
+| **history** | `node tools/history.mjs <check\|snap\|verdict\|list\|diff\|show\|restore\|export> …` | **The per-project tab version store** (PTG-native). `history.mjs check <tab> [check-args…]` is the Gate-B command: it wraps `check.mjs` (same report + exit code) and de-dup-snapshots each gated iteration of `cover.alphatab`+`sidecar.json` into `projects/<slug>/history/`. `snap` checkpoints without gating; `verdict <APPROVED\|REVISE:tag>` annotates the latest version (+ a `sessions.md` stub); `list` / `diff <a> [b]` (bar-aware) / `show` / `restore <seq>` (non-destructive) / `export` manage the store. Exit `0`/`1` (mirrors check) / `2` usage. The store lives inside the gitignored project dir — local by construction. |
+| **smoke** | `npm run smoke` | End-to-end toolchain health check (7 checks) over `tools/fixtures/`. Run after a clone or any change to `tools/`. `npm test` runs the fretboard + analysis + piano-source + playability + history unit suites. |
 
 **`--transpose N` convention:** N = the tab is written N semitones **above** the source
 (a source in E♭ played on a guitar in E is `--transpose 1`). Comparison happens in source
@@ -276,6 +281,7 @@ Piano-to-guitar/
 ├─ tools/           the gate tools (table above)
 │   ├─ lib/         score-utils.mjs, fretboard.mjs (vendored);
 │   │               piano-source.mjs (AT218 normalizer), analysis.mjs (the digest)
+│   ├─ history.mjs  the per-project tab version store (PTG-native; wraps check.mjs)
 │   ├─ fixtures/    song-neutral regression corpus (see tools/smoke.mjs)
 │   └─ smoke.mjs    end-to-end health check
 ├─ projects/        one folder per song — you work inside these. ALL song content is
@@ -287,7 +293,8 @@ Piano-to-guitar/
 │       ├─ source-map.md          generated bar map
 │       ├─ cover.alphatab         the growing guitar tab (a derivative work; stays local)
 │       ├─ sidecar.json           per-span mode map the gate reads (--map)
-│       ├─ sessions.md            per-song verdict history
+│       ├─ sessions.md            per-song verdict history (prose ledger)
+│       ├─ history/               the local tab version store (log.jsonl + snapshots)
 │       ├─ reference-*.alphatab   optional reference renders (audition aids)
 │       └─ scratch/               scratch space for in-progress work
 └─ out/             scratch dir for smoke.mjs (gitignored)

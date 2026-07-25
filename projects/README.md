@@ -19,6 +19,7 @@ version them in a separate private repo.
 | `cover.alphatab` | gitignored | The growing guitar arrangement — one electric-guitar track, fretted notation. No bass track, no backing render. Chunks land here only after `check.mjs` passes. A derivative of the source, so it stays local. |
 | `sidecar.json` | gitignored | The span sidecar you write by hand: each tab span mapped to its source span, with a declared mode (`quote` / `recompose` / `free`). Input to `check.mjs --map`, not generated. |
 | `sessions.md` | gitignored | Per-song verdict history — every Gate B audition's chunk, sidecar entry, gate result, and the human's call. The record of what was *approved*, not of what was attempted. A defect the toolchain let through doesn't belong here alone — it becomes a fixture in `tools/fixtures/`, enforced by `smoke.mjs`. |
+| `history/` | gitignored | The local **tab version store**, written by `tools/history.mjs`: `log.jsonl` (one line per version, embedding its `check.mjs` gate verdict) plus immutable `<seq>-<hash>.alphatab` / `.sidecar.json` snapshots. Every gated iteration is captured (de-duped by content), so no take is ever lost; compare with `history.mjs diff`, recover with `history.mjs restore`. It is the sanctioned replacement for hand-copied `scratch/<name>-v3.alphatab` files. |
 | `scratch/` | gitignored | Throwaway working files for the current chunk. |
 
 Ingest a new source with:
@@ -28,7 +29,8 @@ node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slu
 ```
 
 Gate a chunk from inside the project (digest resolves automatically from the co-located
-`source.json`):
+`source.json`). `history.mjs check` wraps the `check.mjs` gate and versions the result into
+`history/`:
 ```
-cd projects/<slug> && node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-N
+cd projects/<slug> && node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-N
 ```

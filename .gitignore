@@ -4,7 +4,8 @@ out/
 # Song projects are LOCAL and never committed. A piano source is often copyrighted,
 # and a cover is a derivative work of it — neither belongs in this public toolchain
 # repo, which "ships no example arrangement on purpose." Everything under a project
-# slug stays local; only the scaffold README is tracked.
+# slug stays local; only the scaffold README is tracked. This includes each project's
+# history/ tab version store (tools/history.mjs) — the local record of every iteration.
 projects/*
 !projects/README.md
 

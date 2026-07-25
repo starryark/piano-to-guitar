@@ -158,8 +158,17 @@ go ahead," that is approval; if they say nothing, you are still waiting.
    - **Check the bar-sum before you commit the bar** — `node tools/barfill.mjs --frag
      "3.6.4 5.6.4 7.6.4 8.6.8 |"` catches a 3.5-beat bar (`MISMATCH (underfull by 480
      ticks)`) before it reaches the file.
-4. **Check until clean.** THE GATE COMMAND IS `check.mjs --map sidecar.json --bars 1-<last>`,
-   run from inside the project dir.
+
+   If you are about to hand-edit already-approved bars in VS Code, checkpoint first with
+   `node ../../tools/history.mjs snap --note "before <edit>"` — an uncaptured hand edit is
+   the one tab state the gate loop below does not snapshot on its own.
+4. **Check until clean.** THE GATE COMMAND IS
+   `history.mjs check cover.alphatab --map sidecar.json --bars 1-<last>`, run from inside the
+   project dir. `history.mjs check` **wraps `check.mjs`** — identical report, args, and exit
+   code — and additionally **snapshots each gated iteration** of the tab + sidecar into
+   `projects/<slug>/history/` (de-duped: an unchanged re-run adds nothing). That is how no
+   version is ever lost. `check.mjs` itself remains the underlying gate engine; run it bare
+   (`node ../../tools/check.mjs …`) only for the `--bars`-only debugging fallback.
    `--map <sidecar>` selects the gate **MODE** (correspondence-aware — it knows which
    tab bars answer which source bars). `--bars 1-<last>` always scopes the tab range to
    check and is required on every run. A cover expands 2–4× (the corpus's own measured
@@ -168,7 +177,7 @@ go ahead," that is approval; if they say nothing, you are still waiting.
    is useless for a cover. Therefore:
    ```
    cd projects/<slug>
-   node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean]
+   node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean]
    ```
    `--bars` **without** `--map` is a **debugging fallback only** (bar-locked 1:1 mode,
    for a chunk you are inspecting in isolation); it is never the gate command for a
@@ -209,12 +218,19 @@ go ahead," that is approval; if they say nothing, you are still waiting.
    (`wrong-contour` = an unexplained direction-flip against a quoted/recomposed
    source phrase; `unrecognizable` = the reduction, however clean at the gate, no
    longer reads as the source tune.)
-7. **Log it** in `projects/<slug>/sessions.md` before the next chunk.
+7. **Record the verdict.** `node ../../tools/history.mjs verdict <APPROVED|REVISE:tag>
+   --note "…"` stamps the call onto the latest snapshot and appends a one-line stub to
+   `projects/<slug>/sessions.md`; add your prose reasoning to `sessions.md` yourself (it stays
+   the human-readable ledger). To revisit an earlier take, `history.mjs list` shows the
+   lineage, `history.mjs diff <a> <b>` shows what changed bar-by-bar, and
+   `history.mjs restore <seq>` reverts to it **non-destructively** (the current state is
+   snapshotted first). This is the sanctioned replacement for hand-copying
+   `scratch/<name>-v3.alphatab` files or editing the tab in place without a backup.
 
 ### Step FINAL — ASSEMBLE
 
 Full-file check (from inside the project dir,
-`node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-<last>`
+`node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last>`
 covers the whole tab when the sidecar's entries span it), then a full-piece
 audition (open `projects/<slug>/cover.alphatab` in VS Code, alphaTab extension), and a
 summary of what was approved and when, drawn from the log.

@@ -1,0 +1,16 @@
+\title "False high octave — a recurring lower melody must outrank the artifact"
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+D5.4 E5.4 F#5.4 E5.4 |
+D5.4 E5.4 F#5.4 E5.4 |
+D5.4 E5.4 F#5.4 E5.4 |
+D5.4 E5.4 F#5.4 E5.4 |
+\voice
+r.1 |
+r.1 |
+D6.16 r.16 r.8 r.4 r.2 |
+r.1 |

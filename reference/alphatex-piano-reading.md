@@ -218,7 +218,38 @@ pcset) and `harmonySpans` (per-half-bar). See [piano-to-guitar-arranging.md](pia
 for how to use them, and [theory-composition.md](theory-composition.md) for the
 underlying music theory.
 
-## 6. Summary — the source-side reading protocol
+## 6. Noisy automatic transcriptions (Basic Pitch exports) — a different animal
+
+A MuseScore export of engraved notation and a Basic Pitch transcription of an
+audio file are both "a piano source in AlphaTex," but they lie differently.
+`node tools/source-profile.mjs <source>` decides which one you are holding
+(`sourceProfile.kind`); when it says **noisy-transcription**, hold these:
+
+- **The highest sounding voice is a CANDIDATE, not perceptual truth.** Basic
+  Pitch fragments one performance across many voices and tops it with isolated
+  octave artifacts; the digest's `melodyVoice`/`melodySkeleton` (register
+  heuristics) become diagnostics. The reviewed foreground
+  (`tools/foreground.mjs` → `foreground-map.md`) and a locked
+  `melody-contract.json` are the fidelity authority instead.
+- **Ties are dust.** One sustained note arrives as a chain of tied
+  microfragments (`E5.16 E5{t}.64 E5{t}.64 …`). The extractor coalesces chains
+  from the PARSED MODEL (never token placement): continuations are not attacks,
+  and a chain head carries the merged sounding duration. `digest.tieAudit`
+  counts the chains and their anomalies — including `intent.dropped`, the
+  tie-shaped tokens alphaTab silently turned into reattacks (a `{t}` on a pitch
+  that never sounded parses as a PLAIN NOTE, no diagnostic).
+- **A note's duration is its own** — its parsed event or tie chain, never the
+  longest simultaneous note in the gesture. `foregroundEvidence[]` keeps
+  `maxEnvelopeDuration` separate for exactly this reason.
+- **Track boundaries are not instrument boundaries.** Two pitched tracks with
+  shared attacks and overlapping registers are ONE performance
+  (`pitchedPerformanceGroups`); percussion is excluded structurally
+  (unpitched staff / channel 10 / articulation map), never by track name.
+- **Off-grid onsets are noise, not tuplets.** Raw onsets like `1.3125` are
+  kept alongside a sixteenth-grid normalization with confidence; only parsed
+  tuplet metadata makes a tuplet.
+
+## 7. Summary — the source-side reading protocol
 
 1. **Do not open the raw `.alphatab`.** Open `projects/<slug>/source-map.md`. If it is missing,
    run `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>` first.

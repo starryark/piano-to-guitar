@@ -115,9 +115,11 @@ and by smoke check #2 (the bound asserted at the tool level).
 ## The workflow (one heartbeat: `check.mjs`)
 
 1. **Step 0 — Ingest** a `projects/<slug>/source.alphatab`: `piano-validate.mjs` →
-   `piano-extract.mjs` → audition the source (open its `.alphatab` in VS Code, alphaTab
-   extension). Read the generated `projects/<slug>/source-map.md`, never the raw AlphaTex.
-   Establish the source's properties (below) before planning anything.
+   `piano-extract.mjs` → `source-profile.mjs` → audition the source (open its `.alphatab`
+   in VS Code, alphaTab extension). Read the generated `projects/<slug>/source-map.md`,
+   never the raw AlphaTex. Establish the source's properties (below) before planning
+   anything. **If the profile says noisy transcription**: run `foreground.mjs`, review
+   the ambiguous bars, and lock a `melody-contract.json` before drafting.
 2. **Gate A — Plan** the arrangement — register, gain, key/transpose, **target tempo,
    groove, and form** — and get the human's sign-off. Tempo, groove and form are Gate A
    *decisions* (proposed, then locked on approval), not inheritances from the source.
@@ -171,13 +173,17 @@ below for detail.
 | Tool | Command | Exit contract |
 |---|---|---|
 | **piano-validate** | `node tools/piano-validate.mjs <source.alphatab>` | Source-side validator. Normalizes in memory, parses, reports rewrites/skips, flags a `\ks` that disagrees with the sounding key. `0` clean, `1` any error (incl. "still fails after normalization"), `2` usage. **The AT218 check (§A.1):** exit `0` with `rewrites: N` means the normalizer handled the `-1.<str>.<dur>` tokens. |
-| **piano-extract** | `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>` | Writes `projects/<slug>/source.json` (the **digest** — the contract `compare` consumes) + `projects/<slug>/source-map.md` (human-readable bar map). The `--out <dir>` flag targets the project folder; because the source stem is `source`, the outputs land as `source.json` / `source-map.md` automatically. |
+| **piano-extract** | `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>` | Writes `projects/<slug>/source.json` (the **digest** — the contract `compare` consumes) + `projects/<slug>/source-map.md` (human-readable bar map). The `--out <dir>` flag targets the project folder; because the source stem is `source`, the outputs land as `source.json` / `source-map.md` automatically. **Multi-source ingest:** `--manifest <source-set.json>` extracts several independent transcriptions of the same piece (`{ sources: [{file, role, weight}] }`) and writes a `source-set.report.json` alongside the digests. |
+| **source-profile** | `node tools/source-profile.mjs <source.alphatab> [--json]` | **Gate A source-reliability report** (PTG-native). Classifies the source as clean notation vs noisy automatic transcription from STRUCTURE (voice fragmentation, isolated octave artifacts, tied microfragments, off-grid onsets), groups tracks/voices that are fragments of ONE performance, and excludes percussion on structural evidence (unpitched staff / channel 10 / articulation map) — never the track name. Exit `0` when parsed, `1` parse fail, `2` usage. A report, not a gate. |
+| **foreground** | `node tools/foreground.mjs <digest.json> [more-digests…] [--out <dir>] [--bars N-M]` | **Perceptual-foreground candidates** (PTG-native). Scores candidate melody lines per bar from the digest's attack graph — continuity, recurrence across returning bars, cross-source agreement, rhythm, contour — and writes `foreground.json` + `foreground-map.md` with ALTERNATIVES and confidence, never a silent decision. Extra digests = independent transcriptions of the same piece; agreement raises confidence, disagreement stays visible. Ambiguous bars are listed for Gate A. Exit `0` ok, `1` unusable digest, `2` usage. |
+| **contract-validate** | `node tools/contract-validate.mjs <melody-contract.json> [--digest <source.json>] [--json]` | **Melody-contract validator** (PTG-native; schema in `tools/lib/contract.mjs`). Fails closed on contradictions, nonexistent bars, impossible relocated pitches, invalid duration policies, relocation groups cutting a phrase without justification, required events whose only evidence is a tied continuation, and vacuous contracts. `0` valid, `1` invalid, `2` usage/IO. |
+| **tab-events** | `node tools/tab-events.mjs <file.alphatab> [--bars N-M] [--json]` | **Parser-grounded event inspector** (PTG-native): what alphaTab ACTUALLY parsed, not what the AlphaTex text appears to mean. Per bar/onset: MIDI+name, string/fret, duration, tie origin/destination, ATTACK vs CONTINUATION (chain sounding duration on heads), brush/arpeggio, hammer/pull/slide, vibrato/let-ring, tuplet ratio — plus a text-vs-model tie audit (`!! N tie-shaped token(s) parsed as fresh attacks`). **Mandatory whenever ties, cross-bar sustains, or unusual effects are introduced.** `0` ok, `1` parse fail, `2` usage. |
 | **validate** | `node tools/validate.mjs [--strict] <tab.alphatab>` | AlphaTex syntax + per-voice bar-fill. `1` on error; `--strict` makes fill warnings fatal (`check.mjs` always uses `--strict`). |
-| **playability** | `node tools/playability.mjs <tab> [--bars N-M] [--gain high\|crunch\|clean]` | Mechanical + gain/tonal check. Emits `errors[]` (hard) **and** `warnings[]` (soft) — but **EXITS 1 on EITHER**. Default gain `high`. See the exit-code caveat below. |
-| **compare** | `node tools/compare.mjs <tab> <digest.json> --bars N-M [--transpose N] [--json] [--map <sidecar.json>]` | **The fidelity gate.** `--bars N-M` is always required (scopes the tab range). Without `--map`: bar-locked 1:1 — HARD on melodic-skeleton + harmonic-root coverage. With `--map <sidecar.json>`: per-entry, mode-aware — `quote` enforces in-order skeleton + root motion, `recompose` enforces root motion only, `free` enforces nothing (added material). SOFT in both modes: chord quality, density %, dropped notes, contour. `0` all hard gates pass, `1` any hard-fail, `2` IO/usage or a digest missing required fields. |
+| **playability** | `node tools/playability.mjs <tab> [--bars N-M] [--gain high\|crunch\|clean] [--policy <guitar-policy.json>] [--warnings-as-errors]` | Mechanical + gain/tonal check. Emits `errors[]` (hard) **and** `warnings[]` (soft) — but **EXITS 1 on EITHER**. Default gain `high` (a policy's `gain` applies when `--gain` is absent). **`--policy`** adds project texture constraints: exact `maxFret`, `fastAttackMaxNotes` at/below `fastAttackThreshold` beats, `maxSimultaneousNotes`, brush/roll/mute bans, rapid-repeated-grip, preferred fret span (soft). **Tie integrity is always on**: a tie-shaped token that parsed into a fresh attack (`tie-without-origin`) or a pitch-changing chain is an error. **`--warnings-as-errors`** escalates soft advisories into `errors[]` (the channel check.mjs gates on) for zero-warning approval policies. |
+| **compare** | `node tools/compare.mjs <tab> <digest.json> --bars N-M [--transpose N] [--json] [--map <sidecar.json>] [--contract <melody-contract.json>]` | **The fidelity gate.** `--bars N-M` is always required (scopes the tab range). Without `--map`: bar-locked 1:1 — HARD on melodic-skeleton + harmonic-root coverage. With `--map <sidecar.json>`: per-entry, mode-aware — `quote` enforces in-order skeleton + root motion, `recompose` enforces root motion only, `free` enforces nothing (added material), **`contract`** enforces a melody-contract phrase (octave-exact pitches under relocation, phrase order, minimum sounding durations, DISTINCT repeated attacks, required gaps, forbidden textures) plus root motion, **`contract-recompose`** the same with harmony relaxed. The contract file comes from `--contract` or the sidecar's top-level `"contract"` path and is fully validated before any gate runs — invalid/vacuous = exit 2, and a contract span reports non-zero obligation totals or FAILS (anti-vacuity). SOFT in all modes: chord quality, density %, dropped notes, contour. `0` all hard gates pass, `1` any hard-fail, `2` IO/usage or a digest missing required fields. |
 | **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--digest …] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. **Digest resolution:** the co-located `projects/<slug>/source.json` auto-resolves when you run from inside the project dir (`node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-N`); pass `--digest projects/<slug>/source.json` explicitly when running from repo root. |
-| **history** | `node tools/history.mjs <check\|snap\|verdict\|list\|diff\|show\|restore\|export> …` | **The per-project tab version store** (PTG-native). `history.mjs check <tab> [check-args…]` is the Gate-B command: it wraps `check.mjs` (same report + exit code) and de-dup-snapshots each gated iteration of `cover.alphatab`+`sidecar.json` into `projects/<slug>/history/`. `snap` checkpoints without gating; `verdict <APPROVED\|REVISE:tag>` annotates the latest version (+ a `sessions.md` stub); `list` / `diff <a> [b]` (bar-aware) / `show` / `restore <seq>` (non-destructive) / `export` manage the store. Exit `0`/`1` (mirrors check) / `2` usage. The store lives inside the gitignored project dir — local by construction. |
-| **smoke** | `npm run smoke` | End-to-end toolchain health check (7 checks) over `tools/fixtures/`. Run after a clone or any change to `tools/`. `npm test` runs the fretboard + analysis + piano-source + playability + history unit suites. |
+| **history** | `node tools/history.mjs <check\|snap\|verdict\|final-review\|list\|diff\|show\|restore\|export> …` | **The per-project tab version store** (PTG-native). `history.mjs check <tab> [check-args…]` is the Gate-B command: it wraps `check.mjs` (same report + exit code) and de-dup-snapshots each gated iteration of `cover.alphatab`+`sidecar.json` — **plus the melody contract, guitar policy, machine gate report, and foreground.json in force** — into `projects/<slug>/history/`, recording `contractHash`/`policyHash` so an old PASS stays reproducible after a contract edit (an edit is a distinct iteration by construction). `snap` checkpoints without gating; `verdict <APPROVED\|REVISE:tag> [--recognizability A] [--playability-review A]` annotates the latest version (+ a `sessions.md` stub); **`final-review <tab>`** assembles the end-of-project evidence (themes, sections, relocations, fastest events, tuplets, long arrivals, multi-note attacks, tie audit, per-chunk gate/verdict status, contract drift) without replacing the human audition; `list` / `diff <a> [b]` (bar-aware) / `show` / `restore <seq>` (non-destructive) / `export` manage the store. Exit `0`/`1` (mirrors check) / `2` usage. The store lives inside the gitignored project dir — local by construction. |
+| **smoke** | `npm run smoke` | End-to-end toolchain health check (16 checks) over `tools/fixtures/`. Run after a clone or any change to `tools/`. `npm test` runs the fretboard + analysis + piano-source + ties + foreground + contract + playability + history unit suites. |
 
 **`--transpose N` convention:** N = the tab is written N semitones **above** the source
 (a source in E♭ played on a guitar in E is `--transpose 1`). Comparison happens in source
@@ -222,7 +228,13 @@ transposes.** If you propose a transposition, argue it from the fretboard, not f
 - **The digest JSON is a contract — field names are stable.**
   Top-level: `{ song, sourceFile, key, keyFifths, keyMode, keyConfidence, keyDeclared,
   keyDeclaredFifths, keyDisagrees, meterInitial, tempoInitial, guitarRange, pitchRange,
-  rangeDeficit, partCount, pickup, sections[], duplicateRanges[], bars[], harmonicLoop }`.
+  rangeDeficit, partCount, pickup, sections[], duplicateRanges[], bars[], harmonicLoop,
+  tieAudit, sourceProfile }`. `tieAudit` counts tie chains and their anomalies
+  (microfragment chains, ties across silence, orphan continuations, and
+  `intent.dropped` — tie-shaped tokens the parser silently turned into
+  reattacks). `sourceProfile` is `{ kind: 'clean-notation'|'noisy-transcription',
+  pitchedPerformanceGroups[], excludedTracks[], noiseSignals{} }` — the Gate A
+  source-reliability evidence, computed structurally (never from track names).
   `harmonicLoop` is `{length, firstBar, passes[], coverage, cycle[]} | null` — when present
   it is a strong planning signal (plan one texture per pass, escalating toward the climax —
   see `reference/rock-riff-construction.md` → "Passes over a loop"); when null, the
@@ -230,13 +242,34 @@ transposes.** If you propose a transposition, argue it from the fretboard, not f
   detector, not a guarantee.
   Per-bar: `{ bar, sourceBarNumber, timeSig, tempo, tempoChanged, voices[], melodyVoice,
   bassVoice, melody[], melodySkeleton[], bass[], bassFolded[],
-  harmony{root,quality,symbol,pcset}, harmonySpans[], flags[] }` (plus `pickup` on an
-  anacrusis). `harmonySpans[]` is the additive WP2b field carrying **both** half-bar chords
-  (`{root,quality,symbol,pcset}` each) — `compare.mjs` does not read it; it is contract
-  surface for the bar map and any future finer gate. Durations are in **quarter-note
-  beats**. `melodySkeleton` = structural notes only (strong beat OR ≥1 beat OR a contour
-  turning point) — this is what the gate protects, and its strong beats are derived from
-  the meter, not by halving the bar.
+  harmony{root,quality,symbol,pcset}, harmonySpans[], foregroundEvidence[], flags[] }`
+  (plus `pickup` on an anacrusis). `harmonySpans[]` is the additive WP2b field carrying
+  **both** half-bar chords (`{root,quality,symbol,pcset}` each) — `compare.mjs` does not
+  read it; it is contract surface for the bar map and any future finer gate. Durations
+  are in **quarter-note beats**. `melodySkeleton` = structural notes only (strong beat
+  OR ≥1 beat OR a contour turning point) — this is what the gate protects, and its
+  strong beats are derived from the meter, not by halving the bar.
+- **Melody/bass/skeleton are TIE-COALESCED; `voices[].notes` is the raw evidence.**
+  A tie continuation is not an attack: it never becomes a melody/bass/skeleton event,
+  and a chain head carries the chain's merged **sounding duration** (its own pitch's
+  duration, never the group envelope). The raw fragments — every parsed note, with
+  `tied`, `attack:false` on continuations, `tieChainId`, and `soundingBeats` +
+  `notatedFragments` on heads — stay in `voices[].notes` untouched. Tie-free sources
+  are byte-identical through both paths.
+- **`foregroundEvidence[]` is the per-bar attack graph** (one gesture per raw onset,
+  across every pitched voice): each gesture carries raw `onset` + `normalizedOnset`
+  (sixteenth grid) + `displacement` + `normalizationConfidence`, its `notes[]` (each
+  with its OWN tie-merged `duration`, track, voice), `maxEnvelopeDuration` (recorded
+  separately so nothing assigns it to a pitch), `sounding[]` (pitches held over the
+  onset), and `tuplet` only from real parsed tuplet metadata — an irregular offset is
+  never classified as a tuplet. This is what `foreground.mjs` scores and what the
+  melody contract's evidence checks read.
+- **Noisy-transcription doctrine (Improve_Plan):** on a `sourceProfile.kind =
+  noisy-transcription` source, `melodyVoice`/`melodySkeleton` are diagnostics, not
+  perceptual truth — review `foreground-map.md`, lock a `melody-contract.json`
+  (validated by `contract-validate.mjs`), and gate those spans with sidecar mode
+  `contract`. `free` means added material, never "the extractor disagrees." The
+  doctrine list lives in `docs/workflow.md` → "Doctrine for noisy transcriptions".
 
 ---
 
@@ -280,7 +313,9 @@ Piano-to-guitar/
 ├─ CanonRock/       the corpus — READ-ONLY, never write to it
 ├─ tools/           the gate tools (table above)
 │   ├─ lib/         score-utils.mjs, fretboard.mjs (vendored);
-│   │               piano-source.mjs (AT218 normalizer), analysis.mjs (the digest)
+│   │               piano-source.mjs (AT218 normalizer), analysis.mjs (the digest),
+│   │               ties.mjs (tie chains), foreground.mjs (candidate scoring),
+│   │               contract.mjs (melody-contract schema + validator)
 │   ├─ history.mjs  the per-project tab version store (PTG-native; wraps check.mjs)
 │   ├─ fixtures/    song-neutral regression corpus (see tools/smoke.mjs)
 │   └─ smoke.mjs    end-to-end health check

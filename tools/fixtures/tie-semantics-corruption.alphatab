@@ -1,0 +1,7 @@
+\title "Tie corruption — a dash tie with no origin parses as an open-string attack"
+\tempo 120
+.
+\ts 4 4
+2.3.2 -.3.2 |
+2.3.4 r.4 r.2 |
+-.5.2 r.2 |

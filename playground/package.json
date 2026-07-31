@@ -1,0 +1,14 @@
+{
+  "name": "piano-to-guitar-playground",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Web playground: paste AlphaTex → gate report beside live notation. Self-contained sibling of the tools/ CLIs.",
+  "scripts": {
+    "start": "node serve.mjs",
+    "smoke": "node smoke.mjs"
+  },
+  "dependencies": {
+    "@coderline/alphatab": "^1.5.0"
+  }
+}

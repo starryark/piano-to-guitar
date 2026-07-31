@@ -1,0 +1,2644 @@
+\track ("Electric Piano" "el.pno.") {
+  volume 15
+  balance 8
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 120
+    \accidentals auto
+    \clef g2
+    \ottava regular
+    \simile none
+    \ks aminor
+      r.2{dy f instrument acousticgrandpiano}
+      r.8
+      r.16
+      r.32{d}
+      Db4{acc #}.16{dy mp beam Up beam merge}
+      Db4{t}.64{beam Up beam merge}
+      D4.16{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4.16{d beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+    |
+      D4.8{dy f beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      E4.8{dy mp beam Up beam merge}
+      E4{t}.32{d beam Up beam merge}
+      D4.8{dy f beam Up beam merge}
+      D4.8{beam Up beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.32{d beam split}
+    |
+      r.16{beam split}
+      r.32{d beam split}
+      Db4{acc #}.16{beam Up beam merge}
+      Db4{t}.64{beam Up beam merge}
+      D4.16{dy ff beam Up beam split}
+      D4{t}.8{d beam Up beam merge}
+      F4.16{dy f beam Up beam split}
+      F4{t}.64{beam Up beam merge}
+      Gb4{acc #}.8{d beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.16{d dy ff beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      G4.8{dy f beam Up beam merge}
+      G4{t}.32{d beam Up beam split}
+    |
+      r.8{beam split}
+      r.64{beam split}
+      Gb4{acc #}.16{d dy pp beam Up beam merge}
+      Gb4{t}.64{beam Up beam split}
+      r.32{beam split}
+      B4.16{dy p beam Up beam merge}
+      (B4{t} G4).16{beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      Bb4{acc #}.16{dy mf beam Up beam merge}
+      G4.64{dy mp beam Up beam split}
+      (G4{t} B4).16{beam Up beam merge}
+      (B4{t} G4).16{beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      (B4{t} G4).64{beam Up beam merge}
+      G4{t}.16{dy ff beam Up beam merge}
+      (G4{t} E4).32{beam Up beam split}
+      (E4{t} G4).16{dy p beam Up beam merge}
+      G4{t}.16{dy mf beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      D4.16{d dy f beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+    |
+      D4{t}.16{beam Up beam merge}
+      Gb4{acc #}.32{dy mp beam Up beam merge}
+      (Gb4{t} E4).32{d beam Up beam merge}
+      (E4{t} G4).16{d dy p beam Up beam merge}
+      G4{t}.16{dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (D4 Gb4).8{d beam Up beam split}
+      (E4 G4).8{beam Up beam merge}
+      (E4{t} G4{t}).32{d beam Up beam merge}
+      A4.8{beam Up beam merge}
+      A4{t}.32{d beam Down beam merge}
+      Ab4{acc #}.32{dy p beam Down beam merge}
+      (Ab4{t} Gb4).32{beam Down beam merge}
+      Gb4{t}.64{dy mp beam Down beam merge}
+      (Gb4{t} A4 A5).16{beam Down beam merge}
+      (Gb4{t} A4{t} A5{t}).64{beam Down beam split}
+    |
+      (Gb4{t acc #} A4{t}).16{beam Down beam merge}
+      (Gb4{t} A4{t}).64{beam Down beam merge}
+      (Gb4{t} A4{t} A5).8{beam Down beam merge}
+      (Gb4{t} A4{t} A5{t}).8{beam Down beam merge}
+      (Gb4{t} A4{t} A5{t}).32{d beam Down beam split}
+      r.32{d beam split}
+      (A4{t} A5{t}).16{beam Down beam merge}
+      (A4{t} A5{t}).64{beam Down beam split}
+      A4{t}.32{dy ff beam Up beam split}
+      r.4{beam split}
+      r.64{beam split}
+      B4.16{d dy pp beam Up beam merge}
+      A4.16{d dy mf beam Up beam merge}
+      A4{t}.64{beam Up beam split}
+    |
+      r.32{d beam split}
+      Gb4{acc #}.16{dy f beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.8{beam Up beam split}
+      G4{t}.4{beam Up beam split}
+      r.16{beam split}
+      G4.8{d dy p beam Up beam split}
+      r.4{beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{dy pp beam split}
+    |
+      r.1{beam split}
+    |
+      r.2{dy p beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.32{d beam split}
+      D4.32{dy mp beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+    |
+      D4{t}.32{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4{t}.8{beam Up beam merge}
+      D4.16{d beam Up beam merge}
+      D4{t}.8{d beam Up beam merge}
+      D4{t}.32{beam Up beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      D4.32{d beam Up beam merge}
+      D4{t}.16{beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.4{beam split}
+      r.32{beam split}
+    |
+      r.1{dy pp beam split}
+    |
+      r.4{d beam split}
+      D4.8{dy f beam Up beam split}
+      D4{t}.32{d beam Up beam merge}
+      D4.8{dy ff beam Up beam merge}
+      D4.8{dy f beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      E4.16{beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      E4.16{d beam Up beam split}
+    |
+      r.16{dy mf beam split}
+      r.64{beam split}
+      Gb4{acc #}.16{d dy f beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.16{d dy fff beam Up beam merge}
+      G4.16{dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (G4{t} Db4{acc #}).32{beam Up beam merge}
+      Db4{t}.32{d dy p beam Up beam merge}
+      D4.16{dy f beam Up beam split}
+      D4{t}.4{beam Up beam split}
+      r.8{beam split}
+      r.16{beam split}
+      r.64{beam split}
+      G4.32{d beam Up beam split}
+    |
+      G4{t}.32{beam Up beam merge}
+      G4.8{d dy mp beam Up beam merge}
+      G4{t}.32{beam Up beam split}
+      r.64{beam split}
+      E4.8{dy f beam Up beam merge}
+      D4.16{dy ff beam Up beam merge}
+      D4.8{dy f beam Up beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.32{d beam split}
+    |
+      r.1{beam split}
+    |
+      r.64{beam split}
+      D4.8{beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+      r.2{beam split}
+      r.4{beam split}
+      r.16{beam split}
+    |
+      r.2{dy mf beam split}
+      r.4{beam split}
+      r.16{beam split}
+      r.64{beam split}
+      G4.32{d dy mp beam Up beam merge}
+      (G4{t} D4).16{d beam Up beam merge}
+      (G4{t} D4{t}).64{beam Up beam merge}
+      D4{t}.64{dy f beam Up beam split}
+    |
+      (D4{t} G4).32{d dy p beam Up beam merge}
+      (G4{t} D4).16{d beam Up beam merge}
+      (G4{t} D4{t}).64{beam Up beam merge}
+      (G4{t} D4).16{d beam Up beam split}
+      D4.16{dy f beam Up beam merge}
+      G4.32{d dy mf beam Up beam merge}
+      (G4{t} E4).8{beam Up beam merge}
+      (A4 Gb4{acc #}).8{d beam Up beam merge}
+      (A4{t} Gb4{t}).64{beam Up beam merge}
+      (B4 G4).8{d dy p beam Up beam merge}
+      (B4{t} G4{t}).32{d beam Up beam merge}
+      (C5 G4).16{dy mp beam Up beam merge}
+      (C5{t} G4{t}).64{beam Up beam split}
+    |
+      (C5{t} G4{t}).4{beam Up beam split}
+      G4{t}.8{d dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (B4 G4).8{dy mf beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      A4.32{dy f beam Up beam merge}
+      (A4{t} C5).32{beam Up beam merge}
+      C5{t}.64{dy p beam Up beam merge}
+      (C5{t} A4).8{beam Up beam merge}
+      (C5{t} A4{t}).64{beam Up beam merge}
+      A4{t}.8{dy mf beam Up beam merge}
+      A4{t}.64{beam Up beam merge}
+      D4.32{d dy f beam Up beam split}
+    |
+      D4{t}.64{beam Up beam merge}
+      (G4 Eb4{acc #}).8{d beam Up beam merge}
+      (G4{t} Eb4{t}).32{d beam Up beam split}
+      Eb4{t}.32{beam Up beam merge}
+      D4.32{d beam Up beam merge}
+      (D4{t} Gb4{acc #}).8{beam Up beam merge}
+      (D4{t} Gb4{t}).64{beam Up beam merge}
+      (D4{t} Gb4).64{beam Up beam merge}
+      (Gb4{t} D4).8{dy mf beam Up beam merge}
+      (Gb4{t} D4).16{beam Up beam merge}
+      (Gb4{t} D4{t}).64{beam Up beam merge}
+      D4{t}.64{dy f beam Up beam merge}
+      E4.8{dy mf beam Up beam merge}
+      E4{t}.32{d beam Up beam merge}
+      G4.64{dy f beam Up beam merge}
+      (G4{t} B4).32{d beam Up beam merge}
+      B4{t}.64{dy mf beam Up beam merge}
+      (B4{t} G4).32{d beam Up beam split}
+    |
+      (B4{t} G4{t}).16{beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.8{dy f beam Up beam merge}
+      G4{t}.32{d beam Up beam split}
+      r.16{beam split}
+      r.64{beam split}
+      (Db4{acc #} G4).8{beam Up beam merge}
+      (Db4{t} G4{t}).32{d beam Up beam split}
+      r.2{beam split}
+    |
+      r.2{dy p beam split}
+      r.4{d beam split}
+      G4.16{dy mp beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (G4{t} D4).32{d beam Up beam split}
+    |
+      D4{t}.64{dy pp beam Up beam merge}
+      (B4 G4).8{d dy mf beam Up beam merge}
+      (G4{t} G4 B4).64{dy ff beam Up beam merge}
+      (G4{t} B4{t}).8{dy f beam Up beam merge}
+      (G4{t} B4{t}).32{d beam Up beam merge}
+      (B4{t} G4).32{beam Up beam merge}
+      (G4{t} B4).8{dy mf beam Up beam merge}
+      (G4{t} B4).16{d beam Down beam merge}
+      (B5 B4 G5 G4).16{d beam Down beam merge}
+      (B5{t} B4{t} G5{t} G4{t}).64{beam Down beam split}
+      (B4{t} G4{t}).16{beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      G4.64{dy mp beam Up beam merge}
+      (G4{t} D4).8{beam Up beam merge}
+      (G4{t} D4{t}).64{beam Up beam merge}
+      (D4 G4).64{beam Up beam split}
+    |
+      (D4{t} G4{t}).16{dy f beam Up beam merge}
+      (D4{t} G4{t}).64{beam Up beam merge}
+      (G4{t} D4).16{dy mp beam Up beam merge}
+      (G4{t} D4{t}).64{beam Up beam merge}
+      (G4{t} D4{t} D4).64{beam Up beam merge}
+      (G4{t} D4{t}).16{beam Up beam merge}
+      (G4{t} D4{t}).64{beam Up beam split}
+      G4{t}.32{d beam Up beam split}
+      r.16{beam split}
+      D4.8{dy f beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.2{beam split}
+    |
+      r.2{beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      D4.16{d beam Up beam merge}
+      G4.64{dy mp beam Up beam merge}
+      (Bb4{acc #} G4{t}).16{beam Up beam merge}
+      (G4{t} Bb4{t} D4).32{d beam Down beam merge}
+      (G4{t} D4{t}).16{d beam Down beam merge}
+      (G4{t} D4{t}).64{beam Down beam merge}
+      (G5 G4).32{d beam Down beam merge}
+      (G5{t} G4{t} Bb4).64{beam Down beam split}
+    |
+      (G5{t} G4{t} Bb4{t acc #}).64{beam Down beam merge}
+      (G4{t} Bb4{t}).8{beam Down beam merge}
+      (G5 Bb4 G4).16{d dy p beam Down beam merge}
+      (G5{t} Bb4{t} G4{t}).64{beam Down beam split}
+      G4{t}.32{d dy mf beam Up beam merge}
+      (G4{t} G4).64{beam Up beam merge}
+      G4{t}.16{dy mp beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      G4.64{dy ff beam Up beam merge}
+      (G4{t} Bb4).16{beam Up beam merge}
+      (G4{t} Bb4{t} G4).64{beam Up beam merge}
+      (Bb4{t} G4{t}).64{dy mp beam Up beam split}
+      G4{t}.32{d dy mf beam Up beam merge}
+      (D4 G4).8{d beam Up beam merge}
+      (D4 G4).8{d beam Up beam merge}
+      D4.16{dy mp beam Up beam merge}
+      (D4{t} Gb4{acc #}).64{beam Up beam split}
+    |
+      (D4{t} Gb4{t acc #}).32{beam Up beam merge}
+      Gb4{t}.64{dy f beam Up beam merge}
+      G4.16{beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (E4 G4).8{dy mp beam Up beam split}
+      G4{t}.16{d dy mf beam Up beam merge}
+      G4.8{dy mp beam Up beam merge}
+      G4{t}.32{beam Up beam split}
+      E4.8{d dy f beam Up beam merge}
+      E4{t}.32{beam Up beam merge}
+      E5.32{dy pp beam Up beam split}
+      (E5{t} E4).32{d beam Up beam merge}
+      E4{t}.8{dy mf beam Up beam merge}
+      D4.16{dy f beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+    |
+      D4{t}.8{beam Up beam merge}
+      D4.8{dy mp beam Up beam split}
+      D4{t}.8{beam Up beam merge}
+      D4{t}.32{d beam Up beam merge}
+      D4.16{dy mf beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.16{beam split}
+      r.64{beam split}
+      E4.8{beam Up beam merge}
+      E4.16{d beam Up beam merge}
+      E4.16{d dy f beam Up beam merge}
+      E4.16{beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      E4.32{dy mf beam Up beam split}
+    |
+      E4{t}.32{beam Up beam merge}
+      E4.16{dy f beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      Gb4{acc #}.8{dy mf beam Up beam merge}
+      Gb4{t}.64{beam Up beam split}
+      r.8{beam split}
+      r.16{d beam split}
+      D4.16{dy mp beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      (D4{t} Gb4).16{beam Up beam merge}
+      (D4{t} Gb4{t}).64{beam Up beam merge}
+      Gb4{t}.64{dy f beam Up beam merge}
+      (E4 G4).16{d beam Up beam merge}
+      (E4{t} G4{t}).64{beam Up beam split}
+      G4{t}.32{d beam Up beam merge}
+      Ab4{acc #}.16{d dy mf beam Up beam merge}
+      Gb4.64{dy mp beam Up beam merge}
+      (Gb4{t} A4).16{d beam Up beam split}
+    |
+      (Gb4{t acc #} A4).32{beam Up beam merge}
+      A4{t}.64{dy f beam Up beam merge}
+      (A4{t} E4).32{beam Up beam merge}
+      E4{t}.32{dy p beam Up beam merge}
+      (E4{t} G4).32{d beam Up beam merge}
+      G4{t}.16{d dy mp beam Up beam split}
+      r.16{d beam split}
+      E4.64{dy p beam Up beam merge}
+      (E4{t} G4).16{beam Up beam merge}
+      (E4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.16{dy mf beam Up beam split}
+      r.64{beam split}
+      (D4 A4).16{dy pp beam Up beam merge}
+      (D4{t} A4{t} Gb4).16{d beam Up beam merge}
+      (A4{t} Gb4{t}).16{dy f beam Up beam merge}
+      (A4{t} Gb4{t}).64{beam Up beam split}
+      B4.4{beam Up beam split}
+    |
+      r.64{beam split}
+      Gb4{acc #}.16{beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.8{dy mf beam Up beam merge}
+      G4{t}.32{beam Up beam split}
+      A4.8{d dy f beam Up beam merge}
+      A4{t}.32{beam Up beam merge}
+      G4.16{dy ff beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (G4{t} G4).64{beam Up beam merge}
+      G4{t}.8{d dy mf beam Up beam split}
+      G4.8{dy f beam Down beam merge}
+      (A5 A4).32{dy p beam Down beam merge}
+      (A5{t} A4{t} Gb4).16{beam Down beam merge}
+      (A5{t} A4{t} Gb4{t}).64{beam Down beam merge}
+      (A5{t} A4{t} Gb4).64{beam Down beam split}
+    |
+      (A5{t} A4{t} Gb4{t acc #}).16{beam Up beam merge}
+      (A4{t} Gb4{t}).16{dy ff beam Up beam merge}
+      (A4{t} B4).64{beam Up beam merge}
+      B4{t}.16{d dy f beam Up beam merge}
+      B4{t}.64{beam Up beam split}
+      B4{t}.8{d beam Up beam merge}
+      B4{t}.32{d beam Up beam split}
+      r.64{beam split}
+      (G4 B4).16{beam Up beam merge}
+      (G4{t} B4{t}).64{beam Up beam merge}
+      Bb4{acc #}.32{dy ppp beam Up beam merge}
+      (Bb4{t} G4).16{beam Up beam merge}
+      (G4{t} B4).16{dy mp beam Up beam merge}
+      B4{t}.16{dy f beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      (Gb4 A4).16{beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam merge}
+      (Gb4 A4).16{d dy mp beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam split}
+    |
+      (Gb4{t acc #} A4{t}).16{beam Up beam merge}
+      E4.8{d dy f beam Up beam split}
+      G4.4{dy mf beam Up beam split}
+      r.64{beam split}
+      Gb4.8{dy f beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      G4{t}.32{d beam Down beam merge}
+      (A5 A4).64{beam Down beam merge}
+      (A4{t} A5{t} Gb4).16{beam Down beam merge}
+      (A4{t} A5{t} Gb4{t}).64{beam Down beam merge}
+      (A4{t} Gb4{t}).64{beam Down beam merge}
+      (Gb4{t} Ab4{acc #}).16{dy mp beam Down beam split}
+    |
+      (Gb4{t acc #} Ab4{t acc #}).32{beam Up beam merge}
+      (A4 Gb4).8{beam Up beam merge}
+      (A4{t} Gb4{t}).64{beam Up beam merge}
+      B4.16{d dy p beam Up beam merge}
+      B4{t}.64{beam Down beam merge}
+      (G4 B4 B5).16{d beam Down beam merge}
+      (B5{t} G4{t} B4).16{beam Down beam merge}
+      (B5{t} G4{t} B4{t}).64{beam Down beam merge}
+      (B5{t} B4{t}).64{beam Down beam merge}
+      B4{t}.16{dy f beam Down beam merge}
+      B4{t}.64{beam Up beam merge}
+      B4.16{d dy p beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      B4.16{d dy mf beam Up beam split}
+      B4{t}.8{d beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      D4.32{d dy mp beam Up beam split}
+    |
+      D4{t}.32{beam Up beam merge}
+      (D4{t} Gb4{acc #}).32{d beam Up beam merge}
+      Gb4{t}.32{d dy f beam Up beam merge}
+      G4.8{dy mf beam Up beam split}
+      r.16{d beam split}
+      (A4 Gb4).8{dy f beam Up beam merge}
+      (A4{t} Gb4{t}).32{beam Up beam split}
+      Gb4{t}.16{dy mp beam Up beam merge}
+      G4.8{beam Up beam merge}
+      G4{t}.32{beam Up beam merge}
+      G4.16{beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (E4 G4).8{dy p beam Up beam merge}
+      (E4{t} G4{t}).32{d beam Up beam merge}
+      (A4 Gb4).32{dy ff beam Up beam split}
+    |
+      (A4{t} Gb4{t acc #}).8{beam Up beam merge}
+      (Gb4{t} A4).16{dy mp beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam merge}
+      A4{t}.32{dy f beam Up beam merge}
+      (A4{t} G4 B4).64{beam Up beam split}
+      (G4{t} B4{t}).4{beam Up beam split}
+      r.16{beam split}
+      r.64{beam split}
+      B4.16{beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      B4.16{d dy p beam Up beam split}
+      (B4{t} G4).32{d beam Up beam merge}
+      G4{t}.64{dy mp beam Up beam merge}
+      (G4{t} B4).16{beam Up beam merge}
+      B4{t}.16{dy mf beam Up beam merge}
+      Bb4{acc #}.16{dy pp beam Up beam split}
+    |
+      Bb4{t acc #}.32{beam Up beam merge}
+      (Gb4{acc #} A4).16{d dy p beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam merge}
+      G4.16{d dy mp beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+      r.8{beam split}
+      G4.8{dy f beam Up beam split}
+      G4{t}.4{d beam Up beam split}
+      G4{t}.16{beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      D4.32{d dy mp beam Up beam split}
+    |
+      D4{t}.8{beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      E4.16{d dy f beam Up beam split}
+      E4{t}.8{beam Up beam merge}
+      E4.32{dy p beam Up beam merge}
+      (E4{t} G4).16{beam Up beam merge}
+      (E4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.16{dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (Gb4{acc #} A4).8{dy p beam Up beam merge}
+      (Gb4{t} A4{t}).32{d beam Up beam merge}
+      B4.8{dy mf beam Up beam merge}
+      B4{t}.32{d beam Up beam merge}
+      D4.64{dy p beam Up beam merge}
+      (D4{t} G4).16{beam Up beam merge}
+      (D4{t} G4{t}).64{beam Up beam split}
+    |
+      (D4{t} G4{t}).32{d beam Up beam merge}
+      (D4{t} G4).8{beam Up beam merge}
+      G4{t}.16{dy mp beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      C5.16{d dy f beam Down beam merge}
+      B4.16{dy mp beam Down beam merge}
+      G4.64{beam Down beam merge}
+      (Gb6{acc #} B5 G4{t} B4).8{beam Down beam merge}
+      (Gb6{t} B5{t} G4{t} B4{t}).64{beam Down beam merge}
+      (G4{t} B5{t} B4{t} G4).64{beam Down beam merge}
+      (B5{t} B4{t} G4{t}).16{beam Down beam split}
+      (B5{t} B4{t} G4{t}).64{beam Down beam merge}
+      (B4{t} G4{t}).16{beam Down beam merge}
+      (B4{t} G4{t} B5).64{beam Down beam merge}
+      (B5{t} B4{t} D5 G4{t} D4).8{beam Down beam merge}
+      (D6 B4{t} D5{t} G4{t} B5{t} D4{t}).32{beam Down beam split}
+    |
+      (D6{t} D5{t} B4{t} G4{t} D4{t}).64{dy pp beam Down beam merge}
+      (G4{t} D6{t} D4{t} B4 D5 B5).32{d beam Down beam merge}
+      (G4{t} B5{t} B4{t} D4{t} D5{t}).32{dy mp beam Down beam merge}
+      (G4{t} D5{t} B5{t} B4{t}).64{beam Down beam merge}
+      (G4{t} B4{t} D5).32{d beam Down beam merge}
+      (B4{t} D5{t}).32{beam Down beam merge}
+      (A4 C5).32{dy pp beam Down beam merge}
+      (A4{t} C5{t} G6).64{beam Down beam merge}
+      (A4{t} C5{t} G6{t}).32{d beam Down beam merge}
+      (G6{t} C5{t}).32{beam Down beam merge}
+      C5{t}.32{dy mf beam Down beam split}
+      r.64{beam split}
+      B4.8{dy pp beam Up beam merge}
+      (G4 B4).16{d dy p beam Up beam merge}
+      (G4{t} B4{t} B5).16{d beam Down beam merge}
+      (B4{t} B5{t}).32{d dy pp beam Down beam merge}
+      B5{t}.32{beam Down beam split}
+      r.32{d beam split}
+      Gb4{acc #}.16{d beam Up beam merge}
+      G4.16{d dy mf beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+    |
+      G4{t}.32{beam Up beam merge}
+      Gb4{acc #}.16{d dy mp beam Up beam merge}
+      G4.8{dy f beam Up beam split}
+      G4{t}.32{d beam Up beam merge}
+      A4.8{d beam Up beam merge}
+      A4{t}.64{beam Up beam split}
+      r.64{beam split}
+      B4.8{d beam Up beam merge}
+      B4{t}.32{d beam Up beam split}
+      r.8{beam split}
+      r.32{beam split}
+      A4.64{beam Down beam merge}
+      (A5 A4{t} Gb4).16{beam Down beam merge}
+      (A5{t} A4{t} Gb4{t}).64{beam Down beam split}
+    |
+      (A5{t} A4{t} Gb4{t acc #}).16{d dy p beam Down beam merge}
+      (A4{t} G4).16{dy mf beam Down beam merge}
+      G4{t}.64{dy ppp beam Down beam merge}
+      G4.8{d dy ff beam Down beam merge}
+      Ab4{acc #}.8{dy p beam Up beam merge}
+      Ab4{t}.64{beam Up beam split}
+      r.2{beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{dy mp beam split}
+    |
+      r.2{dy p beam split}
+      r.8{beam split}
+      r.32{d beam split}
+      D4.8{beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      D4.16{d dy pp beam Up beam merge}
+      D4.32{dy p beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+    |
+      D4{t}.32{beam Up beam split}
+      r.2{beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.16{d beam split}
+    |
+      r.1{dy mp beam split}
+    |
+      r.16{beam split}
+      D4.8{dy ff beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      D4.16{d beam Up beam merge}
+      D4.8{d dy f beam Up beam split}
+      E4.8{beam Up beam merge}
+      E4{t}.32{d beam Up beam merge}
+      Gb4{acc #}.8{dy ff beam Up beam merge}
+      Gb4{t}.32{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      G4{t}.32{d beam Up beam split}
+    |
+      G4{t}.16{d beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      D4.8{dy f beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      D4{t}.8{d beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+      r.8{beam split}
+      G4.8{dy fff beam Up beam merge}
+      G4{t}.32{d beam Up beam merge}
+      G4.8{dy f beam Up beam merge}
+      G4{t}.32{d beam Up beam merge}
+      E4.32{d dy ff beam Up beam split}
+    |
+      E4{t}.16{beam Up beam merge}
+      Eb4{acc #}.16{dy ppp beam Up beam merge}
+      Eb4{t}.64{beam Up beam merge}
+      D4.16{d dy f beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.2{d beam split}
+    |
+      r.2{beam split}
+      r.8{beam split}
+      r.32{d beam split}
+      D4.8{beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+      r.8{beam split}
+      r.32{beam split}
+    |
+      r.1{beam split}
+    |
+      r.2{dy ff beam split}
+      r.64{beam split}
+      (D4 G4).8{dy f beam Up beam merge}
+      D4.64{dy ff beam Up beam merge}
+      (D4{t} G4).8{beam Up beam merge}
+      (D4{t} G4{t}).32{d beam Up beam merge}
+      (D4 G4).8{beam Up beam merge}
+      (D4{t} G4{t}).32{beam Up beam merge}
+      (G4 E4).64{dy mp beam Up beam split}
+    |
+      (G4{t} E4{t}).8{beam Up beam merge}
+      (G4{t} E4{t}).32{d beam Up beam merge}
+      (A4 Gb4{acc #}).8{beam Up beam merge}
+      (A4{t} Gb4{t}).32{beam Up beam merge}
+      B4.64{beam Up beam merge}
+      (B4{t} G4).16{d beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.32{d dy ff beam Up beam split}
+      (C5 G4).2{beam Up beam split}
+    |
+      r.16{beam split}
+      r.32{d beam split}
+      (B4 G4).8{dy mp beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam split}
+      r.64{beam split}
+      (C5 A4).8{d dy p beam Down beam merge}
+      (C5{t} A4{t}).16{d beam Down beam merge}
+      (C5{t} A4{t}).64{beam Down beam split}
+      r.32{d beam split}
+      D4.32{dy f beam Up beam merge}
+      (D4{t} G4).32{beam Up beam merge}
+      G4{t}.64{dy mf beam Up beam merge}
+      (G4{t} Eb4{acc #}).8{d beam Up beam merge}
+      Eb4{t}.16{dy ff beam Up beam merge}
+      Eb4{t}.64{beam Up beam merge}
+      Gb4{acc #}.64{dy p beam Up beam merge}
+      (Gb4{t} D4).32{beam Up beam split}
+    |
+      (Gb4{t acc #} D4{t}).32{d beam Up beam merge}
+      (Gb4{t} D4).8{beam Up beam merge}
+      (Gb4{t} D4{t}).32{d beam Up beam merge}
+      D4{t}.64{dy mf beam Up beam merge}
+      (Gb4 D4).8{dy f beam Up beam merge}
+      (Gb4{t} D4{t}).64{beam Up beam merge}
+      E4.8{dy mf beam Up beam split}
+      r.16{beam split}
+      B4.32{d dy mp beam Up beam merge}
+      (B4{t} G4).16{d beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.32{dy f beam Up beam split}
+      G4{t}.8{d beam Up beam merge}
+      G4{t}.32{d beam Up beam merge}
+      G4.64{dy p beam Up beam split}
+    |
+      G4{t}.64{beam Up beam merge}
+      (G4{t} D4).16{beam Up beam merge}
+      D4{t}.16{dy f beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.64{beam split}
+      D4.16{dy p beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.2{d beam split}
+    |
+      r.2{dy ff beam split}
+      r.32{beam split}
+      G4.16{dy p beam Up beam merge}
+      (B4 G4).32{dy mf beam Up beam merge}
+      (B4{t} G4{t} D4).32{beam Up beam merge}
+      (G4{t} D4{t}).64{dy f beam Up beam merge}
+      (B4 G4{t} D4{t}).16{beam Up beam merge}
+      (B4{t} G4{t} D4{t}).64{beam Up beam split}
+      (G4{t} B4{t}).16{d beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      (G4 B4).16{d beam Up beam merge}
+      (G4{t} B4{t}).64{beam Up beam merge}
+      (B4{t} G4).32{beam Up beam split}
+    |
+      (B4{t} G4{t}).32{d beam Up beam merge}
+      (B4 D4 G4).8{d dy mf beam Up beam merge}
+      (B4{t} D4{t} G4{t}).64{beam Up beam split}
+      G4{t}.32{d beam Down beam merge}
+      (G5 G4).64{dy p beam Down beam merge}
+      (G5{t} G4{t} B4).16{d beam Down beam merge}
+      (G4{t} B4{t}).16{dy mp beam Down beam merge}
+      (G4{t} G5 G4).64{beam Down beam merge}
+      (G5{t} G4{t}).64{beam Down beam split}
+      (G5{t} G4{t} D4).32{d beam Down beam merge}
+      (G4{t} D4{t}).16{d beam Down beam merge}
+      (D4{t} G4).32{beam Down beam merge}
+      (G4{t} D4).16{d beam Down beam merge}
+      (G4{t} D4{t}).64{beam Up beam merge}
+      (G4{t} D4{t}).32{d beam Up beam merge}
+      D4{t}.16{beam Up beam split}
+      r.16{beam split}
+      r.32{d beam split}
+    |
+      r.32{beam split}
+      D4.8{dy f beam Up beam split}
+      r.2{beam split}
+      r.4{beam split}
+      r.16{d beam split}
+    |
+      r.4{beam split}
+      D4.16{d dy mp beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      (D4{t} G4).64{beam Up beam merge}
+      (Bb4{acc #} D4{t} G4{t}).8{beam Up beam split}
+      (Bb4{t} D4{t} G4{t}).64{beam Up beam merge}
+      (G4{t} Bb4{t}).16{dy p beam Up beam merge}
+      (G4{t} Bb4{t}).64{beam Up beam merge}
+      (Bb4{t} G4).32{d beam Up beam merge}
+      (G4{t} Bb4).8{dy mf beam Up beam merge}
+      (G4{t} Bb4{t}).64{beam Down beam merge}
+      (Bb4 G4).8{beam Down beam merge}
+      (Bb4{t} G4{t}).32{d beam Down beam merge}
+      (G4{t} G5).32{beam Down beam merge}
+      (G4{t} G5{t} Bb4).64{beam Down beam split}
+    |
+      (G4{t} G5{t} Bb4{t acc #}).64{dy p beam Down beam merge}
+      (G4{t} Bb4{t}).32{beam Down beam merge}
+      (Bb4{t} G4).16{beam Down beam merge}
+      (Bb4{t} G4{t}).64{beam Down beam merge}
+      G4{t}.64{dy f beam Down beam merge}
+      G4.16{dy mf beam Down beam merge}
+      (G4{t} D4).64{beam Down beam merge}
+      (G4{t} D4{t} G4).64{beam Down beam merge}
+      (D4{t} G4{t}).8{dy f beam Down beam merge}
+      (D4{t} G4{t}).32{beam Up beam merge}
+      (G4 D4).8{d dy mp beam Up beam merge}
+      (G4{t} D4{t}).32{beam Up beam merge}
+      (D4{t} G4).16{dy mf beam Up beam merge}
+      (D4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.16{d dy p beam Up beam merge}
+      (E4 G4).8{d beam Up beam merge}
+      (E4{t} G4{t}).32{beam Up beam split}
+    |
+      Gb4{acc #}.8{beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      E4.8{d dy f beam Up beam merge}
+      E4{t}.32{beam Up beam merge}
+      F4.16{d dy mp beam Up beam merge}
+      E4.16{d dy mf beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      D4.8{d beam Up beam split}
+      D4{t}.4{beam Up beam split}
+    |
+      D4{t}.16{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4.8{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      E4.16{dy f beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      (A4 E4).8{dy mp beam Up beam merge}
+      (A4{t} E4{t}).32{beam Up beam merge}
+      E4.16{d dy p beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      E4.16{dy mp beam Up beam merge}
+      Gb4{acc #}.8{d beam Up beam merge}
+      Gb4{t}.32{d beam Up beam split}
+    |
+      r.8{beam split}
+      D4.8{dy p beam Up beam split}
+      r.16{beam split}
+      (E4 G4).8{d beam Up beam split}
+      r.32{beam split}
+      (A5 A4 Gb4{acc #}).16{d beam Down beam merge}
+      (Gb4{t} A4).16{dy mp beam Down beam merge}
+      A4{t}.16{dy f beam Down beam split}
+      r.64{beam split}
+      G4.8{d dy mp beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      G4.32{dy pp beam Up beam split}
+    |
+      G4{t}.64{beam Up beam merge}
+      (G4{t} E4).16{d beam Up beam merge}
+      (G4{t} E4{t}).64{beam Up beam merge}
+      E4{t}.32{d dy p beam Up beam merge}
+      A4.64{dy ff beam Up beam merge}
+      (A4{t} Gb4{acc #}).8{d beam Up beam merge}
+      (A4{t} Gb4{t}).32{d beam Up beam merge}
+      B4.8{d dy mp beam Up beam merge}
+      B4{t}.32{d beam Up beam merge}
+      G4.16{d beam Up beam split}
+      G4.8{dy mf beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      A4.16{d dy mp beam Up beam merge}
+      A4{t}.64{beam Up beam split}
+    |
+      A4{t}.8{beam Up beam merge}
+      G4.8{dy f beam Up beam split}
+      r.64{beam split}
+      Gb4{acc #}.16{d beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      E4.64{dy p beam Up beam merge}
+      (E4{t} G4).16{beam Up beam merge}
+      (E4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.64{dy mf beam Up beam merge}
+      Gb4.32{dy mp beam Up beam merge}
+      (Gb4{t} A4).16{beam Down beam merge}
+      (A4{t} Gb4{t} A5).8{beam Down beam merge}
+      (A4{t} Gb4{t} A5{t}).64{beam Down beam merge}
+      (A4{t} A5{t}).32{dy f beam Down beam split}
+      A4{t}.32{beam Up beam merge}
+      B4.8{d beam Up beam merge}
+      B4{t}.32{beam Up beam split}
+    |
+      r.8{beam split}
+      r.32{beam split}
+      G4.32{beam Up beam merge}
+      (G4{t} B4).32{d beam Up beam merge}
+      B4{t}.16{beam Up beam merge}
+      Bb4{acc #}.16{d dy mf beam Up beam merge}
+      Bb4{t}.64{beam Up beam merge}
+      Bb4.16{dy pp beam Up beam merge}
+      Gb4{acc #}.16{dy mp beam Up beam merge}
+      (Gb4{t} A4).64{beam Up beam merge}
+      (Gb4{t} A4{t} Gb4).64{beam Up beam merge}
+      (A4{t} Gb4{t}).8{dy mf beam Up beam merge}
+      Gb4{t}.32{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      E4{t}.32{d beam Up beam merge}
+      (E4{t} G4).16{d beam Up beam merge}
+      (E4{t} G4{t}).64{beam Up beam split}
+    |
+      E4{t}.64{beam Up beam split}
+      r.8{beam split}
+      r.32{d beam split}
+      Gb4{acc #}.8{dy f beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      G4{t}.32{d beam Up beam split}
+      r.64{beam split}
+      (A5 Gb4 A4).8{beam Down beam merge}
+      (A5{t} Gb4{t} A4{t}).32{beam Down beam merge}
+      (Gb4 A4).8{dy p beam Down beam merge}
+      (Gb4{t} A4{t}).32{d beam Up beam merge}
+      B4.16{d dy mp beam Up beam merge}
+      B4.32{dy ff beam Up beam merge}
+      (B4{t} G4 B5).32{beam Up beam split}
+    |
+      (B4{t} G4{t} B5{t}).8{beam Down beam merge}
+      (B4{t} G4{t} B5{t}).32{d beam Down beam merge}
+      B4.16{d dy p beam Down beam merge}
+      B4{t}.64{beam Up beam merge}
+      B4.8{d dy mf beam Up beam merge}
+      B4{t}.32{beam Up beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      D4.8{dy p beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.64{beam split}
+      G4.8{d dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      Gb4{acc #}.32{dy p beam Up beam split}
+    |
+      (Gb4{t acc #} A4).16{d beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam merge}
+      A4{t}.8{dy f beam Up beam merge}
+      A4{t}.64{beam Up beam split}
+      G4.8{d beam Up beam merge}
+      G4{t}.32{beam Up beam merge}
+      (E4 G4).8{dy p beam Up beam merge}
+      (E4{t} G4{t}).32{beam Up beam merge}
+      A4.16{d dy ff beam Up beam merge}
+      A4{t}.64{beam Up beam merge}
+      (A4{t} Gb4).8{beam Up beam merge}
+      (A4{t} Gb4{t}).32{beam Down beam merge}
+      (A4{t} B5 B4).64{beam Down beam merge}
+      (B5{t} B4{t}).16{d dy pp beam Down beam split}
+    |
+      B4{t}.4{dy mf beam Down beam split}
+      B4.16{dy mp beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      B4.16{d dy p beam Up beam merge}
+      (B4{t} G4).32{d beam Up beam merge}
+      (G4{t} B4).32{d beam Up beam merge}
+      B4{t}.32{d dy mf beam Up beam merge}
+      Bb4{acc #}.8{dy mp beam Up beam merge}
+      A4.8{dy mf beam Up beam merge}
+      G4.16{d dy mp beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      A4.16{dy f beam Up beam merge}
+      A4{t}.64{beam Up beam split}
+    |
+      r.64{beam split}
+      G4.16{d dy ff beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      G4.8{dy mf beam Up beam split}
+      G4{t}.4{beam Up beam split}
+      r.16{d beam split}
+      D4.8{beam Up beam merge}
+      D4{t}.32{beam Up beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      E4.16{dy f beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      Gb4{acc #}.16{dy mf beam Up beam split}
+    |
+      E4.16{dy pp beam Up beam merge}
+      (E4{t} G4).32{d beam Up beam merge}
+      G4{t}.16{d dy mf beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      A4{t}.32{beam Up beam merge}
+      B4.8{d beam Up beam merge}
+      (B4 G4).16{dy pp beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      G4.16{d dy mf beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+      G4{t}.8{d beam Up beam merge}
+      G4{t}.32{d beam Up beam split}
+      r.64{beam split}
+    |
+      r.32{beam split}
+      C5.8{dy f beam Down beam merge}
+      (B4 B5 G4).32{d dy ff beam Down beam merge}
+      (B4{t} B5{t} Gb6{acc #} G4{t}).32{d beam Down beam split}
+      (B4 Gb6{t} G4{t} B5{t}).32{beam Down beam merge}
+      (G4{t} Gb6{t} B5{t} B4{t} G5).32{beam Down beam merge}
+      (G4{t} B4{t} B5{t} G5{t}).32{d beam Down beam merge}
+      (B5{t} G4{t} G5{t} B4).8{dy mp beam Down beam merge}
+      (B5{t} G4{t} B4{t}).16{beam Down beam merge}
+      (G4{t} B4{t}).32{d beam Up beam merge}
+      B4{t}.16{d dy f beam Up beam merge}
+      D4.8{dy mf beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      B4.32{d dy p beam Up beam merge}
+      (B4{t} G4).16{beam Up beam merge}
+      (B4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.32{d dy mf beam Up beam split}
+    |
+      Gb4{acc #}.16{d beam Down beam merge}
+      Gb4{t}.64{beam Down beam merge}
+      G4.32{d dy f beam Down beam merge}
+      (G4{t} B5).16{d beam Down beam split}
+      B5{t}.16{dy pp beam Down beam merge}
+      (A5 A4).8{d dy p beam Down beam split}
+      r.32{beam split}
+      G4.16{dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      (G4{t} B4).8{beam Up beam merge}
+      (G4{t} B4{t}).64{beam Up beam split}
+      (G4{t} B4{t}).8{d beam Up beam merge}
+      (G4{t} B4{t}).32{d beam Up beam split}
+      r.64{beam split}
+    |
+      (G4 B4).2{d beam Up beam split}
+      G4{t}.4{beam Up beam split}
+    |
+      G4{t}.8{beam Up beam merge}
+      G4{t}.32{beam Up beam split}
+      r.2{beam split}
+      r.8{beam split}
+      r.32{d beam split}
+      D5.32{dy pp beam Down beam merge}
+      D5{t}.16{d beam Down beam split}
+      r.32{d beam split}
+    |
+      r.2{dy p beam split}
+      r.64{beam split}
+      D5.32{dy mp beam Down beam merge}
+      D5{t}.32{beam Down beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.32{d beam split}
+    |
+      r.1{dy p beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{dy mf beam split}
+    |
+      r.4{beam split}
+      r.8{beam split}
+      r.64{beam split}
+      D4.16{beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+      r.32{beam split}
+      D5.32{dy p beam Up beam merge}
+      D5{t}.32{beam Up beam merge}
+      (D4 D5{t}).32{beam Up beam merge}
+      D4{t}.16{d beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4{t}.64{beam Up beam split}
+      r.4{beam split}
+    |
+      r.8{dy mp beam split}
+      r.16{d beam split}
+      D5.16{dy pp beam Down beam merge}
+      D5{t}.8{beam Down beam merge}
+      D5{t}.64{beam Down beam split}
+      r.2{beam split}
+      r.16{beam split}
+      r.64{beam split}
+    |
+      r.1{dy f beam split}
+    |
+      r.1{dy p beam split}
+    |
+      r.2{dy mp beam split}
+      r.32{beam split}
+      D4.8{dy f beam Up beam merge}
+      D4.16{d dy mf beam Up beam split}
+      D4.8{dy f beam Up beam merge}
+      D4{t}.32{d beam Up beam merge}
+      E4.16{beam Up beam merge}
+      E4{t}.64{beam Up beam split}
+    |
+      E4{t}.16{d beam Up beam merge}
+      Db4{acc #}.16{dy mp beam Up beam merge}
+      D4.8{d dy f beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+      r.2{beam split}
+      r.32{d beam split}
+      D4.16{beam Up beam split}
+    |
+      D4{t}.2{d beam Up beam split}
+      r.4{beam split}
+    |
+      r.16{d beam split}
+      C5.8{dy pp beam Down beam merge}
+      C5{t}.32{beam Down beam split}
+      r.32{d beam split}
+      D4.16{d dy f beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4.16{d dy ff beam Up beam split}
+      D4{t}.8{beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      E4.8{d dy f beam Up beam merge}
+      Db4{acc #}.16{d dy ff beam Up beam merge}
+      D4.16{dy f beam Up beam split}
+    |
+      D4{t}.16{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      E4{t}.32{d beam Up beam split}
+      r.16{beam split}
+      r.64{beam split}
+      Gb4{acc #}.16{d beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      D4.8{d beam Up beam merge}
+      D4{t}.32{beam Up beam split}
+      r.4{beam split}
+      r.16{d beam split}
+    |
+      r.1{beam split}
+    |
+      r.64{beam split}
+      D4.8{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4.16{beam Up beam merge}
+      D4.32{d beam Up beam merge}
+      D4{t}.8{beam Up beam split}
+      r.64{beam split}
+      E4.16{d beam Up beam split}
+      E4{t}.16{beam Up beam merge}
+      E4{t}.64{beam Up beam merge}
+      Db4{acc #}.32{beam Up beam merge}
+      Db4{t}.32{d beam Up beam split}
+      r.64{beam split}
+      D4.32{beam Up beam merge}
+      D4{t}.16{d beam Up beam split}
+      r.8{beam split}
+      r.16{beam split}
+      r.64{beam split}
+    |
+      B4.8{dy pp beam Up beam merge}
+      B4{t}.64{beam Up beam split}
+      r.4{beam split}
+      r.32{beam split}
+      D4.64{dy f beam Down beam merge}
+      (D6 D4{t}).16{beam Down beam split}
+      D4{t}.16{beam Up beam merge}
+      D4{t}.64{beam Up beam merge}
+      D4{t}.8{beam Up beam merge}
+      D4{t}.32{d beam Up beam split}
+      (D4{t} Gb4{acc #}).8{beam Up beam merge}
+      Gb4{t}.16{d dy ff beam Up beam merge}
+      G4.32{dy f beam Up beam split}
+    |
+      G4{t}.4{beam Up beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      G4.8{beam Up beam merge}
+      Bb4{acc #}.16{d dy pp beam Up beam merge}
+      B4.8{dy mf beam Up beam merge}
+      B4{t}.32{d beam Up beam split}
+      (G4 B4).8{beam Up beam merge}
+      (G4{t} B4{t}).64{beam Up beam merge}
+      G4.16{d dy p beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+    |
+      G4.8{dy f beam Up beam merge}
+      G4{t}.32{beam Up beam merge}
+      Db4{acc #}.16{d dy p beam Up beam split}
+      r.16{d beam split}
+      E4.32{beam Up beam merge}
+      (E4{t} G4).16{d beam Up beam merge}
+      (E4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.32{d dy ff beam Up beam merge}
+      Gb4{acc #}.64{dy f beam Up beam merge}
+      (Gb4{t} D4).16{beam Up beam merge}
+      (D4{t} Gb4).32{d beam Up beam merge}
+      Gb4{t}.16{d beam Up beam split}
+      (E4 G4).8{beam Up beam merge}
+      (E4{t} G4{t}).32{d beam Up beam merge}
+      (Gb4 A4).16{dy p beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam split}
+    |
+      (Gb4{t acc #} A4{t}).8{beam Up beam merge}
+      (Gb4{t} A4{t}).64{beam Up beam merge}
+      (Gb4 A4).8{beam Up beam merge}
+      (Gb4{t} A4{t}).32{beam Down beam merge}
+      (A4{t} A5 Gb4{t}).8{d beam Down beam merge}
+      (A4{t} A5{t} Gb4{t}).64{beam Down beam split}
+      (A4{t} Gb4{t}).16{beam Up beam merge}
+      (A4{t} Gb4{t}).64{beam Up beam merge}
+      A4{t}.8{dy f beam Up beam merge}
+      A4{t}.8{d beam Up beam merge}
+      A4{t}.32{d beam Up beam split}
+      r.16{beam split}
+    |
+      r.16{beam split}
+      r.32{d beam split}
+      G4.16{d beam Up beam merge}
+      F4.64{dy mp beam Up beam merge}
+      (F4{t} Ab4{acc #}).16{d beam Up beam merge}
+      Ab4{t}.16{d dy mf beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      Bb4{acc #}.8{d dy ff beam Up beam merge}
+      Bb4{t}.32{d beam Up beam merge}
+      Ab4.8{dy mf beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      Ab4.16{d dy pp beam Up beam merge}
+      Ab4.16{d dy mp beam Up beam merge}
+      Ab4{t}.64{beam Up beam split}
+    |
+      Ab4{t acc #}.16{beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      Bb4{acc #}.8{dy ff beam Up beam merge}
+      Bb4{t}.16{beam Up beam merge}
+      Bb4{t}.64{beam Up beam split}
+      r.32{d beam split}
+      C5.8{dy f beam Down beam merge}
+      C5{t}.32{d beam Down beam split}
+      r.8{beam split}
+      r.64{beam split}
+      Ab4.16{d beam Up beam merge}
+      Ab4{t}.64{beam Up beam split}
+      r.32{d beam split}
+      Bb4.8{d beam Up beam merge}
+      Bb4{t}.64{beam Up beam split}
+    |
+      Bb4{t acc #}.32{dy mf beam Up beam merge}
+      Ab4{acc #}.8{dy f beam Up beam merge}
+      Ab4{t}.32{beam Up beam merge}
+      G4.16{d dy mf beam Up beam merge}
+      Ab4{acc #}.64{dy f beam Up beam merge}
+      (Ab4{t} F4).8{beam Up beam merge}
+      (Ab4{t} F4{t}).64{beam Up beam merge}
+      Bb4.32{d beam Up beam merge}
+      (Bb4{t} G4).8{d beam Up beam merge}
+      (Bb4{t} G4{t}).32{beam Up beam merge}
+      C5.32{d beam Up beam split}
+      C5{t}.4{beam Down beam split}
+    |
+      r.32{d beam split}
+      B4.16{beam Down beam merge}
+      B4{t}.64{beam Down beam merge}
+      C5.16{beam Down beam merge}
+      C5{t}.64{beam Down beam merge}
+      B4.16{dy ff beam Down beam merge}
+      B4{t}.64{beam Up beam merge}
+      C5.16{d dy f beam Up beam merge}
+      Bb4{acc #}.16{beam Up beam merge}
+      Bb4{t}.64{beam Up beam merge}
+      Bb4.64{beam Up beam merge}
+      (Bb4{t} G4).16{d beam Up beam merge}
+      (Bb4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.16{dy mf beam Up beam merge}
+      F4.8{beam Up beam merge}
+      F4{t}.32{d beam Up beam merge}
+      (F4{t} Ab4{acc #}).16{beam Up beam merge}
+      Ab4{t}.8{dy f beam Up beam split}
+    |
+      r.8{beam split}
+      (Eb4{acc #} Ab4{acc #}).8{dy mp beam Up beam split}
+      Ab4.8{dy f beam Up beam merge}
+      Ab4{t}.32{beam Up beam merge}
+      (G4 Bb4{acc #}).8{d dy mp beam Up beam merge}
+      G4.64{dy p beam Up beam merge}
+      (G4{t} Bb4).16{beam Up beam merge}
+      Bb4{t}.16{dy ff beam Up beam merge}
+      Bb4{t}.64{beam Up beam split}
+      r.8{beam split}
+      (C5 Ab4{acc #}).8{dy mp beam Up beam split}
+    |
+      (Ab4{t acc #} C5{t}).16{d beam Up beam merge}
+      Db5{acc #}.16{d dy mf beam Up beam merge}
+      Db5{t}.64{beam Up beam merge}
+      C5.32{d dy f beam Up beam split}
+      C5{t}.4{beam Down beam split}
+      r.32{beam split}
+      Eb4{acc #}.16{dy mp beam Up beam merge}
+      Eb4{t}.64{beam Up beam merge}
+      (Eb4{t} G4).32{beam Up beam merge}
+      G4{t}.32{beam Up beam merge}
+      (G4{t} F4).16{d beam Up beam merge}
+      F4{t}.8{beam Up beam merge}
+      F4{t}.32{beam Up beam merge}
+      Bb4{acc #}.16{dy f beam Up beam merge}
+      Bb4{t}.64{beam Up beam split}
+    |
+      Bb4{t acc #}.8{beam Up beam merge}
+      Bb4{t}.64{beam Up beam merge}
+      Ab4{acc #}.16{d dy mf beam Up beam merge}
+      Ab4{t}.64{beam Up beam split}
+      r.8{beam split}
+      Ab4.16{beam Up beam merge}
+      F4.64{dy mp beam Up beam merge}
+      (F4{t} Ab4).16{beam Up beam merge}
+      (F4{t} Ab4{t}).64{beam Up beam merge}
+      Ab4{t}.64{dy f beam Up beam merge}
+      Bb4.8{d dy ff beam Up beam merge}
+      Bb4{t}.16{beam Up beam split}
+      r.64{beam split}
+      C5.8{d dy f beam Down beam split}
+    |
+      r.8{beam split}
+      r.64{beam split}
+      C5.8{beam Down beam merge}
+      C5{t}.32{d beam Up beam merge}
+      Ab4{acc #}.16{dy p beam Up beam merge}
+      (Ab4{t} C5).32{d beam Up beam merge}
+      C5{t}.64{dy mp beam Up beam merge}
+      Bb4{acc #}.16{dy ppp beam Up beam split}
+      r.16{d beam split}
+      G4.32{d beam Up beam merge}
+      (G4{t} Bb4).32{d beam Up beam merge}
+      Bb4{t}.32{d dy f beam Up beam merge}
+      Ab4{acc #}.16{d dy mf beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      Bb4.32{dy f beam Up beam merge}
+      (Bb4{t} Ab4).32{d beam Up beam merge}
+      Ab4{t}.64{dy pp beam Up beam merge}
+      (Ab4{t} F4).32{beam Up beam merge}
+      (F4{t} Ab4).32{dy mp beam Up beam split}
+    |
+      (F4{t} Ab4{t acc #}).8{d beam Up beam merge}
+      (F4{t} Ab4{t}).64{beam Up beam merge}
+      Ab4{t}.32{d dy f beam Up beam split}
+      Ab4{t}.4{beam Up beam split}
+      r.32{beam split}
+      Eb4{acc #}.16{d dy p beam Up beam merge}
+      Eb4.16{d dy mp beam Up beam merge}
+      Eb4{t}.64{beam Up beam merge}
+      (Eb4{t} F4).32{beam Up beam merge}
+      F4{t}.16{dy f beam Up beam merge}
+      F4{t}.64{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      Ab4{acc #}.64{beam Up beam split}
+    |
+      Ab4{t acc #}.8{beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      (G4 Bb4{acc #}).16{d dy pp beam Up beam merge}
+      (G4{t} Bb4{t}).64{beam Up beam split}
+      Bb4{t}.32{d dy mf beam Up beam merge}
+      C5.8{dy mp beam Up beam merge}
+      C5{t}.32{d beam Up beam merge}
+      Ab4{acc #}.16{d dy f beam Up beam merge}
+      Ab4.8{d dy mf beam Up beam split}
+      r.8{beam split}
+      r.16{beam split}
+      r.64{beam split}
+      Db5{acc #}.32{d dy f beam Down beam split}
+    |
+      Db5{t acc #}.16{d beam Down beam merge}
+      (Ab4{acc #} C5 G6).16{d dy mf beam Down beam merge}
+      (Ab4{t} G6{t} C5).32{d beam Down beam merge}
+      (G6{t} C5{t} Ab4).8{beam Down beam merge}
+      (G6{t} C5{t} Ab4{t}).32{beam Up beam merge}
+      (C5{t} Ab4{t}).64{beam Up beam merge}
+      (C5{t} Ab4{t} C5).32{beam Up beam merge}
+      (Ab4{t} C5{t}).32{beam Up beam merge}
+      C5{t}.64{beam Up beam merge}
+      (C5 Eb4{acc #} Eb5{acc #}).16{beam Up beam merge}
+      (C5{t} Eb4{t} Eb5{t} Ab5{acc #} G6).32{d beam Down beam merge}
+      (Eb5{t} Eb4{t} C5{t} Ab5{t} G6{t} Ab4).16{d beam Down beam merge}
+      (Eb5{t} G6{t} Ab5{t} Eb4{t} Ab4{t} C5).32{beam Down beam merge}
+      (Ab4{t} G6{t} Eb5{t} Ab5{t} C5{t}).32{beam Down beam split}
+      (Ab4{t} Eb5{t} G6{t} C5{t}).64{beam Down beam merge}
+      (Ab4{t} Ab5 Db4{acc #} Db5{acc #} Db6{acc #}).32{beam Down beam merge}
+      (Ab4{t} Ab6{acc #} Db4{t} Db6{t} Ab5{t} Db5{t}).32{beam Down beam merge}
+      (Ab4{t} Ab5{t} Db4{t} Db5{t} Ab6{t}).16{beam Down beam merge}
+      (Ab5{t} Db4{t} Db5{t} Ab6{t}).64{beam Down beam merge}
+      (Db4{t} Db5{t} Ab6{t}).64{beam Down beam merge}
+      (Db5{t} Ab6{t}).64{beam Down beam merge}
+      C5.16{dy p beam Down beam split}
+    |
+      C5{t}.32{beam Down beam merge}
+      Ab5{acc #}.64{beam Down beam merge}
+      (Ab5{t} C5).32{d beam Down beam merge}
+      C5{t}.64{dy mf beam Down beam merge}
+      (C5{t} Ab5).16{d beam Down beam merge}
+      C5.8{dy mp beam Down beam merge}
+      C5{t}.32{beam Up beam merge}
+      (C5{t} G4).8{beam Up beam merge}
+      Ab4{acc #}.8{beam Up beam merge}
+      G4.16{dy mf beam Up beam merge}
+      Ab4{acc #}.8{d dy ff beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      Bb4{acc #}.8{dy f beam Up beam split}
+    |
+      Bb4{t acc #}.32{d beam Down beam merge}
+      C5.8{d beam Down beam merge}
+      C5{t}.64{beam Down beam split}
+      r.16{beam split}
+      r.32{d beam split}
+      Db5{acc #}.16{d beam Down beam merge}
+      Db5{t}.64{beam Down beam merge}
+      (Bb5{acc #} Bb4).64{dy pp beam Down beam merge}
+      (Bb5{t} Bb4{t} G4).16{beam Down beam merge}
+      (Bb4{t} G4{t}).8{dy mf beam Up beam merge}
+      (Bb4{t} G4{t}).64{beam Up beam merge}
+      G4{t}.32{d dy mp beam Up beam merge}
+      Ab4{acc #}.64{dy mf beam Up beam split}
+      Ab4{t}.4{beam Up beam split}
+    |
+      Ab4{t acc #}.4{beam Up beam split}
+      r.16{d beam split}
+      Ab4.8{beam Up beam merge}
+      Ab4{t}.32{beam Up beam split}
+      r.2{beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{dy p beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{dy mf beam split}
+    |
+      r.1{dy p beam split}
+    |
+      r.1{dy mp beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{beam split}
+    |
+      r.1{dy p beam split}
+  \staff {
+    score
+  }
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+        r.4{dy mp}
+        r.8
+        r.32
+        B3.8{d dy f beam Down beam merge}
+        C4.8{beam Down beam merge}
+        C4{t}.64{beam Down beam split}
+        r.4{beam split}
+        r.64{beam split}
+      |
+        r.2{beam split}
+        r.16{beam split}
+        r.64{beam split}
+        C4.8{d beam Down beam merge}
+        B3.8{dy ff beam Down beam merge}
+        B3{t}.32{d beam Down beam merge}
+        C4.16{dy f beam Down beam split}
+      |
+        C4{t}.16{d beam Down beam merge}
+        C4{t}.64{beam Down beam split}
+        r.2{beam split}
+        r.4{beam split}
+        r.8{beam split}
+        r.64{beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy mf beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.8{d beam split}
+        D2.16{beam Up beam split}
+        D2{t}.4{beam Up beam split}
+        r.8{beam split}
+        Eb2{acc #}.8{dy mp beam Up beam split}
+        r.32{beam split}
+        Eb2.8{d dy pp beam Up beam merge}
+        Eb2{t}.32{beam Up beam split}
+      |
+        r.1{beam split}
+      |
+        r.2{beam split}
+        r.4{beam split}
+        r.8{d beam split}
+        B1.16{dy p beam Up beam split}
+      |
+        B1{t}.4{beam Up beam split}
+        r.4{beam split}
+        r.8{beam split}
+        r.32{d beam split}
+        (E2 D1).32{d beam Up beam merge}
+        (E2{t} D2 D1{t}).32{beam Up beam split}
+        (E2{t} D1{t} D2{t} B0).32{beam Up beam merge}
+        (D1{t} D2{t} B0{t}).8{beam Up beam merge}
+        (D1{t} D2{t} B0{t}).64{beam Up beam merge}
+        (D2{t} D1{t} B0{t}).32{beam Up beam merge}
+        (D2{t} B0{t}).32{d beam Up beam split}
+      |
+        (D2{t} B0{t}).32{dy mf beam Up beam merge}
+        D2{t}.64{beam Up beam split}
+        r.8{beam split}
+        r.16{d beam split}
+        Bb0{acc #}.8{d dy mp beam Up beam merge}
+        Bb0{t}.32{beam Up beam merge}
+        Bb0{t}.16{d beam Up beam merge}
+        Bb0{t}.64{beam Up beam merge}
+        (Bb0{t} D2).32{d beam Up beam merge}
+        D2{t}.16{dy mf beam Up beam merge}
+        D2{t}.64{beam Up beam merge}
+        B0.32{dy pp beam Up beam split}
+        B0{t}.4{beam Up beam split}
+      |
+        r.1{beam split}
+      |
+        r.32{d dy f beam split}
+        G2.8{d dy mp beam Up beam merge}
+        G2{t}.64{beam Up beam split}
+        G3.8{dy mf beam Down beam split}
+        r.2{beam split}
+        r.8{beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.2{beam split}
+        r.16{beam split}
+        r.64{beam split}
+        B3.8{dy ff beam Down beam merge}
+        B3{t}.32{d beam Down beam split}
+        G3.4{dy f beam Down beam split}
+      |
+        G3{t}.8{d beam Down beam merge}
+        G3{t}.32{d beam Down beam merge}
+        A3.16{beam Down beam merge}
+        A3{t}.64{beam Down beam merge}
+        B3.16{d beam Down beam merge}
+        B3{t}.64{beam Down beam merge}
+        A3.16{dy ff beam Down beam merge}
+        A3{t}.8{d beam Down beam merge}
+        A3{t}.32{beam Down beam split}
+        r.64{beam split}
+        G3.8{dy f beam Down beam merge}
+        G3.8{beam Down beam merge}
+        G3{t}.32{beam Down beam split}
+      |
+        r.8{d beam split}
+        B3.16{dy ff beam Down beam split}
+        B3{t}.64{beam Down beam merge}
+        B3.8{d dy f beam Down beam merge}
+        B3{t}.32{d beam Down beam split}
+        B3{t}.8{d beam Down beam merge}
+        B3{t}.64{beam Down beam split}
+        r.32{d beam split}
+        B3.8{d beam Down beam merge}
+        B3{t}.64{beam Down beam merge}
+        A3.32{d dy mf beam Down beam split}
+      |
+        A3{t}.16{d beam Down beam merge}
+        A3{t}.64{beam Down beam merge}
+        G3.8{dy ff beam Down beam merge}
+        G3.64{dy mp beam Down beam split}
+        G3{t}.4{beam Down beam split}
+        r.2{beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy mf beam split}
+      |
+        r.2{dy f beam split}
+        B3.8{beam Down beam merge}
+        B3{t}.32{d beam Down beam merge}
+        C4.64{dy mp beam Down beam merge}
+        (C4{t} G3).16{d beam Down beam merge}
+        (C4{t} G3{t}).64{beam Down beam merge}
+        G3{t}.64{dy f beam Down beam merge}
+        A3.16{d dy pp beam Down beam merge}
+        (C4 A3).16{d dy p beam Down beam split}
+      |
+        (C4{t} A3{t}).16{d beam Down beam merge}
+        G3.8{dy mp beam Down beam merge}
+        G3{t}.32{beam Down beam split}
+        G3.32{d dy mf beam Down beam merge}
+        (B3 G3{t}).8{d beam Down beam merge}
+        (B3{t} G3{t}).64{beam Down beam split}
+        G3{t}.8{d beam Down beam merge}
+        G3{t}.64{beam Down beam split}
+        r.4{beam split}
+        r.32{d beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.2{dy f beam split}
+        C4.16{d dy mp beam Down beam merge}
+        C4{t}.64{beam Down beam merge}
+        C4.8{dy f beam Down beam merge}
+        C4{t}.64{beam Down beam split}
+        C4.8{dy mp beam Down beam merge}
+        C4.8{dy f beam Down beam split}
+      |
+        B3.8{d dy mf beam Down beam merge}
+        (B3{t} G3).8{beam Down beam merge}
+        G3{t}.32{d beam Down beam merge}
+        G3.8{beam Down beam merge}
+        G3{t}.16{d beam Down beam merge}
+        G3{t}.64{beam Down beam split}
+        r.64{beam split}
+        G3{t}.16{d beam Down beam merge}
+        G3{t}.64{beam Down beam merge}
+        G3{t}.16{beam Down beam split}
+        r.8{beam split}
+        r.16{d beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.2{dy f beam split}
+        C4.8{d dy p beam Down beam merge}
+        C4{t}.32{beam Down beam split}
+        r.32{beam split}
+        C4.32{d beam Down beam merge}
+        C4{t}.8{beam Down beam split}
+        r.16{beam split}
+        r.64{beam split}
+      |
+        r.1{dy mf beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy ff beam split}
+      |
+        r.1{dy pp beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.8{dy p beam split}
+        r.32{beam split}
+        C4.16{d dy mp beam Down beam split}
+        r.2{d beam split}
+      |
+        r.1{beam split}
+      |
+        r.8{dy mf beam split}
+        r.16{beam split}
+        r.32{d beam split}
+        C4.32{d dy p beam Down beam merge}
+        C4{t}.32{beam Down beam merge}
+        C4{t}.32{beam Down beam merge}
+        C4{t}.64{beam Down beam split}
+        r.8{beam split}
+        B3.16{d beam Down beam merge}
+        B3{t}.16{d beam Down beam split}
+        r.4{beam split}
+        r.16{beam split}
+        r.64{beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.4{beam split}
+        r.32{beam split}
+        (D1 D2 G1).8{dy mp beam Up beam merge}
+        (D1{t} D2{t} G1{t}).32{beam Up beam merge}
+        Db2{acc #}.16{dy p beam Up beam split}
+        r.16{beam split}
+        r.64{beam split}
+        Eb2{acc #}.8{dy mp beam Up beam merge}
+        Eb2{t}.16{d beam Up beam split}
+        r.32{d beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2{t}.32{beam Up beam split}
+      |
+        Eb2{t acc #}.16{d dy mf beam Up beam merge}
+        D2.8{dy p beam Up beam merge}
+        D2{t}.32{beam Up beam split}
+        r.32{d beam split}
+        Db2{acc #}.16{beam Up beam merge}
+        Db2{t}.64{beam Up beam merge}
+        (Db2{t} E1).32{beam Up beam merge}
+        E1{t}.16{dy mp beam Up beam merge}
+        (E1{t} D2).32{d beam Up beam merge}
+        D2{t}.16{d dy p beam Up beam merge}
+        Gb1{acc #}.32{d dy mp beam Up beam merge}
+        (Gb1{t} Eb1{acc #}).16{d beam Up beam split}
+        Gb1{t}.16{beam Up beam merge}
+        (Gb1{t} Db1{acc #}).64{beam Up beam merge}
+        Db1{t}.32{beam Up beam merge}
+        (Db1{t} Eb2{acc #}).16{d beam Up beam merge}
+        (Db1{t} Eb2{t}).64{beam Up beam merge}
+        (Eb2{t} Db2).32{dy p beam Up beam split}
+      |
+        (Eb2{t acc #} Db2{t acc #}).64{beam Up beam merge}
+        Db2{t}.8{d beam Up beam merge}
+        C2.32{d dy mp beam Up beam split}
+        C2{t}.8{d beam Up beam merge}
+        C2{t}.32{d beam Up beam merge}
+        (C2{t} C1).8{beam Up beam merge}
+        (C2{t} C1{t}).64{beam Up beam merge}
+        C1{t}.32{d dy p beam Up beam split}
+        r.4{beam split}
+        r.32{beam split}
+        B1.32{d dy mp beam Up beam split}
+      |
+        B1{t}.32{beam Up beam merge}
+        B1{t}.8{d beam Up beam merge}
+        B1{t}.32{beam Up beam split}
+        r.16{beam split}
+        Eb1{acc #}.8{d beam Up beam split}
+        r.4{beam split}
+        r.8{beam split}
+        r.16{d beam split}
+        D2.32{beam Up beam split}
+      |
+        D2{t}.2{beam Up beam split}
+        r.2{beam split}
+      |
+        r.1{dy ff beam split}
+      |
+        r.1{beam split}
+      |
+        r.4{dy f beam split}
+        r.16{beam split}
+        r.64{beam split}
+        B3.8{beam Down beam merge}
+        B3{t}.32{d beam Down beam split}
+        r.64{beam split}
+        G3.8{d dy ff beam Down beam merge}
+        G3{t}.32{d beam Down beam split}
+        r.8{beam split}
+        r.64{beam split}
+        A3.16{beam Down beam merge}
+        A3{t}.64{beam Down beam merge}
+        B3.32{dy f beam Down beam split}
+      |
+        B3{t}.16{beam Down beam merge}
+        A3.8{d beam Down beam split}
+        A3{t}.16{beam Down beam merge}
+        A3{t}.64{beam Down beam merge}
+        G3.8{dy ff beam Down beam merge}
+        G3{t}.32{d beam Down beam split}
+        G3.8{beam Down beam merge}
+        G3{t}.32{d beam Down beam split}
+        r.8{beam split}
+        r.32{d beam split}
+        B3.8{dy f beam Down beam merge}
+        B3{t}.32{beam Down beam split}
+      |
+        B3{t}.4{beam Down beam split}
+        r.16{beam split}
+        r.64{beam split}
+        C4.8{beam Down beam merge}
+        B3.8{dy ff beam Down beam merge}
+        B3{t}.32{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.64{beam Down beam split}
+        r.16{beam split}
+        G3.8{d beam Down beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy ff beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.1{beam split}
+      |
+        r.8{beam split}
+        r.32{beam split}
+        B3.64{beam Down beam merge}
+        B3{t}.16{beam Down beam merge}
+        B3{t}.64{beam Down beam split}
+        B3{t}.32{beam Down beam split}
+        r.32{beam split}
+        G3.8{d dy f beam Down beam split}
+        r.16{beam split}
+        r.32{d beam split}
+        A3.16{d beam Down beam merge}
+        G3.8{d dy mp beam Down beam merge}
+        G3{t}.32{d beam Down beam merge}
+        G3.16{dy ff beam Down beam split}
+      |
+        G3{t}.32{d beam Down beam merge}
+        G3.16{beam Down beam merge}
+        G3{t}.64{beam Down beam merge}
+        G3.8{dy mf beam Down beam split}
+        G3{t}.4{beam Down beam split}
+        r.2{beam split}
+      |
+        r.2{dy mp beam split}
+        r.4{beam split}
+        r.32{beam split}
+        B3.32{d beam Down beam merge}
+        B3{t}.16{beam Down beam merge}
+        B3{t}.16{d beam Down beam merge}
+        B3{t}.64{beam Down beam split}
+      |
+        r.8{dy f beam split}
+        r.32{beam split}
+        C4.16{d beam Down beam split}
+        C4.8{beam Down beam merge}
+        C4{t}.32{d beam Down beam merge}
+        B3.16{dy mf beam Down beam merge}
+        B3{t}.64{beam Down beam split}
+        r.64{beam split}
+        C4.8{dy ff beam Down beam merge}
+        C4{t}.32{beam Down beam merge}
+        B3.8{d dy mf beam Down beam merge}
+        B3{t}.32{beam Down beam merge}
+        (B3{t} G3).32{d beam Down beam merge}
+        G3{t}.16{dy f beam Down beam split}
+      |
+        G3{t}.32{beam Down beam merge}
+        G3.8{d beam Down beam merge}
+        G3{t}.32{beam Down beam split}
+        r.2{d beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.2{dy mf beam split}
+        r.16{beam split}
+        B3.8{d dy p beam Down beam split}
+        r.4{beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy pp beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy mf beam split}
+      |
+        r.1{dy ff beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.1{dy pp beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy mf beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{beam split}
+      |
+        r.2{dy pp beam split}
+        r.32{d beam split}
+        D2.64{dy f beam Up beam merge}
+        (D2{t} F2).16{d beam Up beam merge}
+        (D2{t} B0).16{beam Up beam merge}
+        (D2{t} D2).64{beam Up beam merge}
+        D2{t}.16{d dy mf beam Up beam merge}
+        C2.32{dy p beam Up beam merge}
+        (C2{t} C1).16{d beam Up beam merge}
+        (C2{t} C1{t}).32{beam Up beam merge}
+        (C2{t} C1{t} D2).64{beam Up beam split}
+      |
+        (C2{t} C1{t} D2{t}).32{beam Up beam merge}
+        (C1{t} D2{t}).16{beam Up beam merge}
+        (C1{t} D2{t}).64{beam Up beam merge}
+        D2{t}.8{dy mp beam Up beam merge}
+        D2{t}.64{beam Up beam split}
+        Db2{acc #}.32{dy mf beam Up beam merge}
+        (Db2{t} E1).8{beam Up beam merge}
+        (Db2{t} E1{t}).32{d beam Up beam merge}
+        E1{t}.32{d dy mp beam Up beam split}
+        r.64{beam split}
+        C2.32{dy p beam Up beam merge}
+        (C2{t} Bb0{acc #}).32{beam Up beam merge}
+        (C2{t} Bb0{t}).8{beam Up beam merge}
+        (C2{t} Bb0{t}).32{d beam Up beam split}
+        C2{t}.8{beam Up beam merge}
+        C2{t}.64{beam Up beam merge}
+        (C2{t} Bb0).32{beam Up beam merge}
+        Bb0{t}.16{beam Up beam merge}
+        (Bb0{t} Db2{acc #}).64{beam Up beam split}
+      |
+        (Bb0{t acc #} Db2{t acc #}).8{beam Up beam merge}
+        Db2{t}.64{dy mp beam Up beam merge}
+        C2.16{d dy mf beam Up beam merge}
+        C2{t}.64{beam Up beam split}
+        C2{t}.4{d beam Up beam split}
+        C2{t}.16{beam Up beam split}
+        r.64{beam split}
+        E2.32{d dy p beam Up beam split}
+        E2{t}.4{beam Up beam split}
+      |
+        r.4{beam split}
+        r.8{d beam split}
+        C2.8{d dy mp beam Up beam merge}
+        C2{t}.32{beam Up beam merge}
+        (C2{t} D2).16{d beam Up beam split}
+        D2{t}.64{dy p beam Up beam merge}
+        C1.16{dy pp beam Up beam merge}
+        (C1{t} C2).8{beam Up beam merge}
+        C2{t}.32{d dy mf beam Up beam split}
+      |
+        (C2{t} D2).4{beam Up beam split}
+        C2{t}.16{d beam Up beam merge}
+        (C2{t} Eb2{acc #}).8{beam Up beam merge}
+        (A0 Eb2{t} C2{t}).32{beam Up beam split}
+        (A0{t} C2{t}).8{beam Up beam merge}
+        (A0{t} C2{t}).64{beam Up beam merge}
+        (Eb1{acc #} C2{t}).32{d beam Up beam merge}
+        (Eb1{t} Eb2 C2{t}).16{d beam Up beam merge}
+        (Eb2{t} C2{t}).16{beam Up beam merge}
+        (Eb2{t} C2{t}).64{beam Up beam merge}
+        (C2{t} E1).16{d beam Up beam merge}
+        (C2{t} D1 E1{t}).32{beam Up beam merge}
+        (C2{t} D1{t} D2).64{beam Up beam split}
+      |
+        (C2{t} D1{t} D2{t}).16{d beam Up beam merge}
+        (D1{t} D2{t}).16{dy mp beam Up beam merge}
+        D2{t}.16{d beam Up beam split}
+        r.16{d beam split}
+        D1.64{beam Up beam merge}
+        (D1{t} B1 D2).64{beam Up beam merge}
+        (D1{t} B1{t} B0 D2{t}).64{beam Up beam merge}
+        (D1{t} B1{t} B0{t} D2{t} E1).16{beam Up beam merge}
+        (D2{t} E1{t} B1{t}).32{d beam Up beam split}
+        (D2{t} B1{t}).64{beam Up beam merge}
+        D2{t}.64{beam Up beam merge}
+        D2{t}.32{beam Up beam merge}
+        (D2{t} E1).32{beam Up beam merge}
+        (D2{t} E1{t}).32{beam Up beam merge}
+        (E1{t} D2{t}).16{d beam Up beam merge}
+        (E1{t} D2{t}).64{beam Up beam merge}
+        D2{t}.64{beam Up beam split}
+        D2{t}.16{d beam Up beam merge}
+        D2{t}.64{beam Up beam split}
+        r.16{beam split}
+        r.64{beam split}
+        E1.32{beam Up beam merge}
+        (E1{t} D2).32{beam Up beam split}
+      |
+        (E1{t} D2{t} B0 E2).64{dy mf beam Up beam merge}
+        (B1 E1{t} B0{t} D2{t} E2{t}).16{beam Up beam merge}
+        (E1{t} D2{t} E2{t} B1{t}).8{beam Up beam merge}
+        (D2{t} E2{t} B1{t}).64{dy mp beam Up beam merge}
+        (D2{t} E2{t}).16{beam Up beam merge}
+        E2{t}.8{dy p beam Up beam merge}
+        E2{t}.64{beam Up beam merge}
+        (E2{t} Bb0{acc #} Bb1{acc #} C1).32{beam Up beam merge}
+        (Bb0{t} Bb1{t} C1{t} D2 G1).16{beam Up beam merge}
+        (Bb1{t} C1{t} D2{t} G1{t}).64{beam Up beam merge}
+        (C1{t} D2{t} G1{t}).64{beam Up beam merge}
+        (G1{t} C1{t} D2).32{beam Up beam merge}
+        (G1{t} D2{t}).32{beam Up beam merge}
+        (G1{t} D2{t} D1).32{d beam Up beam merge}
+        (D2{t} D1{t}).32{d dy ff beam Up beam merge}
+        (D2{t} D1{t} A2).32{d beam Up beam split}
+        (D1{t} A2{t} D2).16{d dy mp beam Up beam merge}
+        (D1{t} A2{t} D2{t}).64{beam Up beam merge}
+        (D1{t} D2{t}).16{beam Up beam merge}
+        D2{t}.16{dy f beam Up beam merge}
+        D2{t}.64{beam Up beam split}
+      |
+        r.32{beam split}
+        D2.8{d dy p beam Up beam merge}
+        D2{t}.32{beam Up beam split}
+        r.8{beam split}
+        D2.8{beam Up beam split}
+        D2{t}.8{beam Up beam merge}
+        D2.8{beam Up beam split}
+        D2{t}.4{beam Up beam split}
+      |
+        r.8{beam split}
+        r.16{beam split}
+        r.64{beam split}
+        C2.32{d dy mp beam Up beam split}
+        C2{t}.2{beam Up beam split}
+        r.4{beam split}
+      |
+        r.8{dy f beam split}
+        r.16{beam split}
+        r.64{beam split}
+        B3.8{beam Down beam merge}
+        B3{t}.64{beam Down beam merge}
+        C4.8{dy mf beam Down beam merge}
+        C4{t}.32{beam Down beam split}
+        r.2{beam split}
+      |
+        r.4{dy f beam split}
+        r.8{beam split}
+        r.64{beam split}
+        C4.8{beam Down beam merge}
+        C4{t}.32{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        B3{t}.32{beam Down beam merge}
+        C4.8{d beam Down beam merge}
+        C4{t}.32{d beam Down beam split}
+        r.16{beam split}
+      |
+        r.2{beam split}
+        r.4{beam split}
+        r.8{beam split}
+        r.16{beam split}
+        r.64{beam split}
+        B3.32{d beam Down beam split}
+      |
+        B3{t}.16{d beam Down beam merge}
+        C4.8{dy mf beam Down beam merge}
+        C4{t}.32{beam Down beam split}
+        C4{t}.32{d beam Down beam split}
+        r.2{beam split}
+        r.8{beam split}
+        r.16{beam split}
+        r.64{beam split}
+      |
+        r.2{dy f beam split}
+        r.8{beam split}
+        r.32{beam split}
+        Bb3{acc #}.16{beam Down beam merge}
+        Bb3{t}.64{beam Down beam merge}
+        B3.64{beam Down beam split}
+        B3{t}.4{beam Down beam split}
+      |
+        B3{t}.2{beam Down beam split}
+        r.8{d beam split}
+        B3.8{beam Down beam merge}
+        C4.8{d beam Down beam split}
+      |
+        C4{t}.64{dy mf beam Down beam split}
+        r.4{beam split}
+        B3.8{dy p beam Down beam merge}
+        B3{t}.64{beam Down beam merge}
+        C4.16{d beam Down beam split}
+        r.16{beam split}
+        r.32{d beam split}
+        B3.32{d beam Down beam merge}
+        B3{t}.64{beam Down beam split}
+        r.32{beam split}
+        B3.16{d dy mp beam Down beam merge}
+        B3{t}.32{beam Down beam merge}
+        C4.8{dy f beam Down beam merge}
+        C4{t}.32{d beam Down beam split}
+      |
+        B3.8{beam Down beam merge}
+        B3{t}.64{beam Down beam merge}
+        C4.16{dy mp beam Down beam merge}
+        C4.8{d dy f beam Down beam merge}
+        B3.32{dy mp beam Down beam merge}
+        B3{t}.64{beam Down beam merge}
+        B3{t}.16{beam Down beam split}
+        B3{t}.16{beam Down beam merge}
+        B3{t}.64{beam Down beam split}
+        r.4{beam split}
+        r.8{beam split}
+        r.32{d beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy mp beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{beam split}
+      |
+        r.1{dy p beam split}
+      |
+        r.1{dy f beam split}
+      |
+        r.1{dy mf beam split}
+      |
+        r.1{beam split}
+      |
+        r.8{beam split}
+        r.16{d beam split}
+        E2.32{dy mp beam Up beam split}
+        E2{t}.4{beam Up beam split}
+        r.8{beam split}
+        r.16{d beam split}
+        E2.32{dy p beam Up beam split}
+        E2{t}.4{beam Up beam split}
+      |
+        r.8{beam split}
+        r.64{beam split}
+        C2.16{d beam Up beam merge}
+        C2{t}.64{beam Up beam split}
+        r.2{d beam split}
+      |
+        r.2{beam split}
+        r.4{beam split}
+        r.32{d beam split}
+        Eb2{acc #}.8{dy mp beam Up beam merge}
+        Db2{acc #}.16{dy mf beam Up beam merge}
+        Db2{t}.64{beam Up beam split}
+      |
+        Db2{t acc #}.8{beam Up beam merge}
+        Db2{t}.32{beam Up beam merge}
+        C2.16{d dy mp beam Up beam split}
+        C2{t}.4{beam Up beam split}
+        C2{t}.16{beam Up beam merge}
+        Bb0{acc #}.8{d dy p beam Up beam split}
+        Bb0{t}.4{beam Up beam split}
+      |
+        r.4{beam split}
+        r.64{beam split}
+        Bb0{acc #}.8{d dy mp beam Up beam merge}
+        Bb0{t}.32{d beam Up beam split}
+        r.2{beam split}
+      |
+        r.2{beam split}
+        r.4{beam split}
+        r.8{beam split}
+        r.16{d beam split}
+        Db1{acc #}.32{beam Up beam split}
+      |
+        Db1{t acc #}.16{beam Up beam merge}
+        Db1{t}.64{beam Up beam merge}
+        (Db1{t} Ab1{acc #}).16{d beam Up beam merge}
+        (Db1{t} Ab1{t}).64{beam Up beam merge}
+        Ab1{t}.16{beam Up beam split}
+        Ab1{t}.64{beam Up beam merge}
+        (Ab1{t} Eb1{acc #}).8{d beam Up beam merge}
+        (Ab1{t} Eb1{t}).32{d beam Up beam split}
+        Ab1{t}.8{beam Up beam merge}
+        (Ab1{t} E1).8{beam Up beam split}
+        Ab1{t}.8{d beam Up beam merge}
+        (Ab1{t} Bb0{acc #}).16{beam Up beam split}
+      |
+        (Ab1{t acc #} Bb0{t acc #}).4{beam Up beam split}
+        r.8{beam split}
+        r.64{beam split}
+        Ab1.8{beam Up beam merge}
+        Ab1{t}.32{beam Up beam merge}
+        (Ab1{t} C4).8{d beam Up beam merge}
+        (Ab1{t} C4{t}).32{beam Up beam merge}
+        C4{t}.8{d dy p beam Down beam merge}
+        C4{t}.32{d beam Down beam split}
+      |
+        r.4{d beam split}
+        Bb0{acc #}.8{d beam Up beam split}
+        r.4{beam split}
+        r.8{d beam split}

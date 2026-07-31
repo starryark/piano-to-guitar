@@ -1,0 +1,23 @@
+{
+  "manifest": "source-set.json",
+  "sources": [
+    {
+      "file": "LieZhiJiuBaChengShi_Piano_only.alphatab",
+      "digest": "LieZhiJiuBaChengShi_Piano_only.json",
+      "role": "pitched-reference",
+      "weight": 1,
+      "bars": 108,
+      "key": "A",
+      "sourceKind": "noisy-transcription"
+    },
+    {
+      "file": "LieZhiJiuBaChengShi_Piano_and_Drum.alphatab",
+      "digest": "LieZhiJiuBaChengShi_Piano_and_Drum.json",
+      "role": "full-mix-reference",
+      "weight": 1,
+      "bars": 108,
+      "key": "F#m",
+      "sourceKind": "noisy-transcription"
+    }
+  ]
+}

@@ -4,10 +4,20 @@
 //
 // Usage:
 //   node tools/playability.mjs tabs/x.alphatab [--bars 9-16] [--gain high|crunch|clean]
+//        [--policy guitar-policy.json] [--warnings-as-errors]
 //
 // Turns reference/guitar-playability.md's prose into mechanical checks. Every
 // finding is either a hard mechanical impossibility (errors) or a tone/physics
 // advisory (warnings).
+//
+// PTG (Improve_Plan §7): --policy adds PROJECT-SPECIFIC texture constraints on
+// top of the general mechanical checks — an exact fret ceiling, single-note
+// limits on fast attacks, simultaneous-note caps, brush/roll/mute bans, and a
+// rapid-repeated-grip check. Tie integrity (a tie-shaped token that parsed
+// into a fresh attack; a linked tie that changes pitch) is checked ALWAYS —
+// corrupted tie semantics are as unplayable-as-written as a 30-fret note.
+// --warnings-as-errors escalates every soft advisory into errors[] so an
+// automatic approval policy can require a zero-warning tab.
 //
 // PICK REACHABILITY IS CHECKED HERE: a struck beat with >=2 notes on
 // non-adjacent strings and no brush/arpeggio effect fails with the
@@ -32,6 +42,7 @@
 // SOURCE numbering (1 = high e). Nothing downstream touches note.string again.
 
 import * as at from '@coderline/alphatab';
+import * as fs from 'node:fs';
 import { loadTex, midiToName, QUARTER_TICKS } from './lib/score-utils.mjs';
 import {
   fromAlphaTabNote,
@@ -40,6 +51,7 @@ import {
   intervalsOf,
   STRING_COUNT,
 } from './lib/fretboard.mjs';
+import { auditTieIntents, collectTieChains } from './lib/ties.mjs'; // PTG §7
 
 // ---- thresholds -----------------------------------------------------------
 const G3 = 55;                       // ~G3: below this a 3rd muds under gain
@@ -68,7 +80,9 @@ const BRUSH_NONE = 0;
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
   let bars = null;
-  let gain = 'high';
+  let gain = null;                 // PTG: null = "not set on the CLI" (policy may supply it)
+  let policy = null;               // PTG §7
+  let warningsAsErrors = false;    // PTG §7.3
   let file = null;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -76,9 +90,51 @@ function parseArgs(argv) {
     else if (a.startsWith('--bars=')) bars = a.slice('--bars='.length);
     else if (a === '--gain') gain = argv[++i];
     else if (a.startsWith('--gain=')) gain = a.slice('--gain='.length);
+    else if (a === '--policy') policy = argv[++i];
+    else if (a.startsWith('--policy=')) policy = a.slice('--policy='.length);
+    else if (a === '--warnings-as-errors') warningsAsErrors = true;
     else if (!a.startsWith('--')) file = a;
   }
-  return { bars, gain, file };
+  return { bars, gain, policy, warningsAsErrors, file };
+}
+
+// PTG §7.1: load + fail-closed-validate a guitar-policy.json. Unknown keys are
+// exit 2 (a typo like "maxfret" must never silently weaken the gate).
+const POLICY_KEYS = new Set([
+  'tuning', 'maxFret', 'gain', 'fastAttackMaxNotes', 'fastAttackThreshold',
+  'maxSimultaneousNotes', 'allowRolls', 'allowBrushes', 'allowMutes',
+  'preferredFretSpan',
+]);
+function loadPolicy(policyPath) {
+  let parsed;
+  try {
+    parsed = JSON.parse(fs.readFileSync(policyPath, 'utf8'));
+  } catch (e) {
+    console.error(`Cannot read policy "${policyPath}": ${e.message}`);
+    process.exit(2);
+  }
+  for (const k of Object.keys(parsed)) {
+    if (!POLICY_KEYS.has(k)) {
+      console.error(`Unknown policy key "${k}" in ${policyPath} (known: ${[...POLICY_KEYS].join(', ')})`);
+      process.exit(2);
+    }
+  }
+  if (parsed.tuning !== undefined && parsed.tuning !== 'standard') {
+    console.error(`policy tuning "${parsed.tuning}" unsupported — this toolchain is standard-tuning-first`);
+    process.exit(2);
+  }
+  for (const k of ['maxFret', 'fastAttackMaxNotes', 'maxSimultaneousNotes', 'preferredFretSpan']) {
+    if (parsed[k] !== undefined && (!Number.isInteger(parsed[k]) || parsed[k] < 1)) {
+      console.error(`policy ${k} must be a positive integer, got ${parsed[k]}`);
+      process.exit(2);
+    }
+  }
+  if (parsed.fastAttackThreshold !== undefined
+    && (!Number.isFinite(parsed.fastAttackThreshold) || parsed.fastAttackThreshold <= 0)) {
+    console.error(`policy fastAttackThreshold must be > 0 beats, got ${parsed.fastAttackThreshold}`);
+    process.exit(2);
+  }
+  return parsed;
 }
 
 /** Parse "9-16" | "12" -> {lo, hi}, or null for "all bars". */
@@ -94,11 +150,15 @@ function parseBarRange(spec) {
   return { lo: Math.min(lo, hi), hi: Math.max(lo, hi) };
 }
 
-const { bars, gain, file } = parseArgs(process.argv.slice(2));
+const { bars, gain: gainArg, policy: policyPath, warningsAsErrors, file } = parseArgs(process.argv.slice(2));
 if (!file) {
-  console.error('Usage: node tools/playability.mjs <file.alphatab> [--bars N-M] [--gain high|crunch|clean]');
+  console.error('Usage: node tools/playability.mjs <file.alphatab> [--bars N-M] '
+    + '[--gain high|crunch|clean] [--policy guitar-policy.json] [--warnings-as-errors]');
   process.exit(2);
 }
+// PTG: precedence — explicit --gain > policy.gain > the historical default.
+const policy = policyPath ? loadPolicy(policyPath) : null;
+const gain = gainArg ?? policy?.gain ?? 'high';
 if (!['high', 'crunch', 'clean'].includes(gain)) {
   console.error(`Bad --gain "${gain}"; expected high|crunch|clean`);
   process.exit(2);
@@ -121,6 +181,30 @@ let notesAnalyzed = 0;
 
 function add(list, type, message, loc) {
   list.push({ type, message, ...loc });
+}
+
+// ---- PTG §7.2: tie integrity (always on) ------------------------------------
+// alphaTab silently parses a tie-shaped token with no resolvable origin into a
+// FRESH ATTACK — on a tab staff, an attack of the open string. The tab then
+// plays a pitch its author never wrote. Model-vs-text audit catches it; a
+// linked chain that changes pitch mid-flight (importer drift) is also fatal.
+{
+  const rawText = fs.readFileSync(file, 'utf8');
+  const intent = auditTieIntents(rawText, score);
+  if (intent.dropped > 0) {
+    add(errors, 'tie-without-origin',
+      `${intent.dropped} tie-shaped token(s) have no compatible origin and parsed as fresh ` +
+      `attacks (${intent.textTieTokens} tie tokens vs ${intent.parsedTieDestinations} parsed ` +
+      'tie destinations) — run tools/tab-events.mjs to see which notes actually attack.', {});
+  }
+  const { chains } = collectTieChains(score);
+  for (const c of chains) {
+    if (c.pitchChanged) {
+      add(errors, 'tie-pitch-changed',
+        `Bar ${c.startBar}: tie chain ${c.id} changes pitch mid-chain — a tied continuation ` +
+        'must keep its pitch.', { bar: c.startBar });
+    }
+  }
 }
 
 // ---- helpers --------------------------------------------------------------
@@ -190,6 +274,8 @@ for (let ti = 0; ti < score.tracks.length; ti++) {
 }
 
 function analyzeSequence(seq, ctx) {
+  let gripStreak = 0;      // PTG §7.2: consecutive identical fast multi-note grips
+  let prevGripKey = null;
   for (let i = 0; i < seq.length; i++) {
     const cur = seq[i];
     const { beat, barNum, notes } = cur;
@@ -200,6 +286,69 @@ function analyzeSequence(seq, ctx) {
 
     if (!beat.isRest) beatsAnalyzed++;
     notesAnalyzed += notes.length;
+
+    // ---- PTG §7.2: project-policy texture constraints ---------------------
+    if (policy && !beat.isRest && notes.length >= 1) {
+      const beatLen = beat.playbackDuration / QUARTER_TICKS;
+      const fastThreshold = policy.fastAttackThreshold ?? 0.25;
+
+      if (policy.fastAttackMaxNotes !== undefined
+        && beatLen <= fastThreshold + 1e-6 && notes.length > policy.fastAttackMaxNotes) {
+        add(errors, 'policy-fast-attack',
+          `Bar ${barNum}: ${notes.length}-note attack at ${beatLen}-beat duration — policy allows ` +
+          `at most ${policy.fastAttackMaxNotes} note(s) on attacks <= ${fastThreshold} beats.`, loc);
+      }
+      if (policy.maxSimultaneousNotes !== undefined && notes.length > policy.maxSimultaneousNotes) {
+        add(errors, 'policy-max-simultaneous',
+          `Bar ${barNum}: ${notes.length} simultaneous notes — policy caps attacks at ` +
+          `${policy.maxSimultaneousNotes}.`, loc);
+      }
+      if (policy.maxFret !== undefined) {
+        for (const n of notes) {
+          if (n.fret > policy.maxFret) {
+            add(errors, 'policy-max-fret',
+              `Bar ${barNum}: fret ${n.fret} (string ${n.string}) exceeds the player's physical ` +
+              `limit of ${policy.maxFret}.`, loc);
+          }
+        }
+      }
+      const brush = beat.brushType ?? BRUSH_NONE;
+      if (policy.allowBrushes === false && (brush === 1 || brush === 2)) {
+        add(errors, 'policy-brush', `Bar ${barNum}: brush effect — policy forbids brushes.`, loc);
+      }
+      if (policy.allowRolls === false && (brush === 3 || brush === 4)) {
+        add(errors, 'policy-roll', `Bar ${barNum}: arpeggio/roll effect — policy forbids rolls.`, loc);
+      }
+      if (policy.allowMutes === false
+        && notes.some((n) => n.raw.isPalmMute || n.raw.isDead)) {
+        add(errors, 'policy-mute', `Bar ${barNum}: palm-muted or dead note — policy forbids mutes.`, loc);
+      }
+      if (policy.preferredFretSpan !== undefined && notes.length >= 2) {
+        const span = spanOf(notes.map(({ string, fret }) => ({ string, fret })));
+        if (span.frettedCount >= 2 && (span.maxFret - span.minFret) > policy.preferredFretSpan) {
+          add(warnings, 'policy-fret-span',
+            `Bar ${barNum}: voicing spans ${span.maxFret - span.minFret} frets — over the ` +
+            `preferred ${policy.preferredFretSpan}.`, loc);
+        }
+      }
+
+      // Rapid repeated grip: the same multi-note shape re-struck 3+ times in a
+      // row at fast-attack pace is a strum pattern pretending to be a line.
+      const gripKey = notes.length >= 2 && beatLen <= fastThreshold + 1e-6
+        ? notes.map((n) => `${n.string}:${n.fret}`).sort().join('|')
+        : null;
+      if (gripKey !== null && gripKey === prevGripKey) {
+        gripStreak++;
+        if (gripStreak === 3) {
+          add(errors, 'policy-rapid-grip',
+            `Bar ${barNum}: the same ${notes.length}-note grip re-struck ${gripStreak}+ times at ` +
+            `<= ${fastThreshold}-beat pace — policy forbids rapid repeated grips.`, loc);
+        }
+      } else {
+        gripStreak = gripKey !== null ? 1 : 0;
+      }
+      prevGripKey = gripKey;
+    }
 
     // ---- per-beat: voicing geometry (span / one-note-per-string / reach) --
     if (notes.length >= 1) {
@@ -365,12 +514,21 @@ function analyzeSequence(seq, ctx) {
 }
 
 // ---- output ---------------------------------------------------------------
+// PTG §7.3: --warnings-as-errors escalates every soft advisory. check.mjs
+// gates on errors[] only, so this is how an automatic approval policy demands
+// a ZERO-warning tab.
+if (warningsAsErrors && warnings.length) {
+  for (const w of warnings) errors.push({ ...w, escalatedFromWarning: true });
+  warnings.length = 0;
+}
 const ok = errors.length === 0 && warnings.length === 0;
 const out = {
   ok,
   file,
   gain,
   bars: bars ?? null,
+  policy: policyPath ?? null,
+  warningsAsErrors,
   stats: {
     tracks: score.tracks.length,
     bars: score.masterBars.length,

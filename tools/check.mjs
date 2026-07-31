@@ -59,6 +59,9 @@ function parseArgs(argv) {
   let gain = 'high';        // matches playability's own default
   let digest = null;
   let map = null;
+  let contract = null;      // PTG: melody contract for contract-mode sidecars
+  let policy = null;        // PTG: guitar policy for playability (§7)
+  let warningsAsErrors = false; // PTG §7.3
   let json = false;
   let file = null;
   for (let i = 0; i < argv.length; i++) {
@@ -73,10 +76,15 @@ function parseArgs(argv) {
     else if (a.startsWith('--digest=')) digest = a.slice('--digest='.length);
     else if (a === '--map') map = argv[++i];
     else if (a.startsWith('--map=')) map = a.slice('--map='.length);
+    else if (a === '--contract') contract = argv[++i];   // PTG: melody contract (§5)
+    else if (a.startsWith('--contract=')) contract = a.slice('--contract='.length);
+    else if (a === '--policy') policy = argv[++i];       // PTG: guitar policy (§7)
+    else if (a.startsWith('--policy=')) policy = a.slice('--policy='.length);
+    else if (a === '--warnings-as-errors') warningsAsErrors = true;  // PTG §7.3
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) file = file ?? a;
   }
-  return { file, bars, transpose, gain, digest, map, json };
+  return { file, bars, transpose, gain, digest, map, contract, policy, warningsAsErrors, json };
 }
 
 function usage(msg) {
@@ -84,11 +92,15 @@ function usage(msg) {
   console.error(
     'Usage: node tools/check.mjs <tab.alphatab> --bars N-M ' +
     '[--transpose N] [--gain high|crunch|clean] [--digest <path>] ' +
-    '[--map <sidecar.json>] [--json]');
+    '[--map <sidecar.json>] [--contract <melody-contract.json>] ' +
+    '[--policy <guitar-policy.json>] [--warnings-as-errors] [--json]');
   process.exit(2);
 }
 
-const { file, bars, transpose, gain, digest: digestArg, map: mapArg, json } = parseArgs(process.argv.slice(2));
+const {
+  file, bars, transpose, gain, digest: digestArg, map: mapArg, contract: contractArg,
+  policy: policyArg, warningsAsErrors, json,
+} = parseArgs(process.argv.slice(2));
 
 if (!file) usage('No tab file given.');
 if (!bars) usage('--bars N-M is required (compare needs a bar range).');
@@ -122,6 +134,19 @@ if (mapPath && !fs.existsSync(mapPath)) {
   usage(`No map sidecar at "${mapPath}"`);
 }
 
+// PTG: --contract is passed straight through to compare.mjs (contract-mode
+// sidecars). Existence checked here for a clear exit-2 on typos.
+const contractPath = contractArg ?? null;
+if (contractPath && !fs.existsSync(contractPath)) {
+  usage(`No melody contract at "${contractPath}"`);
+}
+
+// PTG: --policy is passed straight through to playability.mjs (§7).
+const policyPath = policyArg ?? null;
+if (policyPath && !fs.existsSync(policyPath)) {
+  usage(`No guitar policy at "${policyPath}"`);
+}
+
 // ---- child-process helper -------------------------------------------------
 /** Run a sub-tool, capture {code, stdout, stderr, json|null}. */
 function run(script, args) {
@@ -151,7 +176,10 @@ let toolError = null;  // a sub-tool that could not produce JSON at all
 
 if (!parseFailed) {
   // STAGE 2: playability — DO NOT trust exit code; gate on errors[] ONLY.
-  const P = run('playability.mjs', [file, '--bars', bars, '--gain', gain]);
+  const playArgs = [file, '--bars', bars, '--gain', gain];
+  if (policyPath) playArgs.push('--policy', policyPath);          // PTG §7
+  if (warningsAsErrors) playArgs.push('--warnings-as-errors');    // PTG §7.3
+  const P = run('playability.mjs', playArgs);
   if (P.json === null) {
     toolError = toolError ?? `playability.mjs produced no JSON:\n${(P.stderr || P.stdout || '').trim()}`;
   } else {
@@ -167,6 +195,7 @@ if (!parseFailed) {
   // STAGE 3: compare — the fidelity gate. Exit 0 pass / 1 hard-fail / 2 IO.
   const cmpArgs = [file, digestPath, '--bars', bars, '--transpose', String(transposeNum), '--json'];
   if (mapPath) cmpArgs.push('--map', mapPath);
+  if (contractPath) cmpArgs.push('--contract', contractPath);   // PTG
   const C = run('compare.mjs', cmpArgs);
   if (C.code === 2) {
     cmpIoError = (C.stderr || C.stdout || 'compare reported an IO/usage error').trim();
@@ -196,6 +225,7 @@ if (cmpHard && !cmpHard.ok) {
       for (const f of r.failures) {
         if (f.gate === 'melodicSkeleton') gates.add('compare melodic skeleton');
         else if (f.gate === 'harmonicRoots') gates.add('compare harmonic roots');
+        else if (f.gate === 'contract') gates.add('compare melody contract');   // PTG
         else gates.add('compare');
       }
     }
@@ -282,9 +312,18 @@ if (cmpHard) {
     L.push(`  compare (fidelity)   ${mark(cmpHard.ok)}   map ${cmpHard.map}`);
     for (const r of cmpHard.mapResults) {
       const src = r.sourceBars ? `  sourceBars=[${r.sourceBars.join(',')}]` : '';
+      const ph = r.contractPhrase ? ` phrase="${r.contractPhrase}"` : '';  // PTG
       const tail = r.ok ? mark(true) : `${mark(false)}  ${r.failures[0].message}`;
-      L.push(`       # ${r.mode.padEnd(9)} tabBars=[${r.tabBars.join(',')}]${src}  ${tail}`);
+      L.push(`       # ${r.mode.padEnd(9)} tabBars=[${r.tabBars.join(',')}]${src}${ph}  ${tail}`);
       for (const f of r.failures.slice(1)) L.push(`                       ! ${f.message}`);
+      if (r.totals) {   // PTG §5.3: contract obligations are always shown, never 0/0
+        const t = r.totals;
+        const bits = [`attacks ${t.foregroundAttacks.covered}/${t.foregroundAttacks.total}`];
+        if (t.durationObligations.total) bits.push(`durations ${t.durationObligations.covered}/${t.durationObligations.total}`);
+        if (t.requiredGaps.total) bits.push(`gaps ${t.requiredGaps.covered}/${t.requiredGaps.total}`);
+        if (t.forbiddenRules.total) bits.push(`forbidden ${t.forbiddenRules.covered}/${t.forbiddenRules.total}`);
+        L.push(`                       ~ contract obligations: ${bits.join(', ')}`);
+      }
     }
   } else {
     const hg = cmpHard.hardGates;

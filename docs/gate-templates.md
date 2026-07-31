@@ -43,6 +43,29 @@ waiting at this gate.
 Approve to start drafting chunk 1 (bars <N>-<M>)?
 ```
 
+### Gate A — Source-reliability block (fill from source-profile.mjs + foreground-map.md)
+
+Present this with the arrangement plan whenever the source is an automatic
+transcription (and fill the first row even when it is not):
+
+```
+## Source reliability: <song>
+
+| Item | Decision |
+|---|---|
+| Transcription type | <clean notation \| noisy automatic transcription> (sourceProfile.kind) |
+| Pitched-performance groups | <tracks/voices treated as ONE performance, e.g. "pitched-1: track 0, voices 0-5"> |
+| Excluded tracks | <track N "<name>" — percussion (structural evidence), or none> |
+| Foreground authority | <digest skeleton \| reviewed foreground contract (melody-contract.json)> |
+| Ambiguous bars | <bars from foreground-map.md needing a human decision, with the chosen reading> |
+| Relocation groups | <complete phrases moved coherently: bars N-M ±12, reason — or none> |
+```
+
+On a noisy transcription the foreground authority row is the load-bearing one:
+if it says "digest skeleton", you are grading against a heuristic the profile
+itself says is unreliable. Write and validate the melody contract first
+(`node tools/contract-validate.mjs melody-contract.json --digest source.json`).
+
 ### Transposition candidate table (general guitar craft)
 
 > ⚠️ **This table is general craft, NOT derived from the CanonRock corpus — every
@@ -94,10 +117,12 @@ chunk. The schema — never re-invent it mid-session:
 ```json
 {
   "song": "<name>",
+  "contract": "melody-contract.json",
   "entries": [
     { "tabBars": [1, 8],  "mode": "free",      "note": "intro riff — added material" },
     { "tabBars": [9, 16], "mode": "quote",     "sourceBars": [1, 4], "note": "theme, stated straight" },
-    { "tabBars": [17, 24],"mode": "recompose", "sourceBars": [5, 8], "note": "chorus over the same roots" }
+    { "tabBars": [17, 24],"mode": "recompose", "sourceBars": [5, 8], "note": "chorus over the same roots" },
+    { "tabBars": [25, 32],"mode": "contract",  "contractPhrase": "solo-1", "note": "noisy-source solo, contract-enforced" }
   ]
 }
 ```
@@ -105,16 +130,31 @@ chunk. The schema — never re-invent it mid-session:
 - `tabBars: [a, b]` — the inclusive tab-bar span this entry governs (required).
 - `mode` — the fidelity contract for the span (required):
   - **`free`** — no fidelity gate; added material, the guitar's own contribution.
-    Omit `sourceBars`.
+    Omit `sourceBars`. **Never** a stand-in for "source-tied but the extractor
+    disagrees" — that case is `contract`.
   - **`quote`** — in-order melodic **skeleton** + harmonic **root motion** are
     protected. Requires `sourceBars`.
   - **`recompose`** — harmonic **root motion only** is protected (melody may be
     re-voiced). Requires `sourceBars`.
+  - **`contract`** — a melody-contract **phrase** is enforced: octave-exact
+    pitches under the declared relocation, phrase order, minimum sounding
+    durations, distinct repeated attacks, required gaps, forbidden textures —
+    PLUS root motion. Requires `contractPhrase` (+ the top-level `"contract"`
+    path or `check.mjs --contract`); `sourceBars` come from the phrase itself.
+  - **`contract-recompose`** — the contract phrase with harmony relaxed (no
+    root-motion gate).
 - `sourceBars: [c, d]` — the inclusive source-bar range this entry answers
-  (required for `quote` / `recompose`, omitted for `free`).
+  (required for `quote` / `recompose`, omitted for `free`, derived for the
+  contract modes).
 - `note` — a one-line human label; also where you **name a deliberate contour
   inversion** so the soft contour warning is pre-explained (see `docs/workflow.md`
   Gate B, step 5).
+
+A `contract` span always reports its obligation totals
+(`foreground attacks 17/17`, `duration obligations 6/6`, `required gaps 4/4`,
+`forbidden rules 1/1`) — a contract span with zero protected events FAILS
+(anti-vacuity), and an invalid or vacuous contract file refuses to gate at all
+(exit 2).
 
 `check.mjs --map sidecar.json --bars 1-<last>` reads these entries and gates each
 span in its declared mode. Additions are first-class — a `free` span is a named

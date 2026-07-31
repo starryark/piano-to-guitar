@@ -1,0 +1,6 @@
+{
+  "sources": [
+    { "file": "../../LieZhiJiuBa/LieZhiJiuBaChengShi_Piano_only.alphatab", "role": "pitched-reference", "weight": 1 },
+    { "file": "../../LieZhiJiuBa/LieZhiJiuBaChengShi_Piano_and_Drum.alphatab", "role": "full-mix-reference", "weight": 1 }
+  ]
+}

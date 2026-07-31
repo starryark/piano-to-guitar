@@ -1,0 +1,11 @@
+{
+  "song": "nonzero transpose regression",
+  "entries": [
+    {
+      "tabBars": [1, 1],
+      "mode": "quote",
+      "sourceBars": [1, 1],
+      "note": "C source transposed down to A"
+    }
+  ]
+}

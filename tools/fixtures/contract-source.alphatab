@@ -1,0 +1,10 @@
+\title "Contract fixture source — repeats, a breath, and an out-of-range phrase"
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+B4.4 B4.4 A4.4 F#4.4 |
+C#5.2 r.2 |
+A5.4 G5.4 F#5.4 E5.4 |

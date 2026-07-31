@@ -43,6 +43,23 @@ Two CLIs answer the two questions that cost the most rework. Use them per bar, n
 - Exit 1 = at least one bar over/underfull. Tuplets are the usual culprit (three `{tu 3}`
   eighths fill ONE beat, not 1.5).
 
+**`tools/tab-events.mjs` — confirm what the parser ACTUALLY built (mandatory for ties).**
+
+```
+node ../../tools/tab-events.mjs cover.alphatab --bars 14-16
+```
+
+Every note prints as **ATTACK or CONTINUATION** with its tie links and the
+chain's merged sounding duration — read from the parsed model, never from how
+the text looks. The trap it exists for: a dash tie (`-.5.2`) whose origin
+cannot be resolved parses SILENTLY as a fresh attack of the **open string** — a
+pitch you never wrote — and a `{t}` on a pitch that never sounded parses as a
+plain reattack. The footer audit (`!! N tie-shaped token(s) parsed as fresh
+attacks`) counts what the parser swallowed; `playability.mjs` fails the same
+defect as `tie-without-origin`. Run tab-events whenever a chunk introduces
+ties, cross-bar sustains, or unusual effects — before the gate, not after it
+fails.
+
 **Versioning the loop — never lose a take.** The Gate-B command is
 `node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-N`: it runs the
 `check.mjs` gate (same report + exit code) **and** snapshots each gated iteration into

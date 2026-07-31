@@ -1,0 +1,12 @@
+{
+  "tuning": "standard",
+  "maxFret": 21,
+  "gain": "crunch",
+  "fastAttackMaxNotes": 1,
+  "fastAttackThreshold": 0.25,
+  "maxSimultaneousNotes": 2,
+  "allowRolls": false,
+  "allowBrushes": false,
+  "allowMutes": false,
+  "preferredFretSpan": 4
+}

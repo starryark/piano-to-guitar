@@ -53,6 +53,8 @@ import {
   extractDigest,
   intIfWhole,
   EMPTY_SIG,
+  parseTex,
+  buildDigest,
 } from './analysis.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -123,6 +125,165 @@ test('foldIntoGuitar raises by octaves until >= E2 (Python 144-148)', () => {
   assert.equal(foldIntoGuitar(28), 40, 'lands exactly on the low E');
   assert.equal(foldIntoGuitar(24), 48, 'two octaves up');
   assert.equal(foldIntoGuitar(88), 88, 'never folds DOWN — only up');
+});
+
+test('percussion articulations do not become pitched bass or harmony evidence', () => {
+  const text = String.raw`
+\tempo 105
+.
+\track "Music" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+D3.1 |
+\track "Drums" { instrument percussion }
+\staff { score }
+\articulation defaults
+\voice
+\clef neutral
+"Snare (hit)".1 |
+`;
+  const parsed = parseTex(text);
+  assert.equal(parsed.ok, true);
+  const { score } = parsed;
+  const digest = buildDigest(score, { song: 'percussion exclusion' });
+  assert.equal(digest.bars[0].voices.length, 1);
+  assert.equal(digest.bars[0].bass[0].name, 'D3');
+  assert.equal(digest.bars[0].harmony.root, 'D');
+  assert.deepEqual(digest.pitchRange, {
+    lowMidi: 50,
+    highMidi: 50,
+    lowName: 'D3',
+    highName: 'D3',
+  });
+});
+
+// --------------------------------------------------------------------------- //
+// foregroundEvidence — the per-bar attack graph (Improve_Plan §2)
+// --------------------------------------------------------------------------- //
+
+const NOISY_VOICES = String.raw`
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+B4.8 r.8 C#5.8 C#5{t}.8 r.2 |
+\voice
+r.8 A4.8 B4.4 A4.4 r.4 |
+\voice
+(E2 B2).1 |
+\voice
+r.2 r.64 A5.16 r.4 r.8 r.32 r.64 |
+`;
+
+test('foregroundEvidence: pitch-specific durations, never the group envelope', () => {
+  const parsed = parseTex(NOISY_VOICES);
+  assert.equal(parsed.ok, true);
+  const digest = buildDigest(parsed.score, { song: 'noisy voices' });
+  const fe = digest.bars[0].foregroundEvidence;
+  const g0 = fe.find((g) => g.onset === 0);
+  // B4 (an eighth) attacks together with the whole-bar (E3 B3) bed: three
+  // notes, three OWN durations, envelope recorded separately.
+  assert.deepEqual(
+    g0.notes.map((n) => [n.name, n.duration]),
+    [['B4', 0.5], ['B2', 4], ['E2', 4]]);
+  assert.equal(g0.maxEnvelopeDuration, 4);
+});
+
+test('foregroundEvidence: voice-fragmented attacks appear together in ONE gesture', () => {
+  const parsed = parseTex(NOISY_VOICES);
+  const digest = buildDigest(parsed.score, { song: 'noisy voices' });
+  const fe = digest.bars[0].foregroundEvidence;
+  const g1 = fe.find((g) => g.onset === 1);
+  // C#5 (voice 0, a 2-fragment tie chain -> merged duration 1) and B4
+  // (voice 1) attack simultaneously: one gesture, two voices.
+  assert.deepEqual(g1.notes.map((n) => [n.name, n.voice, n.duration]),
+    [['C#5', 0, 1], ['B4', 1, 1]]);
+  assert.equal(g1.notes[0].fragments, 2, 'the C#5 chain is visible in the gesture');
+  // The sustained (E2 B2) bed is SOUNDING under this gesture, not attacking.
+  assert.deepEqual(g1.sounding.map((n) => n.name), ['B2', 'E2']);
+});
+
+test('foregroundEvidence: raw + normalized timing; tuplets only from parsed metadata', () => {
+  const parsed = parseTex(NOISY_VOICES);
+  const digest = buildDigest(parsed.score, { song: 'noisy voices' });
+  const fe = digest.bars[0].foregroundEvidence;
+  // A5 was written at 2 + 1/16 beat (r.2 r.64): off-grid by +0.0625.
+  const late = fe.find((g) => g.onset === 2.0625);
+  assert.ok(late, 'raw onset preserved');
+  assert.equal(late.normalizedOnset, 2);
+  assert.equal(late.displacement, 0.0625);
+  assert.equal(late.normalizationConfidence, 0.9375);
+  assert.equal(late.tuplet, undefined, 'an irregular offset is NOT classified as a tuplet');
+
+  // A real parsed tuplet keeps its own grid: onset trusted, ratio reported.
+  const trip = parseTex(String.raw`
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+D5.8{tu 3} E5.8{tu 3} F#5.8{tu 3} A4.4 A4.4 A4.4 |
+`);
+  assert.equal(trip.ok, true);
+  const tdig = buildDigest(trip.score, { song: 'triplet' });
+  const tfe = tdig.bars[0].foregroundEvidence;
+  const second = tfe[1];
+  assert.equal(second.tuplet, '3:2');
+  assert.equal(second.normalizationConfidence, 1);
+  assert.equal(second.displacement, 0);
+});
+
+// --------------------------------------------------------------------------- //
+// sourceProfile — transcription-noise detection (Improve_Plan §1)
+// --------------------------------------------------------------------------- //
+
+test('sourceProfile: noisy fixture classified from structure, with signals', () => {
+  const parsed = parseTex(NOISY_VOICES);
+  const digest = buildDigest(parsed.score, { song: 'noisy voices' });
+  const sp = digest.sourceProfile;
+  assert.equal(sp.kind, 'noisy-transcription');
+  assert.equal(sp.noiseSignals.voiceFragmentation, 'high');
+  assert.ok(sp.noiseSignals.isolatedOctaveArtifacts >= 1, 'the A5-over-A4 sixteenth counts');
+  assert.equal(sp.noiseSignals.nearSimultaneousSplits, 1, 'A5 at 2.0625 splits off the 2.0 gesture');
+  assert.equal(sp.pitchedPerformanceGroups.length, 1);
+  assert.deepEqual(sp.pitchedPerformanceGroups[0].voices, [0, 1, 2, 3]);
+});
+
+test('sourceProfile: percussion excluded on structural evidence, never the name', () => {
+  const text = String.raw`
+\tempo 105
+.
+\track "Music" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+D3.2 A3.2 |
+\track "Band" { instrument percussion }
+\staff { score }
+\articulation defaults
+\voice
+\clef neutral
+"Kick (hit)".4 "Snare (hit)".4 "Kick (hit)".4 "Snare (hit)".4 |
+`;
+  const parsed = parseTex(text);
+  assert.equal(parsed.ok, true);
+  const digest = buildDigest(parsed.score, { song: 'band' });
+  const sp = digest.sourceProfile;
+  assert.equal(sp.excludedTracks.length, 1);
+  const ex = sp.excludedTracks[0];
+  assert.equal(ex.track, 1);
+  assert.equal(ex.role, 'percussion');
+  assert.equal(ex.name, 'Band', 'the name gives no percussion hint — evidence must be structural');
+  assert.ok(ex.evidence.some((e) => /unpitched staff|channel 10|articulation/.test(e)),
+    `structural evidence required, got: ${JSON.stringify(ex.evidence)}`);
+  assert.equal(sp.kind, 'clean-notation');
+  // And the drum voice contributes NOTHING to the attack graph.
+  assert.ok(digest.bars[0].foregroundEvidence.every(
+    (g) => g.notes.every((n) => n.track === 0)));
 });
 
 test('CONTRACT: every root name detectHarmony can emit parses in compare.mjs', () => {

@@ -1,0 +1,219 @@
+\track ("Electric Piano" "el.pno.") {
+  volume 15
+  balance 8
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 120
+    \accidentals auto
+    \clef g2
+    \ottava regular
+    \simile none
+    \ks aminor
+      r.4{dy f instrument acousticgrandpiano}
+      r.8
+      r.32
+      B4.16{d dy p beam Down}
+      B4.16{dy f beam Up beam merge}
+      B4.16{d dy mp beam Up beam merge}
+      B4.8{dy ff beam Up beam merge}
+      B4{t}.32{beam Up beam merge}
+      B4.8{d dy p beam Up beam split}
+    |
+      B4{t}.4{beam Down beam split}
+      r.64{beam split}
+      A4.8{dy f beam Up beam merge}
+      G4.8{d dy ff beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      A4.8{dy mf beam Up beam merge}
+      G4.8{dy f beam Up beam merge}
+      G4{t}.32{beam Up beam merge}
+      Gb4{acc #}.8{beam Up beam split}
+    |
+      r.32{beam split}
+      E4.8{d beam Up beam merge}
+      E4{t}.32{beam Up beam split}
+      r.4{beam split}
+      r.8{d beam split}
+      Eb5{acc #}.8{dy pp beam Down beam merge}
+      Eb5{t}.64{beam Down beam merge}
+      E5.8{dy p beam Down beam merge}
+      E5{t}.32{beam Down beam merge}
+      E5.64{dy mp beam Down beam split}
+    |
+      E5{t}.8{beam Down beam merge}
+      E5.8{dy mf beam Down beam split}
+      r.16{d beam split}
+      Eb5{acc #}.8{dy p beam Down beam merge}
+      Eb5{t}.32{beam Down beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.32{beam split}
+      B4.16{d dy f beam Down beam split}
+    |
+      B4{t}.16{beam Down beam merge}
+      D5.8{beam Down beam merge}
+      D5.8{dy mf beam Down beam merge}
+      D5{t}.32{beam Down beam merge}
+      C5.8{beam Down beam merge}
+      C5{t}.32{beam Down beam split}
+      r.8{beam split}
+      r.64{beam split}
+      B4.16{d dy pp beam Up beam merge}
+      B4{t}.64{beam Up beam split}
+      B4{t}.8{d beam Up beam merge}
+      B4{t}.32{d beam Up beam split}
+      r.64{beam split}
+    |
+      r.8{beam split}
+      B4.8{dy f beam Down beam split}
+      r.8{beam split}
+      r.64{beam split}
+      E5.16{d beam Down beam merge}
+      E5{t}.64{beam Down beam split}
+      r.32{beam split}
+      D5.8{beam Down beam merge}
+      D5{t}.32{d beam Down beam merge}
+      B4.32{d beam Down beam split}
+      B4{t}.4{beam Down beam split}
+    |
+      B4{t}.16{d dy mf beam Up beam merge}
+      B4{t}.64{beam Up beam merge}
+      A4.8{dy f beam Up beam merge}
+      A4{t}.64{beam Up beam split}
+      r.16{beam split}
+      G4.16{d dy p beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      G4.16{dy mf beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+      r.64{beam split}
+      Ab4{acc #}.8{beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      G4.16{d dy f beam Up beam split}
+      r.32{beam split}
+      Gb4{acc #}.16{dy ff beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      G4.16{dy f beam Up beam merge}
+      G4{t}.64{beam Up beam merge}
+      E4.16{beam Up beam split}
+    |
+      E4{t}.4{beam Up beam split}
+      r.4{beam split}
+      r.32{beam split}
+      Eb4{acc #}.8{d dy mp beam Up beam merge}
+      Eb4{t}.32{beam Up beam split}
+      r.64{beam split}
+      Ab4{acc #}.16{beam Up beam merge}
+      Ab4{t}.64{beam Up beam merge}
+      G4.8{dy f beam Up beam merge}
+      Gb4{acc #}.32{beam Up beam split}
+    |
+      Gb4{t acc #}.16{d beam Up beam merge}
+      E4.16{dy ppp beam Up beam merge}
+      E4.8{dy f beam Up beam merge}
+      E4{t}.32{beam Up beam merge}
+      E4.8{d beam Up beam split}
+      B4.4{beam Up beam split}
+      r.64{beam split}
+      A4.8{beam Up beam merge}
+      A4{t}.32{beam Up beam merge}
+      G4.16{dy p beam Up beam merge}
+      G4{t}.64{beam Up beam split}
+    |
+      G4{t}.32{d beam Up beam merge}
+      Gb4{acc #}.8{dy mp beam Up beam merge}
+      Gb4{t}.64{beam Up beam merge}
+      D4.8{beam Up beam merge}
+      D4{t}.32{beam Up beam merge}
+      E4.16{d dy fff beam Up beam merge}
+      E4.8{dy f beam Up beam merge}
+      E4{t}.32{d beam Up beam split}
+      r.4{beam split}
+      r.8{beam split}
+      r.64{beam split}
+  \staff {
+    score
+  }
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks aminor
+        r.1{dy p}
+      |
+        r.1{dy f}
+      |
+        r.1{dy mp}
+      |
+        r.1{dy f}
+      |
+        r.1{dy pp}
+      |
+        r.1{dy f}
+      |
+        r.1
+      |
+        r.1
+      |
+        r.1{dy p}
+      |
+        r.1{dy f}

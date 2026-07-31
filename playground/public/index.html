@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piano-to-Guitar Gate Playground</title>
+  <link rel="stylesheet" href="playground.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <h1>Piano&nbsp;→&nbsp;Guitar · Gate Playground</h1>
+    <p class="subtitle">Paste AlphaTex. See the gate report beside live notation.</p>
+
+    <div class="editor-row">
+      <label for="tab" class="field-label">AlphaTex tab</label>
+      <textarea id="tab" rows="10" spellcheck="false" placeholder="\\.title ... paste your guitar AlphaTex here"></textarea>
+    </div>
+
+    <details>
+      <summary>Source + sidecar (for fidelity gate)</summary>
+      <div class="details-grid">
+        <div>
+          <label for="source" class="field-label">Source AlphaTex (piano)</label>
+          <textarea id="source" rows="5" spellcheck="false" placeholder="Paste a piano source AlphaTex to enable fidelity mode (leave empty for lint-only)"></textarea>
+        </div>
+        <div>
+          <label for="sidecar" class="field-label">Sidecar JSON</label>
+          <textarea id="sidecar" rows="5" spellcheck="false" placeholder='Paste a sidecar JSON: { "song": "...", "entries": [...] }'></textarea>
+        </div>
+      </div>
+    </details>
+
+    <div class="controls">
+      <button id="run" type="button" class="primary">Run gate</button>
+      <button id="play" type="button" disabled>▶ Play</button>
+      <button id="stop" type="button">■ Stop</button>
+      <span id="status" class="status">loading…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="split">
+      <div id="alphaTab" class="notation" aria-label="Live notation"></div>
+      <aside id="report" class="report" aria-label="Gate report"></aside>
+    </section>
+
+    <div id="error-banner" class="error-banner hidden" role="alert"></div>
+  </main>
+
+  <script type="module" src="playground.js"></script>
+</body>
+</html>

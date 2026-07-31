@@ -1,0 +1,248 @@
+/* playground.css — Piano-to-Guitar Gate Playground.
+   Self-contained: system font stack, no external deps. */
+
+:root {
+  --ok: #1a7f37;       /* green  — HARD pass / verdict PASS */
+  --fail: #cf222e;     /* red    — HARD fail / verdict FAIL */
+  --soft: #9a6700;     /* amber  — soft signals, advisories, 0/0 warning */
+  --ink: #1f2328;
+  --muted: #656d76;
+  --rule: #d0d7de;
+  --bg: #ffffff;
+  --bg-alt: #f6f8fa;
+  --border-focus: #0969da;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-alt);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+               Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------------- toolbar / header ---------------- */
+.toolbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  padding: 1rem 1.25rem;
+}
+.toolbar h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.subtitle {
+  margin: 0.15rem 0 0.9rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.editor-row {
+  margin-bottom: 0.6rem;
+}
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+textarea {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  resize: vertical;
+}
+textarea:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+}
+
+details {
+  margin: 0.4rem 0 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg-alt);
+  padding: 0.4rem 0.6rem;
+}
+details > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ink);
+  padding: 0.15rem 0;
+}
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+@media (max-width: 700px) {
+  .details-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------- controls ---------------- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+button:hover:not(:disabled) { background: var(--bg-alt); }
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.primary {
+  background: var(--border-focus);
+  border-color: var(--border-focus);
+  color: #fff;
+}
+button.primary:hover:not(:disabled) { background: #0860c7; }
+
+.status {
+  margin-left: 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant: italic;
+}
+
+/* ---------------- main split (the headline layout) ---------------- */
+main {
+  padding: 1rem 1.25rem 2rem;
+}
+
+/* Two-column: report BESIDE the staff. */
+.split {
+  display: grid;
+  grid-template-columns: 58fr 42fr;
+  gap: 1rem;
+  min-height: 70vh;
+}
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+}
+
+/* ---------------- notation ---------------- */
+.notation {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.75rem;
+  min-height: 70vh;
+  min-width: 0;            /* allow grid child to shrink + scroll */
+  overflow-x: auto;
+  overflow-y: auto;
+}
+.notation:empty::before {
+  content: "notation will render here";
+  color: var(--muted);
+  font-style: italic;
+  padding: 1rem;
+  display: block;
+}
+
+/* alphaTab injects SVG; keep it from overflowing vertically awkwardly */
+.notation :is(svg, .at-track) { max-width: 100%; }
+
+/* ---------------- report ---------------- */
+.report {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.report-block {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-left-width: 5px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre;
+  overflow-x: auto;
+  /* color-driven left border is set by the verdict modifier class */
+}
+.report-block.verdict-pass { border-left-color: var(--ok); }
+.report-block.verdict-fail { border-left-color: var(--fail); }
+
+/* verdict line at the top of the report block */
+.report-verdict {
+  display: block;
+  font-weight: 700;
+}
+
+/* in-block color classes */
+.report-block .ok   { color: var(--ok); }
+.report-block .fail { color: var(--fail); }
+.report-block .soft { color: var(--soft); }
+.report-block .muted { color: var(--muted); }
+.report-block .hard-tag { color: var(--muted); }
+
+/* a standalone pill badge (used outside the <pre> if desired) */
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+}
+.badge.ok   { color: var(--ok);   background: rgba(26, 127, 55, 0.08); }
+.badge.fail { color: var(--fail); background: rgba(207, 34, 46, 0.08); }
+.badge.soft { color: var(--soft); background: rgba(154, 103, 0, 0.08); }
+
+/* the global color helpers (also used outside the report block) */
+.ok   { color: var(--ok); }
+.fail { color: var(--fail); }
+.soft { color: var(--soft); }
+
+/* ---------------- error banner ---------------- */
+.error-banner {
+  margin-top: 1rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(207, 34, 46, 0.06);
+  border: 1px solid var(--fail);
+  border-left-width: 4px;
+  border-radius: 6px;
+  color: var(--fail);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.hidden { display: none; }

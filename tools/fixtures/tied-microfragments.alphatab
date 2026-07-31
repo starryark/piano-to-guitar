@@ -1,0 +1,10 @@
+\title "Tied microfragments — Basic Pitch export shape (synthetic)"
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+E5.16 E5{t}.16 E5{t}.8 (E5{t} A4).4 (A4{t} E4).4 A4{t}.4 |
+F#4.2 A4{t}.2 |
+D6{t}.2 r.2 |

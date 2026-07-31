@@ -1,0 +1,9 @@
+\tempo 100
+.
+\track "Guitar" { instrument 29 }
+\staff { score tabs }
+\tuning (E4 B3 G3 D3 A2 E2)
+\voice
+\ks c
+\ts (4 4)
+2.3{v lr}.1 |

@@ -1,0 +1,8 @@
+\tempo 100
+.
+\track "Source" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ks c
+\ts (4 4)
+C4.1 |

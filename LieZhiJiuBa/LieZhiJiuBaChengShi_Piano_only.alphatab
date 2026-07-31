@@ -1,0 +1,4767 @@
+\systemsLayout (1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
+\hideDynamics
+\bracketExtendMode nobrackets
+\firstSystemTrackNameOrientation horizontal
+\otherSystemsTrackNameOrientation horizontal
+\track ("Electric Piano" "el.pno.") {
+  color "#EABC7C"
+  systemsLayout (1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
+  volume 12
+  balance 8
+  instrument electricpiano1
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 120
+    \accidentals auto
+    \clef g2
+    \ottava regular
+    \simile none
+    \ks aminor
+      (D4 Gb4).16{d dy p instrument electricpiano1}
+      (D4{t} Gb4{t}).64
+      (Gb4{t} Ab4).16{dy mf}
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.32{dy f}
+      A4.16{d dy mp}
+      A4{t}.32
+      E5.16{dy mf}
+      E5{t}.64
+      E5{t}.64
+      (E5{t} E4 A4).32
+      (A4{t} E4{t}).16{d dy mp}
+      (E4{t} Ab4).32{dy pp}
+      (Ab4{t} E4{t}).8
+      (Ab4{t} E4{t}).32
+      Ab4{t}.64{dy f}
+      Ab4{t}.64
+      (Gb4 Db4).8{d dy mf}
+      (Gb4{t} Db4{t}).32
+    |
+      (Gb4{t} Db4{t}).16{d}
+      (Gb4{t} Db4{t}).64
+      (Gb4{t} Db4{t} A4).16
+      (Db4{t} A4{t}).64{dy mp}
+      (Db4{t} A4{t}).32
+      (Db4 Ab4).32{dy mf}
+      (Db4{t} Ab4{t}).8{d}
+      (Db4{t} Ab4{t}).32
+      E4.16{d dy mp}
+      (E4{t} Db4).8{d}
+      (E4{t} Db4{t}).32
+      (D4 Gb4).64{dy p}
+      (Gb4{t} D4{t}).16{d}
+      (Gb4{t} Ab4 D4{t}).32{d}
+      (Gb4{t} Ab4{t}).32{d dy mf}
+      Ab4{t}.64{dy f}
+    |
+      A4.16{d dy p}
+      A4{t}.64
+      (A4{t} E5).16
+      (A4{t} E5{t}).32{d}
+      (E5{t} A4 E4).32
+      (A4{t} E4{t}).64
+      (A4{t} E4{t}).16
+      (E4{t} Ab4).32
+      (E4{t} Ab4{t}).8
+      (E4{t} Ab4{t}).64
+      (Ab4{t} E4{t}).32
+      Ab4{t}.64{dy f}
+      r.64{dy mf}
+      (Db4 Gb4).8{d}
+      (Db4{t} Gb4{t}).4
+    |
+      (E4 Gb4{t}).8{d dy p}
+      (E4{t} Gb4{t}).32
+      (Gb4{t} Db4).16{d dy mf}
+      (Gb4{t} Db4{t}).64
+      (Db4{t} Gb4{t}).8{d}
+      (Db4{t} Gb4{t}).32{d}
+      (Gb4 D4).16{d}
+      (Gb4{t} D4{t}).64
+      (D4{t} Gb4{t} Ab4).16
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.32{dy f}
+      A4.16{d dy p}
+      A4{t}.64
+      (A4{t} E5).16
+      (A4{t} E5{t}).64
+      (A4{t} E5{t}).32
+    |
+      (E5{t} A4 E4).32{dy mf}
+      (A4{t} E4{t}).16
+      (A4{t} E4{t}).64
+      (E4{t} Ab4).32{dy p}
+      (Ab4{t} E4{t}).16{d}
+      (Ab4{t} E4{t}).64
+      (Ab4{t} E4{t}).16
+      Ab4{t}.64{dy f}
+      r.64{dy mf}
+      (Db4 Gb4).8
+      (Db4{t} Gb4{t}).8
+      (Db4{t} Gb4{t}).32{d}
+      r.32
+      (Gb4{t} E5).32{d}
+      E5{t}.64
+      E5{t}.32{d}
+      (Gb5 Gb4 Ab4 Db4).8{d dy mp}
+      (Gb5{t} Gb4{t} Ab4{t} Db4{t}).32
+    |
+      (E5 E4).16{d}
+      (E5{t} E4{t}).64
+      (E5{t} E4{t} A4).16
+      (E4{t} A4{t}).8{dy p}
+      A4{t}.64{dy mf}
+      A4{t}.64
+      (D4 Gb4).16{d}
+      (D4{t} Gb4{t}).64
+      (Gb4{t} Db4).16{d}
+      Db4{t}.64
+      (A4 Db4{t}).16{d}
+      (A4{t} Db4{t}).64
+      A4{t}.64{dy mp}
+      Db4.32{d dy mf}
+      Db4{t}.16
+      (Db4{t} A4 E4).16
+      (Db4{t} A4{t} E4{t}).64
+      (A4{t} E4{t}).32{dy mp}
+      (E4{t} Ab4).16{d dy pp}
+      (E4{t} Ab4{t}).64
+    |
+      (Ab4{t} E4).16{dy mf}
+      (Ab4{t} E4{t}).64
+      (Ab4{t} E4{t}).64
+      E4{t}.64{dy mp}
+      (E4{t} Gb4 Db4).16{d}
+      (E4{t} Gb4{t} Db4{t}).64
+      (Gb4{t} Db4{t}).32
+      (Gb4{t} Db4{t}).2{d}
+    |
+      (Db4{t} Gb4{t}).16{d}
+      (Db4{t} Gb4{t}).64
+      (Gb4 D4).32{dy mf}
+      (D4{t} Gb4{t}).16
+      (D4{t} Gb4{t}).64
+      (Gb4{t} D4{t} Ab4).16
+      (Gb4{t} D4{t} Ab4{t}).64
+      Ab4{t}.64{dy f}
+      Ab4{t}.64
+      A4.16{d dy p}
+      A4{t}.64
+      A4{t}.64
+      E5.16{dy mp}
+      E5{t}.32{d}
+      (A4 E4).16{d}
+      (A4{t} E4{t}).64
+      (E4{t} Ab4).16{dy p}
+      Ab4{t}.32{d dy mf}
+      Ab4{t}.16{d}
+      r.64
+      (Gb4 Db4).16{d dy ff}
+      (Gb4{t} Db4{t}).64
+    |
+      (Db4 Gb4).16{dy mp}
+      (Db4{t} Gb4{t}).8
+      (Db4{t} Gb4{t}).64
+      r.32{dy mf}
+      A4.16{d dy mp}
+      (Db4 Ab4).8
+      (Db4 Ab4).32
+      (Db4{t} Ab4{t}).32{d}
+      (Db4{t} Ab4{t}).32
+      (E4 Db4{t} Ab4{t}).64
+      (Ab4{t} E4{t}).32
+      E4{t}.32
+      E4{t}.32
+      (E4{t} Db4).8{d}
+      Db4{t}.64{dy mf}
+      Db4{t}.64
+      (Gb4 D4).16{d}
+      (Gb4{t} D4{t}).64
+    |
+      (Gb4{t} Ab4).16
+      Ab4{t}.64{dy f}
+      Ab4{t}.32
+      A4.16{d dy p}
+      A4{t}.64
+      (A4{t} E5).32
+      E5{t}.16{dy mp}
+      E5{t}.64
+      (A4 E4).32
+      (E4{t} A4{t}).16{d}
+      (E4{t} Ab4).32{d dy pp}
+      Ab4{t}.32{d dy mf}
+      Ab4{t}.64
+      Ab4{t}.16
+      Ab4{t}.32
+      r.64
+      (Db4 Gb4).16{d dy mp}
+      (Db4{t} Gb4{t}).64
+      (Db4 Gb4).8{d}
+      (Db4{t} Gb4{t}).32
+    |
+      Gb4{t}.32
+      Gb4{t}.16
+      Gb4{t}.64
+      (Gb4{t} E4).16
+      E4{t}.32{d dy p}
+      E4.32
+      E4{t}.16
+      E4{t}.64
+      Db4.32
+      Db4{t}.8
+      Db4{t}.64
+      r.32{d dy mf}
+      Gb4.16{dy pp}
+      Gb4{t}.64
+      Gb4{t}.32{d}
+      (D4 Gb4).16{dy p}
+      Gb4{t}.32{d dy mf}
+      (Gb4{t} Ab4).16
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.64
+      Ab4{t}.64
+      A4.16{d dy p}
+      A4{t}.64
+    |
+      A4{t}.64
+      E5.32{d dy mp}
+      E5{t}.32{d}
+      (E4 A4).64
+      (A4{t} E4{t}).16{d}
+      (E4{t} Ab4).16{dy p}
+      Ab4{t}.32{d dy mf}
+      Ab4{t}.64
+      Ab4{t}.16
+      Ab4{t}.64
+      r.32
+      (Db4 Gb4).16{d dy mp}
+      (Db4{t} Gb4{t}).64
+      (Db4 Gb4).32{d}
+      (Gb4{t} Db4{t}).8
+      (Gb4{t} Db4{t}).64
+      (Db4{t} Gb4{t}).64
+      r.64{dy mf}
+      E5.16{d dy pp}
+      E5{t}.64
+      (Db4 Gb5 Ab4).16{d dy p}
+      (Db4{t} Gb5{t} Ab4{t}).64
+    |
+      (Gb5{t} Ab4{t} Db4).32{dy mp}
+      (Gb5{t} Ab4{t} Db4{t}).64
+      (Ab4{t} Db4{t}).32
+      Db4{t}.32
+      (E5 E4).16{dy p}
+      (E4{t} E5{t}).16
+      A4.64{dy mp}
+      A4{t}.64
+      A4{t}.16
+      A4{t}.16{d}
+      r.32{dy mf}
+      (D4 Gb4).16{d dy p}
+      (D4{t} Gb4{t}).64
+      (Gb4{t} Db4).32{d dy mf}
+      (Db4{t} Gb4{t}).32{d}
+      Db4{t}.64{dy mp}
+      Db4{t}.64
+      (A4 Db4{t}).16
+      (A4{t} Db4{t}).64
+      (A4{t} Db4{t}).64
+      (A4{t} Db4).32{d dy p}
+      Db4{t}.64{dy mf}
+      Db4{t}.32{d}
+      (Db4{t} E4 A4).64
+      (Db4{t} A4{t} E4{t}).16
+      (A4{t} E4{t}).64{dy mp}
+      (A4{t} E4{t}).64
+    |
+      (E4{t} Ab4).16{d dy pp}
+      (E4{t} Ab4{t}).64
+      (Ab4{t} E4).32{d dy mf}
+      (Ab4{t} E4{t}).32{d}
+      E4{t}.64{dy mp}
+      (E4{t} Gb4 Db4).16
+      (Db4{t} Gb4{t}).32{d dy p}
+      (Db4 Gb4).16{d dy mp}
+      (Db4{t} Gb4{t}).64
+      (Db4 Gb4).16
+      (Db4{t} Gb4{t}).4
+      Gb4{t}.4
+    |
+      Gb4{t}.16{d}
+      Gb4{t}.16
+      Gb4{t}.32{d}
+      r.64{dy mf}
+      (A4 D4).32{dy mp}
+      (A4{t} D4{t}).64
+      (A4{t} D4{t}).32
+      D4{t}.32{dy p}
+      (D4{t} B4).16
+      (D4{t} B4{t}).64
+      B4{t}.32{d dy mp}
+      (B4{t} A4).32
+      A4{t}.32{d dy p}
+      A4{t}.32
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mf}
+      Db5{t}.32{d}
+      E4.32{dy p}
+      E4{t}.32{d}
+      r.64{dy mf}
+      (E4 B4).64{dy p}
+      (B4{t} E4{t}).16{d}
+      r.16
+      r.32{d}
+    |
+      (Gb4 Db4 A4).16{d dy mp}
+      (Gb4{t} Db4{t} A4{t}).64
+      (A4 Gb4 Db4).32
+      (A4{t} Gb4{t} Db4{t}).64
+      (A4{t} Gb4{t} Db4{t}).32{d}
+      (Gb4{t} Db4{t}).16{d}
+      Db4{t}.64
+      r.8{dy mf}
+      (Db5 Db4 Ab4).8{dy mp}
+      (Ab4 Db4).32{d}
+      (Ab4{t} Db4{t}).32{d}
+      Db4{t}.64
+      (Db4{t} E4).32
+      E4{t}.16{d}
+      E4{t}.64
+      E4{t}.16{d}
+      E4{t}.64
+      E4{t}.32{d}
+      E4{t}.64
+      r.64
+    |
+      (A4 D4).16{d dy p}
+      (A4{t} D4{t}).64
+      (D4{t} B4).16
+      (D4{t} B4{t}).64
+      B4{t}.64{dy mf}
+      B4{t}.64
+      A4.32{dy p}
+      A4{t}.16
+      A4{t}.64
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mp}
+      Db5{t}.32{d}
+      (Db5{t} E4).64
+      (Db5{t} E4{t}).32
+      E4{t}.16{dy p}
+      (E4 B4).16{d}
+      (E4{t} B4{t}).64
+      r.16{dy mf}
+      r.32{d}
+      (Db4 Gb4 A4).16{d dy mp}
+      (Db4{t} Gb4{t} A4{t}).64
+      (A4 Gb4 Db4).64
+      (A4{t} Gb4{t} Db4{t}).32
+      (A4{t} Gb4{t} Db4{t}).32
+      (Gb4{t} Db4{t}).32
+    |
+      (Gb4{t} Db4{t}).16{dy p}
+      Db4{t}.32{dy mp}
+      r.8{dy mf}
+      Gb5.64{dy mp}
+      Gb5{t}.32
+      Gb5{t}.16
+      (Gb5{t} E4).16
+      E4{t}.16{dy pp}
+      (E5 Db4).16
+      (Db4{t} E5{t}).16
+      r.8{dy mf}
+      r.16
+      r.64
+      (A4 D4).64{dy pp}
+      (A4{t} D4{t}).32
+      (A4{t} D4{t}).64
+      D4{t}.32
+      D4{t}.64
+      (D4{t} B4).32
+      (D4{t} B4{t}).64
+      (D4{t} B4{t}).64
+      B4{t}.32{d dy mp}
+    |
+      (B4{t} A4).32{d}
+      A4{t}.16{dy p}
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mf}
+      Db5{t}.32{d}
+      E4.64{dy p}
+      E4{t}.16
+      E4{t}.64
+      (E4{t} E4 B4).64
+      (E4{t} B4{t}).16{d}
+      r.8{dy mf}
+      (Db4 Gb4 Db5 A4).64{dy mp}
+      (Gb4{t} A4{t} Db4{t} Db5{t}).16{d}
+      (Db5{t} A4 Gb4 Db4).32
+      (A4{t} Db4{t} Gb4{t}).16
+      (Gb4{t} Db4{t}).16{d}
+      Db4{t}.64
+      r.8
+    |
+      (Db4 Ab4).16{d dy f}
+      (Db4{t} Ab4{t}).64
+      (Ab4{t} Db4).32{d dy p}
+      (Ab4{t} Db4{t}).32
+      Db4{t}.64{dy mf}
+      Db4{t}.64
+      (Db4{t} E4).32
+      E4{t}.16{dy f}
+      E4{t}.64
+      E4.64{dy p}
+      E4{t}.64
+      E4{t}.32{d}
+      E4{t}.32{d}
+      E4{t}.32{d}
+      E4{t}.32
+      E4{t}.64
+      D4.8
+      (D4{t} B4).64
+      (D4{t} B4{t}).32{d}
+      B4{t}.64{dy mf}
+      B4{t}.32
+      (B4{t} A4).32
+      A4{t}.64{dy p}
+      A4{t}.32{d}
+      A4{t}.64
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mf}
+      Db5{t}.32
+    |
+      (Db5{t} E4).32
+      (Db5{t} E4{t}).64
+      E4{t}.32{d dy p}
+      r.64{dy mf}
+      (E4 B4).16{d dy p}
+      (E4{t} B4{t}).64
+      r.16{dy mf}
+      r.32{d}
+      (A4 Db4 Gb4).32{d dy mp}
+      (Db4{t} Gb4{t} A4{t}).32{d}
+      (Db4{t} Gb4{t} A4{t}).64
+      (A4{t} Db4 Gb4).16
+      (A4{t} Db4{t} Gb4{t}).64
+      (Db4{t} Gb4{t}).32{d}
+      (Gb4{t} Db4).32
+      (Gb4{t} Db4{t}).64
+      Db4{t}.32{d}
+      r.8{dy mf}
+      Gb5.32{dy f}
+      Gb5{t}.16
+      (Gb5{t} Gb5).64
+      Gb5{t}.16{dy p}
+      Gb5{t}.64
+      Gb5{t}.32
+    |
+      E5.8{d dy mf}
+      E5{t}.32
+      r.8
+      (A4 D4).64{dy p}
+      (A4{t} D4{t}).32{d}
+      D4{t}.32
+      (D4{t} B4).64
+      (D4{t} B4{t}).16
+      (D4{t} B4{t}).64
+      B4{t}.32{dy mp}
+      (B4{t} A4).32{d}
+      A4{t}.32{d dy p}
+      A4{t}.64
+      (A4{t} Db5).32
+      Db5{t}.32{dy mf}
+      Db5{t}.16
+      E4.32{dy p}
+      E4{t}.16
+      (E4{t} E4 B4).64
+      (E4{t} B4{t}).16{d}
+    |
+      r.16{dy mf}
+      r.32{d}
+      (Gb4 A4 Db4).32{dy mp}
+      (Gb4{t} Db4{t} A4{t}).16
+      (Gb4{t} Db4{t} A4{t}).64
+      (A4 Db4 Gb4).32{d}
+      (A4{t} Db4{t} Gb4{t}).64
+      (A4{t} Db4{t} Gb4{t}).32
+      (Db4{t} Gb4{t}).16{d}
+      r.8{dy mf}
+      r.32
+      (Db4 Ab4).16{d dy f}
+      (Db4{t} Ab4{t}).64
+      (Ab4 Db4).32{dy p}
+      (Ab4{t} Db4{t}).16
+      Db4{t}.64{dy mf}
+      (Db4{t} E4).32
+      E4{t}.16{dy mp}
+      E4{t}.64
+      E4{t}.32{d}
+      E4{t}.16
+    |
+      E4{t}.32
+      E4{t}.16
+      E4{t}.64
+      D4.16{d dy p}
+      D4{t}.64
+      (D4{t} B4).16
+      (D4{t} B4{t}).64
+      B4{t}.64{dy mf}
+      B4{t}.64
+      (A4 B4{t}).32
+      A4{t}.16{dy p}
+      A4{t}.64
+      (A4{t} Db5).32{d}
+      Db5{t}.16{dy mp}
+      Db5{t}.64
+      (Db5{t} E4).32
+      (Db5{t} E4{t}).64
+      E4{t}.32{d dy p}
+      (E4 B4).64
+      (E4{t} B4{t}).16
+      (E4{t} B4{t}).64
+      B4{t}.32{dy mp}
+      r.16{dy mf}
+      r.32{d}
+      (Db4 Gb4 A4).16{d dy mp}
+      (Db4{t} Gb4{t} A4{t}).64
+    |
+      (A4{t} Gb4 Db4).32
+      (A4{t} Gb4{t} Db4{t}).64
+      (Db4{t} A4{t} Gb4{t}).32
+      (Gb4{t} Db4{t}).16{d}
+      Db4{t}.64
+      Db4{t}.64
+      r.8{dy mf}
+      (Gb5 E4).64
+      (Gb5{t} E4{t}).32
+      (Gb5{t} E4{t}).16
+      (E4{t} Gb5{t}).32{d}
+      E4{t}.64{dy pp}
+      r.16{dy mf}
+      (E5 Db4).32{d dy pp}
+      (E5{t} Db4{t}).16{d}
+      r.8{d dy mf}
+      D4.64{dy pp}
+      D4{t}.32
+      D4{t}.16
+    |
+      (D4{t} B4).32{d}
+      (D4{t} B4{t}).64
+      (D4{t} B4{t}).64
+      B4{t}.32{dy mp}
+      (B4{t} A4).32{d}
+      A4{t}.16{dy p}
+      (A4{t} Db5).32
+      Db5{t}.32{dy mf}
+      Db5{t}.16
+      E4.64{dy p}
+      E4{t}.16
+      E4{t}.64
+      r.64{dy mf}
+      (E4 B4).16{d dy p}
+      (E4{t} B4{t}).64
+      r.16{dy mf}
+      r.32{d}
+      (Db4 Gb4 A4).16{dy mp}
+      (Db4{t} Gb4{t} A4{t}).64
+      (Db4{t} Gb4{t} A4{t}).32
+      (A4{t} Gb4 Db4).32
+      (Db4{t} A4{t} Gb4{t}).32{d}
+      (Db4{t} Gb4{t}).64
+      (Gb4{t} Db4{t}).16{d}
+      r.32
+    |
+      r.16{dy mf}
+      r.32{d}
+      (Db4 Ab4).16{d dy f}
+      (Db4{t} Ab4{t}).64
+      (Ab4 Db4).32{dy p}
+      (Ab4{t} Db4{t}).16
+      Db4{t}.32{dy mf}
+      (Db4{t} E4).64
+      E4{t}.8{dy mp}
+      E4{t}.8
+      E4{t}.32{d}
+      E4{t}.64
+      (A4 D4).16{dy p}
+      (A4{t} D4{t}).64
+      D4{t}.32
+      (D4{t} B4).16
+      (D4{t} B4{t}).64
+      B4{t}.32{dy mf}
+      A4.32{dy p}
+      A4{t}.16
+      A4{t}.64
+    |
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mp}
+      Db5{t}.32
+      (Db5{t} E4).32
+      (Db5{t} E4{t}).32
+      E4{t}.32{dy p}
+      r.64{dy mf}
+      (E4 B4).16{d dy p}
+      (E4{t} B4{t}).64
+      r.8{dy mf}
+      (Db4 Gb4 A4).64{dy mp}
+      (Db4{t} Gb4{t} A4{t}).16{d}
+      (A4 Gb4 Db4).16
+      (Db4{t} Gb4{t}).32
+      (Db4{t} Gb4{t}).64
+      (Gb4{t} Db4).32{d}
+      Db4{t}.8
+      Db4{t}.32{d}
+      (Gb4 Gb5).16{d dy pp}
+      (Gb4{t} Gb5{t}).64
+    |
+      (Gb4{t} Gb5{t}).16{d}
+      (Gb4{t} Gb5{t}).64
+      E5.8{dy mf}
+      E5{t}.64
+      r.8
+      r.16
+      r.64
+      (D4 A4).64{dy pp}
+      (A4{t} D4{t}).32{d}
+      D4{t}.16{d}
+      D4{t}.64
+      D4{t}.64
+      r.32{dy mf}
+      A4.32{dy p}
+      A4{t}.16
+      A4{t}.64
+      A4.32{dy mf}
+      A4{t}.16
+      A4{t}.64
+      (A4 E4).32{d dy mp}
+      (A4{t} E4{t}).16
+    |
+      (E4{t} A4).16{dy p}
+      (E4{t} A4{t}).64
+      A4{t}.64{dy mf}
+      A4{t}.64
+      B4.32{d dy pp}
+      B4{t}.32
+      B4{t}.32
+      (Gb4 Db4 Db5).16{d dy mp}
+      (Gb4{t} Db4{t} Db5{t}).64
+      (Db5{t} Gb4 Db4).32
+      (Db4{t} Gb4{t}).32
+      (Db4{t} Gb4{t}).32
+      (Db4{t} Gb4{t}).16{d}
+      r.8{dy mf}
+      r.32
+      (Db4 Ab4).16{d dy mp}
+      (Db4{t} Ab4{t}).64
+      (Ab4 Db4).64
+      (Ab4{t} Db4{t}).16
+      Db4{t}.64
+      Db4{t}.64
+      (Db4{t} E4).32{d}
+      E4{t}.16{dy p}
+    |
+      r.16{dy mf}
+      r.32{d}
+      E4.32{dy p}
+      E4{t}.16
+      E4{t}.64
+      (E5 D4).16{d}
+      (E5{t} D4{t}).64
+      D4{t}.16{d dy pp}
+      r.8{dy mf}
+      r.64
+      E5.16{dy mp}
+      E5{t}.32{d}
+      (E4 E5).32{dy p}
+      (E4{t} E5{t}).16
+      (E4{t} E5{t}).64
+      (E4 E5).16{d}
+      (E5{t} E4{t}).64
+      D5.16{dy mp}
+      D5{t}.32
+      D5{t}.64
+    |
+      (Gb4 Db4 Db5).16{d}
+      (Gb4{t} Db4{t} Db5{t}).64
+      (Db5{t} Gb4 Db4).32
+      (Gb4{t} Db4{t}).32
+      (Db4{t} Gb4{t}).16
+      Db4{t}.16
+      Db4{t}.64
+      r.8{dy mf}
+      E4.16{dy p}
+      E4{t}.64
+      E4{t}.32
+      r.64{dy mf}
+      E4.16{d dy p}
+      E4{t}.64
+      Db4.32{d dy mp}
+      Db4{t}.64
+      Db4{t}.64
+      Db4{t}.4
+    |
+      D4.32{dy p}
+      D4{t}.64
+      D4{t}.8
+      D4{t}.64
+      D4{t}.64
+      r.64{dy mf}
+      A4.8{dy p}
+      A4.64{dy mf}
+      A4{t}.16
+      A4{t}.64
+      (A4 E4).64{dy mp}
+      (A4{t} E4{t}).64
+      (A4{t} E4{t}).32
+      (E4{t} A4{t}).32{d}
+      E4{t}.64{dy p}
+      (E4{t} A4).16
+      A4{t}.32{d dy mf}
+      B4.32{d dy pp}
+      B4{t}.32
+      r.32{dy mf}
+      (Db4 Gb4 Db5).16{d dy mp}
+      (Db4{t} Gb4{t} Db5{t}).64
+      (Db5{t} Db4 Gb4).32
+      (Db4{t} Gb4{t}).32
+      (Db4{t} Gb4{t}).32{d}
+    |
+      (Gb4{t} Db4{t}).16{dy p}
+      (Gb4{t} Db4{t}).64
+      r.8{dy mf}
+      r.64
+      (Db4 Ab4).16{d dy mp}
+      (Db4{t} Ab4{t}).64
+      (Ab4 Db4).32
+      (Ab4{t} Db4{t}).16
+      Db4{t}.64
+      Db4{t}.64
+      (Db4{t} E4).32
+      E4{t}.16{dy p}
+      E4{t}.64
+      r.16{dy mf}
+      r.32{d}
+      E4.32{d dy pp}
+      E4{t}.32{d}
+      E4{t}.64
+      (D4 E4).32
+      (E4{t} D4{t}).32
+      (D4{t} E4{t}).8
+      (D4{t} E4{t}).64
+      E4{t}.64{dy mp}
+    |
+      E4.32{d dy mf}
+      E4{t}.16
+      E4.16{d dy f}
+      E4{t}.64
+      E4.32
+      E4{t}.16
+      E4{t}.64
+      E4.16{d dy mp}
+      E4{t}.32
+      (E4{t} Ab4).16
+      (E4{t} Ab4{t}).64
+      Ab4{t}.64{dy mf}
+      Ab4{t}.64
+      (Gb4 Db4 A4).16{d dy mp}
+      (Gb4{t} Db4{t} A4{t}).64
+      (A4{t} Db4 Gb4).16
+      (A4{t} Db4{t} Gb4{t}).64
+      (Db4{t} Gb4{t}).32{d}
+      Db4.64{dy p}
+      Db4{t}.16
+      Db4{t}.64
+      r.16
+      r.32{d}
+    |
+      r.2{dy mf}
+      r.16
+      A4.32{d dy pp}
+      A4{t}.16{d}
+      A4{t}.64
+      r.16{dy mf}
+      r.64
+      E5.16{d dy mp}
+      E5{t}.64
+      E5{t}.16
+      E5{t}.32
+    |
+      D5.64{dy mf}
+      D5{t}.8{d}
+      D5{t}.64
+      r.64
+      Db5.64{dy p}
+      Db5{t}.32
+      Db5{t}.32{d}
+      Db5{t}.64
+      (Db4 Db5 Gb4).16{d}
+      (Gb4 Db4 B4).32
+      (Db4{t} Gb4{t} B4{t}).32
+      (Gb4{t} Db4{t} B4{t}).8
+      B4{t}.64{dy mf}
+      B4{t}.64
+      r.64
+      A4.16{d dy p}
+      A4{t}.64
+      (Db4 Ab4).16{d}
+      (Db4{t} Ab4{t}).64
+      (Ab4{t} B4 Db4).32
+      (B4{t} Ab4{t} Db4{t}).16
+      (B4{t} Db4{t}).64{dy mf}
+    |
+      (B4{t} Db4{t} E4 B4).64
+      (B4{t} E4{t}).16{dy p}
+      (E4{t} B4{t}).32
+      r.32{dy mf}
+      Db5.32{d dy mp}
+      (Db5{t} E4).16
+      (Db5{t} E4{t}).64
+      (Db5{t} E4{t}).64
+      (Db5{t} E4{t}).32
+      (Db5{t} E4{t}).64
+      (D4 A4).64{dy pp}
+      (D4{t} A4{t}).8
+      A4{t}.64
+      r.16{d dy mf}
+      E5.32{dy mp}
+      E5{t}.8
+      E5{t}.64
+      E5{t}.64
+      E5{t}.64
+      (E4 D5).32{dy pp}
+      (D5{t} E4{t}).8
+      (D5{t} E4{t}).32
+      D5{t}.32{dy mf}
+    |
+      B4.16{d dy p}
+      B4{t}.64
+      (B4{t} Db4 Gb4).32
+      (B4{t} Db4{t} Gb4{t}).64
+      (Db4{t} B4{t} Gb4{t}).32{d}
+      (Db4{t} Gb4{t}).64{dy mp}
+      (Db4 Db5 Gb4).32{d dy pp}
+      (Db4{t} Gb4{t} Db5{t}).16{d}
+      (Db4{t} Gb4{t} Db5{t}).64
+      Db5{t}.16{dy mf}
+      r.64
+      E5.32{d dy mp}
+      E5{t}.16
+      (E5{t} E4).16{d}
+      E4{t}.64
+      (E4 Db5).64
+      (Db5{t} E4{t}).16{d}
+      (Db5 Db4).32{d}
+      (Db5{t} Db4{t}).64
+      (Db4{t} Db5{t}).32{d}
+      A4.16{d dy p}
+      A4{t}.64
+    |
+      A4{t}.16
+      A4{t}.64
+      A4{t}.64
+      A4{t}.64
+      A4.16{dy pp}
+      A4{t}.16
+      (D4 A4{t}).64
+      D4{t}.16
+      D4{t}.64
+      r.32{dy mf}
+      E5.32{dy mp}
+      E5{t}.8
+      E5{t}.64
+      E5{t}.32
+      (E4 D5).32{dy pp}
+      (D5{t} E4{t}).8
+      (D5{t} E4{t}).32
+      D5{t}.64{dy mf}
+      r.32
+      Db5.16{dy mp}
+      Db5{t}.64
+      Db5{t}.64
+      (Db4 Db5 Gb4).16{d}
+      (Db4{t} Db5{t} Gb4{t}).64
+    |
+      (Gb4 Db4 B4).32{d dy p}
+      (Gb4{t} Db4{t} B4{t}).8
+      (Gb4{t} Db4{t} B4{t}).64
+      (Db4{t} B4{t}).64{dy mp}
+      B4{t}.64
+      A4.16{d dy p}
+      A4{t}.64
+      (Ab4 Db4).32{d}
+      (Ab4{t} Db4{t}).16
+      (Ab4{t} Db4{t}).64
+      (Db4{t} B4 Ab4{t}).16
+      (Db4{t} B4{t} Ab4{t}).64
+      (Db4{t} B4{t}).32{dy mp}
+      (B4 E4).8{dy p}
+      Db5.32{dy mp}
+      Db5{t}.32
+      (Db5{t} E4).16
+      (Db5{t} E4{t}).16
+      E4{t}.64{dy p}
+      (A4 D4).16{d dy pp}
+      (A4{t} D4{t}).64
+    |
+      A4{t}.16{d}
+      A4{t}.64
+      r.64{dy mf}
+      E5.8{dy mp}
+      E5{t}.32
+      E5{t}.32
+      E5{t}.32
+      (E4 D5).32{dy pp}
+      (E4{t} D5{t}).8
+      (E4{t} D5{t}).32
+      D5{t}.64{dy mf}
+      r.64
+      B4.16{d dy p}
+      B4{t}.64
+      (Db4 B4{t} Gb4).32
+      (Db4{t} B4{t} Gb4{t}).16
+      (Gb4{t} Db5 Db4).32{d}
+      (Db4{t} Db5{t}).16{dy mp}
+      (Db4{t} Db5{t}).64
+      (Db4{t} Db5).64
+      (Db4{t} Db5{t}).64
+      (Db5{t} Db4{t}).64
+      Db5{t}.32{d}
+      Db5{t}.64
+    |
+      r.64{dy mf}
+      E5.16{d dy mp}
+      E5.64
+      E5{t}.16{d}
+      Db5.16{d dy mf}
+      Db5{t}.64
+      Db5.16{d}
+      Db5{t}.32
+      A4.32{d dy mp}
+      A4{t}.16{d}
+      A4{t}.64
+      A4{t}.16
+      A4.32{dy p}
+      A4{t}.64
+      A4{t}.8
+      r.16{dy mf}
+      r.64
+      E5.64{dy mp}
+      E5{t}.16
+    |
+      E5{t}.16
+      E5{t}.64
+      E5{t}.32
+      (E4 D5).32{dy pp}
+      (D5{t} E4{t}).8
+      (D5{t} E4{t}).32
+      D5{t}.32{dy mf}
+      Db5.32{dy p}
+      Db5{t}.32{d}
+      Db5{t}.32{d}
+      (Db5 Db4 Gb4).16{d}
+      (Db5{t} Db4{t} Gb4{t}).64
+      (Gb4 Db4 B4).64
+      (Gb4{t} B4{t} Db4{t}).32{d}
+      (Gb4{t} B4{t} Db4{t}).16{d}
+      (Gb4{t} B4{t} Db4{t}).64
+      (B4{t} Db4{t}).64{dy mf}
+      B4{t}.64
+      r.64
+      A4.16{d dy p}
+      A4{t}.64
+      (Db4 Ab4).32{d}
+      (Db4{t} Ab4{t}).16
+    |
+      (Ab4{t} Db4 B4).16
+      (Ab4{t} Db4{t} B4{t}).64
+      (B4{t} Db4{t}).32{dy mf}
+      (E4 B4).8{dy pp}
+      Db5.16{dy mp}
+      (E4 Db5{t}).8
+      E4{t}.64{dy p}
+      (A4 D4).16{dy pp}
+      (A4{t} D4{t}).8
+      (A4{t} D4{t}).32{d}
+      r.64{dy mf}
+      E5.8{dy mp}
+      E5{t}.32
+      E5{t}.64
+      E5{t}.64
+      E5{t}.64
+      (E4 D5).32{dy pp}
+      (E4{t} D5{t}).16
+      (E4{t} D5{t}).64
+    |
+      (D5{t} E4{t}).16{dy mf}
+      (D5{t} E4{t}).64
+      D5{t}.32
+      B4.16{d dy p}
+      B4{t}.64
+      (B4{t} Db4 Gb4).32
+      (B4{t} Db4{t} Gb4{t}).64
+      (Db4{t} B4{t} Gb4{t}).32{d}
+      (Db4{t} Gb4{t}).64{dy mp}
+      (Gb4 Db4 Db5).16{dy pp}
+      (Gb4{t} Db4{t} Db5{t}).32
+      (Db5{t} Db4{t}).32{dy mf}
+      (Db5{t} Db4{t}).32
+      Db5{t}.16
+      r.64
+      E5.16{d dy mp}
+      E5{t}.64
+      (E5 E4).16{d}
+      (Db5 E4).32
+      (Db5{t} E4{t}).16
+      (Db5{t} E4{t}).64
+      E4{t}.64
+      (Db5 Db4).16
+      (Db5{t} Db4{t}).32{d}
+    |
+      Db4{t}.64
+      A4.32{dy p}
+      A4{t}.8
+      A4{t}.64
+      A4{t}.64
+      r.64{dy mf}
+      A4.32{d dy pp}
+      A4{t}.64
+      A4{t}.16{d}
+      r.16{d dy mf}
+      E5.8{dy mp}
+      E5{t}.32
+      E5{t}.64
+      E5{t}.32
+      D5.16{dy mf}
+      D5{t}.64
+      D5{t}.8
+      r.64
+      E4.64{dy pp}
+      (Db5 E4{t}).64
+      (E4{t} Db5{t}).32{d}
+      (E4{t} Db5{t}).64
+      Db5{t}.64{dy mp}
+    |
+      (Db4 Gb4 Db5).32
+      (Db4{t} Gb4{t} Db5{t}).16
+      (Db4{t} Gb4{t} Db5{t}).64
+      (B4 Db4 Gb4).16
+      (Gb4{t} Db4{t} B4{t}).16{d}
+      (Gb4{t} Db4{t} B4{t}).64
+      (Db4{t} B4{t}).64
+      B4{t}.32
+      A4.16{d dy p}
+      A4{t}.64
+      (Db4 Ab4).32{d}
+      (Db4{t} Ab4{t}).16
+      Ab4{t}.64
+      (Ab4{t} Db4 B4).64
+      (B4{t} Ab4{t} Db4{t}).16
+      (B4{t} Db4{t}).64{dy mf}
+      (B4{t} Db4{t}).64
+      (B4 E4).32{d dy p}
+      (E4{t} B4{t}).32
+      r.32{d dy mf}
+      Db5.32{dy mp}
+      Db5{t}.64
+      (Db5{t} E4).16{d}
+      (Db5{t} E4{t}).32{d}
+      E4{t}.64{dy p}
+    |
+      (D4 A4).8{d dy pp}
+      (D4{t} A4{t}).32
+      r.64{dy mf}
+      E5.16{d dy mp}
+      E5{t}.16{d}
+      E5{t}.32
+      (D5 E4).32{dy pp}
+      (D5{t} E4{t}).8
+      (D5{t} E4{t}).64
+      D5{t}.32{d dy mf}
+      B4.16{dy p}
+      B4{t}.64
+      B4{t}.32
+      (B4{t} Gb4 Db4).64
+      (B4{t} Db4{t} Gb4{t}).64
+      (B4{t} Db4{t} Gb4{t}).16
+      (Db4{t} Gb4{t}).32{dy mp}
+      (Db4 Db5).16{d}
+    |
+      (Db4{t} Db5{t} Db4 Db5).64
+      (Db4{t} Db5{t}).64
+      (Db4{t} Db5{t}).32
+      Db5{t}.32
+      r.32{dy mf}
+      E5.32{d dy mp}
+      E5{t}.64
+      E5{t}.16
+      E5{t}.64
+      E5{t}.16
+      Db5.16{d dy mf}
+      Db5{t}.64
+      Db5.16{d}
+      Db5{t}.64
+      Db5{t}.64
+      A4.32{d dy p}
+      A4{t}.16
+      A4{t}.32{d}
+      A4{t}.32
+      A4{t}.32
+      (A4{t} D4 Gb4).32
+      (D4{t} Gb4{t}).16
+      Gb4{t}.64{dy mf}
+      (Gb4{t} Ab4).16
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.64
+      Ab4{t}.64
+    |
+      A4.16{d dy p}
+      A4{t}.64
+      (A4{t} E5).32
+      E5{t}.32{d dy mp}
+      E5{t}.32
+      A4.32
+      (A4{t} E4).16
+      (A4{t} E4{t}).64
+      E4{t}.64{dy p}
+      (E4{t} Ab4).16
+      Ab4{t}.32{dy mf}
+      Ab4{t}.64
+      Ab4{t}.32{d}
+      Ab4{t}.32{d}
+      r.64
+      (Gb4 Db4).16{d dy ff}
+      (Db4 Gb4).8{dy mp}
+      (Gb4{t} Db4).32{d}
+      (Db4{t} Gb4{t}).32
+      Db4{t}.64
+      r.64{dy mf}
+      A4.16{d dy mp}
+      A4{t}.64
+    |
+      (Db4 Ab4).16{d dy mf}
+      (Db4{t} Ab4{t}).64
+      (Ab4{t} Db4).8
+      (Ab4{t} E4).32
+      E4{t}.32{dy mp}
+      E4{t}.32{d}
+      (E4{t} Db4).8{d}
+      Db4{t}.64{dy mf}
+      Db4{t}.64
+      (D4 Gb4).16{d}
+      (D4{t} Gb4{t}).64
+      (Gb4{t} D4{t} Ab4).32{d}
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.32
+      Ab4{t}.64
+      A4.32{dy p}
+      A4{t}.16
+      A4{t}.64
+      A4{t}.64
+      E5.16{d dy mp}
+    |
+      (E5{t} A4 E4).64
+      (E4{t} A4{t}).16{d}
+      (E4{t} Ab4).16{dy mf}
+      Ab4{t}.32{d}
+      Ab4{t}.16
+      Ab4{t}.32
+      r.32
+      (Db4 Gb4).16{d dy mp}
+      (Db4 Gb4).8
+      (Gb4 Db4).32{d dy p}
+      (Db4{t} Gb4{t}).32{d}
+      Gb4{t}.16
+      Gb4{t}.64
+      Gb4{t}.64
+      Gb4{t}.32
+      (Gb4{t} E4).32
+      E4{t}.32
+      E4{t}.32{d}
+      E4.16{d}
+      E4{t}.64
+    |
+      Db4.32
+      Db4{t}.8
+      Db4{t}.32{d}
+      (Db4 Gb4).16{d dy pp}
+      (Db4{t} Gb4{t}).64
+      r.32{dy mf}
+      (D4 Gb4).16{dy pp}
+      (D4{t} Gb4{t}).64
+      Gb4{t}.32{dy mf}
+      (Gb4{t} Ab4).16
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.64
+      Ab4{t}.64
+      A4.16{d dy p}
+      A4{t}.64
+      E5.16{dy mp}
+      E5{t}.32{d}
+      (E4 A4).16{d}
+      (E4{t} A4{t}).64
+      (E4{t} Ab4).16{dy p}
+      (E4{t} Ab4{t}).64
+      Ab4{t}.32{dy mf}
+    |
+      Ab4{t}.64
+      Ab4{t}.16
+      Ab4{t}.64
+      r.64
+      (Db4 Gb4).16{d dy mp}
+      (Db4{t} Gb4{t}).64
+      (Db4 Gb4).16{d}
+      (Db4{t} Gb4{t}).64
+      (Gb4{t} Db4).16{d}
+      Db4{t}.32
+      E5.32{d dy p}
+      E5{t}.32
+      r.32{dy mf}
+      (Gb4 Db4 Gb5 Ab4).16{d dy p}
+      (Gb5{t} Ab4{t} Db4).32{d}
+      (Ab4{t} Db4{t}).64
+      (Ab4{t} Db4{t}).64
+      Db4{t}.32
+      r.64{dy mf}
+      (E5 E4).16{d dy p}
+      (E5{t} E4{t}).64
+      A4.32{dy mp}
+      A4{t}.32
+      A4{t}.32
+      A4{t}.64
+    |
+      A4{t}.16
+      A4{t}.64
+      r.32{dy mf}
+      (D4 Gb4).16{d dy p}
+      (D4{t} Gb4{t}).64
+      (Gb4{t} Db4).16{dy mf}
+      (Gb4{t} Db4{t}).64
+      (Gb4{t} Db4{t}).64
+      Db4{t}.64{dy mp}
+      Db4{t}.64
+      (Db4{t} A4).64
+      (Db4{t} A4{t}).64
+      (Db4{t} A4{t}).16
+      (A4{t} Db4).32{dy p}
+      Db4{t}.64{dy mf}
+      Db4{t}.64
+      Db4{t}.64
+      Db4{t}.32{d}
+      (Db4{t} E4 A4).64
+      (Db4{t} A4{t} E4{t}).32{d}
+      (A4{t} E4{t}).64{dy mp}
+      A4{t}.32
+      Ab4.16{d dy mf}
+      Ab4{t}.64
+      (Ab4{t} E4).32{d}
+      (Ab4{t} E4{t}).32{d}
+      E4{t}.64{dy mp}
+      (E4{t} Db4 Gb4).16
+      (Db4{t} Gb4{t}).32{d}
+    |
+      (Db4 Gb4).16{d}
+      (Db4{t} Gb4{t}).64
+      (Gb4{t} Db4).16
+      Gb4{t}.8
+      Gb4{t}.32
+      (Gb4{t} Gb4).64
+      Gb4{t}.16
+      Gb4{t}.32
+      Gb4.8
+      Gb4.16{dy p}
+      Gb4{t}.64
+      Gb4{t}.16{d}
+      Gb4{t}.8
+      Gb4{t}.64
+      r.64{dy mf}
+      (D4 Gb4 Gb5).32{dy p}
+      (Gb5{t} Gb4{t} D4{t}).32{d}
+      Gb5{t}.64{dy mp}
+      r.64
+    |
+      Ab5.16{d}
+      Ab5{t}.64
+      A5.16{d dy pp}
+      A5{t}.64
+      E6.64{dy p}
+      E6{t}.16
+      E6{t}.32{d}
+      A5.32{dy mf}
+      A5{t}.16
+      A5{t}.64
+      (Ab4 Ab5).16{d dy pp}
+      (Ab4{t} Ab5{t}).64
+      r.16{dy mf}
+      r.32{d}
+      (Gb4 Gb5 Db4).16{d}
+      (Gb4 Db4{t}).8{dy p}
+      (Gb4{t} Db4).32{d}
+      (Gb4{t} Db4{t}).64
+      Db4{t}.32
+      r.64
+    |
+      A4.16{d dy mp}
+      A4{t}.64
+      (Db4 Ab4).64
+      (Db4{t} Ab4{t}).16{d}
+      (Ab4{t} Db4).32{d}
+      (Ab4{t} Db4{t}).32
+      (Ab4{t} Db4{t}).32
+      Ab4{t}.64{dy mf}
+      E4.16{dy mp}
+      E4{t}.64
+      E4{t}.32
+      (E4{t} Db4).8
+      (E4{t} Db4{t}).32{d}
+      Db4{t}.64{dy mf}
+      Db4{t}.32
+      (D4 Gb5).16{dy pp}
+      (D4{t} Gb5{t}).64
+      Gb5{t}.32{dy mp}
+      Ab5.16
+      Ab5{t}.64
+      Ab5{t}.32
+      A5.32{dy pp}
+      A5{t}.16
+      r.64
+    |
+      E6.16{dy p}
+      E6{t}.32
+      E6{t}.64
+      A5.32{dy mf}
+      A5{t}.16
+      A5{t}.64
+      (Ab4 Ab5).16{d dy pp}
+      (Ab4{t} Ab5{t}).64
+      r.8{dy mf}
+      (Db4 Gb4 Gb5).16{d dy p}
+      (Db4{t} Gb4{t} Gb5{t}).64
+      (Gb5 Db4 Gb4).16{d}
+      (Gb4{t} Db4).32{d}
+      (Gb4{t} Db4{t}).32{d}
+      r.8{dy mf}
+      r.64
+      E4.16{dy p}
+      E4{t}.32{d}
+    |
+      E4.8
+      Db4.32
+      Db4{t}.16{d}
+      r.8{dy mf}
+      r.16
+      r.64
+      Gb5.32
+      Gb5{t}.16
+      Gb5{t}.64
+      Ab5.16{d dy mp}
+      Ab5{t}.64
+      A5.16{d dy pp}
+      A5{t}.64
+      E6.16{dy p}
+      E6{t}.64
+      E6{t}.32
+      (A4 A5).64{dy pp}
+      (A5{t} A4{t}).16
+      A5{t}.64{dy mp}
+      r.64
+    |
+      (Ab4 Ab5).16{d dy pp}
+      (Ab4{t} Ab5{t}).64
+      r.16{dy mf}
+      r.32{d}
+      (Db4 Gb4 Gb5).16{d dy p}
+      (Db4{t} Gb4{t} Gb5{t}).64
+      (Gb5{t} Gb4 Db4).64
+      (Gb5{t} Db4{t} Gb4{t}).64
+      (Gb4{t} Db4{t}).32{d dy mp}
+      (Gb4{t} Db4{t}).32
+      (Gb4{t} Db4).16{d}
+      Db4{t}.64
+      Db4{t}.64
+      E5.16{d dy p}
+      E5{t}.64
+      (Gb4 Gb5 Ab4).16
+      (Gb4{t} Gb5{t} Ab4{t}).64
+      (Gb5{t} Ab4{t}).32
+      (Gb5{t} Ab4{t} Db4).32{d}
+      (Ab4{t} Db4{t}).64
+      Db4{t}.32
+      r.64{dy mf}
+      (E4 E5).16{d dy p}
+      (E4{t} E5{t}).64
+    |
+      (A4 A5).16{d dy mp}
+      A4{t}.16{d}
+      r.32{dy mf}
+      Gb5.32{dy mp}
+      Gb5{t}.16
+      Gb5{t}.64
+      Gb5{t}.64
+      (Gb5{t} Db5).64
+      Db5{t}.16
+      Db5{t}.64
+      Db5{t}.64
+      A5.64{dy p}
+      A5{t}.16{d}
+      Db5.32{d dy mp}
+      Db5{t}.64
+      Db5{t}.32{d}
+      A5.64
+      A5{t}.16
+      A5{t}.64
+      r.64{dy mf}
+      Ab5.8{dy mp}
+      Ab5{t}.32{d}
+      Ab5{t}.32{d}
+    |
+      (Gb4 Db4 Gb5).16{d dy mf}
+      (Gb4{t} Db4{t} Gb5{t}).64
+      (Db4{t} Gb4 Gb5).16{d dy p}
+      (Db4{t} Gb4{t} Gb5{t}).64
+      (Gb4{t} Db4).16
+      Gb4{t}.32
+      r.4{dy mf}
+      r.32
+      Gb4.16{dy p}
+      Gb4.16{dy mp}
+      Gb4{t}.64
+      Gb4{t}.64
+      r.8{dy mf}
+      r.64
+      Gb4.16{d dy p}
+      Gb4{t}.64
+    |
+      D4.32{d}
+      D4{t}.64
+      D4{t}.32{d}
+      (D4{t} B4).64
+      (D4{t} B4{t}).32
+      (D4{t} B4{t}).64
+      B4{t}.64{dy mp}
+      B4{t}.32{d}
+      (B4{t} A4).32
+      A4{t}.16{dy p}
+      A4{t}.64
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mf}
+      Db5{t}.32{d}
+      E4.16{d dy p}
+      (B4 E4).16{d}
+      r.8{dy mf}
+      (Db5 Gb4 Db4 A4).16{d}
+      (Db5{t} Gb4{t} Db4{t} A4{t}).64
+      (Gb4 A4 Db4).32{dy mp}
+      (Gb4{t} A4{t} Db4{t}).64
+      (A4{t} Gb4{t} Db4{t}).32{d}
+      (Gb4{t} Db4{t}).64
+    |
+      (Gb4{t} Db4{t}).16
+      (Gb4{t} Db4{t}).64
+      Db4{t}.64
+      r.8{dy mf}
+      (Db5 Ab4 Db4).16{d dy pp}
+      (Db5{t} Ab4{t} Db4{t}).64
+      (Db4{t} Ab4).32{d dy mf}
+      (Ab4{t} Db4{t}).32{d}
+      Db4{t}.32
+      E4.8{dy mp}
+      E4{t}.32
+      E4{t}.8
+      E4{t}.64
+      E4{t}.64
+      r.64{dy mf}
+      D4.16{d dy p}
+      D4{t}.64
+      (D4{t} B4).16
+      (D4{t} B4{t}).64
+      (D4{t} B4{t}).64
+      B4{t}.64{dy mf}
+    |
+      A4.32{dy p}
+      A4{t}.32{d}
+      A4{t}.32
+      (A4{t} Db5).32
+      Db5{t}.32{d dy mp}
+      Db5{t}.32
+      (Db5{t} E4).32
+      (Db5{t} E4{t}).32
+      E4{t}.32{dy p}
+      r.64{dy mf}
+      (B4 E4).8{dy p}
+      r.16{dy mf}
+      r.32{d}
+      (Gb4 Db5 Db4 A4).16{d dy p}
+      (Gb4{t} Db5{t} Db4{t} A4{t}).64
+      (A4{t} Gb4 Db4).64
+      (Gb4{t} A4{t} Db4{t}).32
+      (Gb4{t} Db4{t} A4{t}).32
+      (Db4{t} Gb4{t}).16{d}
+      Db4{t}.32{dy mp}
+      r.8
+    |
+      (Gb5 E4).32{dy pp}
+      (E4{t} Gb5{t}).16
+      (Gb5{t} E4{t}).64
+      (Gb5{t} E4).16{dy mp}
+      E4{t}.32{d dy p}
+      (Db4 E5).16{dy pp}
+      (Db4{t} E5{t}).64
+      (Db4{t} E5{t}).16
+      (Db4{t} E5{t}).64
+      r.8{d dy mf}
+      D4.64{dy pp}
+      D4{t}.32
+      D4{t}.32{d}
+      D4{t}.64
+      (D4{t} B4).32
+      (D4{t} B4{t}).32
+      B4{t}.32{d dy mp}
+      (B4{t} A4).32{d}
+      A4{t}.32{d dy p}
+      A4{t}.32
+      Db5.16{dy mp}
+      Db5{t}.32
+    |
+      (Db5{t} E4).16
+      (Db5{t} E4{t}).32
+      E4{t}.64{dy pp}
+      (B4 E4).32{d dy mp}
+      (B4{t} E4{t}).16
+      r.8{dy mf}
+      (Gb4 Db4 Db5 A4).64{dy mp}
+      (Db4{t} Gb4{t} A4{t} Db5{t}).16
+      (Db4{t} Gb4{t} A4{t} Db5{t}).64
+      (Db5{t} A4 Gb4 Db4).32{d}
+      (Db4{t} A4{t} Gb4{t}).64
+      (A4{t} Gb4{t} Db4{t}).32
+      (Db4{t} Gb4{t}).16{d}
+      Db4{t}.64
+      r.8{dy mf}
+      r.64
+      (Db4 Db5 Ab4).16{d dy f}
+      (Db4{t} Db5{t} Ab4{t}).64
+      (Ab4{t} Db4).32{dy p}
+      (Db4{t} Ab4{t}).16
+      Db4{t}.64{dy mf}
+    |
+      (Db4{t} E4).64
+      E4{t}.8{d dy mp}
+      E4{t}.64
+      r.32{d dy mf}
+      E4{t}.16{dy mp}
+      D4.16{d dy p}
+      D4{t}.64
+      (D4{t} B4).16
+      (D4{t} B4{t}).64
+      B4{t}.32{d dy mf}
+      A4.64{dy p}
+      A4{t}.16
+      A4{t}.64
+      (A4{t} Db5).32{d}
+      Db5{t}.16{dy mf}
+      Db5{t}.64
+      (Db5{t} E4).32
+      E4{t}.16{dy p}
+      r.64{dy mf}
+      (E4 B4).16{d dy pp}
+      (E4{t} B4{t}).64
+    |
+      r.16{dy mf}
+      r.32{d}
+      (Gb4 Db4 Db5 A4).16{d dy mp}
+      (Gb4{t} Db4{t} Db5{t} A4{t}).64
+      (A4{t} Db4 Gb4).16
+      (A4{t} Db4{t} Gb4{t}).64
+      (Db4{t} Gb4{t}).32
+      (Db4 Gb4{t}).16
+      Db4{t}.16{d}
+      Db4{t}.64
+      r.32{d dy mf}
+      (Gb5 Gb4).16{d dy f}
+      (Gb5{t} Gb4{t}).64
+      (Gb4{t} Gb5).32{dy pp}
+      Gb5{t}.16{dy p}
+      r.32{dy mf}
+      E5.8{d}
+      E5{t}.32
+    |
+      r.8
+      r.16{d}
+      B4.16{dy mp}
+      B4{t}.16
+      (B4{t} A4).32
+      A4{t}.16{dy p}
+      A4{t}.64
+      Db5.16{dy mf}
+      Db5{t}.64
+      Db5{t}.32
+      E4.64{dy p}
+      E4{t}.16{d}
+      (E4 B4).16{d dy mp}
+      r.8{dy mf}
+      (Gb4 A4 Db4).32{dy mp}
+      (Gb4{t} Db4{t} A4{t}).16
+      (Gb4{t} Db4{t} A4{t}).64
+    |
+      (Gb4 A4 Db4).64
+      (Db4{t} A4{t} Gb4{t}).32
+      (Gb4{t} Db4{t} A4{t}).32{d}
+      (Db4{t} Gb4{t}).16{d}
+      (Gb4{t} Db4{t}).64
+      r.8{dy mf}
+      (Db4 Ab4).32{d dy f}
+      (Db4{t} Ab4{t}).16
+      Ab4{t}.64{dy p}
+      (Ab4{t} Db4).16
+      Db4{t}.32{d dy mf}
+      E4.8{dy mp}
+      E4{t}.64
+      E4{t}.16
+      E4{t}.64
+      E4{t}.64
+      E4{t}.16
+      E4{t}.64
+      E4{t}.64
+      E4{t}.64
+      r.16{d}
+    |
+      (D4 B4).16{d dy p}
+      (D4{t} B4{t}).64
+      (B4{t} A4).32{d dy mp}
+      A4{t}.16{dy pp}
+      A4{t}.64
+      Db5.16{d dy mp}
+      Db5{t}.64
+      (Db5{t} E4).64
+      (Db5{t} E4{t}).32
+      E4{t}.32{dy p}
+      E4{t}.64
+      (E4{t} B4 E4).64
+      (B4{t} E4{t}).32{d dy mp}
+      (B4{t} E4{t}).32{d}
+      r.16{dy mf}
+      r.32{d}
+      (Gb4 Db5 Db4 A4).16{d dy mp}
+      (Gb4{t} Db5{t} Db4{t} A4{t}).32
+      (A4{t} Db4 Gb4).32{d}
+      (Db4{t} A4{t} Gb4{t}).64
+      (Gb4{t} Db4{t}).8
+      Db4{t}.64
+      r.64
+    |
+      r.16{dy mf}
+      r.32{d}
+      (E4 Gb5).64{dy pp}
+      (Gb5{t} E4{t}).16
+      (Gb5{t} E4{t}).64
+      (Gb5{t} E4{t}).64
+      (Gb5{t} E4{t}).16
+      E4{t}.64
+      r.32{d dy mf}
+      (Db4 E5).32{d dy pp}
+      (E5{t} Db4{t}).16{d}
+      r.4{dy mf}
+      r.32{d}
+      B4.32{d dy mp}
+      B4{t}.64
+      B4{t}.32{d}
+      (B4{t} A4).32{d}
+      A4{t}.16{dy p}
+    |
+      A4{t}.64
+      Db5.16{dy mf}
+      Db5{t}.32
+      (Db5{t} E4).64
+      E4{t}.32{dy p}
+      E4{t}.16
+      (B4 E4).32
+      (E4{t} B4{t}).16
+      (E4{t} B4{t}).64
+      r.8{dy mf}
+      (Gb4 Db4 A4).16{d dy mp}
+      (A4 Db4 Gb4).32{d}
+      (A4{t} Db4{t} Gb4{t}).64
+      (Db4{t} Gb4{t} A4{t}).32
+      (Db4{t} Gb4{t}).16{d}
+      r.32{d dy mf}
+      Db4.16{d dy pp}
+      Db4{t}.64
+      (Db4 Ab4).16{d dy f}
+      (Db4{t} Ab4{t}).64
+    |
+      (Ab4 Db4).32{d dy p}
+      (Ab4{t} Db4{t}).32
+      (Ab4{t} Db4{t}).64
+      Db4{t}.64{dy mf}
+      E4.8{dy mp}
+      E4{t}.64
+      E4{t}.16
+      E4{t}.64
+      E4{t}.32
+      E4{t}.16
+      E4{t}.64
+      r.16{dy mf}
+      r.32{d}
+      (B4 D4).16{d dy mp}
+      (D4{t} B4{t}).32
+      (B4{t} A4).64
+      (A4{t} B4{t}).64
+      A4{t}.32{dy pp}
+      A4{t}.32{d}
+      Db5.32{d dy mf}
+      Db5{t}.32
+      Db5{t}.32
+      E4.64{dy p}
+      E4{t}.16
+      E4{t}.64
+      E4{t}.64
+    |
+      (B4 E4).16{dy mp}
+      (E4{t} B4{t}).32{d}
+      r.16{dy mf}
+      r.32{d}
+      (Db4 Gb4 Db5 A4).16{d dy mp}
+      (Db4{t} Gb4{t} Db5{t} A4{t}).64
+      (Db4 A4{t} Gb4).16
+      (Gb4{t} Db4{t}).16
+      (Gb4{t} Db4).32
+      Db4{t}.32{d}
+      r.8{dy mf}
+      Gb5.16{d dy mp}
+      Gb5{t}.8
+      Gb5{t}.64
+      E5.16
+      E5{t}.32
+      r.64
+    |
+      r.4{dy mf}
+      r.8
+      r.16
+      r.64
+      A4.32{dy pp}
+      A4{t}.16
+      (A4{t} A4).64
+      A4{t}.16{dy mp}
+      A4{t}.64
+      A4{t}.32
+      (A4 E4).64{dy p}
+      (A4{t} E4{t}).16{d}
+      (E4{t} A4).16
+      (E4{t} A4{t}).64
+      (E4{t} A4{t}).64
+      A4{t}.64{dy mp}
+      r.16
+      r.32{d}
+    |
+      (Db4 Gb4 Db5).16{d dy mf}
+      (Db4{t} Gb4{t} Db5{t}).64
+      (Db5{t} Gb4 Db4).32{dy mp}
+      (Gb4{t} Db4{t}).32
+      (Gb4{t} Db4{t}).32
+      (Gb4{t} Db4{t}).16{d}
+      Db4{t}.64
+      r.64{dy mf}
+      Db4.16{d dy pp}
+      Db4{t}.64
+      (Db4 Ab4).8{dy p}
+      (Ab4 Db4).32
+      (Db4{t} Ab4{t}).32{d}
+      Db4{t}.32{dy mp}
+      (Db4{t} E4).64
+      E4{t}.16{dy p}
+      r.8{dy mf}
+      E4.32{d dy p}
+      E4{t}.16
+      E4{t}.64
+    |
+      (E4{t} E5).32{d}
+      E5{t}.16
+      r.8{dy mf}
+      E5.16{dy pp}
+      E5{t}.64
+      E5{t}.64
+      E5.16{d dy mf}
+      E5{t}.32
+      (E5 E4).32{dy mp}
+      (E4{t} E5{t}).32{d}
+      (E4{t} E5{t}).64
+      E4{t}.64
+      (E5 E4).16{d}
+      (E5{t} E4{t}).64
+      D5.32{d}
+      D5{t}.32
+      D5{t}.32
+      (Db4 Gb4 Db5).16{d}
+      (Db4{t} Gb4{t} Db5{t}).64
+      (Db5{t} Db4 Gb4).32
+      (Gb4{t} Db4{t} Db5{t}).64
+      (Gb4{t} Db4{t}).64
+      (Gb4{t} Db4{t}).32{d}
+    |
+      (Db4{t} Gb4{t}).32{d}
+      Db4{t}.32
+      r.4{dy mf}
+      r.64
+      E4.16{d dy p}
+      E4{t}.64
+      Db4.32
+      Db4{t}.32
+      Db4{t}.8{d}
+      Db4{t}.32{d}
+      r.4
+    |
+      A4.32{d}
+      A4{t}.16
+      A4.16{dy mp}
+      A4{t}.64
+      A4{t}.32{d}
+      (A4 E4).32{dy p}
+      (A4{t} E4{t}).16
+      (E4{t} A4).16{d}
+      (E4{t} A4{t}).64
+      A4{t}.16
+      r.16{dy mf}
+      (Gb4 Db4 Db5).16{d dy mp}
+      (Db5{t} Gb4 Db4).32
+      (Db5{t} Gb4{t} Db4{t}).64
+      (Gb4{t} Db4{t}).64
+      (Gb4{t} Db4{t}).32
+      (Gb4{t} Db4{t}).16{d}
+      Db4{t}.64
+      r.8
+      r.64
+    |
+      (Db4 Ab4).16{d dy p}
+      (Db4{t} Ab4{t}).64
+      (Ab4 Db4).32
+      (Ab4{t} Db4{t}).16
+      Db4{t}.32{dy mp}
+      E4.16{d dy p}
+      r.16{dy mf}
+      r.32{d}
+      E4.32{dy p}
+      E4{t}.16
+      E4{t}.64
+      E4.64{dy mp}
+      E4{t}.32
+      E4{t}.32{d}
+      E4{t}.32{d}
+      (E4{t} D4).16
+      E4{t}.64
+      r.64{dy mf}
+      E4.16{d}
+      E4{t}.64
+      E4.16{dy f}
+      E4{t}.32{d}
+    |
+      E4.32{d}
+      E4{t}.16
+      (E5 E4).16{d dy p}
+      (E5{t} E4{t}).64
+      (E4{t} Ab4).32{dy mp}
+      (E4{t} Ab4{t}).16
+      (E4{t} Ab4{t}).64
+      (Gb4 Db5 Db4 E4{t} A4).16
+      (Db4{t} Db5{t} A4{t} Gb4{t}).32
+      (Db4{t} A4{t}).64
+      A4{t}.64{dy p}
+      (A4{t} Gb4 Db4).32{d}
+      (Db4{t} Gb4{t}).32{d dy mp}
+      (Db4{t} Gb4{t} Db4).64
+      (Gb4{t} Db4{t}).32{dy pp}
+      (Gb4{t} Db4{t}).64
+      Db4{t}.32{dy p}
+      r.4
+      r.16
+      r.32{d}
+    |
+      r.4{dy mf}
+      r.16{d}
+      (A4 D4).64{dy p}
+      (A4{t} D4{t}).64
+      (D4{t} A4{t}).16
+      (D4{t} A4{t}).64
+      D4{t}.16{d dy pp}
+      r.32{dy mf}
+      E5.8{dy mp}
+      E5{t}.32
+      E5{t}.64
+      E5{t}.32
+      D5.32{dy mf}
+      D5{t}.8{d}
+    |
+      r.64
+      Db5.64{dy mp}
+      Db5{t}.32{d}
+      Db5{t}.32
+      (Db5{t} Db4 Gb4).16{d}
+      (Db5{t} Db4{t} Gb4{t}).64
+      (Gb4 Db4 B4).16
+      (Gb4{t} Db4{t} B4{t}).16
+      (Gb4{t} Db4{t} B4{t}).64
+      (Db4{t} B4{t}).32{d}
+      B4{t}.64{dy mf}
+      B4{t}.64
+      r.64
+      A4.16{d dy p}
+      A4{t}.64
+      (Ab4 Db4).32
+      (Ab4{t} Db4{t}).16
+      Db4{t}.64{dy mp}
+      (B4 Db4).16{d}
+      (B4{t} Db4{t}).64
+      (B4 E4).16{d dy p}
+      (B4{t} E4{t}).64
+      (Db5 E4).32{dy mf}
+      (E4{t} Db5{t}).32{d}
+      (Db5{t} E4{t}).32
+    |
+      (E4{t} Db5{t}).16{d dy pp}
+      r.64{dy mf}
+      (D4 A4).8{dy pp}
+      (D4{t} A4{t}).64
+      A4{t}.16
+      A4{t}.64
+      E5.8{dy mp}
+      E5{t}.32{d}
+      E5{t}.32
+      E5{t}.32
+      (D5 E4).64{dy f}
+      (D5{t} E4{t}).16
+      (D5{t} E4{t}).64
+      (D5{t} E4{t} D5).64
+      (E4{t} D5{t}).16{dy mf}
+      D5{t}.32{d}
+      B4.16{d dy p}
+      B4{t}.64
+      (B4 Db4 Gb4).32
+      (B4{t} Db4{t} Gb4{t}).16
+      (B4{t} Db4{t} Gb4{t}).64
+    |
+      (Db4 Db5 Gb4).32{d}
+      (Gb4{t} Db4{t} Db5{t}).16
+      (Gb4{t} Db4{t} Db5{t}).64
+      (Db5{t} Gb4{t} Db4{t}).32{d}
+      Db5{t}.32{dy mf}
+      Db5{t}.64
+      E5.16{d dy mp}
+      E5{t}.64
+      (E4 E5).16{d}
+      E4{t}.64
+      (Db5 E4).16{d dy f}
+      (Db5{t} E4{t}).64
+      (Db4 Db5).64{dy mp}
+      (Db5{t} Db4{t}).16
+      (Db5{t} Db4{t}).64
+      (Db4{t} Db5{t}).32
+      A4.8{dy p}
+      A4{t}.32{d}
+      A4{t}.32{d}
+      A4.16
+      r.32{d}
+    |
+      r.16{dy mf}
+      r.32{d}
+      E5.32{d dy p}
+      E5{t}.8
+      E5{t}.64
+      E5{t}.32
+      (E4 D5).32{dy pp}
+      (E4{t} D5{t}).32
+      D5{t}.8{dy mf}
+      D5{t}.32
+      r.64
+      Db5.16{dy mp}
+      Db5{t}.64
+      Db5{t}.32
+      (Db5{t} Gb4 Db4).16
+      (Db5{t} Gb4{t} Db4{t}).64
+      (Db4{t} Gb4{t}).32
+      (Gb4 Db4 B4).32{dy p}
+      (Gb4{t} Db4{t} B4{t}).32
+      (Gb4{t} Db4{t} B4{t}).16
+      (Db4{t} B4{t}).32{d}
+      (Db4{t} B4{t}).64
+      B4{t}.64{dy mf}
+      B4{t}.64
+    |
+      A4.16{d dy p}
+      A4{t}.64
+      (Db4 Ab4).16{d}
+      (Db4{t} Ab4{t}).64
+      (Ab4{t} Db4 B4).32
+      (Ab4{t} Db4{t} B4{t}).16
+      (Db4{t} B4{t}).64{dy mp}
+      r.64{dy mf}
+      (B4 E4).16{d dy p}
+      r.64{dy mf}
+      Db5.16
+      Db5{t}.64
+      (Db5{t} E4).16
+      (E4{t} Db5{t}).64
+      (Db5{t} E4{t}).32
+      (Db5{t} E4{t}).64
+      E4{t}.64{dy p}
+      (D4 A4).64{dy pp}
+      (A4{t} D4{t}).16
+      A4{t}.16{d}
+      r.16{dy mf}
+      E5.16{d dy mp}
+    |
+      E5.32
+      E5{t}.16
+      E5{t}.64
+      (E4 D5).32{d dy pp}
+      (E4{t} D5{t}).16
+      (E4{t} D5).16
+      (E4{t} D5{t}).64
+      D5{t}.32{dy mf}
+      D5{t}.64
+      B4.16{d dy p}
+      (B4 Gb4 Db4).32
+      (B4{t} Gb4{t} Db4{t}).64
+      (B4{t} Db4{t} Gb4{t}).16
+      (Db4 Db5 Gb4).16{d dy mf}
+      (Db4{t} Db5{t} Gb4{t}).64
+      (Gb4{t} Db4 Db5).64
+      (Gb4{t} Db4{t} Db5{t}).32
+      (Gb4{t} Db4{t} Db5{t}).32
+      Db5{t}.32
+      r.64
+      E5.16{d}
+      E5{t}.64
+      E5.16{d}
+      E5{t}.64
+    |
+      Db5.16{d dy f}
+      Db5{t}.64
+      Db5.16{dy mf}
+      Db5{t}.64
+      Db5{t}.32{d}
+      A4.32{dy mp}
+      A4{t}.16{d}
+      A4{t}.32{d}
+      A4{t}.32
+      A4.64{dy pp}
+      A4{t}.32{d}
+      A4{t}.16{d}
+      r.16{d dy mf}
+      E5.8{dy mp}
+      E5{t}.32{d}
+      E5{t}.32
+      (E4 D5).32{dy pp}
+      (E4{t} D5{t}).16
+      (E4{t} D5{t}).64
+    |
+      (D5{t} E4{t}).16
+      (D5{t} E4{t}).64
+      D5{t}.32{dy mf}
+      r.64
+      Db5.32{dy mp}
+      Db5{t}.64
+      Db5{t}.32{d}
+      (Db5{t} Db4 Gb4).16{d}
+      (Db4{t} Gb4{t}).64
+      (Gb4 B4 Db4).32{dy p}
+      (Gb4{t} Db4{t} B4{t}).32{d}
+      (Db4{t} Gb4{t} B4{t}).32
+      (Db4{t} B4{t}).16
+      (Db4{t} B4{t}).64
+      B4{t}.64{dy mf}
+      B4{t}.64
+      r.64
+      A4.16{d dy p}
+      A4{t}.64
+      (Db4 Ab4).16{d dy mp}
+      (Db4{t} Ab4{t}).64
+      (Db4 B4).32
+      (Db4{t} B4{t}).16
+      (B4{t} Db4{t}).64
+      (E4 B4).16{dy p}
+      (E4{t} B4{t}).32{d}
+    |
+      Db5.32{d dy mf}
+      Db5{t}.32{d}
+      (Db5{t} E4).16
+      (Db5{t} E4{t}).64
+      (Db5{t} E4{t}).32
+      (Db5{t} E4{t}).64
+      A4.8{d dy p}
+      A4{t}.32
+      r.64{dy mf}
+      E5.16{d dy mp}
+      E5.32{d}
+      E5{t}.32{d}
+      E5{t}.32
+      (D5 E4).32{dy mf}
+      (D5{t} E4{t}).16
+      (D5{t} E4{t}).64
+      (E4{t} D5).16
+      (E4{t} D5{t}).64
+      D5{t}.32
+      B4.16{d dy p}
+      B4{t}.64
+    |
+      (B4 Db4 Gb4).32{d}
+      (B4{t} Db4{t} Gb4{t}).16
+      (Gb4{t} Db4 Db5).32{dy mp}
+      (Db5{t} Db4{t}).32{d}
+      (Db4{t} Db5{t}).32{d}
+      (Db4{t} Db5{t}).16
+      Db5{t}.32{dy mf}
+      r.64
+      E5.16{d dy mp}
+      (E5 E4).16{d}
+      (E5{t} E4{t}).64
+      (E4 Db5).32{dy p}
+      (E4{t} Db5{t}).16
+      (E4{t} Db5{t}).64
+      r.64{dy mf}
+      (Db4 Db5).16{dy p}
+      (Db4{t} Db5{t}).32{d}
+      A4.8
+      A4{t}.32{d}
+      A4{t}.32{d}
+    |
+      A4{t}.32{d}
+      A4{t}.32
+      r.8{dy mf}
+      r.32
+      E5.8{dy mp}
+      E5{t}.32{d}
+      E5{t}.32{d}
+      (E4 D5).64{dy pp}
+      (E4{t} D5{t}).16
+      D5{t}.8{dy mf}
+      D5{t}.64
+      r.64
+      Db5.64{dy mp}
+      Db5{t}.32
+      Db5{t}.32
+      Db5{t}.64
+      (Db5{t} Db4 Gb4).16{d}
+      (Db4{t} Gb4{t}).64
+      (Gb4 Db4 B4).32{d dy p}
+      (Gb4{t} Db4{t} B4{t}).64
+      (Db4{t} Gb4{t} B4{t}).32{d}
+    |
+      (Db4{t} B4{t}).16
+      (Db4{t} B4{t}).64
+      B4{t}.64{dy mf}
+      B4{t}.64
+      A4.16{d dy p}
+      A4{t}.64
+      (Db4 Ab4).16{d}
+      (Db4{t} Ab4{t}).64
+      (Ab4{t} Db4 B4).32
+      (Ab4{t} Db4{t} B4{t}).32{d}
+      (Db4{t} B4{t}).64{dy mp}
+      (B4{t} Db4{t}).64
+      B4.16{dy p}
+      B4{t}.16
+      Db5.32{dy mp}
+      Db5{t}.32{d}
+      (E4 Db5{t}).16
+      (E4{t} Db5{t}).64
+      (Db5{t} E4{t}).32
+      Db5{t}.64
+      Db5{t}.64
+      (Db5{t} A4 Db4 Gb4).32{d}
+      (A4{t} Gb4{t} Db4{t} Db5{t}).32
+      (Gb4{t} A4{t} Db4{t}).16{d}
+      (Gb4{t} A4{t} Db4{t}).64
+      (Gb4{t} Db4{t}).64
+      Db4{t}.64{dy p}
+    |
+      Db4{t}.64
+      (Db4{t} E5).16
+      (Db4{t} E5{t}).32
+      (Db4{t} Gb4 E5).32
+      (Db4{t} Gb4{t} E5{t}).32{d}
+      (Gb4{t} E5{t}).32{dy pp}
+      (D5 E4).32{d}
+      (E4{t} D5{t}).16
+      (E4{t} D5).16
+      (E4{t} D5{t}).64
+      D5{t}.32{dy mf}
+      D5{t}.64
+      B4.16{d dy p}
+      B4{t}.64
+      (Db4 B4).16
+      (Db4{t} B4{t}).32{d}
+      (Db4 Db5).16{d dy mp}
+      (Db4{t} Db5{t}).64
+      (Db4 Db5).32{dy p}
+      (Db5{t} Db4{t}).32{d}
+      Db5{t}.64{dy mf}
+      Db5{t}.64
+      E5.16{d}
+      E5{t}.64
+    |
+      E5.16
+      E5{t}.64
+      E5{t}.32
+      Db5.16{d dy f}
+      Db5{t}.64
+      Db5.64{dy mf}
+      Db5{t}.16{d}
+      A4.8{dy mp}
+      A4{t}.16{d}
+      r.64{dy mf}
+      (E4 A4).16{dy mp}
+      (E4{t} A4{t}).16
+      (E4{t} D4 B4).32
+      (E4{t} D4{t} B4{t}).32
+      B4{t}.32{dy mf}
+      (B4{t} A4).16
+      (B4{t} A4{t}).64
+      A4{t}.32
+      (A4{t} Db5).16
+      (A4{t} Db5{t}).64
+      Db5{t}.64{dy f}
+      Db5{t}.64
+    |
+      (Db5{t} E4).16{d dy p}
+      E4{t}.64
+      (E4 B4).8{d dy f}
+      (E4{t} B4{t}).32
+      (Gb4 A4 Db4).16{d dy mp}
+      (Gb4{t} A4{t} Db4{t}).64
+      (Db4{t} Gb4 A4).8{dy p}
+      (Db4{t} Gb4{t} A4 B4).32
+      (A4{t} Db4{t} B4{t}).8
+      (A4{t} Db4{t} B4{t}).32
+      (Db4{t} B4{t}).32
+      (Db4 Ab4).8{d dy mf}
+      (Db4{t} Ab4{t}).32
+    |
+      (Ab4{t} E4).32{dy f}
+      E4{t}.16{d dy mf}
+      (E4{t} Gb4).16
+      (E4{t} Gb4{t}).64
+      Gb4{t}.32
+      (Gb4{t} Ab4).16
+      (Gb4{t} Ab4{t}).64
+      Ab4{t}.64
+      (Ab4{t} E5 E4).8
+      (Ab4{t} E5{t} E4{t}).32
+      (E5{t} E4{t}).64
+      E4{t}.16
+      (E4{t} Db5).16
+      (E4{t} Db5{t}).64
+      Db5{t}.16{d dy f}
+      Db5{t}.64
+      Db5{t}.32
+      E4.16{d dy mp}
+      E4{t}.64
+      (B4 E4).16{d dy f}
+      (B4{t} E4{t}).64
+    |
+      (E4{t} A4 B4{t}).32{dy pp}
+      (A4{t} E4{t}).64
+      A4{t}.16{dy ff}
+      (A4 Gb4 Db4).8{d dy f}
+      (A4{t} Gb4{t} Db4{t}).32
+      (Db4{t} Gb4 A4).8{d}
+      (Gb4{t} A4{t}).32{d}
+      (E4 A4).16{d dy p}
+      (E4{t} A4{t}).64
+      (A4{t} B4).16{dy mf}
+      (B4{t} E4 A4{t}).32
+      (B4{t} E4{t}).64
+      (Db5 Db4 B4{t} E4{t}).32
+      (Db5{t} Db4{t}).32{d}
+      (Db5{t} Db4{t}).32
+      (Db5{t} Db4{t} Ab4).32{d}
+      (Db4{t} Ab4{t}).32{dy p}
+      Ab4{t}.32{dy ff}
+    |
+      Ab4.16{dy p}
+      Ab4{t}.64
+      Ab4{t}.64
+      Ab4{t}.64
+      E4.16{d dy mf}
+      E4{t}.64
+      (Gb4 E4{t}).16{d}
+      (Gb4{t} E4{t}).64
+      Gb4{t}.64{dy f}
+      (Gb4{t} E4).16
+      (Gb4{t} E4{t}).64
+      E4{t}.32
+      (E4 Ab4).32{d}
+      (E4{t} Ab4{t}).64
+      (E4{t} Ab4{t}).32{d}
+      (Ab4{t} E4).16{d}
+      (Ab4{t} E4{t}).64
+      (E4{t} A4).8{d}
+      (E4{t} A4{t}).32
+      (Db4 E4 Gb4).64
+      (Db4{t} E4{t} Gb4{t}).16{d}
+    |
+      (Db4 A4 E4 Gb4).16{d dy mp}
+      (Db4{t} A4{t} E4{t} Gb4{t}).64
+      (E4{t} Gb4{t} Db4 A4 B4).32{d}
+      (Gb4{t} A4{t} Db4{t} B4{t}).64
+      (Db4{t} A4{t} B4{t}).64
+      (A4{t} Db4{t} B4{t}).32{d}
+      (B4 D5).16{d}
+      (Ab4 Db5 Db4).8{d dy mf}
+      (Ab4{t} Db5{t} Db4{t}).32{d}
+      (B4 E4).16{d dy f}
+      (B4{t} E4{t}).64
+      (E4{t} A4 B4{t}).32
+      (E4{t} A4{t}).8
+      (E4{t} A4{t}).32
+      A4{t}.32
+      (D4 E5).32{d}
+      (D4{t} E5{t}).16
+    |
+      (E5{t} D4 A4).32{dy mf}
+      (D4{t} A4{t}).8{d}
+      (D4{t} A4{t}).32
+      A4{t}.16
+      A4{t}.64
+      A4{t}.64
+      (Gb4 Gb5).8
+      (Gb4{t} Gb5{t}).32
+      Gb4{t}.16
+      Gb4{t}.64
+      (Gb4{t} E4).16
+      E4{t}.32{dy pp}
+      (Gb4 Db5 E5 Db4).16{dy mp}
+      (E5{t} Db5{t} Gb4{t} Db4{t}).8
+      (E5{t} Db5{t} Gb4{t} Db4{t}).32
+      (Db4{t} Gb4 A4).16{d}
+      (Db4{t} Gb4{t} A4{t}).64
+    |
+      (Db4{t} Gb4{t} A4{t}).16{d}
+      (Gb4{t} A4{t}).64{dy p}
+      A4.16{d dy ff}
+      A4{t}.32
+      (A4 C5).16{d}
+      B4.16{d dy mf}
+      B4{t}.64
+      (B4{t} A4).16
+      (B4{t} A4{t}).64
+      A4{t}.32{d dy ff}
+      A4.32{dy mf}
+      (A4{t} Gb4).8
+      A4{t}.32
+      A4{t}.4
+    |
+      A4{t}.8
+      r.2
+      r.4{d}
+  \staff {
+    score
+  }
+    \clef f4
+    \ottava regular
+    \simile none
+    \ks aminor
+      (D3 A3).16{d dy p}
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).16
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).32
+      (D3{t} A3{t}).16{d}
+      A3{t}.32{dy mp}
+      A3{t}.16
+      A3{t}.64
+      r.64{dy mf}
+      (B3 E3).32{dy mp}
+      (B3{t} E3{t}).16{d}
+      (E3{t} B3).32{dy mf}
+      (E3{t} B3{t} E2).8
+      (E3{t} B3{t} E2{t}).32
+      (E3{t} B3{t}).64
+      E3{t}.64
+      Gb3.8{d dy mp}
+      Gb3{t}.32
+    |
+      Gb3{t}.16{d}
+      Gb3{t}.64
+      Gb3{t}.16
+      Gb3{t}.64
+      r.32{dy mf}
+      Ab3.32
+      Ab3{t}.8{d}
+      Ab3{t}.32
+      (B3 E3).16{d}
+      (E3{t} B3{t}).8{d}
+      (E3{t} B3{t}).32
+      (E3{t} A3 D3).64
+      (A3{t} D3{t}).16{d dy p}
+      (A3{t} D3{t}).32{d}
+      (D3{t} A3{t}).32{d}
+      (D3{t} A3{t}).64
+    |
+      (D3{t} A3).16{d}
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).16
+      A3{t}.32{d}
+      (A3{t} E3 B3).32
+      (E3{t} B3{t} A3{t}).64
+      (B3{t} E3{t}).16{dy mp}
+      (E3 B3).32
+      (E3{t} B3{t} E2).8
+      (E3{t} B3{t} E2{t}).64
+      (B3{t} E3{t}).32
+      E3{t}.64{dy mf}
+      r.64
+      Gb3.8{d}
+      Gb3{t}.4
+    |
+      E3.8{d}
+      E3{t}.32
+      (Ab3 E3{t} Db3).16{d}
+      (Ab3{t} E3{t} Db3{t}).64
+      (Db3{t} Ab3{t}).8{d}
+      (Db3{t} Ab3{t}).32{d}
+      (D3 A3).16{d dy p}
+      (D3{t} A3{t}).64
+      (A3{t} D3{t}).16
+      (A3{t} D3{t}).64
+      (D3{t} A3{t}).32
+      (D3{t} A3).16{d}
+      (D3{t} A3{t}).64
+      (A3{t} D3{t}).16
+      A3{t}.64{dy mp}
+      r.32
+    |
+      (B3 E3).32
+      (E3{t} B3{t}).16
+      (E3{t} B3{t}).64
+      (B3{t} E3{t}).32
+      (B3{t} E3{t} E2).16{d}
+      (B3{t} E3{t} E2{t}).64
+      (E3{t} B3{t}).16
+      E3{t}.64{dy mf}
+      E3{t}.64
+      Gb3.8{dy mp}
+      Gb3{t}.8
+      Gb3{t}.32{d}
+      r.32{dy mf}
+      Gb3{t}.32{d dy mp}
+      Gb3{t}.64
+      r.32{d dy mf}
+      Ab3.8{d dy mp}
+      Ab3{t}.32
+    |
+      (B3 E3).16{d}
+      (B3{t} E3{t}).64
+      (E3{t} B3{t}).16
+      (E3{t} B3{t}).8
+      (E3{t} B3{t}).64
+      r.64{dy mf}
+      (A3 D3).16{d dy mp}
+      (A3{t} D3{t}).64
+      (A3{t} D3{t}).16{d}
+      (A3{t} D3{t}).64
+      (D3{t} A3).16{d}
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).32{d}
+      A3{t}.16
+      (A3{t} B3 E3).16
+      (A3{t} B3{t} E3{t}).64
+      (B3{t} E3{t}).32
+      (E3{t} B3).16{d}
+      (E3{t} B3{t}).64
+    |
+      (B3{t} E3).16{dy p}
+      (B3{t} E3{t}).64
+      E3{t}.64{dy mp}
+      E3{t}.64
+      Gb3.16{d dy mf}
+      Gb3{t}.64
+      Gb3{t}.32
+      Gb3{t}.2{d}
+    |
+      Gb3{t}.16{d}
+      Gb3{t}.64
+      (D3 A3).32{dy mp}
+      (D3{t} A3{t} G1).16
+      (D3{t} A3{t} G1{t}).64
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t} G1{t}).64
+      (G1{t} A3{t}).64{dy p}
+      G1{t}.64
+      (G1{t} A3).16{d}
+      (G1{t} A3{t}).64
+      A3{t}.64
+      A3{t}.16
+      r.32{d dy mf}
+      (B3 G1 E3).16{d dy p}
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} B3 E3{t}).16{dy mp}
+      (G1{t} E3{t} B3{t}).32{d}
+      E3.16{d}
+      E3{t}.64
+      Gb3.16{d dy p}
+      Gb3{t}.64
+    |
+      Gb3.16{dy mp}
+      (Gb3{t} G1).8
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      G1{t}.64
+      r.16{d dy mf}
+      Ab3.8{dy p}
+      Ab3.32
+      (Ab3{t} G1).32{d}
+      G1{t}.32
+      (B3 G1{t} E3).64
+      (G1{t} B3{t} E3{t}).32
+      (G1{t} B3{t} E3{t}).32
+      (B3{t} E3{t}).32
+      E3{t}.8{d dy mp}
+      E3{t}.64
+      r.64{dy mf}
+      (D3 A3 G1).16{d dy p}
+      (D3{t} A3{t} G1{t}).64
+    |
+      (G1{t} A3{t} D3{t}).16
+      (A3{t} D3{t}).64
+      D3{t}.32
+      D3{t}.16{d}
+      r.8{dy mf}
+      (E3 B3).32{dy p}
+      (E3{t} G1 B3{t}).16{d}
+      (E3{t} B3{t} G1{t}).32{d}
+      (E3{t} B3{t} G1{t}).32{d}
+      G1{t}.64
+      (G1{t} E3).16
+      E3{t}.32{dy mp}
+      E3{t}.64
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      (Gb3 Ab1).8{d}
+      (Gb3{t} Ab1{t}).32
+    |
+      (Ab1{t} Gb3).32
+      Gb3{t}.16
+      Gb3{t}.64
+      E3.16{dy mp}
+      E3{t}.32{d}
+      E3.32
+      (E3{t} G1).16
+      (E3{t} G1{t}).64
+      (Ab3 G1{t} Db3).32{dy p}
+      (Ab3{t} Db3{t}).8
+      (Ab3{t} Db3{t}).64
+      Db3{t}.32{d}
+      Db3{t}.16
+      Db3{t}.64
+      r.32{d dy mf}
+      (A3 D3).16{dy p}
+      (D3{t} G1 A3{t}).32{d}
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t} G1{t}).64
+      (G1{t} D3{t} A3{t}).64
+      (D3{t} G1{t}).64
+      (D3{t} G1{t} A3).16{d}
+      (G1{t} A3{t}).64
+    |
+      A3{t}.64
+      A3{t}.32{d}
+      r.32{d dy mf}
+      (B3 E3).64{dy p}
+      (B3{t} E3{t} G1).16{d}
+      (G1{t} E3{t} B3).16{dy mp}
+      (E3{t} G1{t} B3{t}).32{d}
+      (G1{t} E3).64
+      E3{t}.16
+      E3{t}.64
+      E3{t}.32
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.32{d dy mp}
+      (Gb3{t} G1).8
+      (Gb3{t} G1{t}).64
+      Gb3{t}.64
+      Gb3{t}.64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{d dy pp}
+      Ab3{t}.64
+    |
+      Ab3{t}.32
+      (Ab3{t} Ab2).64
+      (G1 Ab2{t}).32
+      (Ab2{t} G1{t}).32
+      (G1{t} B3 E3 Ab2{t}).16
+      (B3{t} G1{t} E3{t}).16{dy p}
+      (G1{t} E3{t}).64
+      (G1{t} E3{t} Ab2).64
+      (E2 G1{t} E3{t} Ab2{t}).16
+      (G1{t} E3{t} E2{t}).16{d}
+      (E2{t} G1{t}).32
+      (G1{t} A3 D3).16{d}
+      (G1{t} A3{t} D3{t}).64
+      (A3{t} D3{t} G1{t}).32{d}
+      (D3{t} A3{t}).32{d}
+      (D3{t} A3{t}).64
+      (D3{t} A3).64
+      (D3{t} A3{t} A2).16
+      (D3{t} A3{t} A2{t}).64
+      (A3{t} A2{t}).64{dy pp}
+      (A3{t} A2{t}).32{d}
+      A2{t}.64
+      r.32{d dy mf}
+      (B3 E3).64{dy p}
+      (E3{t} B3{t} G1).16
+      (B3{t} E3{t} G1{t}).64
+      (E3{t} G1{t}).64
+    |
+      (B3 E3{t} G1{t}).16{d}
+      (B3{t} E3{t} G1{t}).64
+      (G1{t} E3).32{d}
+      E3{t}.32{d dy mp}
+      E3{t}.64
+      Gb3.16{dy p}
+      Gb3{t}.32{d}
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.16{dy pp}
+      Gb3{t}.4
+      G1.4{dy p}
+    |
+      G1{t}.16{d}
+      (Gb2 G1{t}).16
+      Gb2{t}.32{d}
+      Gb2{t}.64
+      (D3 A3).32
+      (D3{t} A3{t} D2).64
+      (G1 D3{t} A3{t} D2{t}).32
+      (D2{t} A3{t} D3{t} G1{t}).32
+      (A3{t} D2{t} G1{t}).16
+      (A3{t} D2{t} G1{t}).64
+      G1{t}.32{d}
+      (G1{t} A3).32
+      (G1{t} A3{t}).32{d}
+      A3{t}.32{dy pp}
+      A3{t}.32
+      A3{t}.32{d}
+      r.32{d dy mf}
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).32{d}
+      (B3{t} E3{t} G1{t}).64
+      (E3{t} B3{t} G1{t} E3 B3).64
+      (G1{t} E3{t} B3{t}).16{d}
+      (G1{t} B3 E3).16
+      (B3{t} E3{t}).32{d}
+    |
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.32
+      (Gb3{t} Gb2).64
+      (Gb3{t} Gb2{t} G1).32{d}
+      (G1{t} Gb2{t}).16{d dy mp}
+      G1{t}.64
+      G1{t}.8
+      Ab3.8{dy p}
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).32{d}
+      G1{t}.64{dy p}
+      (G1{t} B3 E3).32
+      (B3{t} G1{t} E3{t}).16{d}
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} B3{t} E3{t} Gb2).16{d}
+      (G1{t} B3{t} E3{t} Gb2{t}).64
+      (E3{t} B3{t} Gb2{t}).32{d}
+      (E3{t} Gb2{t}).64
+      Gb2{t}.64
+    |
+      (G1 A3 D3).16{d}
+      (G1{t} A3{t} D3{t}).64
+      (G1{t} A3{t} D3{t}).16
+      (G1{t} A3{t} D3{t}).64
+      (D3{t} A3{t}).64
+      D3{t}.64
+      D3{t}.32
+      (D3{t} A2).16
+      (D3{t} A2{t}).64
+      A2{t}.32
+      A2{t}.32{d}
+      r.32{d dy mf}
+      (E3 B3).64{dy p}
+      (E3{t} B3{t} G1).32
+      (B3{t} E3{t} G1{t}).16
+      (E3 G1{t} B3{t}).16{d}
+      (E3{t} G1{t} B3{t}).64
+      (G1{t} B3{t} E3).16
+      E3{t}.32{d dy mf}
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.64
+      (B2 Gb3{t}).32
+      (B2{t} Gb3{t} G1).32
+      (G1{t} B2{t} Gb3{t}).32
+    |
+      (Gb3{t} B2{t} G1{t}).16
+      (Gb3{t} G1{t}).32
+      (Gb3{t} G1{t}).64
+      Gb3.16{d dy pp}
+      Gb3{t}.64
+      r.64{dy mf}
+      E3.32{dy mp}
+      (G1 E3{t}).16
+      (G1{t} E3).16
+      (G1{t} E3{t}).16
+      (G1{t} Ab3 Db3).16{dy p}
+      (Ab3{t} Db3{t}).16
+      (Db3{t} Ab2).8
+      (Db3{t} Ab2{t}).32{d}
+      r.32{dy mf}
+      (D3 A3).64{dy p}
+      (D3{t} A3{t} D2).32
+      (A3{t} D3{t} D2{t} G1).64
+      (D3{t} D2{t} A3{t} G1{t}).32
+      (A3{t} D2{t} G1{t}).64
+      (A3{t} D2{t} G1{t}).32
+      (D2{t} G1{t}).64
+      G1{t}.64
+      G1{t}.32{d}
+    |
+      (G1{t} A3).32{d}
+      (G1{t} A3{t}).16
+      A3{t}.32{dy pp}
+      A3{t}.32{d}
+      r.32{d dy mf}
+      (E3 B3).64{dy mp}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} E3{t} G1{t} E3 B3).64
+      (E3{t} B3{t} G1{t}).16{d}
+      (G1{t} B3 E3).8
+      (G1{t} Gb3).64
+      Gb3{t}.16{d dy p}
+      Gb3.32
+      (G1 Gb3{t} Gb2).16
+      (G1{t} Gb2{t}).16{d dy mf}
+      (G1{t} Gb2{t}).64
+      (G1{t} Gb2{t}).8
+    |
+      Ab3.16{d dy p}
+      Ab3{t}.64
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).32
+      (Ab3{t} G1{t}).64
+      G1{t}.64
+      (G1{t} B3 E3).32
+      (G1{t} E3{t} B3{t}).16
+      (G1{t} E3{t} B3{t}).64
+      (G1{t} E3{t} B3{t}).64
+      (E3{t} B3{t}).64
+      (E3{t} B3{t} Gb2).32{d}
+      (E3{t} B3{t} Gb2{t} G1).32{d}
+      (E3{t} B3{t} G1{t}).32{d}
+      (E3{t} B3{t}).32
+      r.64{dy mf}
+      (G1 A3 D3).8{dy p}
+      (A3{t} D3{t}).64
+      (A3{t} D3{t} G1).32{d}
+      (A3{t} D3{t} G1{t}).64
+      (D3{t} G1{t}).32
+      (D3{t} G1{t}).32
+      (D3{t} G1{t} A2).64
+      (D3{t} A2{t}).32{d}
+      A2{t}.64
+      A2{t}.32
+      A2{t}.32{d}
+      r.32
+    |
+      (B3 E3).32
+      (B3{t} E3{t} G1).64
+      (E3{t} B3{t} G1{t}).32{d}
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} G1{t} E3).16{d}
+      (B3{t} G1{t} E3{t}).64
+      (B3{t} G1{t} E3).16
+      (B3{t} G1{t} E3{t}).64
+      E3{t}.32{dy mp}
+      Gb3.32{d dy p}
+      (Gb3{t} B2).32{d}
+      B2{t}.64{dy pp}
+      (B2{t} Gb3).16
+      Gb3{t}.64{dy p}
+      Gb3{t}.32{d}
+      Gb3.32{dy pp}
+      (Gb3{t} G1).64
+      (Gb3{t} G1{t}).32{d}
+      G1{t}.8{dy p}
+      G1{t}.32
+      (G1{t} B2).16
+      (G1{t} B2{t}).64
+      (G1{t} B2{t}).16
+      (G1{t} B2{t}).64
+      G1{t}.32
+    |
+      G1{t}.8{d}
+      G1{t}.32
+      (G1{t} Gb2).32
+      Gb2{t}.16{d}
+      (A3 D3).64
+      (D3{t} A3{t} G1 D2).32{d}
+      (D3{t} D2{t} G1{t} A3{t}).32
+      (D3{t} A3{t} G1{t} D2{t}).64
+      (A3{t} G1{t} D2{t}).16
+      (A3{t} G1{t}).64
+      G1{t}.32
+      (A3 G1{t}).32{d}
+      (G1{t} A3{t}).32{d}
+      A3{t}.64{dy pp}
+      A3{t}.32
+      A3{t}.32
+      r.16{dy mf}
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t} E3 B3).64
+      (G1{t} B3{t} E3{t}).16{d}
+    |
+      (G1{t} B3 E3).16{d dy p}
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} Gb3).32
+      Gb3{t}.16
+      Gb3{t}.64
+      Gb3.32{d}
+      (Gb3{t} Gb2).64
+      (Gb3{t} Gb2{t} G1).32
+      (Gb2{t} G1{t}).16{d dy mp}
+      (Gb2{t} G1{t}).64
+      G1{t}.16
+      G1{t}.64
+      r.16{dy mf}
+      Ab3.16{d dy p}
+      Ab3{t}.64
+      Ab3.32
+      (Ab3{t} G1).16
+      G1{t}.64
+      (G1{t} B3 E3).32
+      (B3{t} G1{t} E3{t}).16
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} E3{t} B3).32{d}
+      (E3{t} G1{t} B3{t} Gb2).16
+    |
+      (E3{t} G1{t} Gb2{t} B3{t}).32{dy mp}
+      (E3{t} B3{t} Gb2{t}).16
+      Gb2{t}.64{dy p}
+      (D3 A3 G1).16{d}
+      (D3{t} A3{t} G1{t}).64
+      (A3{t} G1{t} D3{t}).16
+      (A3{t} G1{t} D3{t}).64
+      (A3{t} G1{t} D3{t}).64
+      (G1{t} D3{t}).64
+      (G1{t} D3{t} A3).32
+      (G1{t} D3{t} A3{t}).16
+      (G1{t} D3{t} A3{t}).64
+      r.8{dy mf}
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).64
+      (E3{t} B3{t} G1{t}).32{d}
+      (E3{t} B3{t} E3 G1{t}).64
+      (G1{t} B3{t} E3{t}).16
+      (G1{t} B3{t} E3{t}).64
+      (B3{t} E3{t} G1{t}).32
+      (G1{t} B3 E3).16
+      (G1{t} B3{t} E3{t}).64
+      (B3{t} E3{t}).32{dy p}
+      Gb3.16{d dy pp}
+      Gb3{t}.64
+    |
+      Gb3.32{dy p}
+      (Gb3{t} B2).64
+      (Gb3{t} B2{t} G1).32
+      (Gb3{t} B2{t} G1{t}).16{d}
+      (Gb3{t} B2{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).32{d}
+      Gb3{t}.32{d}
+      r.32{d dy mf}
+      E3.32{dy mp}
+      (E3{t} G1).16
+      (G1{t} E3).32{d}
+      (G1{t} E3{t}).64
+      (E3{t} G1{t}).16
+      (G1{t} Ab3 Db3).32{d dy pp}
+      (Ab3{t} Db3{t}).16{d dy p}
+      (Db3{t} Ab2).8
+      (Db3{t} Ab2{t}).32
+      Ab2{t}.32
+      (D3 A3).64
+      (D3{t} A3{t} D2).32
+      (D3{t} A3{t} G1 D2{t}).16
+    |
+      (A3{t} D2{t} G1{t}).32{d}
+      (D2{t} G1{t}).64
+      G1{t}.64
+      G1{t}.32
+      (A3 G1{t}).32{d}
+      (G1{t} A3{t}).16
+      A3{t}.32{dy pp}
+      A3{t}.32
+      r.16{dy mf}
+      (B3 E3).64{dy mp}
+      (E3{t} G1 B3{t}).16
+      (E3{t} G1{t} B3{t}).64
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} G1{t} B3{t}).16{d}
+      (E3{t} G1{t} B3{t}).64
+      (G1{t} B3 E3).16{d}
+      (G1{t} B3{t} E3{t}).64
+      Gb3.16{dy pp}
+      Gb3{t}.64
+      r.32{dy mf}
+      Gb3.32{dy p}
+      (Gb2 Gb3{t} G1).32{d}
+      (Gb3{t} Gb2{t} G1{t}).64
+      (Gb2{t} G1{t}).16{d dy mp}
+      (Gb2{t} G1{t}).32
+    |
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{d dy p}
+      Ab3{t}.64
+      Ab3.32{dy mp}
+      (Ab3{t} G1).16
+      G1{t}.32{dy p}
+      (G1{t} B3 E3).64
+      (G1{t} E3{t} B3{t}).8
+      (E3{t} B3{t} Gb2 G1{t}).8
+      (E3{t} B3{t} Gb2{t}).32{d}
+      Gb2{t}.64
+      (G1 D3 A3).16
+      (G1{t} D3{t} A3{t}).64
+      (G1{t} D3{t} A3{t}).32
+      (G1{t} A3{t} D3{t}).16
+      (G1{t} A3{t} D3{t}).64
+      D3{t}.32
+      D3{t}.32
+      (D3{t} A2).16
+      (D3{t} A2{t}).64
+    |
+      A2{t}.32
+      A2{t}.32{d}
+      r.32{dy mf}
+      (B3 E3).32{dy mp}
+      (E3{t} B3{t} G1).32
+      (E3{t} B3{t} G1{t}).32
+      (E3{t} B3{t} G1{t}).64
+      (G1{t} B3{t} E3).16{d}
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} B3 E3).8
+      (G1{t} Gb3).64
+      Gb3{t}.16{d dy p}
+      Gb3.16
+      (Gb3{t} G1).32
+      G1{t}.64
+      (G1{t} Gb3).32{d}
+      (G1{t} Gb3{t}).8
+      (G1{t} Gb3{t}).32{d}
+      G1{t}.16{d}
+      G1{t}.64
+    |
+      G1{t}.16{d}
+      G1{t}.64
+      G1{t}.8
+      G1{t}.64
+      G1{t}.64
+      (A2 G1{t}).8{d}
+      (D3 A3 G1{t}).64
+      (G1{t} D3{t} D2 A3{t}).32{d}
+      (G1{t} D2{t} D3{t} A3{t}).16{d}
+      (G1{t} D2{t} D3{t} A3{t}).64
+      (G1{t} A3{t} D2{t}).64
+      (G1{t} A3{t} D2{t}).64
+      (G1{t} D2{t}).64
+      (G1{t} A3).32
+      (A3{t} D3 G1{t}).16
+      (A3{t} D3{t} G1{t}).64
+      (G1{t} A3{t} D3{t}).32
+      (A3{t} D3{t}).16
+      D3{t}.64{dy pp}
+      (E3 G1 D3{t} B3).32{d}
+      (G1{t} E3{t} B3{t}).16{dy mp}
+    |
+      (B3{t} E3{t} G1{t}).16{dy p}
+      (B3{t} E3{t} G1{t}).64
+      (B3{t} E3{t} G1{t}).64
+      (B3{t} G1{t}).64
+      (B3{t} G1{t} E3).32{d}
+      (G1{t} E3{t}).32{dy mp}
+      E3{t}.32
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.32
+      (Gb3{t} Gb2).32
+      (Gb3{t} Gb2{t} G1).32
+      (Gb2{t} G1{t}).16{d dy mp}
+      (Gb2{t} G1{t}).64
+      G1{t}.8{dy mf}
+      G1{t}.64
+      Ab3.16{d dy mp}
+      Ab3{t}.64
+      Ab3.64
+      (Ab3{t} G1).16
+      (G1{t} Ab3{t}).64
+      G1{t}.64{dy p}
+      (G1{t} E3 B3).32{d}
+      (B3{t} G1{t} E3{t}).16
+    |
+      (G1{t} E3 B3{t}).32
+      (G1{t} B3{t} E3{t} Gb2).16
+      (G1{t} B3{t} E3{t} Gb2{t}).64
+      (B3{t} E3{t} Gb2{t}).32
+      (E3{t} B3{t}).16{dy mp}
+      E3{t}.64
+      (G1 A3 D3).16{d}
+      (G1{t} A3{t} D3{t}).64
+      (D3{t} G1{t} A3{t} A2).16{d}
+      (A2{t} G1{t} D3{t}).32{d dy p}
+      (D3{t} G1{t} A2).32{d}
+      (D3{t} A2{t}).64
+      A2{t}.32{dy pp}
+      A2{t}.16
+      r.32{d dy mf}
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (E3 G1{t} B3{t}).16{d}
+      (E3{t} G1{t}).64
+      (E3{t} G1{t}).16
+      E3{t}.32{dy p}
+      r.64
+    |
+      Gb3.16{d dy mp}
+      Gb3{t}.64
+      Gb3.32{dy p}
+      Gb3{t}.32
+      (Gb3{t} G1).16
+      (G1{t} Gb3{t} B2).16
+      (G1{t} Gb3{t} B2{t}).64
+      (Gb3{t} B2{t}).16{d}
+      B2{t}.32
+      E3.16{dy mp}
+      E3{t}.64
+      (E3{t} G1).32
+      G1{t}.64{dy p}
+      (G1{t} E3).16{d}
+      (G1{t} E3{t}).64
+      (G1{t} E3{t} Ab3 Db3).32{d}
+      (G1{t} Ab3{t} Db3{t}).64
+      (Db3{t} Ab3{t}).64
+      (Db3{t} Ab3{t}).4
+    |
+      (D3 A3).32
+      (A3{t} D3{t} D2).64
+      (D2{t} A3{t} D3{t} G1).8
+      (D2{t} A3{t} D3{t} G1{t}).64
+      (A3{t} D3{t} G1{t}).64
+      (D3{t} A3{t} G1{t}).64
+      (G1{t} D3{t} A3).8
+      (G1{t} D3{t} A3{t}).64
+      (D3{t} A3{t}).16
+      (D3{t} A3{t}).64
+      (D3{t} A3{t} B3).64
+      (D3{t} A3{t} B3{t} G1 E3).64
+      (G1{t} B3{t} D3{t} E3{t}).32
+      (B3{t} G1{t} E3{t}).32{d}
+      (B3{t} E3{t} G1{t}).64
+      (B3{t} E3{t} G1{t}).16
+      (G1{t} B3{t} E3{t}).32{d}
+      (G1{t} B3{t} E3).32{d}
+      (G1{t} E3{t}).32{dy mp}
+      E3{t}.32
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.32
+      (Gb3{t} Gb2).32
+      (Gb2{t} G1 Gb3{t}).32{d}
+    |
+      (Gb2{t} G1{t}).16{dy mp}
+      (Gb2{t} G1{t}).64
+      G1{t}.8
+      G1{t}.64
+      Ab3.16{d}
+      Ab3{t}.64
+      Ab3.32
+      (Ab3{t} G1).16
+      (Ab3{t} G1{t}).64
+      G1{t}.64{dy p}
+      (G1{t} B3 E3).32
+      (G1{t} B3{t} E3{t}).16
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} B3 E3).16
+      (B3{t} G1{t} E3{t} Gb2).32{d}
+      (B3{t} E3{t} Gb2{t}).32{d dy mp}
+      (E3{t} B3{t}).32{d}
+      E3{t}.64
+      (E3{t} A3 G1 D3).32
+      (E3{t} D3{t} A2 G1{t} A3{t}).32
+      (D3{t} A3{t} G1{t} A2{t}).8{dy p}
+      (D3{t} A3{t} G1{t} A2{t}).64
+      (G1{t} A2{t}).64
+    |
+      (G1{t} A2{t}).32{d}
+      A2{t}.16
+      A2{t}.16{d}
+      r.64{dy mf}
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} E3 G1{t}).16{d}
+      (G1{t} E3{t}).32{dy p}
+      (G1{t} E3{t}).16
+      E3{t}.64
+      E3{t}.64
+      r.64{dy mf}
+      Gb3.16{d dy pp}
+      Gb3{t}.64
+      Gb3.16
+      Gb3{t}.64
+      r.32{d dy mf}
+      Gb3.64{dy pp}
+      (Gb3{t} G1).16
+      (Gb3{t} G1{t}).64
+      G1{t}.16{d dy p}
+      G1{t}.64
+    |
+      G1{t}.64
+      (G1{t} Gb3 B2).8
+      (G1{t} Gb3{t} B2{t}).32
+      (Gb3{t} B2{t}).16{dy pp}
+      (B2{t} Db3).32
+      Db3{t}.16
+      Db3{t}.64
+      (Db3{t} G1).32
+      (Db3{t} B2 G1{t}).16{d}
+      (Db3{t} B2{t} G1{t}).64
+      (G1{t} B2{t}).64{dy p}
+      r.16{dy mf}
+      (A3 D3).32{d dy p}
+      (A3{t} D3{t} G1).16{d}
+      (A3{t} D3{t} G1{t}).64
+      (A3{t} D3{t} G1{t}).16
+      (D3{t} G1{t} A3).64
+      (G1{t} A3{t} D3{t}).16{d}
+      (G1{t} A3{t} D3{t}).64
+      (D3{t} A3{t}).16
+      r.32
+    |
+      (E3 B3).64{dy mp}
+      (E3{t} B3{t} G1).8{d}
+      (E3{t} B3{t} G1{t}).64
+      (E3 B3{t} G1{t}).64
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} E3{t}).32
+      E3{t}.32{d}
+      r.64{dy mf}
+      Gb3.16{d dy mp}
+      Gb3.32{dy p}
+      (Gb3{t} B2).32
+      (Gb3{t} B2{t} G1).8
+      (B2{t} Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      G1{t}.64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{d dy mp}
+      Ab3{t}.64
+      Ab3.32
+      (Ab3{t} B2 G1).16
+      (Ab3{t} B2{t} G1{t}).64
+    |
+      (B2{t} G1{t} E3 B3).64{dy p}
+      (G1{t} B2{t} B3{t} E3{t}).16
+      (E3{t} G1{t} B3{t}).32
+      (E3 G1{t}).32
+      (G1{t} E3{t} B2).32{d}
+      (G1{t} B2{t} E3{t}).16
+      (G1{t} B2{t} E3{t}).64
+      (G1{t} E3{t}).64
+      E3{t}.32{dy mp}
+      r.64{dy mf}
+      (A3 D3).64{dy mp}
+      (D3{t} A3{t} G1).8
+      (D3{t} A3{t} G1{t}).64
+      (A3{t} D3{t} G1{t}).16
+      (D3{t} G1{t}).64
+      (D3{t} G1{t} A3).64
+      (D3{t} G1{t} A3{t}).32
+      (D3{t} A3{t}).8
+      (D3{t} A3{t}).64
+      A3{t}.64
+      r.64{dy mf}
+      (E3 B3).32{dy mp}
+      (B3{t} E3{t} G1).8
+      (B3{t} E3{t} G1{t}).32
+      (E3{t} B3{t} G1{t}).32
+    |
+      (B3 G1{t} E3).16{d}
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} E3{t} Gb3).32
+      (G1{t} Gb3{t}).64
+      Gb3{t}.32{d}
+      Gb3{t}.64
+      Gb3.32{d dy p}
+      (Gb3{t} G1 Db3).16{d}
+      (Gb3{t} G1{t} Db3{t}).64
+      (G1{t} Gb3{t} Db3{t}).16
+      (G1{t} Gb3{t} Db3{t}).64
+      (Gb3{t} Db3{t}).32{d}
+      Db3{t}.16
+      (Db3{t} E3).16{d}
+      (Db3{t} E3{t}).64
+      (Db3{t} E3).64
+      (Db3{t} E3{t} G1).16{d}
+      (E3{t} G1{t} Db3 Ab3).32{d}
+      (G1{t} Db3{t} Ab3{t}).64
+      (Db3{t} Ab3{t}).32{d}
+      (Db3{t} Ab3{t}).16{d}
+      (Db3{t} Ab3{t}).64
+    |
+      (Ab3{t} Db3{t}).16
+      (Ab3{t} Db3{t}).64
+      Ab3{t}.64
+      r.64{dy mf}
+      (A3 D3).16{dy p}
+      (A3{t} D3{t} G1).16
+      (A3{t} D3{t} G1{t}).64
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t} G1{t}).64
+      (D3{t} G1{t} A3).32
+      (D3{t} A2 A3{t} G1{t}).32
+      (A2{t} A3{t} D3{t}).8
+      (A2{t} A3{t} D3{t}).64
+      A2{t}.32
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).8
+      (E3{t} B3{t} G1{t}).32
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} G1{t} E3).64
+      (G1{t} E3{t}).64
+      (G1{t} E3{t}).16
+      E3{t}.64
+      r.64{dy mf}
+      Gb3.16{d dy mp}
+      Gb3{t}.64
+    |
+      Gb3.32{d dy p}
+      (G1 Gb3{t}).8
+      (G1{t} Gb3{t}).64
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).16
+      G1{t}.64{dy p}
+      (Ab3 G1{t}).16
+      (Ab3{t} G1{t}).64
+      (Ab3{t} G1{t}).32
+      (G1{t} E3 B3).8
+      (G1{t} E3).32
+      (G1{t} E3{t} B2).32
+      (E3{t} G1{t} B2{t}).16
+      E3{t}.16{dy mp}
+      E3{t}.64
+      (G1 A3 D3).16{d}
+      (G1{t} A3{t} D3{t}).64
+    |
+      (G1{t} A3{t} D3{t}).16{d dy p}
+      (G1{t} A3{t} D3{t}).64
+      (G1{t} D3{t} A3).64
+      (G1{t} D3{t} A3{t}).8
+      (G1{t} D3{t} A3{t}).32
+      (A3{t} D3{t}).32{dy mp}
+      r.32{dy mf}
+      (B3 E3).32{dy mp}
+      (E3{t} B3{t} G1).8
+      (E3{t} B3{t} G1{t}).32
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} B3{t} G1{t}).64
+      (G1{t} B3 E3).16{d}
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} Gb3 E3{t}).32
+      Gb3{t}.16{dy p}
+      Gb3.32{d dy mp}
+      Gb3{t}.16
+      Gb3{t}.64
+      Gb3{t}.64
+      (Gb3{t} Db3).64
+      (Gb3{t} Db3{t} G1).64
+      (Gb3{t} Db3{t} G1{t}).32{d}
+      (Db3{t} G1{t}).64{dy p}
+    |
+      (Db3{t} G1{t}).64
+      (G1{t} Db3{t}).16{d}
+      (Db3{t} G1{t}).64
+      (Db3{t} G1{t} Gb3).16{d}
+      (G1{t} Db3{t} Gb3{t}).16{d}
+      (G1{t} Db3{t} Gb3{t}).64
+      (Gb3{t} Db3{t} G1{t}).16{d}
+      G1{t}.32
+      G1{t}.32{d}
+      (G1{t} B2).16{d}
+      (G1{t} B2{t}).64
+      B2{t}.16{dy pp}
+      (A3 D3).32{dy p}
+      (A2 A3{t} D3{t}).64
+      (A3{t} A2{t} G1 D3{t}).8
+      (A2{t} A3{t} D3{t} G1{t}).16
+      (A2{t} A3{t} D3{t} G1{t}).64
+      (A2{t} A3{t} D3{t}).64
+      (A2{t} D3{t}).16
+    |
+      (D3{t} A2{t}).16
+      (D3{t} A2{t}).64
+      r.32{dy mf}
+      (B3 E3).32{dy mp}
+      (B3{t} E3{t} G1).8
+      (B3{t} E3{t} G1{t}).32
+      (G1{t} E3{t} B3{t}).32
+      (B3{t} G1{t} E3).32
+      (G1{t} E3{t}).32{d}
+      E3{t}.32{d}
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.64{dy p}
+      (Gb3{t} B2).32{d}
+      (G1 Gb3{t} B2{t}).16{d}
+      (G1{t} Gb3{t} B2{t}).64
+      (Gb3{t} G1{t}).64
+      Gb3{t}.64
+      r.8{dy mf}
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).16
+    |
+      (G1{t} Ab3).16{dy p}
+      (G1{t} Ab3{t}).64
+      (G1{t} Ab3{t}).32
+      (G1{t} E3 B3).8
+      (G1{t} E3).16
+      (G1{t} E3{t}).8
+      (G1{t} E3{t}).64
+      (E3{t} D3 A3 G1{t}).16
+      (G1{t} A3{t} D3{t}).8
+      (G1{t} A3{t} D3{t}).32{d}
+      (G1{t} D3{t} A3).64
+      (A3{t} D3{t} G1{t}).8
+      (A3{t} D3{t} G1{t}).32
+      (A3{t} D3{t}).64{dy mp}
+      A3{t}.64
+      r.64{dy mf}
+      (E3 B3).32{dy mp}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+    |
+      (B3{t} E3{t} G1{t}).16
+      (B3{t} E3{t} G1{t}).64
+      (B3{t} E3{t} G1{t}).32
+      (G1{t} E3 B3).16{d}
+      (G1{t} E3{t} B3{t}).64
+      (E3{t} G1{t} Gb3).32
+      (G1{t} Gb3{t}).64
+      Gb3{t}.32{d dy p}
+      Gb3{t}.64
+      Gb3.16{dy mp}
+      (G1 Gb3{t}).32
+      (Gb3{t} G1{t}).32
+      (Gb3{t} G1{t} Db3).32
+      (Gb3{t} G1{t} Db3{t}).16
+      Db3{t}.64{dy p}
+      Db3{t}.16{d}
+      Db3{t}.64
+      (Db3{t} E3).16{d}
+      (Db3{t} E3).32
+      (Db3{t} E3{t} G1).16
+      (Db3{t} E3{t} G1{t}).64
+      (Db3{t} G1{t}).64
+      (G1{t} Ab3 Db3).16
+      (Ab3{t} Db3{t}).32{d dy mp}
+    |
+      Db3{t}.64
+      Db3{t}.32
+      (Db3{t} Ab3).8
+      (Db3{t} Ab3{t}).64
+      Ab3{t}.64{dy pp}
+      Ab3{t}.64
+      (D3 A3).32{d dy p}
+      (A3{t} D3{t} A2).64
+      (A3{t} D3{t} A2{t} G1).16{d}
+      (D3{t} G1{t} A3{t} A2{t}).16
+      (D3{t} G1{t} A2{t}).64
+      (D3{t} A3 A2{t}).64
+      (A2{t} D3{t} A3{t}).8
+      (A2{t} D3{t} A3{t}).32
+      A3{t}.64{dy pp}
+      r.32{dy mf}
+      (E3 B3).16{dy mp}
+      (E3{t} B3{t}).64
+      (E3{t} B3{t} G1).8
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} G1{t} E3).64
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} E3{t}).32{d}
+      E3{t}.64
+      E3{t}.64
+    |
+      Gb3.32
+      (Gb3{t} B2).16
+      (Gb3{t} B2{t}).64
+      (B2{t} Gb3).16{dy p}
+      (Gb3{t} G1 B2{t}).16{d}
+      (Gb3{t} G1{t} B2{t}).64
+      (Gb3{t} B2{t} G1{t}).64
+      (Gb3{t} G1{t}).32
+      r.16{dy mf}
+      r.32{d}
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).16
+      G1{t}.64{dy p}
+      (G1{t} Ab3).64
+      (G1{t} B2 Ab3{t}).16
+      (B2{t} G1{t} Ab3{t}).64
+      (B2{t} G1{t}).64
+      (G1{t} B2{t} E3 B3).32{d}
+      (G1{t} E3{t} B3{t}).32
+      (B3{t} G1{t} E3{t}).32
+      (G1{t} E3).64
+      (G1{t} E3{t}).32
+      (G1{t} E3{t} B2).64
+      (E3{t} G1{t} B2{t}).16{d}
+      E3{t}.32{d dy mp}
+      r.64
+    |
+      (G1 A3 D3).8{d dy p}
+      (G1{t} A3{t} D3{t}).32
+      (G1{t} D3{t} A3).64
+      (G1{t} D3{t} A3{t}).16{d}
+      (A3{t} D3{t}).16{d}
+      r.32{dy mf}
+      (B3 E3).32{dy mp}
+      (B3{t} G1 E3{t}).8
+      (B3{t} G1{t} E3{t}).64
+      (E3{t} B3{t} G1{t}).32{d}
+      (B3 E3 G1{t}).16
+      (B3{t} E3{t} G1{t}).64
+      (G1{t} E3{t}).32
+      (G1{t} E3{t} Gb3).64
+      (E3{t} Gb3{t}).64
+      Gb3{t}.16{dy p}
+      Gb3{t}.32
+      Gb3.16{d dy mp}
+    |
+      (Gb3{t} Gb3).64
+      (Db3 Gb3{t}).64{dy p}
+      (Db3{t} Gb3{t} G1).32
+      (Gb3{t} Db3{t} G1{t}).32
+      (Gb3{t} Db3{t} G1{t}).64
+      (Db3{t} G1{t}).64
+      (Db3{t} G1{t}).32{d}
+      G1{t}.64
+      r.16{dy mf}
+      (Gb3 Db3).64{dy p}
+      (Gb3{t} Db3{t} G1).16
+      (Gb3{t} Db3{t} G1{t}).16{d}
+      (Gb3{t} Db3{t} G1{t}).64
+      (Db3{t} Gb3{t} G1{t}).16{d}
+      (Db3{t} G1{t}).64
+      G1{t}.64
+      G1{t}.32{d}
+      (G1{t} B2).16
+      (G1{t} A2).32{d}
+      A2{t}.32
+      r.32{dy mf}
+      (A3 D2 D3).32{dy p}
+      (D2{t} D3{t} A3{t} G1).16
+      (D3{t} A3{t} G1{t}).64
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t} G1{t}).64
+      G1{t}.64{dy mp}
+      r.64
+    |
+      A3.16{d dy p}
+      A3{t}.64
+      A3{t}.32
+      A3{t}.32{d}
+      r.32{dy mf}
+      (B3 E3).32{dy p}
+      (B3{t} E3{t} G1).16
+      (B3{t} E3{t} G1{t}).64
+      (E3{t} G1{t}).64{dy mp}
+      (E3{t} G1{t} B3).16
+      (E3{t} G1{t} B3{t}).32
+      (G1{t} B3{t}).64
+      (G1{t} E3).32{d}
+      E3{t}.32{d}
+      E3{t}.64
+      Gb3.16{d dy p}
+      Gb3.8
+      Gb3.32{d}
+      (Gb3{t} G1).32
+      (Gb3{t} G1{t}).64
+      G1{t}.64
+      G1{t}.16{d}
+      G1{t}.64
+    |
+      (Ab3 G1{t}).16{d}
+      (Ab3{t} G1{t}).64
+      (G1{t} Ab3).8
+      (G1{t} B3 E3).32
+      (B3{t} G1{t} E3{t}).32
+      (E3{t} B3{t}).32{d}
+      E3{t}.8{d dy mp}
+      E3{t}.64
+      r.64{dy mf}
+      (G1 A3 D3).16{d dy p}
+      (G1{t} A3{t} D3{t}).64
+      (A3{t} G1{t} D3{t}).32{d}
+      (A3{t} G1{t} D3{t}).64
+      (A3{t} D3{t} G1{t}).32
+      (G1{t} D3{t}).64
+      (G1{t} D3{t}).32
+      D3{t}.16
+      D3{t}.64
+      r.16
+      r.32{d}
+    |
+      (B3 E3).64
+      (E3{t} B3{t} G1).16{d}
+      (B3{t} E3{t} G1{t}).16
+      (B3{t} E3{t} G1{t}).32{d}
+      (G1{t} E3).16{dy mp}
+      E3{t}.32
+      E3{t}.32
+      Gb3.16{d dy p}
+      Gb3.8
+      Gb3{t}.32{d}
+      (Gb3{t} G1).32{d}
+      (Gb3{t} G1{t}).16
+      (Gb3{t} G1{t}).64
+      G1{t}.64{dy pp}
+      r.32{dy mf}
+      E3.32{dy mp}
+      E3{t}.32
+      (E3{t} G1).32{d}
+      (G1{t} E3).16{d}
+      (G1{t} E3{t}).64
+    |
+      (G1{t} Ab3 Db3).32{dy p}
+      (Ab3{t} Db3{t}).8
+      (Ab3{t} Db3{t}).32{d}
+      Db3{t}.16{d}
+      r.64{dy mf}
+      Ab1.32{dy pp}
+      (Ab1{t} D3 A3).16
+      (Ab1{t} D3{t} A3{t}).64
+      (D3{t} G1 A3{t}).32{dy mp}
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t} G1{t}).64
+      (A3{t} G1{t}).64{dy p}
+      G1{t}.64
+      (G1{t} A3).16{d}
+      (G1{t} A3{t}).64
+      A3{t}.16
+      r.32{d dy mf}
+      (G1 B3 E3).16{d dy p}
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} B3 E3{t}).16
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} E3{t} B3{t}).32
+    |
+      (G1{t} B3{t} E3).64{dy mp}
+      (B3{t} E3{t}).16
+      E3{t}.64
+      E3{t}.64
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.16{d}
+      Gb3{t}.32
+      r.32{d dy mf}
+      G1.32{dy pp}
+      G1{t}.32
+      Ab3.16{d}
+      Ab3{t}.32{d}
+      Ab3{t}.64
+      G1.64{dy p}
+      G1{t}.32
+      G1{t}.64
+      (G1{t} E3 B3).16{d}
+      (G1{t} E3{t} B3{t}).64
+      (G1{t} E3{t}).32
+      (G1{t} Ab2 E3{t}).32
+      (G1{t} Ab2{t} E3{t} E2).32
+      (G1{t} E2{t} E3{t}).64
+    |
+      (G1{t} E2{t} E3{t}).16
+      (G1{t} E2{t} E3{t}).64
+      (G1{t} E2{t} E3{t}).64
+      (G1{t} E2{t}).64
+      (G1{t} D3 A3).16{d}
+      (G1{t} D3{t} A3{t}).64
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t}).64
+      A3{t}.64
+      A3{t}.64
+      r.64{dy mf}
+      A3.64{dy pp}
+      (A3{t} A2).64
+      (A3{t} D3 A2{t}).16
+      (A3{t} D3{t} A2{t}).32
+      (A3{t} A2{t} D3{t}).64
+      (A3{t} A2{t}).64
+      A2{t}.64
+      r.32{d dy mf}
+      (B3 E3).64{dy pp}
+      (B3{t} E3{t} G1).32{d}
+      (B3{t} E3{t} G1{t}).64
+      (G1{t} B3{t} E3{t}).32
+      (E3{t} G1{t} B3).16{d dy p}
+      (E3{t} G1{t} B3{t}).64
+      (G1{t} E3).32{d}
+      E3{t}.32{d dy mp}
+      E3{t}.64
+      Gb3.16{dy p}
+      Gb3{t}.32{d}
+    |
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.16{dy pp}
+      (Gb3{t} G1).8
+      (Gb3{t} G1{t}).32
+      Gb3{t}.64
+      Gb3{t}.16
+      G1.32{dy p}
+      G1{t}.8
+      G1{t}.16
+      G1{t}.64
+      r.4{dy mf}
+      D3.32{dy mp}
+      (D3{t} G1).32{d}
+      (D3{t} G1{t}).64
+      (D3{t} G1{t}).64
+    |
+      (D3{t} G1{t}).16{d dy p}
+      (D3{t} G1{t}).64
+      (D3{t} G1{t}).16{d}
+      (D3{t} G1{t}).64
+      (D3{t} G1{t}).64
+      D3{t}.16{dy mp}
+      r.32{d dy mf}
+      (E3 B3).32{dy mp}
+      (B3{t} E3{t} G1).16
+      (B3{t} E3{t} G1{t}).64
+      (B3{t} E3{t} G1{t}).16{d}
+      (E3{t} G1{t}).64
+      (G1{t} E3).32
+      E3{t}.16{dy mf}
+      E3{t}.64
+      Gb3.16{d dy p}
+      Gb3{t}.8
+      Gb3{t}.32{d}
+      (Gb3{t} G1).64
+      (Gb3{t} G1{t}).32
+      G1{t}.64
+    |
+      G1{t}.16{d}
+      G1{t}.64
+      (G1{t} Ab3).64
+      Ab3{t}.16{d}
+      Ab3{t}.32{d}
+      (Ab3{t} G1).32
+      G1{t}.32{dy mp}
+      G1{t}.64
+      (B3 G1{t} E3).16
+      (B3{t} G1{t} E3{t}).64
+      (B3{t} E3{t}).32
+      E3{t}.8
+      E3{t}.32{d}
+      E3{t}.64
+      r.32{dy mf}
+      (G1 D3).16{dy mp}
+      (G1{t} D3{t}).64
+      (G1{t} D3{t}).32
+      (G1{t} D3{t}).16
+      (G1{t} D3{t}).64
+      D3{t}.32
+      D3{t}.32
+      (D3{t} A2).16
+      (D3{t} A2{t}).64
+    |
+      (D3{t} A2{t}).16
+      D3{t}.32
+      r.64{dy mf}
+      (B3 E3).32{dy mp}
+      (B3{t} E3{t} G1).16
+      (E3{t} G1{t}).64
+      (G1{t} E3).16{d}
+      (G1{t} E3{t}).64
+      (G1{t} E3).16
+      (G1{t} E3{t}).64
+      E3{t}.32{d dy mf}
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.16{d dy pp}
+      Gb3{t}.32{d}
+      (Gb3{t} G1).32{d}
+      (Gb3{t} G1{t}).16{d}
+      (Gb3{t} G1{t}).64
+      G1{t}.32
+      E3.16{dy mp}
+      (E3{t} G1).32{d}
+    |
+      (G1{t} E3).8
+      (G1{t} Ab3 Db3).32{dy p}
+      (Db3{t} Ab3{t}).16{d}
+      (Db3{t} Ab3{t} E2).8
+      (Db3{t} Ab3{t} E2{t}).32{d}
+      E2{t}.32
+      D3.32
+      (D3{t} G1).16
+      (D3{t} G1{t}).64
+      (D3{t} G1{t}).16{d}
+      (D3{t} G1{t}).64
+      D3{t}.16{d}
+      D3{t}.64
+      D3{t}.16
+      D3{t}.64
+      r.32{dy mf}
+      (E3 B3).64{dy p}
+      (B3{t} E3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} B3{t} G1{t}).64
+    |
+      (B3{t} E3{t} G1{t}).16{d}
+      (B3{t} E3{t} G1{t}).64
+      (G1{t} B3{t} E3).32{d}
+      E3{t}.16{dy mf}
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.64
+      (Gb3{t} Ab1).64
+      (Gb3{t} Ab1{t}).32{d}
+      Ab1{t}.32
+      (Ab1{t} Gb3).16{d}
+      (Gb3{t} Ab1{t}).64
+      Gb3{t}.64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{dy p}
+      Ab3{t}.64
+      Ab3{t}.32
+      Ab3{t}.32{d}
+      (Ab3{t} G1).64
+      G1{t}.32
+      G1{t}.64
+      (G1{t} B3 E3).16{d}
+      (G1{t} B3{t} E3{t}).64
+    |
+      (G1{t} E3{t}).16{d}
+      (E3{t} G1{t} B3).16{d}
+      (G1{t} B3{t}).32
+      (D3 G1{t} B3{t}).32
+      (G1{t} D3{t}).16
+      (G1{t} D3{t}).64
+      (D3{t} G1).64
+      (D3{t} G1{t}).64
+      (G1{t} D3{t}).16
+      (G1{t} D3{t}).64
+      D3{t}.64
+      D3{t}.64
+      (D3{t} A2).16{d}
+      (D3{t} A2{t}).32{d}
+      A2{t}.64{dy pp}
+      r.32{d dy mf}
+      (B3 E3).64{dy pp}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} G1{t}).64{dy p}
+      (G1{t} E3).8
+      (G1{t} E3{t}).32{d}
+      E3{t}.32{d dy mp}
+    |
+      Gb3.16{d dy pp}
+      Gb3{t}.64
+      Gb3{t}.16{d}
+      Gb3{t}.64
+      Gb3{t}.16
+      (Gb3{t} G1).32
+      G1{t}.8{d}
+      r.64{dy mf}
+      G1.16{dy p}
+      G1{t}.64
+      G1{t}.16
+      (Gb2 G1{t}).16
+      (Gb2{t} G1{t}).64
+      Gb2{t}.64{dy mp}
+      r.8{dy mf}
+      r.64
+      Gb2.16{d dy p}
+      Gb2{t}.64
+    |
+      (D3 A3).32{d}
+      (D3{t} A3{t} D2).64
+      (D3{t} A3{t} D2{t} G1).32{d}
+      (D3{t} A3{t} D2{t} G1{t}).64
+      (A3{t} D2{t} G1{t}).32
+      (D2{t} G1{t}).64
+      (D2{t} G1{t}).64
+      G1{t}.32{d}
+      (G1{t} A3).32
+      (G1{t} A3{t}).16
+      A3{t}.64{dy pp}
+      A3{t}.32
+      A3{t}.32{d}
+      r.32{d dy mf}
+      (B3 E3 G1).16{d dy mp}
+      (G1{t} E3 B3).16{d}
+      (B3 G1{t} E3).16{d}
+      (G1{t} E3{t}).64
+      E3{t}.64
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.32
+      (Gb3{t} Gb2).64
+      (Gb3{t} Gb2{t} G1).32{d}
+      (G1{t} Gb2{t}).64
+    |
+      (Gb2{t} G1{t}).16
+      (Gb2{t} G1{t}).64
+      G1{t}.64{dy mp}
+      G1{t}.8
+      Ab3.16{d dy p}
+      Ab3{t}.64
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).32{d}
+      G1{t}.32{dy p}
+      (E3 G1{t} B3).8
+      (E3{t} G1{t} B3{t}).32
+      (G1{t} E3{t} Gb2 B3{t}).8
+      (G1{t} E3{t} Gb2{t} B3{t}).64
+      (E3{t} B3{t} G1{t}).64
+      G1{t}.64
+      (D3 G1{t} A3).16{d}
+      (D3{t} G1{t} A3{t}).64
+      (D3{t} G1{t} A3{t}).16
+      (D3{t} G1{t} A3{t}).64
+      (G1{t} A3{t}).64
+      G1{t}.64
+    |
+      G1{t}.32
+      (G1{t} A2).32{d}
+      A2{t}.32
+      A2{t}.32
+      A2{t}.32{d}
+      r.32{dy mf}
+      (B3 E3).32{dy mp}
+      (E3{t} B3{t} G1).32
+      (E3{t} B3{t} G1{t}).32
+      (E3{t} B3{t} G1{t}).64
+      (E3 G1{t} B3).8
+      (B3{t} G1{t} E3).16
+      E3{t}.32{d}
+      Gb3.16{d dy p}
+      Gb3{t}.64
+      Gb3.64
+      (Gb3{t} B2).32
+      (B2{t} G1 Gb3{t}).32
+      (Gb3{t} B2{t} G1{t}).16{d}
+      (Gb3{t} G1{t}).32
+      (Gb3{t} G1{t}).16
+      (Gb3{t} G1{t}).64
+      G1{t}.32{d}
+    |
+      E3.32{dy mp}
+      (E3{t} G1).16
+      G1{t}.64{dy p}
+      (G1{t} E3).16
+      (G1{t} E3{t}).32{d}
+      (Db3 G1{t} Ab3).16
+      (Db3{t} G1{t} Ab3{t}).64
+      (Ab3{t} Db3{t}).16
+      (Ab3{t} Db3{t}).64
+      (Ab2 Db3{t}).16
+      (Ab2{t} Db3{t} Ab1).32{d}
+      (Db3{t} Ab1{t}).32
+      Ab1{t}.32{d}
+      (D3 A3).64{dy mp}
+      (D3{t} A3{t} D2).32
+      (D3{t} A3{t} D2{t} G1).32{d}
+      (A3{t} D2{t} G1{t}).64
+      (A3{t} D2{t} G1{t}).32
+      (D2{t} G1{t}).32
+      G1{t}.32{d dy p}
+      (G1{t} A3).32{d}
+      (G1{t} A3{t}).32{d}
+      A3{t}.32{dy pp}
+      A3{t}.16
+      r.32
+    |
+      (B3 E3).16{dy mp}
+      (B3{t} E3{t} D2 G1).32
+      (B3{t} E3{t} D2{t} G1{t}).64
+      (D2{t} G1{t} B3 E3).32{d}
+      (G1{t} B3{t} E3{t}).16
+      (G1{t} B3 E3).8
+      (G1{t} Gb3).64{dy p}
+      Gb3{t}.16{dy pp}
+      Gb3{t}.64
+      Gb3.32{d dy p}
+      (Gb3{t} Gb2).64
+      (Gb3{t} G1 Gb2{t}).32
+      (Gb2{t} G1{t}).16{d dy mp}
+      (Gb2{t} G1{t}).64
+      G1{t}.16{d}
+      G1{t}.64
+      r.32{dy mf}
+      Ab3.16{d dy p}
+      Ab3{t}.64
+      Ab3.32
+      (Ab3{t} G1).16
+      G1{t}.64
+    |
+      (G1{t} E3 B3).64
+      (G1{t} E3{t} B3{t}).8{d}
+      (G1{t} E3{t} B3{t}).64
+      r.32{d dy mf}
+      (E3{t} B3{t}).16{dy mp}
+      (D3 A3 G1).16{d dy p}
+      (D3{t} A3{t} G1{t}).64
+      (D3{t} A3{t} G1{t}).16
+      (D3{t} A3{t} G1{t}).64
+      (A3{t} G1{t}).32{d}
+      (A3{t} G1{t}).64
+      G1{t}.16
+      r.8{dy mf}
+      r.64
+      (E3 B3).32{dy p}
+      (B3{t} E3{t} G1).16
+      (B3{t} E3{t} G1{t}).64
+      (G1{t} E3 B3).16{d dy mp}
+      (G1{t} E3{t} B3{t}).64
+    |
+      (G1{t} B3 E3).16
+      (G1{t} B3{t} E3{t}).64
+      (B3{t} E3{t}).32{dy p}
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.16{dy pp}
+      (Gb3{t} G1).64
+      (Gb3{t} G1{t}).32
+      (Gb3{t} G1{t}).16
+      (G1{t} Gb3{t}).16{d}
+      (G1{t} Gb3{t}).64
+      G1{t}.32{d dy p}
+      G1{t}.16{d}
+      G1{t}.64
+      G1{t}.32
+      G1{t}.16
+      G1{t}.32
+      G1{t}.8{d}
+      G1{t}.32
+    |
+      (G1{t} Gb2).32
+      Gb2{t}.16
+      Gb2{t}.64
+      (D3 A3).32
+      (D3{t} A3{t} D2).32
+      (D3{t} A3{t} D2{t} G1).32{d}
+      (G1{t} D2{t}).16
+      G1{t}.16
+      (G1{t} A3).32
+      (G1{t} A3{t}).16
+      A3{t}.64{dy pp}
+      A3{t}.16
+      A3{t}.64
+      r.32{dy mf}
+      (E3 B3).64{dy p}
+      (E3{t} B3{t} G1).16{d}
+      (G1{t} B3{t} E3).16{d}
+      (E3{t} G1{t} B3{t} B3).64
+      (G1{t} E3{t} B3{t}).16{d}
+      (G1{t} B3{t}).64
+      G1{t}.32
+      r.16
+      r.64
+    |
+      Gb3.64
+      (Gb3{t} Gb2).32
+      (Gb3{t} Gb2{t} G1).32{d}
+      (Gb2{t} G1{t}).16{d dy mp}
+      G1{t}.64
+      G1{t}.32{d}
+      r.16{dy mf}
+      r.64
+      Ab3.32{d dy mp}
+      (Ab3{t} G1).16
+      (Ab3{t} G1{t}).64
+      (Ab3{t} G1{t}).16
+      G1{t}.32{d dy pp}
+      (G1{t} E3 B3).8
+      (G1{t} E3{t} B3{t}).64
+      (B3{t} G1{t} E3{t} Gb2).16
+      (B3{t} G1{t} E3{t} Gb2{t} E2).64
+      (B3{t} E3{t} Gb2{t} E2{t}).64{dy mp}
+      (B3{t} E3{t} E2{t}).16
+      (B3{t} E3{t} E2{t}).64
+      E2{t}.64{dy p}
+      (D3 A3).64
+      (D3{t} A3{t}).16{d}
+    |
+      (D3{t} A3{t} G1).16{d}
+      G1{t}.64{dy mp}
+      A3.32{d dy pp}
+      A3{t}.16
+      A3{t}.64
+      r.16{dy mf}
+      r.32{d}
+      (E3 B3).64{dy p}
+      (E3{t} B3{t} G1).32
+      (E3{t} B3{t} G1{t}).32
+      (E3{t} B3{t} G1{t} E2).64
+      (E2{t} E3{t} G1{t} B3{t}).64
+      (G1{t} E2{t} E3{t} B3{t}).32{d}
+      (E3{t} G1{t} B3{t}).32{d}
+      (G1{t} B3{t} E3{t} B3 E3).64
+      (G1{t} B3{t} E3{t}).32
+      (B3{t} E3{t}).16
+      Gb3.16{d}
+      r.32{dy mf}
+      Gb3.32{d dy p}
+      (Gb3{t} G1).64
+      (Gb3{t} G1{t}).8
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+    |
+      (Gb3{t} G1{t}).16
+      G1{t}.32{d}
+      (B3 E3).64
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} G1{t}).64
+      (G1{t} E3).16
+      (G1{t} E3{t}).64
+      (G1{t} E3{t}).32{d}
+      (G1{t} Ab3 Db3).32{d}
+      (Ab3{t} Db3{t}).16{d}
+      (Db3{t} Ab2).8
+      (Db3{t} Ab2{t}).32
+      Ab2{t}.32
+      (A3 D3).64
+      (A3{t} D3{t} D2).32{d}
+      (A3{t} D3{t} G1 D2{t}).32
+      (D3{t} D2{t} G1{t}).64
+      (D2{t} D3{t} G1{t}).32{d}
+      (D2{t} G1{t}).64
+      G1{t}.32{d}
+      (G1{t} A3).32{d}
+      (G1{t} A3{t}).16
+    |
+      A3{t}.64{dy pp}
+      A3{t}.16
+      r.32{dy mf}
+      (B3 E3).64{dy p}
+      (B3{t} E3{t}).32
+      (B3{t} E2 G1 E3{t}).16
+      (E3{t} B3 E2{t} G1{t}).32
+      (E3{t} G1{t} B3{t}).16
+      (E3{t} G1{t} B3{t}).64
+      (G1{t} B3 E3).16{d dy mp}
+      (G1{t} B3{t} E3{t}).64
+      (B3{t} E3{t}).64
+      r.16{d dy mf}
+      Gb3.32{d dy p}
+      (Gb3{t} Gb2).64
+      (Gb2{t} Gb3{t} G1).32
+      (Gb2{t} G1{t}).16{d dy mp}
+      (Gb2{t} G1{t}).64
+      G1{t}.32
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{d dy mp}
+      Ab3{t}.64
+    |
+      Ab3.32{d dy p}
+      (Ab3{t} G1).32
+      G1{t}.64
+      G1{t}.64
+      (B3 G1{t} E3).8
+      (B3{t} G1{t} E3{t}).64
+      (B3{t} G1{t} E3{t} Gb2).16
+      (B3{t} G1{t} E3{t} Gb2{t}).64
+      (E3{t} Gb2{t} E2 G1{t} B3{t}).32
+      (B3{t} E3{t} E2{t}).16
+      E2{t}.64
+      E2{t}.64
+      (A3 G1 D3).16{d}
+      (G1{t} D3{t} A3{t}).16{d}
+      (G1{t} D3{t}).32
+      (G1{t} D3{t} A3).64
+      (D3{t} A3{t} A2 G1{t}).64
+      (D3{t} A3{t} A2{t} G1{t}).32
+      (D3{t} A3{t} A2{t}).32{d}
+      (D3{t} A3{t} A2{t}).32{d}
+      A2{t}.32
+      r.32{dy mf}
+      (E3 B3).64{dy p}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} B3{t} G1{t} E2).64
+    |
+      (B3{t} G1{t} E2{t} E3).16
+      (B3{t} G1{t} E3{t}).32{d}
+      (B3{t} G1{t} E3).16
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} E3{t}).32
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.16{dy pp}
+      Gb3{t}.16
+      Gb3{t}.32
+      (Gb3{t} G1).32{d}
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t} B2).16
+      (G1{t} B2{t}).32{d}
+      (B3 G1{t}).16{d dy p}
+      G1{t}.8
+      r.16{dy mf}
+      r.64
+      G1.32{dy p}
+      G1{t}.64
+    |
+      G1{t}.8{d}
+      G1{t}.32
+      (G1{t} D3 A3).32
+      (G1{t} D3{t} A3{t} D2).8
+      (G1{t} D3{t} A3{t} D2{t}).32
+      (G1{t} A3{t} D2{t}).64
+      D2{t}.32
+      A3.32
+      (A3{t} D3).16
+      (A3{t} D3{t}).64
+      (A3{t} D3{t}).16
+      A3{t}.64
+      r.32{dy mf}
+      (B3 E3).64{dy p}
+      (B3{t} E3{t} G1).16{d}
+      (B3{t} E3{t} G1{t}).16
+      (B3{t} E3{t} G1{t}).64
+      (E3{t} G1{t}).64
+      G1{t}.64{dy mp}
+      (G1{t} E3).32
+      E3{t}.16{dy p}
+      E3{t}.64
+    |
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.32
+      (Gb3{t} Gb2).32
+      (Gb3{t} Gb2{t} G1).32
+      (Gb2{t} G1{t}).16{d dy mp}
+      (Gb2{t} G1{t}).64
+      G1{t}.64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.8{dy mp}
+      Ab3.32{dy p}
+      (Ab3{t} G1).32{d}
+      G1{t}.32
+      (G1{t} B3 E3).64
+      (G1{t} E3{t} B3{t}).16
+      (G1{t} E3{t} B3{t}).32
+      (B3{t} E3).32
+      (B3{t} E3{t} Gb2).16
+      (B3{t} E3{t} Gb2{t}).32{d}
+      (B3{t} E3{t}).16
+      r.64
+    |
+      (A3 D3 G1).32{d dy mp}
+      (D3{t} G1{t} A2 A3{t}).16
+      (G1{t} A3{t} D3{t} A2{t}).16
+      (G1{t} A3{t} D3{t} A2{t}).64
+      (A3{t} D3{t} A2{t}).64
+      (D3{t} A2{t}).32{dy p}
+      (D3{t} A3).16
+      (D3{t} A3{t}).64
+      A3{t}.64{dy pp}
+      A3{t}.16{d}
+      r.32{dy mf}
+      (B3 E3).32{dy p}
+      (B3{t} E3{t} G1).32{d}
+      (E3{t} G1{t}).64
+      (E3{t} G1{t}).64
+      (G1{t} E3{t}).16{d}
+      (G1{t} E3{t}).64
+      (E3{t} G1{t}).32{d}
+      E3{t}.32
+      r.32{dy mf}
+      Gb3.16{d dy mp}
+      Gb3{t}.64
+      Gb3.32{dy p}
+      (Gb3{t} B2).64
+      (Gb3{t} B2{t}).64
+      (Gb3{t} G1 B2{t}).32{d}
+    |
+      (Gb3{t} G1{t} B2).32{d}
+      (Gb3{t} G1{t} B2{t}).32
+      (Gb3{t} G1{t} B2{t}).32
+      (Gb3{t} B2{t}).16
+      B2{t}.16{dy mp}
+      E3.64{dy mf}
+      (E3{t} G1).16{d}
+      (G1{t} E3).16{d dy pp}
+      (G1{t} E3{t}).64
+      (G1{t} Ab3 E3{t} Db3).32
+      (G1{t} Db3{t} Ab3{t}).32
+      (Db3{t} Ab3{t}).8{d dy mp}
+      (Db3{t} Ab3{t}).32{d}
+      Ab3{t}.32{dy p}
+      (D3 A3).16
+      (D3{t} A3{t} D2 G1).8
+      (A3{t} D2{t} G1{t}).32
+    |
+      A3.32{d}
+      (A3{t} D3).16
+      (A3{t} D3{t}).16
+      (A3{t} D3{t}).64
+      D3{t}.32{d dy pp}
+      (D3{t} E3 G1 B3).32
+      (E3{t} B3{t} G1{t}).16{dy p}
+      (E3{t} B3{t} G1{t}).16{d}
+      (G1{t} B3{t}).64
+      (B3{t} G1{t} E3).16
+      (G1{t} E3{t}).32
+      E3{t}.32
+      Gb3.16{d}
+      Gb3.32
+      (Gb3{t} Gb2).64
+      (Gb3{t} Gb2{t}).64
+      (Gb3{t} Gb2{t} G1).32
+      (Gb2{t} G1{t}).16{d dy mp}
+      G1{t}.64
+      G1{t}.8
+      G1{t}.64
+    |
+      Ab3.16{d}
+      Ab3{t}.64
+      Ab3.32{dy p}
+      (Ab3{t} G1).16
+      G1{t}.32
+      (G1{t} E3 B3).16{d}
+      (G1{t} B3{t} E3).64
+      (B3{t} E3{t}).32
+      (B3{t} Gb2 E3{t}).16
+      (B3{t} Gb2{t} E3{t}).32
+      (B3{t} E3{t}).16
+      (B3{t} E3{t}).64
+      (E3{t} A3 D3).64
+      (E3{t} A3{t} D3{t} A2 G1).32
+      (A3{t} A2{t} D3{t} G1{t}).32{d}
+      (A3{t} D3{t} G1 A2{t}).32{d}
+      (A3{t} G1{t} A2{t} D3{t}).16
+      (D3{t} A2{t}).64
+      A2{t}.64
+      A2{t}.16{d}
+      A2{t}.64
+      A2{t}.16
+      r.32{d}
+    |
+      (B3 E3).32{d}
+      (B3{t} E3{t} G1).16
+      (E3{t} B3{t} G1{t}).16{d}
+      (G1{t} E3{t}).64
+      (G1{t} E3{t}).32
+      E3{t}.16{dy mp}
+      r.64{dy mf}
+      Gb3.16{dy pp}
+      Ab1.32{dy p}
+      Ab1{t}.64
+      Ab1{t}.64
+      Gb3.32{d dy pp}
+      Gb3{t}.32{d}
+      r.32{d dy mf}
+      G1.64{dy p}
+      G1{t}.32
+      G1{t}.16
+      (G1{t} B2).32{d}
+      (G1{t} B2{t}).4
+    |
+      G1{t}.8
+      G1{t}.64
+      (G1{t} B2 Db3).16
+      (G1{t} B2{t} Db3{t}).64
+      (G1{t} B2{t} Db3{t} A2).32
+      (G1{t} A2{t}).32{d}
+      A2{t}.32{d}
+      (A3 D3).64
+      (D3{t} A3{t} G1).64
+      (G1{t} A3{t} D3{t} A2).16
+      (G1{t} A3{t} D3{t} A2{t}).64
+      (A2{t} A3{t} D3{t} G1{t}).16{d}
+      (D3{t} A2{t} A3{t}).64
+      (A2{t} A3 D3{t}).64
+      (D3{t} A2{t} A3{t}).8
+      (D3{t} A2{t} A3{t}).32
+      (D3{t} A3{t}).64
+      r.32{dy mf}
+      (E3 B3).32{dy p}
+      (B3{t} E3{t} G1).8{d}
+    |
+      (B3{t} G1{t} E3).64
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} E3{t}).32{d dy mp}
+      E3{t}.32
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3.16{dy p}
+      (Gb3{t} G1).16
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).32{d}
+      (Gb3{t} G1{t}).64
+      G1{t}.64
+      G1{t}.64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.32{dy mp}
+      (Ab3{t} G1).16
+      (Ab3{t} G1{t}).64
+      (G1{t} Ab3).16{d}
+      (G1{t} Ab3{t}).64
+      (G1{t} B3 E3).16{d dy p}
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} B3{t} E3).32
+      (G1{t} E3{t}).32{d}
+      (E3{t} G1{t} B2).32
+    |
+      (G1{t} B2{t} E3{t}).16{d dy mp}
+      (G1{t} B2{t}).64{dy p}
+      (D3 G1{t} A3).8
+      (D3{t} G1{t} A3{t}).64
+      (G1{t} D3{t} A3{t}).16
+      (G1{t} D3{t} A3{t}).64
+      (A3 G1{t} D3{t}).8
+      (A3{t} G1{t} D3{t}).32{d}
+      (D3{t} A3{t}).32{dy mp}
+      A3{t}.32
+      (E3 B3).64{dy mf}
+      (E3{t} B3{t} G1).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} E3{t} G1{t}).16
+      (B3{t} E3{t} G1{t}).32{d}
+      (G1{t} B3 E3).16{d dy p}
+      (G1{t} B3{t} E3{t}).64
+      (G1{t} E3{t} Gb3).32
+      Gb3{t}.16
+      Gb3{t}.64
+    |
+      Gb3.32{d dy mp}
+      (G1 Gb3{t}).16
+      (G1{t} Gb3{t}).64
+      (Gb3{t} Db3 G1{t}).32{d}
+      (Gb3{t} G1{t} Db3{t}).32
+      (Gb3{t} Db3{t}).64
+      Db3{t}.16{d dy p}
+      Db3{t}.64
+      (Db3{t} E3).16{d}
+      (Db3{t} G1).64
+      (G1{t} Db3{t} E3).16{d}
+      (G1{t} Db3{t} E3{t}).64
+      (Db3{t} G1{t} E3{t} Ab3 Db3).64
+      (G1{t} Db3{t} Ab3{t} E3{t}).16
+      (Ab3{t} G1{t} Db3{t}).64
+      (Ab3{t} Db3{t}).32
+      Db3{t}.8
+      Db3{t}.32{d}
+      r.32{d dy mf}
+      (A3 D3).16{dy p}
+      (D3{t} A3{t} G1).32{d}
+    |
+      (A3{t} D3{t} G1{t} A2).16{d}
+      (A3{t} D3{t} A2{t}).64
+      (A3{t} D3{t} A2{t}).32{d}
+      (A2{t} D3{t}).8
+      (A2{t} D3{t}).64
+      r.32{dy mf}
+      (E3 B3).32{dy p}
+      (E3{t} B3{t} G1).32
+      (E3{t} B3{t} G1{t}).8
+      (E3{t} B3{t} G1{t}).32
+      (G1{t} E3).64
+      (G1{t} E3{t}).16
+      E3{t}.64
+      r.32{dy mf}
+      Gb3.16{dy mp}
+      Gb3{t}.64
+      Gb3{t}.32
+      Gb3.32{dy p}
+      (B2 Gb3{t}).32
+      (B2{t} Gb3{t} G1).16
+      (Gb3{t} B2{t} G1{t}).32{d}
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      G1{t}.64
+    |
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{d dy mp}
+      Ab3{t}.64
+      Ab3.32{dy p}
+      (Ab3{t} G1).16
+      G1{t}.64
+      G1{t}.64
+      (G1{t} B3 E3).16{d}
+      (G1{t} E3).64
+      (G1{t} E3{t}).16
+      (G1{t} E3{t} B2).64
+      (G1{t} E3{t} B2{t}).16
+      (G1{t} E3{t}).64
+      E3{t}.32{dy mp}
+      r.32{dy mf}
+      (D3 A3).64{dy mp}
+      (D3{t} A3{t} G1).16
+      (D3{t} A3{t} G1{t}).16{d}
+      (A3{t} D3{t} G1{t}).16
+      (A3{t} D3{t} G1{t}).16{d}
+    |
+      (D3{t} G1{t} A3{t}).32{dy p}
+      (D3{t} A3{t}).16
+      r.64{dy mf}
+      (B3 E3).32{d dy p}
+      (E3{t} B3{t} G1).16
+      (B3{t} E3{t} G1{t}).16
+      (B3{t} E3{t} G1{t}).64
+      (B3{t} G1{t} E3{t}).32
+      G1{t}.64{dy mp}
+      (G1{t} B3 E3).16{d}
+      (G1{t} Gb3 E3{t}).32
+      (E3{t} Gb3{t}).64
+      Gb3{t}.16{dy p}
+      Gb3.16{d}
+      Gb3{t}.64
+      Gb3{t}.64
+      (Gb3{t} Db3).32
+      (Gb3{t} Db3{t} G1).32
+      (G1{t} Gb3{t} Db3{t}).32
+      (Db3{t} G1{t}).64
+      (Db3{t} G1{t}).16{d}
+      (Db3{t} G1{t}).64
+      (Db3{t} G1{t}).16{d}
+      (Db3{t} G1{t}).64
+    |
+      (G1{t} Db3{t}).16{d}
+      (G1{t} Db3{t}).64
+      (G1{t} Db3{t}).16
+      (G1{t} Db3{t}).64
+      G1{t}.32{d}
+      G1{t}.32
+      (G1{t} B2).16{d}
+      (G1{t} A2).32{d}
+      A2{t}.32{dy pp}
+      A2{t}.64
+      (A2{t} A3 D3).32{d}
+      (A3{t} A2{t} G1 D3{t}).16{d}
+      (D3{t} A3{t} G1{t} A2{t}).32
+      (A3{t} G1{t} D3{t}).32{d dy p}
+      (D3{t} G1{t}).64
+      (D3{t} A2 A3).8
+      (D3{t} A2{t} A3{t}).32{d}
+      (A3{t} A2{t}).32
+      (E3 B3).32
+      (B3{t} E3{t} G1).16
+      (B3{t} E3{t} G1{t}).64
+    |
+      (E3{t} B3{t} G1{t}).16{dy mp}
+      (E3{t} B3{t} G1{t}).64
+      (B3{t} E3{t} G1{t}).32
+      (B3{t} G1{t} E3).64
+      (B3{t} G1{t} E3{t}).32
+      (G1{t} E3{t}).64
+      E3{t}.32{d dy p}
+      Gb3.16{d dy mp}
+      Gb3{t}.64
+      Gb3.32{dy p}
+      (B2 Gb3{t}).32{d}
+      (Gb3{t} B2{t} G1).32
+      (Gb3{t} B2{t} G1{t}).16
+      (Gb3{t} B2{t}).64
+      Gb3{t}.64
+      r.8{dy mf}
+      r.64
+      Ab3.16{d dy p}
+      Ab3{t}.64
+      Ab3.32
+      (Ab3{t} B2 G1).16
+      (B2{t} G1{t}).64
+      (B2{t} G1{t} B3 E3).16
+      (G1{t} E3{t} B3{t}).32{d}
+    |
+      (G1{t} E3).32{d}
+      (G1{t} E3{t} B2).32{d}
+      (G1{t} E3{t} B2{t}).16
+      (E3{t} B2{t}).64
+      E3{t}.32{dy mp}
+      r.64{dy mf}
+      (D3 A3 G1).8{d dy mp}
+      (D3{t} A3{t} G1{t}).32
+      (D3{t} A3 G1{t}).64
+      (G1{t} D3{t} A3{t}).16{d}
+      (D3{t} G1{t} A3{t}).32{d}
+      (D3{t} A3{t}).32{d}
+      r.32{dy mf}
+      (E3 B3).32
+      (B3{t} E3{t} G1).16
+      (B3{t} E3{t} G1{t}).64
+      (E3{t} B3{t} G1{t}).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} B3{t} G1{t}).32
+      (B3 G1{t} E3).16{d dy mp}
+      (B3{t} G1{t} E3{t}).64
+    |
+      (E3{t} Gb3).32{d}
+      Gb3{t}.16{dy p}
+      Gb3.32{dy mp}
+      Gb3{t}.32{d}
+      (Gb3{t} G1).32{d}
+      (Gb3{t} G1{t} Db3).16
+      (G1{t} Gb3{t} Db3{t}).32
+      Db3{t}.64{dy pp}
+      Db3{t}.16{d}
+      (Db3{t} E3).16{d}
+      (Db3{t} E3{t}).64
+      (Db3{t} E3).32
+      (G1 E3{t} Db3{t}).16
+      (G1{t} E3{t} Db3{t}).64
+      (Db3{t} E3{t} G1{t}).64
+      (G1{t} Ab3 Db3).16{dy p}
+      (Ab3{t} Db3{t}).32{d}
+      Db3{t}.8
+      Db3{t}.32{d}
+      r.32{d}
+    |
+      (D3 A3).32{d}
+      (D3{t} A2 A3{t} G1).32
+      (D3{t} A2{t} A3{t} G1{t}).8
+      (D3{t} A2{t} A3{t} G1{t}).32
+      (D3{t} A2{t} A3{t}).8
+      (D3{t} A2{t} A3{t}).32{d}
+      r.32{d dy mf}
+      (E3 B3).64{dy p}
+      (E3{t} B3{t} G1).16
+      (E3{t} G1{t} B3{t}).8
+      (E3{t} B3{t} G1{t} E3).64
+      (B3{t} G1{t} E3{t}).64
+      (B3{t} G1{t} E3{t}).64
+      (G1{t} E3{t}).32{dy mp}
+      E3{t}.32
+      r.64{dy mf}
+      Gb3.16{d dy mp}
+      Gb3{t}.64
+      Gb3.32{d dy p}
+      (Gb3{t} B2).64
+      (Gb3{t} B2{t} G1).32{d}
+    |
+      (Gb3{t} B2{t} G1{t}).16
+      (Gb3{t} B2{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      G1{t}.64
+      r.16{dy mf}
+      r.32{d}
+      Ab3.16{d dy mp}
+      Ab3{t}.64
+      Ab3.32{dy p}
+      (Ab3{t} B2 G1).32{d}
+      (Ab3{t} B2{t} G1{t}).64
+      (B2{t} G1{t}).64
+      (B2{t} G1{t} E3 B3).16
+      (G1{t} B3{t} E3{t}).16
+      (G1{t} E3).32
+      (G1{t} E3{t} B2).32{d}
+      (G1{t} E3{t} B2{t}).16
+      (E3{t} B2{t}).64
+      E3{t}.32{dy mp}
+      E3{t}.64
+      r.64{dy mf}
+      Gb3.32{d dy mp}
+      (Gb3{t} G1).32
+      (Gb3{t} G1{t}).16{d}
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+      (Gb3{t} G1{t}).64
+    |
+      (G1{t} Gb3).64{dy p}
+      (G1{t} Gb3{t}).16
+      G1{t}.32
+      G1{t}.32
+      r.16{dy mf}
+      r.64
+      (E3 B3).32{d dy p}
+      (G1 E3{t} B3{t}).16
+      (E3{t} B3{t} G1{t}).16
+      (E3{t} B3{t} G1{t}).64
+      (E3{t} B3{t} G1{t}).32
+      G1{t}.64{dy mp}
+      (G1{t} B3 E3).16{d}
+      (B3{t} E3{t}).64
+      (E3{t} Ab3 Db3).16
+      (Ab3{t} Db3{t}).32{d}
+      (Ab3 Db3).16{d dy pp}
+      (Ab3{t} Db3{t}).64
+      (Ab3{t} Db3{t}).32
+      (Db3{t} G1 Ab3{t}).32{d}
+      (Db3{t} G1{t} Ab3{t}).64
+      (Db3{t} G1{t}).64{dy p}
+      (Db3{t} G1{t}).16{d}
+      (Db3{t} G1{t}).64
+    |
+      (G1{t} Db3{t}).16
+      (G1{t} Db3{t}).64
+      G1{t}.32
+      G1{t}.16{d}
+      G1{t}.64
+      G1{t}.64
+      (G1{t} Db3).16{d}
+      G1{t}.8
+      (G1{t} A2).16{d}
+      (G1{t} A2{t}).64
+      (D3 A3 G1{t} A2{t}).16
+      (G1{t} A3{t} D3{t}).16
+      (A3{t} G1{t} D3{t}).32
+      (A3{t} D3{t}).32
+      (A3{t} D3{t}).32
+      (D3{t} A3).16
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).32
+      (D3{t} A3{t}).16
+      (D3{t} A3{t}).64
+      A3{t}.64{dy mp}
+      r.64
+    |
+      (B3 E3).16{d dy mf}
+      (B3{t} E3{t}).64
+      (E3{t} B3).8{d}
+      (E3{t} B3{t}).32
+      Gb3.16{d dy mp}
+      Gb3{t}.64
+      Gb3.8{dy p}
+      Gb3{t}.32
+      Gb3{t}.8
+      Gb3{t}.32
+      r.32{dy mf}
+      Ab3.8{d dy mp}
+      Ab3{t}.32
+    |
+      (B3 E3).32
+      (B3{t} E3{t}).16{d}
+      (E3{t} B3).16
+      (E3{t} B3{t}).64
+      (E3{t} B3{t}).32
+      (B3 E3{t}).16
+      (B3{t} E3{t}).64
+      B3{t}.64{dy p}
+      (E3 A3 D3).8{dy pp}
+      (E3{t} A3{t} D3{t}).32
+      (A3{t} E3{t} D3{t}).64
+      (A3{t} D3{t}).16{dy mp}
+      (D3{t} A3).16
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).16{d}
+      (D3{t} A3{t}).64
+      A3{t}.32
+      (E3 B3).16{d dy f}
+      (E3{t} B3{t}).64
+      (B3 E3).16{d dy mp}
+      (B3{t} E3{t}).64
+    |
+      (E3{t} B3).32{dy mf}
+      (E3{t} B3{t}).64
+      (B3{t} E3{t}).16
+      Gb3.8{d dy mp}
+      Gb3{t}.32
+      Gb3.8{d}
+      Gb3{t}.32{d}
+      E3.16{d dy mf}
+      E3{t}.64
+      E3.16
+      E3{t}.32
+      E3{t}.64
+      (E3{t} Db3 Ab3).32
+      (E3{t} Ab3{t} Db3{t}).32{d}
+      (Db3{t} Ab3{t}).32{dy mp}
+      (Ab3 Db3{t}).32{d}
+      (Db3{t} Ab3{t}).32
+      (Db3{t} Ab3{t}).32
+    |
+      (Db3{t} Ab3{t}).16
+      (Db3{t} Ab3{t}).64
+      Db3{t}.64
+      r.64{dy mf}
+      (A3 D3).16{d dy mp}
+      (A3{t} D3{t}).64
+      (D3{t} A3).16{d}
+      (D3{t} A3{t}).64
+      (D3{t} A3{t}).64
+      (A3{t} D3{t}).16
+      (A3{t} D3{t}).64
+      (D3{t} A3{t}).32
+      (A3{t} D3{t}).32{d}
+      A3{t}.64
+      r.32{d dy mf}
+      (E3 B3).16{d}
+      (E3{t} B3{t}).64
+      (B3 E3{t}).8{d}
+      (B3{t} E3{t}).32
+      (E3{t} E3 Gb3).64
+      (E3{t} Gb3{t}).16{d dy p}
+    |
+      Gb3.16{d dy pp}
+      Gb3{t}.64
+      Gb3{t}.32{d}
+      Gb3{t}.64
+      Gb3{t}.64
+      r.8{dy mf}
+      r.64
+      Ab3.8{d}
+      Ab3{t}.32{d}
+      (B3 E3).16{d}
+      (B3{t} E3{t}).64
+      (E3{t} B3).32
+      (B3{t} E3{t}).8
+      (B3{t} E3{t}).32
+      (B3{t} E3{t}).32
+      (E3{t} A3 D3).32{d}
+      (D3{t} A3{t}).16
+    |
+      (D3{t} A3{t}).32
+      (D3{t} A3{t}).8{d}
+      (D3{t} A3{t}).32
+      (D3{t} A3{t}).16
+      A3{t}.64
+      r.64
+      (B3 E3).8
+      (B3{t} E3{t}).32
+      (B3{t} E3{t}).16
+      (B3{t} E3{t}).64
+      (B3{t} E3{t}).16
+      (B3{t} E3{t}).32
+      (Gb3 E3{t}).16
+      Gb3{t}.8{dy mp}
+      Gb3{t}.32
+      Gb3.16{d dy p}
+      Gb3{t}.64
+    |
+      Gb3{t}.16{d}
+      Gb3{t}.64
+      Gb3{t}.16{d}
+      r.2
+      r.4
+      r.32{d}
+    |
+      r.1{dy mf}

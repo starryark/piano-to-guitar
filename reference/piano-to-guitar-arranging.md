@@ -326,6 +326,36 @@ The Drop-D question is decided by the folded bass line, not by taste: if the low
 structural note fits above E2 after octave-folding, **standard tuning wins** — see
 [tunings.md](tunings.md) for the full test.
 
+## Arranging from a noisy transcription (Basic Pitch and friends)
+
+When `source-profile.mjs` classifies the source as a **noisy transcription**,
+the arranging workflow changes shape before any craft below applies:
+
+1. **Recover the tune before reducing it.** The digest's highest-voice melody
+   is a candidate, not the tune — one performance arrives fragmented across
+   voices, topped with short octave artifacts, over a chord bed. Run
+   `tools/foreground.mjs` (with every independent transcription you have —
+   cross-source agreement is evidence), review `foreground-map.md`, and decide
+   the ambiguous bars yourself.
+2. **Lock the decision in a melody contract.** `melody-contract.json` states
+   octave-exact pitches with onsets, minimum sounding durations, distinct
+   repeated attacks, required gaps (a breath is an obligation — it cannot be
+   plugged with gate-serving roots), and forbidden textures (absence of
+   accompaniment can itself be a fidelity obligation). Validate it against the
+   digest; gate its spans with sidecar mode `contract`.
+3. **Relocate out-of-range material by phrase group.** A phrase that exceeds
+   the fretboard moves as a COMPLETE phrase, by whole octaves
+   (`relocationGroups`), never note-by-note — exact octave matters inside a
+   relocation group, and the contract validator rejects a group boundary that
+   cuts a phrase without justification.
+4. **Repeated pitches are rhythmic events.** A melody that restates one pitch
+   demands that many distinct attacks in the tab; a single sustain is a
+   different musical statement and the contract gate counts it as one.
+5. **`free` still means added material.** A span you cannot make the digest
+   agree with is a `contract` span with reviewed events — declaring it `free`
+   removes it from fidelity protection entirely, which is how a noisy cover
+   quietly stops resembling its source.
+
 ## What to deliberately discard
 
 These carry no arrangement content. They are AlphaTex **engraving directives** the

@@ -1,0 +1,1766 @@
+\artist "GaroadArr. by Spectronoid"
+\subtitle "from VA-11 HALL-A"
+\title "Every Day Is Night"
+\track ("Piano" "Pno") {
+  volume 12
+  balance 8
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \voice 
+      \ts (4 4)
+      \tempo 113
+      \accidentals auto
+      \clef g2
+      \ottava regular
+      \simile none
+      \ks eb
+        (G3 Bb3 C4 Eb4).1{dy mp instrument acousticgrandpiano}
+      |
+        (A3{acc forcenatural} C4 E4{acc forcenatural} F4).1{beam split}
+      |
+        (Ab3 C4 Db4{acc b} Eb4).1{beam split}
+      |
+        (Bb3 C4 Eb4 G4).1{beam split}
+      |
+        (G3 Bb3 C4 Eb4).1{beam split}
+      |
+        (A3{acc forcenatural} C4 E4{acc forcenatural} F4).1{beam split}
+      |
+        (Ab3 C4 Db4{acc b} Eb4).1{beam split}
+      |
+      \barLineRight lightlight
+        Eb4.16{beam Up beam merge}
+        F4{st}.8{beam Up beam merge}
+        Eb4.16{beam Up beam split}
+        r.16{beam split}
+        D4{st}.8{beam Up beam merge}
+        C4.16{beam Up beam split}
+        C4{t}.8{beam Up beam merge}
+        D4{st}.8{beam Up beam split}
+        Eb4{st}.8{beam Down beam merge}
+        (F4 F5).16{dy f beam Down beam merge}
+        (G4 G5).16{beam Down beam split}
+      |
+        (G4{t} G5{t}).8{beam Down beam split}
+        r.8{beam split}
+        (C5 D5 G5 Bb5).2{d beam Up beam split}
+      |
+        r.4{beam split}
+        (D5 E5{acc forcenatural} A5{acc forcenatural} C6).2{d beam Up beam split}
+      |
+        (D5 D6).16{beam Down beam merge}
+        (Eb5 Eb6).8{beam Down beam merge}
+        (D5 D6).16{beam Down beam split}
+        (D5{t} D6{t}).16{beam Down beam merge}
+        (C5 C6).8{beam Down beam merge}
+        (Bb4 Bb5).16{beam Down beam split}
+        (Bb4{t} Bb5{t}).4{beam Up beam split}
+        (Bb4 Bb5).8{beam Up beam merge}
+        (C5 C6).16{beam Up beam merge}
+        (G4 G5).16{beam Up beam split}
+      |
+        (G4{t} G5{t}).8{beam Up beam split}
+        r.8{beam split}
+        r.4{beam split}
+        (Eb4 G4 C5 Eb5).4{beam Up beam split}
+        (F4 Bb4 D5 F5).4{beam Down beam split}
+      |
+        (G4 C5 Eb5 G5).4{beam Down beam split}
+        r.4{beam split}
+        r.8{beam split}
+        F4.8{beam Up beam split}
+        G4.16{beam Up beam merge}
+        Bb4.8{beam Up beam merge}
+        G4.16{beam Up beam split}
+      |
+        G4{t}.8{beam Up beam split}
+        r.8{beam split}
+        r.2{beam split}
+        r.8{beam split}
+        C5.8{beam Down beam split}
+      |
+        D5.16{beam Down beam merge}
+        Eb5.8{beam Down beam merge}
+        D5.16{beam Down beam split}
+        D5{t}.16{beam Down beam merge}
+        C5.8{beam Down beam merge}
+        Bb4.16{beam Down beam split}
+        Bb4{t}.4{beam Up beam split}
+        Bb4.8{beam Up beam merge}
+        C5.16{beam Up beam merge}
+        G4.16{beam Up beam split}
+      |
+        G4{t}.8{beam Up beam split}
+        r.8{beam split}
+        r.4{beam split}
+        (F4 G4 C5 Eb5 F5).2{ad 0 beam Down beam split}
+      |
+        C5.8{dy mf beam Down beam merge}
+        D5.8{beam Down beam split}
+        D5{slur s466}.8{gr beam split}
+        Eb5{slur s466}.8{beam Down beam merge}
+        F5.16{beam Down beam merge}
+        C5.16{beam Down beam split}
+        C5{t}.2{beam Down beam split}
+      |
+        C5{t}.2{beam Up beam split}
+        Ab4.4{d beam Up beam split}
+        Eb4{slur s489}.16{gr onbeat beam merge}
+        E4{acc b}.16{gr onbeat beam split}
+        F4{slur s489 acc forcenatural}.8{beam Up beam split}
+      |
+        G4.8{beam Up beam merge}
+        Ab4.8{beam Up beam split}
+        A4{slur s514 acc forcenatural}.8{gr beam split}
+        Bb4{slur s514}.8{beam Up beam merge}
+        C5.16{beam Up beam merge}
+        F4.16{beam Up beam split}
+        F4{t}.2{beam Up beam split}
+      |
+        F4{t}.2{beam Up beam split}
+        Eb4.8{d beam Up beam merge}
+        (Eb4 Ab4).16{beam Up beam split}
+        (Eb4{t} Ab4{t}).8{beam Up beam merge}
+        (Eb4 Ab4 C5).8{beam Up beam split}
+      |
+        (Gb4{acc b} Bb4 Db5{acc b} Gb5{acc b}).4{d beam Down beam split}
+        (Db5 Gb5 Bb5 Db6{acc b}).8{ad 0 beam Down beam split}
+        (Db5{t} Gb5{t} Bb5{t} Db6{t}).2{beam Down beam split}
+      |
+        (Gb5{acc b} Db6{acc b} Eb6 Gb6{acc b}).2{ad 0 beam Down beam split}
+        (Db5{acc b} F5 Bb5 Db6).2{beam Down beam split}
+      |
+        (Eb5 F5 Ab5 C6 Eb6).1{ad 0 beam split}
+      |
+        r.8{beam split}
+        (Ab4{st} Db5{acc b}).8{beam Down beam merge}
+        (Ab4{st} Db5).8{beam Down beam merge}
+        (G4{st} C5).8{beam Down beam split}
+        (G4{st} C5).8{beam Up beam merge}
+        (Eb4{st} Ab4).8{beam Up beam merge}
+        (Eb4{st} Ab4).8{beam Up beam merge}
+        (Bb3{st} F4).8{beam Up beam split}
+      |
+        (C5{st} C6).8{beam Down beam merge}
+        (D5{st} D6).8{beam Down beam split}
+        (Eb5{st} Eb6).8{beam Down beam merge}
+        (F5{st} F6).16{beam Down beam merge}
+        (C5 C6).16{beam Down beam split}
+        r.16{beam split}
+        Ab5{slur s681}.32{beam Down beam merge}
+        Bb5.32{beam Down beam merge}
+        Ab5{slur s681}.16{beam Down beam merge}
+        C6.16{beam Down beam split}
+        B5{acc forcenatural}.16{beam Down beam merge}
+        Bb5{acc b}.16{beam Down beam merge}
+        Ab5.8{beam Down beam split}
+      |
+        r.16{beam split}
+        Eb5{st}.16{beam Down beam merge}
+        Gb5{st acc b}.8{beam Down beam split}
+        Eb5{st}.16{beam Down beam merge}
+        F5{st}.16{beam Down beam merge}
+        C5{st}.8{beam Down beam split}
+        (B3{acc b} Ab4).4{beam Up beam split}
+        (B3{t} Ab4{t}).16{beam Up beam merge}
+        F4{slur s721}.32{beam Up beam merge}
+        G4.32{beam Up beam merge}
+        F4{st slur s721}.16{beam Up beam merge}
+        Gb4{st acc b}.16{beam Up beam split}
+      |
+        G4{slur s748}.16{tu (3 2) beam Up beam merge}
+        Gb4{acc #}.16{tu (3 2) beam Up beam merge}
+        G4.16{tu (3 2) beam Up beam merge}
+        Ab4.16{tu (3 2) beam Up beam merge}
+        G4.16{tu (3 2) beam Up beam merge}
+        Ab4.16{tu (3 2) beam Up beam split}
+        Bb4.16{tu (3 2) beam Up beam merge}
+        A4{acc forcenatural}.16{tu (3 2) beam Up beam merge}
+        Bb4.16{tu (3 2) beam Up beam merge}
+        C5{slur s748}.16{beam Up beam merge}
+        F4{acc forcenatural}.16{beam Up beam split}
+        r.16{beam split}
+        (Ab4{st acc b} D5).16{beam Up beam merge}
+        (F4{st} Bb4).16{beam Up beam split}
+        r.16{beam split}
+        (Eb4 Gb4{acc b} Ab4).4{beam Up beam split}
+      |
+        r.4{beam split}
+        (F4 A4{acc forcenatural} Bb4 D5 F5).2{beam Down beam split}
+        (F4 Ab4{acc b} Bb4 Eb5).4{beam Up beam split}
+      |
+        (Gb4{acc b} Bb4 Db5{acc #} Eb5 Gb5{acc b}).8{ad 0 beam Down beam split}
+        r.4{beam split}
+        (Db5{acc b} Ab5 Bb5 Db6{acc b}).8{beam Down beam split}
+        r.8{beam split}
+        (Gb4 Ab4).8{beam Up beam split}
+        (F4 Ab4 Bb4).4{beam Up beam split}
+      |
+        (Gb4{acc b} Bb4 Db5{acc b} Eb5 Gb5{acc b}).2{dec beam Down beam split}
+        (Db5 Gb5 A5{acc forcenatural} C6 Db6{acc b}).2{dec beam Down beam split}
+      |
+        (Ab4 C5 Db5{acc b} F5 Ab5).1{dy mp beam split}
+      |
+        r.8{beam split}
+        (D4 F4 G4 B4{acc x}).4{beam Up beam split}
+        (C4 C5).8{beam Up beam split}
+        (Eb4 Ab4{acc b} C5 Eb5).8{dec beam Down beam merge}
+        (F4 F5).8{dec beam Down beam merge}
+        (G4 C5 Eb5 G5).8{dec beam Down beam merge}
+        (Bb4 Bb5).8{dec beam Down beam split}
+      |
+        (C5 Eb5 C6).4{d dy p beam Down beam split}
+        (G4 C5 D5 G5).8{beam Down beam split}
+        (G4{t} C5{t} D5{t} G5{t}).2{beam Down beam split}
+      |
+        (G4{t} C5{t} D5{t} G5{t}).4{d beam Down beam split}
+        (Eb4 Eb5).8{beam Up beam split}
+        (F4 C5 F5).8{beam Down beam merge}
+        (Eb4 Eb5).8{beam Down beam split}
+        (F4 C5 F5).8{beam Up beam merge}
+        (G4 G5).16{beam Up beam merge}
+        (C4 C5).16{beam Up beam split}
+      |
+        (C4{t} C5{t}).1{beam split}
+      |
+        (C4{t} C5{t}).2{beam Up beam split}
+        (G3 Eb4 G4).8{d cre beam Up beam merge}
+        (Bb3 G4 Bb4).16{cre beam Up beam split}
+        (Bb3{t} G4{t} Bb4{t}).8{cre beam Up beam merge}
+        (C4 A4{acc forcenatural} C5).8{cre beam Up beam split}
+      |
+        (D4 G4 D5).4{beam Up beam split}
+        (Eb4 C5 Eb5).8{beam Up beam split}
+        (D4 G4 D5).4{d beam Up beam split}
+        (Eb4 C5 Eb5).8{beam Down beam merge}
+        (F4 D5 F5).8{beam Down beam split}
+      |
+        (F4{t} D5{t} F5{t}).2{beam Down beam split}
+        (F4 C5 D5 F5).4{beam Down beam split}
+        (Bb4 Bb5).8{beam Down beam merge}
+        (C5 C6).8{beam Down beam split}
+      |
+        (C5{t} C6{t}).4{beam Down beam split}
+        (D5 D6).8{beam Down beam merge}
+        (G4 G5).8{beam Down beam split}
+        (G4{t} G5{t}).2{beam Down beam split}
+      |
+        (G4{t} G5{t}).2{beam Down beam split}
+        (C4 E4{acc forcenatural} G4 A4{acc forcenatural} C5).2{beam Up beam split}
+      |
+        (G4 Bb4 D5 G5).1{d beam split}
+        (C5 Eb5 G5 C6).2{beam Up beam split}
+      |
+        (G5 C6 E6{acc forcenatural} G6).1{d beam split}
+        (C5 E5{acc forcenatural} A5{acc forcenatural} C6).2{beam Up beam split}
+      |
+        (F5 Ab5 C6 F6).1{d beam split}
+        (C6 F6 C7).2{beam Up beam split}
+      |
+        (G5 C6 E6{acc forcenatural} G6).1{d beam split}
+        r.2{beam split}
+      |
+        (G4 Bb4 D5 G5).1{d beam split}
+        (C5 Eb5 G5 C6).2{beam Up beam split}
+      |
+        (G5 B5{acc forcenatural} D6 G6).1{d beam split}
+        (C5 G5 C6).2{beam Up beam split}
+      |
+        (F5 Ab5 C6 F6).1{d beam split}
+        (C6 Eb6 Ab6 C7).2{beam Up beam split}
+      |
+      \barLineRight lightheavy
+        (G5 A5{acc forcenatural} C6 G6).1{ad 0 beam split}
+        r.2{beam split}
+        (Ab1 Eb2 Ab2 Eb4 G4 Ab4 C5).2{ad 0 fermata (medium 0) beam Down beam split}
+        Bb5{slur s1383}.32{tu (5 4) ot 8va beam Down beam merge}
+        C6.32{tu (5 4) ot 8va beam Down beam merge}
+        Eb6.32{tu (5 4) ot 8va beam Down beam merge}
+        G6.32{tu (5 4) ot 8va beam Down beam merge}
+        A6.32{tu (5 4) ot 8va beam Down beam merge}
+        C7{slur s1383}.8{ot 8va fermata (medium 0) beam Down beam split}
+    \voice 
+      \clef g2
+      \ottava regular
+      \simile none
+      \ks eb
+        r.8{dy mp}
+        G5.8{beam Down}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        Bb5.16{beam Down beam split}
+        Bb5{t}.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+        F5.8{beam Down beam merge}
+        G5.16{beam Down beam merge}
+        C5.16{beam Down beam split}
+      |
+        r.8{beam split}
+        G5.8{beam Down beam split}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        C6.16{beam Down beam split}
+        C6{t}.8{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        F5.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+      |
+        r.8{beam split}
+        G5.8{beam Down beam split}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        Bb5.16{beam Down beam split}
+        Bb5{t}.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+        F5.8{beam Down beam merge}
+        G5.16{beam Down beam merge}
+        C5.16{beam Down beam split}
+      |
+        r.8{beam split}
+        G5.8{beam Down beam split}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        C6.16{beam Down beam split}
+        C6{t}.8{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        F5.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+      |
+        r.8{beam split}
+        G5.8{beam Down beam split}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        Bb5.16{beam Down beam split}
+        Bb5{t}.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+        F5.8{beam Down beam merge}
+        G5.16{beam Down beam merge}
+        C5.16{beam Down beam split}
+      |
+        r.8{beam split}
+        G5.8{beam Down beam split}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        C6.16{beam Down beam split}
+        C6{t}.8{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        F5.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+      |
+        r.8{beam split}
+        G5.8{beam Down beam split}
+        F5.16{beam Down beam merge}
+        G5.8{beam Down beam merge}
+        Bb5.16{beam Down beam split}
+        Bb5{t}.8{beam Down beam merge}
+        G5.8{beam Down beam split}
+        F5.8{beam Down beam merge}
+        G5.16{beam Down beam merge}
+        C5.16{beam Down beam split}
+      |
+      \barLineRight lightlight
+      |
+        r.4{beam split}
+        r.4{beam split}
+        r.8{beam split}
+        (F4 F5).8{beam Down beam split}
+        (G4 G5).16{beam Down beam merge}
+        (Bb4 Bb5).8{beam Down beam merge}
+        (C5 C6).16{beam Down beam split}
+      |
+        (C5{t} C6{t}).8{beam Down beam split}
+        r.8{beam split}
+        r.8{beam split}
+        r.256
+        r.8{beam split}
+        r.8{beam split}
+        (C5 C6).8{beam Down beam split}
+      |
+        r.256
+        (Eb4 F4 Ab4 C5).2{beam Down beam split}
+      |
+        (F4 G4 Bb4 C5).2{beam Down beam split}
+      |
+      |
+      |
+        r.256
+        (Eb4 F4 Ab4 C5).2{beam Down beam split}
+      |
+        (Eb4 F4 G4 C5).2{beam Down beam split}
+      |
+      |
+        r.8{dy mf beam split}
+        r.8{beam split}
+        (Eb4{st} F4).8{beam Down beam merge}
+        Gb4{acc b}.16{beam Down beam merge}
+        G4{acc forcenatural}.16{beam Down beam split}
+        r.2{beam split}
+      |
+      |
+        r.8{dy mf beam split}
+        r.8{beam split}
+        (Ab4{st} Bb4).8{beam Down beam merge}
+        (C4{st} D4).8{beam Down beam split}
+      |
+      |
+      |
+        r.256{dy mf}
+        r.8{beam split}
+        (Eb4{st} F4).8{beam Down beam merge}
+        (Ab4{st} Bb4).8{beam Down beam split}
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \staff {
+      score
+    }
+      \voice 
+        \clef f4
+        \ottava regular
+        \simile none
+        \ks eb
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightlight
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightheavy
+      \voice 
+        \clef f4
+        \ottava regular
+        \simile none
+        \ks eb
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightlight
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightheavy
+      \voice 
+        \clef f4
+        \ottava regular
+        \simile none
+        \ks eb
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightlight
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightheavy
+      \voice 
+        \clef f4
+        \ottava regular
+        \simile none
+        \ks eb
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightlight
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightheavy
+      \voice 
+        \clef f4
+        \ottava regular
+        \simile none
+        \ks eb
+          (F1{ac} Eb2).8{d dy mp beam Up beam merge}
+          F1.16{beam Up beam split}
+          C2.16{beam Up beam merge}
+          (G2 Eb3).16{beam Up beam split}
+          r.16{beam split}
+          (G2 Eb3).16{beam Up beam split}
+          (G2{t} Eb3{t}).8{beam Up beam merge}
+          (C2 G2).8{beam Up beam merge}
+          (G2 C3).8{beam Up beam merge}
+          (C3 F3).8{beam Up beam split}
+        |
+          (F1{ac} D2).8{d beam Up beam merge}
+          A1{acc forcenatural}.16{beam Up beam split}
+          D2.16{beam Up beam merge}
+          (F2 D3).16{beam Up beam split}
+          r.16{beam split}
+          (F2 D3).16{beam Up beam split}
+          (F2{t} D3{t}).8{beam Up beam merge}
+          (D2 A2{acc forcenatural}).8{beam Up beam merge}
+          (A2 D3).8{beam Up beam merge}
+          (D3 A3{acc forcenatural}).8{beam Up beam split}
+        |
+          (F1{ac} Db2{acc b}).8{d beam Up beam merge}
+          Ab1.16{beam Up beam split}
+          Db2.16{beam Up beam merge}
+          (F2 Db3{acc b}).16{beam Up beam split}
+          r.16{beam split}
+          (F2 Db3).16{beam Up beam split}
+          (F2{t} Db3{t}).8{beam Up beam merge}
+          (Db2 Ab2).8{beam Up beam merge}
+          (Ab2 Db3).8{beam Up beam merge}
+          (Db3 Ab3).8{beam Up beam split}
+        |
+          (F1{ac} C2).8{d beam Up beam merge}
+          Eb2.16{beam Up beam split}
+          F2.16{beam Up beam merge}
+          (G2 C3).16{beam Up beam split}
+          r.16{beam split}
+          (G2 C3).16{beam Up beam split}
+          (G2{t} C3{t}).8{beam Up beam merge}
+          (C2 G2).8{beam Up beam split}
+          (C3 F3).16{beam Down beam merge}
+          (Bb2 Eb3).8{d beam Down beam split}
+        |
+          (F1{ac} Eb2).8{d beam Up beam merge}
+          F1.16{beam Up beam split}
+          C2.16{beam Up beam merge}
+          (G2 Eb3).16{beam Up beam split}
+          r.16{beam split}
+          (G2 Eb3).16{beam Up beam split}
+          (G2{t} Eb3{t}).8{beam Up beam merge}
+          (C2 G2).8{beam Up beam merge}
+          (G2 C3).8{beam Up beam merge}
+          (C3 F3).8{beam Up beam split}
+        |
+          (F1{ac} D2).8{d beam Up beam merge}
+          A1{acc forcenatural}.16{beam Up beam split}
+          D2.16{beam Up beam merge}
+          (F2 D3).16{beam Up beam split}
+          r.16{beam split}
+          (F2 D3).16{beam Up beam split}
+          (F2{t} D3{t}).8{beam Up beam merge}
+          (D2 A2{acc forcenatural}).8{beam Up beam merge}
+          (A2 D3).8{beam Up beam merge}
+          (D3 A3{acc forcenatural}).8{beam Up beam split}
+        |
+          (F1{ac} Db2{acc b}).8{d beam Up beam merge}
+          Ab1.16{beam Up beam split}
+          Db2.16{beam Up beam merge}
+          (F2 Db3{acc b}).16{beam Up beam split}
+          r.16{beam split}
+          (F2 Db3).16{beam Up beam split}
+          (F2{t} Db3{t}).8{beam Up beam merge}
+          (Db2 Ab2).8{beam Up beam merge}
+          (Ab2 Db3).8{beam Up beam merge}
+          (Db3 Ab3).8{beam Up beam split}
+        |
+        \barLineRight lightlight
+          (C3{st} F3).16{dy f beam Down beam merge}
+          (C3{st} Eb3 F3).16{beam Down beam split}
+          r.16{beam split}
+          (C3{st} F3).16{beam Down beam split}
+          (C3{st} Eb3 F3).16{beam Down beam split}
+          r.16{beam split}
+          (C3{st} F3).16{beam Down beam merge}
+          (C3{st} Eb3 F3 Bb3).16{beam Down beam split}
+          r.16{beam split}
+          (C3{st} F3).16{beam Down beam merge}
+          (C3{st} Eb3 F3 Bb3).16{beam Down beam split}
+          r.16{beam split}
+          F2{st}.16{beam Up beam merge}
+          Eb1{ac}.8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (Eb3 F3 C4).8{beam Up beam merge}
+          (Eb3{st} F3 C4).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (C3 Eb3 F3).8{beam Down beam split}
+          (C3{st} Eb3 F3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (D3 F3 A3{acc forcenatural}).8{beam Up beam merge}
+          (D3{st} F3 A3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (A2{acc forcenatural} D3 F3).8{beam Up beam split}
+          (A2{st} D3 F3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (Db3{acc b} F3 Ab3).8{beam Up beam merge}
+          (Db3{st} F3 Ab3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (Ab2{st} Db3 F3).8{beam Up beam split}
+          (Ab2 Db3 F3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (C3 F3 Bb3).8{beam Up beam merge}
+          (C3{st} F3 Bb3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (G2 C3 F3).8{beam Up beam split}
+          (G2{st} C3 F3).16{beam Up beam merge}
+          (Eb1 Eb2).8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (Eb3 F3 C4).8{beam Up beam merge}
+          (Eb3{st} F3 C4).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (C3 Eb3 F3).8{beam Down beam split}
+          (C3{st} Eb3 F3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (D3 F3 A3{acc forcenatural}).8{beam Up beam merge}
+          (D3{st} F3 A3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (A2{acc forcenatural} D3 F3).8{beam Up beam split}
+          (A2{st} D3 F3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+        |
+          (F1 F2).4{beam Up beam split}
+          (Db3{acc b} F3 Ab3).8{beam Up beam merge}
+          (Db3{st} F3 Ab3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+          (Ab2{st} Db3 F3).8{beam Up beam split}
+          (Ab2 Db3 F3).16{beam Up beam merge}
+          (F1 F2).8{d beam Up beam split}
+        |
+          (F1{st} F2).4{beam Up beam split}
+          r.4{beam split}
+          r.8{beam split}
+          (F2 C3 D3 Eb3 G3).4{dec beam Up beam split}
+          Eb2{hac st}.8{dec beam Up beam split}
+        |
+          (F1 F2).8{dy mf beam Up beam split}
+          (Ab2 Eb3 F3 Ab3).4{beam Down beam split}
+          F2.16{beam Up beam merge}
+          (C3 F3 Ab3).8{d beam Up beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} C3).8{beam Up beam merge}
+          (Eb3{st} F3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (Ab2 Eb3 F3 Ab3).4{beam Down beam split}
+          F2.16{beam Up beam merge}
+          (C3 F3 Ab3).8{d beam Up beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} C3).8{beam Up beam merge}
+          (Eb3{st} F3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (D3 F3 Ab3 Bb3).4{beam Down beam split}
+          F2.16{beam Down beam merge}
+          (D3 Ab3 Bb3).8{d beam Down beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} D3).8{beam Up beam merge}
+          (G3{st} Ab3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (D3 F3 Ab3 Bb3).4{beam Down beam split}
+          F2.16{beam Down beam merge}
+          (D3 Ab3 Bb3).8{d beam Down beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} D3).8{beam Up beam merge}
+          (G3{st} Ab3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (Bb2 Db3{acc b} F3 Gb3{acc b}).4{beam Down beam split}
+          F2.16{beam Up beam merge}
+          (Db3 F3 Gb3).8{d beam Up beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} Db3).8{beam Up beam merge}
+          (F3{st} Gb3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (Bb2 Db3{acc b} F3 Gb3{acc b}).4{beam Down beam split}
+          F2.16{beam Up beam merge}
+          (Db3 F3 Gb3).8{d beam Up beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} Db3).8{beam Up beam merge}
+          (F3{st} Gb3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (C3 Eb3 F3 Ab3).4{beam Down beam split}
+          F2.16{beam Up beam merge}
+          (Eb3 F3 Ab3).8{d beam Up beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} Db3{acc b}).8{beam Up beam merge}
+          (Eb3{st} F3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam split}
+          (C3 Eb3 F3 Ab3).4{beam Down beam split}
+          F2.16{beam Up beam merge}
+          (Eb3 F3 Ab3).8{d beam Up beam split}
+          F2.16{beam Up beam merge}
+          (F2{t} Db3{acc b}).8{beam Up beam merge}
+          (Eb3{st} F3).16{beam Up beam merge}
+          F2.8{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam merge}
+          (C3{st} Eb3 F3 Ab3).16{beam Up beam merge}
+          (C3 Eb3 F3 Ab3).16{beam Up beam split}
+          r.16{beam split}
+          (F1{st} F2).8{beam Up beam merge}
+          (C3 Eb3 F3 Ab3).16{beam Up beam split}
+          r.16{beam split}
+          (F1 F2).16{beam Up beam merge}
+          (F1{t} F2{t}).8{beam Up beam split}
+          (F2 B2{acc b} Db3{acc b} Eb3).4{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam merge}
+          (C3{st} Eb3 F3 Ab3).16{beam Up beam merge}
+          (C3 Eb3 F3 Ab3).16{beam Up beam split}
+          r.16{beam split}
+          (F1{st} F2).8{beam Up beam merge}
+          (C3 Eb3 F3 Ab3).16{beam Up beam split}
+          r.16{beam split}
+          (F1 F2).16{beam Up beam merge}
+          (F1{t} F2{t}).8{beam Up beam split}
+          (F2 C3 F3).4{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam merge}
+          (Ab2{st} Bb2 D3 F3).16{beam Up beam merge}
+          (Ab2 Bb2 D3 F3).16{beam Up beam split}
+          r.16{beam split}
+          (F1{st} F2).8{beam Up beam merge}
+          (Ab2 Bb2 D3 F3).16{beam Up beam split}
+          r.16{beam split}
+          (F1 F2).16{beam Up beam merge}
+          (F1{t} F2{t}).8{beam Up beam split}
+          (F2 Ab2 B2{acc b} Db3{acc b}).4{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam merge}
+          (Ab2{st} Bb2 D3 F3).16{beam Up beam merge}
+          (Ab2 Bb2 D3 F3).16{beam Up beam split}
+          r.16{beam split}
+          (F1{st} F2).8{beam Up beam merge}
+          (Ab2 Bb2 D3 F3).16{beam Up beam split}
+          r.16{beam split}
+          (F1 F2).16{beam Up beam merge}
+          (F1{t} F2{t}).8{beam Up beam split}
+          (F2 C3 Db3{acc b} F3).4{beam Up beam split}
+        |
+          (F1 F2).8{beam Up beam merge}
+          (Db3{st acc b} F3 Gb3{acc b} Bb3).16{beam Up beam merge}
+          (Db3 F3 Gb3{acc b} Bb3).16{beam Up beam split}
+          r.16{beam split}
+          (F1{st} F2).8{beam Up beam merge}
+          (Db3 F3 Gb3 Bb3).16{beam Up beam split}
+          r.16{beam split}
+          (F1 F2).16{beam Up beam merge}
+          (F1{t} F2{t}).8{beam Up beam split}
+          (F2 Db3 Gb3).4{beam Up beam split}
+        |
+          (F2 Bb2 Db3{acc b} F3).2{beam Up beam split}
+          (F2 A2{acc forcenatural} Eb3 F3).2{beam Up beam split}
+        |
+          (F2 C3 Db3{acc b} F3).2{d dy mp beam Up beam split}
+          G1{st}.16{cre beam Up beam merge}
+          Ab1{hac slur s888}.8{cre beam Up beam merge}
+          G1.32{cre beam Up beam merge}
+          Gb1{acc #}.32{cre beam Up beam split}
+        |
+          F1{st slur s888}.16{beam Up beam merge}
+          (F1{hac} B1{acc x} F2).16{dy mf beam Up beam split}
+          (F1{t} B1{t} F2{t}).4{d beam Up beam split}
+          (F1{hac} F2).4{beam Up beam split}
+          (F1{hac} F2).4{beam Up beam split}
+        |
+          Bb1.8{d dy p beam Up beam merge}
+          D2.16{beam Up beam split}
+          G2.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          Bb2.8{beam Up beam split}
+          Bb2{t}.4{d beam Up beam split}
+          (Bb1 G2 Bb2).8{beam Up beam split}
+        |
+          (Bb1{t} G2{t} Bb2{t}).2{beam Up beam split}
+          (Bb1{t} G2{t} Bb2{t}).8{beam Up beam merge}
+          (C2 G2 C3).8{beam Up beam split}
+          (C2{t} G2{t} C3{t}).4{beam Up beam split}
+        |
+          (A1{acc forcenatural} A2{acc forcenatural}).4{d beam Up beam split}
+          (B2{acc forcenatural} C3 E3{acc forcenatural} A3{acc forcenatural}).4{d beam Down beam split}
+          (B2{t} C3{t} E3{t} G3).4{beam Down beam split}
+        |
+          (B2{t} C3{t} E3{t} G3{t}).8{beam Down beam merge}
+          (B2{t} C3{t} E3{t} F3).8{beam Down beam split}
+          (B2{t} C3{t} E3{t} F3{t}).4{beam Down beam split}
+          (Bb1 Bb2{acc b}).4{beam Up beam split}
+          (A1{acc forcenatural} A2{acc forcenatural}).4{beam Up beam split}
+        |
+          Ab2{hac}.8{beam Down beam merge}
+          (C3 F3 Ab3).8{beam Down beam split}
+          r.8{beam split}
+          Ab2{hac}.8{beam Up beam split}
+          (C3 G3 Bb3).8{beam Down beam split}
+          r.8{beam split}
+          Ab2{hac}.8{beam Down beam merge}
+          (F3 Ab3 D4).8{beam Down beam split}
+        |
+          (F3{t} Ab3{t} D4{t}).4{beam Down beam split}
+          (Ab2 B2{acc b} Eb3 E3{acc b} Ab3).4{beam Down beam split}
+          (F1{st} F2).8{dec beam Up beam merge}
+          C3{st acc forcenatural}.8{dec beam Up beam merge}
+          (G1{st} G2).8{dec beam Up beam merge}
+          D3{st}.8{dec beam Up beam split}
+        |
+          r.4{beam split}
+          r.8{beam split}
+          (C3 E3{acc forcenatural} A3{acc forcenatural} B3{acc forcenatural}).8{beam Up beam split}
+          (C3{t} E3{t} A3{t} B3{t}).2{beam Up beam split}
+        |
+          (C3{t} E3{t} A3{t} B3{t}).2{beam Up beam split}
+          (F2 C3 F3).2{beam Up beam split}
+        |
+          Bb1{slur s1106}.16{beam Up beam merge}
+          D2.16{beam Up beam merge}
+          Eb2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          Bb2.16{beam Up beam merge}
+          D3.16{beam Up beam merge}
+          Eb3.16{beam Up beam merge}
+          G3{slur s1106}.16{beam Up beam split}
+          Bb3{slur s1114}.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          Eb4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          Bb4.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          Eb5.16{beam Down beam merge}
+          G5{slur s1114}.16{beam Down beam split}
+          Eb5{slur s1122}.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          Bb4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          Eb4.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          Bb3.16{beam Down beam merge}
+          G3{slur s1122}.16{beam Down beam split}
+          Eb3{slur s1130}.16{beam Up beam merge}
+          D3.16{beam Up beam merge}
+          Bb2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          Eb2.16{beam Up beam merge}
+          D2.16{beam Up beam merge}
+          Bb1.16{beam Up beam merge}
+          D2{slur s1130}.16{beam Up beam split}
+        |
+          A1{slur s1146 acc forcenatural}.16{beam Up beam merge}
+          B1{acc forcenatural}.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          E2{acc forcenatural}.16{beam Up beam merge}
+          A2{acc forcenatural}.16{beam Up beam merge}
+          B2{acc forcenatural}.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          E3{slur s1146 acc forcenatural}.16{beam Up beam split}
+          A3{slur s1154 acc forcenatural}.16{beam Down beam merge}
+          B3{acc forcenatural}.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          E4{acc forcenatural}.16{beam Down beam merge}
+          A4{acc forcenatural}.16{beam Down beam merge}
+          B4{acc forcenatural}.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          E5{slur s1154 acc forcenatural}.16{beam Down beam split}
+          C5{slur s1162}.16{beam Down beam merge}
+          B4.16{beam Down beam merge}
+          A4.16{beam Down beam merge}
+          E4.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          B3.16{beam Down beam merge}
+          A3.16{beam Down beam merge}
+          E3{slur s1162}.16{beam Down beam split}
+          C3{slur s1170}.16{beam Up beam merge}
+          B2.16{beam Up beam merge}
+          A2.16{beam Up beam merge}
+          E2.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          B1.16{beam Up beam merge}
+          A1.16{beam Up beam merge}
+          B1{slur s1170}.16{beam Up beam split}
+        |
+          Ab1{slur s1185}.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          F2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          Ab2.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          F3.16{beam Up beam merge}
+          G3{slur s1185}.16{beam Up beam split}
+          Ab3{slur s1193}.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          F4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          Ab4.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          F5.16{beam Down beam merge}
+          G5{slur s1193}.16{beam Down beam split}
+          F5{slur s1201}.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          Ab4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          F4.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          Ab3.16{beam Down beam merge}
+          G3{slur s1201}.16{beam Down beam split}
+          F3{slur s1209}.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          Ab2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          F2.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          Ab1.16{beam Up beam merge}
+          C2{slur s1209}.16{beam Up beam split}
+        |
+          A1{slur s1221 acc forcenatural}.16{beam Up beam merge}
+          B1{acc forcenatural}.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          E2{acc forcenatural}.16{beam Up beam merge}
+          A2{acc forcenatural}.16{beam Up beam merge}
+          B2{acc forcenatural}.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          E3{slur s1221 acc forcenatural}.16{beam Up beam split}
+          A3{slur s1229 acc forcenatural}.16{beam Down beam merge}
+          B3{acc forcenatural}.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          E4{acc forcenatural}.16{beam Down beam merge}
+          A4{acc forcenatural}.16{beam Down beam merge}
+          B4{acc forcenatural}.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          E5{slur s1229 acc forcenatural}.16{beam Down beam split}
+          C5{slur s1237}.16{beam Down beam merge}
+          B4.16{beam Down beam merge}
+          A4.16{beam Down beam merge}
+          E4.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          B3.16{beam Down beam merge}
+          A3.16{beam Down beam merge}
+          E3{slur s1237}.16{beam Down beam split}
+          C3{slur s1245}.16{beam Up beam merge}
+          B2.16{beam Up beam merge}
+          A2.16{beam Up beam merge}
+          E2.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          B1.16{beam Up beam merge}
+          A1.16{beam Up beam merge}
+          B1{slur s1245}.16{beam Up beam split}
+        |
+          Bb1{slur s1261}.16{beam Up beam merge}
+          D2.16{beam Up beam merge}
+          Eb2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          Bb2.16{beam Up beam merge}
+          D3.16{beam Up beam merge}
+          Eb3.16{beam Up beam merge}
+          G3{slur s1261}.16{beam Up beam split}
+          Bb3{slur s1269}.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          Eb4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          Bb4.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          Eb5.16{beam Down beam merge}
+          G5{slur s1269}.16{beam Down beam split}
+          Eb5{slur s1277}.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          Bb4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          Eb4.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          Bb3.16{beam Down beam merge}
+          G3{slur s1277}.16{beam Down beam split}
+          Eb3{slur s1285}.16{beam Up beam merge}
+          D3.16{beam Up beam merge}
+          Bb2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          Eb2.16{beam Up beam merge}
+          D2.16{beam Up beam merge}
+          Bb1.16{beam Up beam merge}
+          G1{slur s1285}.16{beam Up beam split}
+        |
+          B1{slur s1300 acc forcenatural}.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          D2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          B2{acc forcenatural}.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          D3.16{beam Up beam merge}
+          G3{slur s1300}.16{beam Up beam split}
+          B3{slur s1308 acc forcenatural}.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          B4{acc forcenatural}.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          G5{slur s1308}.16{beam Down beam split}
+          D5{slur s1316}.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          B4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          B3.16{beam Down beam merge}
+          G3{slur s1316}.16{beam Down beam split}
+          D3{slur s1324}.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          B2.16{beam Up beam merge}
+          G2.16{beam Up beam merge}
+          D2.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          B1.16{beam Up beam merge}
+          G1{slur s1324}.16{beam Up beam split}
+        |
+          C2{slur s1340}.16{beam Up beam merge}
+          Db2{acc b}.16{beam Up beam merge}
+          Eb2.16{beam Up beam merge}
+          Ab2.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          Db3{acc b}.16{beam Up beam merge}
+          Eb3.16{beam Up beam merge}
+          Ab3{slur s1340}.16{beam Up beam split}
+          C4{slur s1348}.16{beam Down beam merge}
+          Db4{acc b}.16{beam Down beam merge}
+          Eb4.16{beam Down beam merge}
+          Ab4.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          Db5{acc b}.16{beam Down beam merge}
+          Eb5.16{beam Down beam merge}
+          Ab5{slur s1348}.16{beam Down beam split}
+          Eb5{slur s1356}.16{beam Down beam merge}
+          Db5.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          Ab4.16{beam Down beam merge}
+          Eb4.16{beam Down beam merge}
+          Db4.16{beam Down beam merge}
+          C4.16{beam Down beam merge}
+          Ab3{slur s1356}.16{beam Down beam split}
+          Eb3{slur s1364}.16{beam Up beam merge}
+          Db3.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          Ab2.16{beam Up beam merge}
+          Eb2.16{beam Up beam merge}
+          Db2.16{beam Up beam merge}
+          C2.16{beam Up beam merge}
+          Ab1{slur s1364}.16{beam Up beam split}
+        |
+        \barLineRight lightheavy
+          D2{slur s1389}.16{beam Up beam merge}
+          E2{acc b}.16{beam Up beam merge}
+          A2{acc forcenatural}.16{beam Up beam merge}
+          C3.16{beam Up beam merge}
+          D3.16{beam Up beam merge}
+          E3{acc b}.16{beam Up beam merge}
+          A3{acc forcenatural}.16{beam Up beam merge}
+          B3{slur s1389 acc forcenatural}.16{beam Up beam split}
+          C4{slur s1397}.16{beam Down beam merge}
+          D4.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          A4{acc forcenatural}.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          A5{acc forcenatural}.16{beam Down beam merge}
+          B5{slur s1397 acc forcenatural}.16{beam Down beam split}
+          C6{slur s1405}.16{beam Down beam merge}
+          B5{acc b}.16{beam Down beam merge}
+          G5.16{beam Down beam merge}
+          D5.16{beam Down beam merge}
+          C5.16{beam Down beam merge}
+          B4{acc b}.16{beam Down beam merge}
+          G4.16{beam Down beam merge}
+          D4{slur s1405}.16{beam Down beam split}
+          (Ab1 Eb2 Ab2{acc b}).2{ad 0 fermata (medium 0) beam Up beam split}
+          (D6 Eb6 G6).8{beam Down beam merge}
+          (D6{t} Eb6{t} G6{t}).8{fermata (medium 0) beam Down beam split}
+      \voice 
+        \clef f4
+        \ottava regular
+        \simile none
+        \ks eb
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightlight
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+          (A1{acc forcenatural} A2{acc forcenatural}).1{dy p beam split}
+        |
+          (A1{t} A2{t}).1{beam split}
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        |
+        \barLineRight lightheavy
+    \track ("Piano" "Pno.") {
+      volume 12
+      balance 8
+      instrument acousticgrandpiano
+    }
+      \staff {
+        score
+      }
+        \clef g2
+        \ottava regular
+        \simile none
+        \ks eb
+          r.1{dy p instrument acousticgrandpiano}
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+        \barLineRight lightlight
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+        |
+          r.1
+          r.1
+        |
+          r.1
+          r.1
+        |
+          r.1
+          r.1
+        |
+          r.1
+          r.1
+        |
+          r.1
+          r.1
+        |
+          r.1
+          r.1
+        |
+          r.1
+          r.1
+        |
+        \barLineRight lightheavy
+          r.1
+      \staff {
+        score
+      }
+        \voice 
+          \clef f4
+          \ottava regular
+          \simile none
+          \ks eb
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightlight
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightheavy
+        \voice 
+          \clef f4
+          \ottava regular
+          \simile none
+          \ks eb
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightlight
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightheavy
+        \voice 
+          \clef f4
+          \ottava regular
+          \simile none
+          \ks eb
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightlight
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightheavy
+        \voice 
+          \clef f4
+          \ottava regular
+          \simile none
+          \ks eb
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightlight
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          |
+          \barLineRight lightheavy
+        \voice 
+          \clef f4
+          \ottava regular
+          \simile none
+          \ks eb
+            r.1{dy p}
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+          \barLineRight lightlight
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+          |
+            r.1
+            r.1
+          |
+            r.1
+            r.1
+          |
+            r.1
+            r.1
+          |
+            r.1
+            r.1
+          |
+            r.1
+            r.1
+          |
+            r.1
+            r.1
+          |
+            r.1
+            r.1
+          |
+          \barLineRight lightheavy
+            r.1

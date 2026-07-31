@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "song": "Contract fixture",
+  "phrases": [
+    {
+      "id": "theme-1",
+      "sourceBars": [1, 1],
+      "events": [
+        { "bar": 1, "onset": 0, "pitch": "B4", "duration": 1 },
+        { "bar": 1, "onset": 1, "pitch": "B4", "duration": 1 },
+        { "bar": 1, "onset": 2, "pitch": "A4", "duration": 1 },
+        { "bar": 1, "onset": 3, "pitch": "F#4", "duration": 1 }
+      ]
+    },
+    {
+      "id": "breath-1",
+      "sourceBars": [2, 2],
+      "events": [
+        { "bar": 2, "onset": 0, "pitch": "C#5", "duration": 2, "allowReattack": false }
+      ],
+      "requiredGaps": [
+        { "bar": 2, "fromOnset": 2, "toOnset": 4 }
+      ]
+    },
+    {
+      "id": "solo-high",
+      "sourceBars": [3, 3],
+      "events": [
+        { "bar": 3, "onset": 0, "pitch": "A5", "duration": 1 },
+        { "bar": 3, "onset": 1, "pitch": "G5", "duration": 1 },
+        { "bar": 3, "onset": 2, "pitch": "F#5", "duration": 1 },
+        { "bar": 3, "onset": 3, "pitch": "E5", "duration": 1 }
+      ]
+    }
+  ],
+  "relocationGroups": [
+    {
+      "sourceBars": [3, 3],
+      "semitones": -12,
+      "reason": "the complete phrase peaks at A5, beyond the practical guitar ceiling; relocate it whole"
+    }
+  ]
+}

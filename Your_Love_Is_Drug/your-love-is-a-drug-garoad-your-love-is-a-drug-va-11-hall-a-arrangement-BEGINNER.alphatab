@@ -1,0 +1,760 @@
+\artist "Composer"
+\title "Title"
+\track ("Piano" "Pno.") {
+  volume 12
+  balance 8
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 86
+    \accidentals auto
+    \clef g2
+    \ottava regular
+    \simile none
+    \ks eb
+      G4{slur s0}.4{dy f instrument acousticgrandpiano beam Up}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      F4.8{beam Up beam split}
+      Bb4{slur s0}.4{beam Down beam split}
+      G4{slur s5}.8{beam Up beam split}
+    |
+      F4.8{dy p beam Up beam split}
+      G4{slur s5}.4{d beam Up beam split}
+      C4.8{beam Up beam merge}
+      Eb4.8{beam Up beam split}
+      G4.4{beam Up beam split}
+    |
+      F4{slur s14}.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      F4.8{beam Up beam split}
+      (G4{slur s14} C5).4{beam Up beam split}
+      G4{slur s19}.8{beam Up beam merge}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+    |
+      G4{t slur s19}.4{beam Up beam split}
+      C4{slur s23}.8{beam Up beam merge}
+      Eb4.8{beam Up beam split}
+      G4{slur s23}.4{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+    |
+      F4{slur s30}.8{beam Up beam split}
+      (F4{slur s30} Bb4).4{beam Up beam split}
+      G4{slur s33}.8{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      G4{t slur s33}.4{beam Up beam split}
+    |
+      C4{slur s38}.8{beam Up beam merge}
+      Eb4.8{beam Up beam split}
+      (Eb4{slur s38} G4).4{beam Up beam split}
+      F4{slur s42}.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      F4.8{beam Up beam merge}
+      (G4{slur s42} C5).8{beam Up beam split}
+    |
+      C4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      F4{slur s50}.8{beam Up beam split}
+      (F4{slur s50} D5).4{beam Up beam split}
+      G4.8{beam Up beam split}
+      F4.4{beam Up beam split}
+    |
+      G4{slur s55}.4{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      F4.8{beam Up beam split}
+      Bb4{slur s55}.4{beam Down beam split}
+      G4.8{beam Up beam split}
+    |
+      F4.8{beam Up beam split}
+      G4.4{d beam Up beam split}
+      C4{slur s73}.8{beam Up beam merge}
+      Eb4.8{beam Up beam split}
+      (Eb4{slur s73} G4).4{beam Up beam split}
+    |
+      F4{slur s85}.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      F4.8{beam Up beam split}
+      (G4{slur s85} C5).4{beam Up beam split}
+      G4{slur s90}.8{beam Up beam merge}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+    |
+      G4{t slur s90}.4{beam Up beam split}
+      C4{slur s103}.8{beam Up beam merge}
+      Eb4.8{beam Up beam split}
+      G4{slur s103}.4{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+    |
+      F4{slur s115}.8{beam Up beam split}
+      (F4{slur s115} Bb4).4{beam Up beam split}
+      G4{slur s118}.8{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      G4{t slur s118}.4{beam Up beam split}
+    |
+      C4{slur s126}.8{beam Up beam merge}
+      Eb4.8{beam Up beam split}
+      (Eb4{slur s126} G4).4{beam Up beam split}
+      F4{slur s130}.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      F4.8{beam Up beam merge}
+      (G4{slur s130} C5).8{beam Up beam split}
+    |
+      C4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      F4{slur s147}.8{beam Up beam split}
+      (F4{slur s147} D5).4{beam Up beam split}
+      G4.8{beam Up beam split}
+      F4.4{beam Up beam split}
+    |
+      (Bb4 D5).4{beam Down beam split}
+      Eb5.8{beam Down beam split}
+      D5.4{beam Down beam split}
+      Bb4.8{beam Down beam split}
+      C5.4{beam Down beam split}
+    |
+      C5{t}.4{beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+      (Bb4 D5).4{beam Down beam split}
+      Eb5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+    |
+      D5{t}.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+      C5.4{beam Down beam split}
+      C5{t}.4{beam Down beam split}
+      F5.4{beam Down beam split}
+    |
+      G5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      (Eb4 G4).2{beam Up beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+    |
+      C5{t}.4{d beam Down beam split}
+      F5.4{beam Down beam split}
+      G5.8{beam Down beam merge}
+      D5.8{beam Down beam merge}
+      (G4 Bb4).8{beam Down beam split}
+    |
+      (G4{t} Bb4{t}).4{beam Up beam split}
+      Eb5.2{beam Down beam split}
+      (G4 D5).4{beam Down beam split}
+    |
+      (G4{t} D5{t}).4{beam Down beam split}
+      Bb4.2{beam Down beam split}
+      r.4{beam split}
+    |
+      r.8{beam split}
+      D5.8{beam Down beam split}
+      Eb5.4{beam Down beam split}
+      F5.2{beam Down beam split}
+    |
+      F5.4{beam Down beam split}
+      F5.8{beam Down beam split}
+      Eb5.4{beam Down beam split}
+      Eb5.4{beam Down beam split}
+      D5.8{beam Down beam split}
+    |
+      D5{t}.8{beam Down beam split}
+      C5.2{beam Down beam split}
+      A4{acc forcenatural}.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+    |
+      C5{t}.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      G4.2{beam Up beam split}
+      A4{acc forcenatural}.8{beam Up beam merge}
+      Bb4.8{beam Up beam split}
+    |
+      C5.2{beam Down beam split}
+      D5.2{beam Down beam split}
+    |
+      Eb5.2{beam Down beam split}
+      Bb4.2{beam Down beam split}
+    |
+      F5.8{beam Down beam split}
+      r.8{beam split}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+      Eb5.8{beam Down beam merge}
+      Eb5.8{beam Down beam merge}
+      Eb5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+    |
+      r.8{beam split}
+      D5.8{beam Down beam split}
+      r.8{beam split}
+      Bb4.4{beam Down beam split}
+      r.8{beam split}
+      Bb4.8{beam Up beam merge}
+      A4{acc forcenatural}.8{beam Up beam split}
+    |
+      Bb4.8{beam Up beam merge}
+      A4{acc forcenatural}.8{beam Up beam merge}
+      Bb4.8{beam Up beam split}
+      C5.4{d beam Down beam split}
+      r.4{beam split}
+    |
+      F4.4{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam merge}
+      C5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+    |
+      r.8{beam split}
+      G4.8{beam Up beam split}
+      G4{t}.2{beam Up beam split}
+      r.4{beam split}
+    |
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Bb4.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+      D5.2{beam Down beam split}
+    |
+      Eb5.2{beam Down beam split}
+      F5.2{beam Down beam split}
+    |
+      Bb4.2{beam Down beam split}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+    |
+      Bb4.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      Eb5.8{beam Down beam split}
+    |
+      Eb5{t}.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+    |
+      Bb4.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      G5.8{beam Down beam split}
+    |
+      G5{t}.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+    |
+      Bb4.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      Eb5.8{beam Down beam split}
+    |
+      Eb5{t}.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      D5.2{beam Down beam split}
+    |
+      Eb5.2{beam Down beam split}
+      F5.2{beam Down beam split}
+    |
+      Bb4.2{ot 8va beam Down beam split}
+      Eb5.2{ot 8va beam Down beam split}
+    |
+      Eb5{t}.2{ot 8va beam Down beam split}
+      D5.2{ot 8va beam Down beam split}
+    |
+    \barLineRight lightheavy
+      D5{t}.1{ot 8va beam split}
+  \staff {
+    score
+  }
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+        (G3 D4).4{dy p beam Down}
+        r.2{d}
+      |
+        r.2{d}
+        Bb3.4{beam Down}
+      |
+        r.1
+      |
+        r.2
+        (G3 C4).4{beam Down}
+        r.4
+      |
+        r.8
+        Bb3.4{beam Down}
+        r.8
+        r.2
+      |
+        r.4
+        Bb3.4{beam Down}
+        r.2
+      |
+        r.1
+      |
+        (D3{slur s61} G3).8{beam Down beam merge}
+        G3.8{beam Down beam split}
+        G2{slur s64}.8{beam Up beam merge}
+        (G2{slur s64} D3).8{beam Up beam split}
+        G2{slur s67}.8{beam Up beam merge}
+        (D3{slur s67} G3).8{beam Up beam split}
+        Bb3{slur s61}.4{beam Down beam split}
+      |
+        F3{slur s77}.8{beam Down beam merge}
+        G3.8{beam Down beam split}
+        (Bb2{slur s77} Eb3).4{beam Up beam split}
+        Eb2{slur s81}.8{beam Up beam merge}
+        (Eb2{slur s81} Bb2).8{beam Up beam split}
+        Bb3{slur s81}.4{beam Down beam split}
+      |
+        C2{slur s93}.8{beam Up beam merge}
+        (C2{slur s93} G2).8{beam Up beam merge}
+        G2{slur s96}.8{beam Up beam merge}
+        (C3{slur s96} G3).8{beam Up beam split}
+        C4{slur s93}.4{beam Down beam split}
+        G2{slur s100}.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+      |
+        C4{slur s100}.4{beam Down beam split}
+        C3{slur s109}.8{beam Down beam merge}
+        (C3 G3).8{beam Down beam split}
+        Bb3{slur s109}.4{beam Down beam split}
+        Bb3{slur s113}.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+      |
+        F3{slur s113}.4{beam Down beam split}
+        C4.4{beam Down beam split}
+        F3.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+      |
+        Eb2{slur s135}.8{beam Up beam merge}
+        (G2 C3).8{beam Up beam split}
+        C4{slur s135}.4{beam Down beam split}
+        C2{slur s139}.8{beam Up beam merge}
+        (C2 G2).8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        (C3{slur s139} G3).8{beam Up beam split}
+      |
+        F3{slur s152}.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        F3.8{beam Down beam split}
+        (Bb2{slur s152} Eb3).4{beam Up beam split}
+        G3.8{beam Down beam split}
+        F3.4{beam Down beam split}
+      |
+        G2.8{beam Up beam split}
+        G3.4{beam Down beam split}
+        G3.8{beam Down beam split}
+        G2.4{beam Up beam split}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam split}
+      |
+        C4.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        Bb3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        Eb2.8{beam Up beam split}
+        Eb3.4{beam Down beam split}
+        Eb3.8{beam Down beam split}
+      |
+        Eb2.4{beam Up beam split}
+        Eb3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        G3.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+        F4.4{beam Down beam split}
+      |
+        G4.4{beam Down beam split}
+        C2.4{beam Up beam split}
+        C3.8{beam Up beam split}
+        G3.4{beam Down beam split}
+        Bb3.8{beam Down beam split}
+      |
+        C4.4{beam Down beam split}
+        G3.8{beam Down beam split}
+        r.8{beam split}
+        F3.8{beam Down beam split}
+        r.8{beam split}
+        Bb3.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+        D4{t}.8{beam Down beam merge}
+        G3.8{beam Down beam split}
+        r.8{beam split}
+        Eb3.8{beam Down beam split}
+        C4.8{beam Down beam split}
+        Eb4.4{beam Down beam split}
+        G3.8{beam Down beam split}
+      |
+        D4.8{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        F3{slur s234}.8{beam Down beam merge}
+        F2{slur s234}.8{beam Down beam merge}
+        C4{slur s236}.8{beam Down beam merge}
+        F4{slur s236}.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+      |
+        C4{t}.8{beam Down beam merge}
+        Ab2.8{beam Down beam split}
+        (Eb3 Ab3).4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        r.8{beam split}
+        D4.8{beam Down beam split}
+      |
+        r.8{beam split}
+        F3.4{beam Down beam split}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        r.8{beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        Eb4.4{beam Down beam split}
+        r.4{beam split}
+      |
+        Bb3.4{beam Down beam split}
+        C3{slur s274}.8{beam Down beam merge}
+        G3.8{beam Down beam split}
+        C4{slur s274}.4{beam Down beam split}
+        r.4{beam split}
+      |
+        r.8{beam split}
+        Bb3.8{beam Down beam split}
+        C4.4{beam Down beam split}
+        r.8{beam split}
+        F3.8{beam Down beam split}
+        D4.4{beam Down beam split}
+      |
+        r.8{beam split}
+        G3.8{beam Down beam split}
+        Eb4.4{beam Down beam split}
+        r.8{beam split}
+        Bb3.8{beam Down beam split}
+        F4.4{beam Down beam split}
+      |
+        r.8{beam split}
+        F3.8{beam Up beam merge}
+        Ab2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        D4.8{beam Down beam split}
+        r.8{beam split}
+        D4.8{beam Down beam merge}
+        F3.8{beam Down beam split}
+      |
+        D4.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        G3.8{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        C4.8{beam Down beam split}
+      |
+        Bb3.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        G3.4{beam Down beam split}
+        D4.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+      |
+        r.8{beam split}
+        Bb2.4{beam Up beam split}
+        F3.8{beam Down beam split}
+        Bb3.8{beam Down beam split}
+        C4.4{beam Down beam split}
+        G3.8{beam Down beam split}
+      |
+        D4.8{beam Down beam split}
+        r.8{beam split}
+        G3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        C4.8{beam Down beam merge}
+        Eb4.8{beam Down beam split}
+        F4.4{beam Down beam split}
+      |
+        F3.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        r.8{beam split}
+        Eb4.8{beam Down beam merge}
+        Bb3.8{beam Down beam merge}
+        F4.8{beam Down beam split}
+      |
+        r.8{beam split}
+        G3.8{beam Down beam split}
+        Eb4.4{beam Down beam split}
+        r.8{beam split}
+        Bb3.8{beam Down beam split}
+        D4.4{beam Down beam split}
+      |
+        r.8{beam split}
+        Bb3.8{beam Down beam split}
+        F4.4{beam Down beam split}
+        D4.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+      |
+        G3.4{beam Down beam split}
+        D4.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        Eb4.4{beam Down beam split}
+      |
+        r.8{beam split}
+        C4.8{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        G3.4{beam Down beam split}
+        D4.4{beam Down beam split}
+      |
+        G3.4{beam Down beam split}
+        D4.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        F4.4{beam Down beam split}
+      |
+        r.8{beam split}
+        G3.8{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        F3.4{beam Down beam split}
+        C4.4{beam Down beam split}
+      |
+        Bb2.4{beam Up beam split}
+        F3.4{beam Down beam split}
+        Bb3.4{beam Down beam split}
+        C4.4{beam Down beam split}
+      |
+        r.2{beam split}
+        Bb3.2{beam Down beam split}
+      |
+        C4.2{ot 8va beam Up beam split}
+        D4.2{ot 8va beam Down beam split}
+      |
+        Bb3.2{ot 8va beam Up beam split}
+        (Eb3 Ab3).2{ot 8va beam Up beam split}
+      |
+        (Eb3{t} Ab3{t}).2{ot 8va beam Up beam split}
+        r.2{ot 8va beam split}
+      |
+      \barLineRight lightheavy
+        (D4 F4 Bb4).1{ad 0 ot 8va dec dy pp beam split}

@@ -1,0 +1,10 @@
+\title "Foreground over chord bed — short punctuations above a sustained pad"
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+r.4 C#5.8 r.8 E5.8 r.8 B4.4 |
+\voice
+(A3 E4).1 |

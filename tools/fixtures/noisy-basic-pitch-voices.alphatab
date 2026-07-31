@@ -1,0 +1,14 @@
+\title "Noisy transcription — one performance fragmented across voices (synthetic)"
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+B4.8 r.8 C#5.8 C#5{t}.8 r.2 |
+\voice
+r.8 A4.8 B4.4 A4.4 r.4 |
+\voice
+(E2 B2).1 |
+\voice
+r.2 r.64 A5.16 r.4 r.8 r.32 r.64 |

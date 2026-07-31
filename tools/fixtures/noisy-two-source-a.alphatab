@@ -1,0 +1,10 @@
+\title "Two-source A — the noisier transcription (carries an octave artifact)"
+\tempo 120
+.
+\track "Piano" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+B4.4 A4.4 B4.4 C#5.4 |
+\voice
+r.2 B5.16 r.16 r.8 r.4 |

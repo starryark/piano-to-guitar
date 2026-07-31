@@ -1,0 +1,16 @@
+\title "Percussion + piano — the drum track must be excluded structurally"
+\tempo 105
+.
+\track "Music" { instrument acousticgrandpiano }
+\staff { score }
+\voice
+\ts (4 4)
+D3.2 A3.2 |
+D3.2 A3.2 |
+\track "Band" { instrument percussion }
+\staff { score }
+\articulation defaults
+\voice
+\clef neutral
+"Kick (hit)".4 "Snare (hit)".4 "Kick (hit)".4 "Snare (hit)".4 |
+"Kick (hit)".4 "Snare (hit)".4 "Kick (hit)".4 "Snare (hit)".4 |

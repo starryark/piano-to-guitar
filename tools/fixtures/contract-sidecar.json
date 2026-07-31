@@ -1,0 +1,9 @@
+{
+  "song": "Contract fixture",
+  "contract": "contract-melody.json",
+  "entries": [
+    { "tabBars": [1, 1], "mode": "contract", "contractPhrase": "theme-1" },
+    { "tabBars": [2, 2], "mode": "contract", "contractPhrase": "breath-1" },
+    { "tabBars": [3, 3], "mode": "contract", "contractPhrase": "solo-high" }
+  ]
+}

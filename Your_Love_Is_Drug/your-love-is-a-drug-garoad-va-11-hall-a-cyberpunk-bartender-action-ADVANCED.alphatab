@@ -1,0 +1,1134 @@
+\artist "Composed by Michael \"Garoad\" KellyArranged by Paper Coelacanth"
+\subtitle "VA-11 Hall-A: Cyberpunk Bartender Action"
+\title "Your Love is a Drug"
+\track ("Piano" "Pno.") {
+  volume 12
+  balance 8
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (4 4)
+    \tempo 149
+    \accidentals auto
+    \clef g2
+    \ottava regular
+    \simile none
+    \ks eb
+      (G4 Bb4 D5 G5).4{dy f instrument acousticgrandpiano beam Down}
+      F5.4{beam Down}
+      G5.8{beam Down}
+      F5.4{beam Down}
+      Bb5.8{beam Down}
+    |
+      Bb5{t}.8{beam Down beam merge}
+      G5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      G5.8{beam Down beam split}
+      G5{t}.4{beam Down beam split}
+      C5.8{beam Down beam merge}
+      Eb5.8{beam Down beam split}
+    |
+      (G4 Bb4 Eb5 G5).4{beam Down beam split}
+      F5.4{beam Down beam split}
+      G5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+      C6.8{beam Down beam split}
+    |
+      C6{t}.8{beam Down beam merge}
+      G5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      G5.8{beam Down beam split}
+      G5{t}.4{beam Down beam split}
+      C5.8{beam Down beam merge}
+      Eb5.8{beam Down beam split}
+    |
+      (G4 C5 Eb5 G5).4{beam Down beam split}
+      F5.4{beam Down beam split}
+      G5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+      Bb5.8{beam Down beam split}
+    |
+      Bb5{t}.8{beam Down beam merge}
+      G5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      G5.8{beam Down beam split}
+      G5{t}.4{beam Down beam split}
+      C5.8{beam Down beam merge}
+      Eb5.8{beam Down beam split}
+    |
+      (G4 Bb4 Eb5 G5).4{beam Down beam split}
+      F5.4{beam Down beam split}
+      G5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+      C6.8{beam Down beam split}
+    |
+      C5.8{beam Down beam merge}
+      G5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      D6.8{beam Down beam split}
+      D6{t}.8{beam Down beam merge}
+      G5.8{beam Down beam split}
+      F5.4{beam Down beam split}
+    |
+      (G5 G6).4{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (Bb5 Bb6).8{ot 8va beam Down beam split}
+    |
+      (Bb5{t} Bb6{t}).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam merge}
+      (F5 F6).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (G5{t} G6{t}).4{ot 8va beam Down beam split}
+      (C5 C6).8{ot 8va beam Up beam merge}
+      (Eb5 Eb6).8{ot 8va beam Up beam split}
+    |
+      (G5 G6).4{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (C6 C7).8{ot 8va beam Down beam split}
+    |
+      (C6{t} C7{t}).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam merge}
+      (F5 F6).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (G5{t} G6{t}).4{ot 8va beam Down beam split}
+      (C5 C6).8{ot 8va beam Up beam merge}
+      (Eb5 Eb6).8{ot 8va beam Up beam split}
+    |
+      (G5 G6).4{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (Bb5 Bb6).8{ot 8va beam Down beam split}
+    |
+      (Bb5{t} Bb6{t}).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam merge}
+      (F5 F6).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (G5{t} G6{t}).4{ot 8va beam Down beam split}
+      (C5 C6).8{ot 8va beam Up beam merge}
+      (Eb5 Eb6).8{ot 8va beam Up beam split}
+    |
+      (G5 G6).4{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+      (C6 C7).8{ot 8va beam Down beam split}
+    |
+      (C6{t} C7{t}).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam merge}
+      (F5 F6).8{ot 8va beam Down beam merge}
+      (D6 D7).8{ot 8va beam Down beam split}
+      (D6{t} D7{t}).8{ot 8va beam Down beam merge}
+      (G5 G6).8{ot 8va beam Down beam split}
+      (F5 F6).4{ot 8va beam Down beam split}
+    |
+      (G4 Bb4 D5).4{beam Down beam split}
+      Eb5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      D5{t}.4{beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+    |
+      C5{t}.2{d beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+    |
+      (G4 Bb4 D5).4{beam Down beam split}
+      Eb5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      D5{t}.4{beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+    |
+      C5{t}.2{beam Down beam split}
+      F5.4{beam Down beam split}
+      G5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+    |
+      (Eb4 G4).2{d beam Up beam split}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+    |
+      C5{t}.2{beam Down beam split}
+      F5.4{beam Down beam split}
+      G5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+    |
+      (G4 Bb4).2{beam Up beam split}
+      Eb5.2{beam Down beam split}
+    |
+      (G4 D5).2{beam Down beam split}
+      Bb4.2{beam Down beam split}
+    |
+      (G5 Bb5 D6).4{ot 8va beam Down beam split}
+      Eb6.8{ot 8va beam Down beam merge}
+      D6.8{ot 8va beam Down beam split}
+      D6{t}.4{ot 8va beam Down beam split}
+      Bb5.8{ot 8va beam Down beam merge}
+      C6.8{ot 8va beam Down beam split}
+    |
+      C6{t}.2{d ot 8va beam Down beam split}
+      Bb5.8{ot 8va beam Down beam merge}
+      C6.8{ot 8va beam Down beam split}
+    |
+      (G5 Bb5 D6).4{ot 8va beam Down beam split}
+      Eb6.8{ot 8va beam Down beam merge}
+      D6.8{ot 8va beam Down beam split}
+      D6{t}.4{ot 8va beam Down beam split}
+      Bb5.8{ot 8va beam Down beam merge}
+      C6.8{ot 8va beam Down beam split}
+    |
+      C6{t}.2{ot 8va beam Down beam split}
+      F6.4{ot 8va beam Down beam split}
+      G6.8{ot 8va beam Down beam merge}
+      D6.8{ot 8va beam Down beam split}
+    |
+      (Eb5 G5).2{d ot 8va beam Up beam split}
+      Bb5.8{ot 8va beam Down beam merge}
+      C6.8{ot 8va beam Down beam split}
+    |
+      C6{t}.2{ot 8va beam Down beam split}
+      F6.4{ot 8va beam Down beam split}
+      G6.8{ot 8va beam Down beam merge}
+      D6.8{ot 8va beam Down beam split}
+    |
+      (G5 Bb5).2{ot 8va beam Up beam split}
+      Eb6.2{ot 8va beam Down beam split}
+    |
+      (G5 D6).2{ot 8va beam Down beam split}
+      Bb5.2{ot 8va beam Down beam split}
+    |
+    \ro
+    \barLineLeft heavylight
+      D5.8{beam Down beam split}
+      Eb5.4{beam Down beam split}
+      F5.8{beam Down beam split}
+      F5{t}.2{beam Down beam split}
+    |
+      F5{t}.2{d beam Down beam split}
+      F5.4{beam Down beam split}
+    |
+      F5.8{beam Down beam split}
+      Eb5.4{beam Down beam split}
+      Eb5.8{beam Down beam split}
+      Eb5{t}.8{beam Down beam split}
+      D5.4{beam Down beam split}
+      C5.8{beam Down beam split}
+    |
+      C5{t}.2{d beam Down beam split}
+      A4{acc forcenatural}.8{beam Up beam merge}
+      Bb4.8{beam Up beam split}
+    |
+      C5.4{beam Down beam split}
+      D5.8{beam Down beam merge}
+      G4.8{beam Down beam split}
+      G4{t}.2{beam Up beam split}
+    |
+      G4{t}.2{d beam Up beam split}
+      A4{acc forcenatural}.8{beam Up beam merge}
+      Bb4.8{beam Up beam split}
+    |
+      C5.2{beam Down beam split}
+      D5.2{beam Down beam split}
+    |
+    \rc 2
+    \barLineRight lightheavy
+      Eb5.2{beam Down beam split}
+      Bb4.2{beam Down beam split}
+    |
+      F5{st}.4{txt "D.C." beam Down beam split}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+      Eb5.8{beam Down beam merge}
+      Eb5.8{beam Down beam merge}
+      Eb5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+    |
+      r.8{beam split}
+      D5.8{beam Down beam split}
+      r.8{beam split}
+      Bb4.8{beam Down beam split}
+      Bb4{t}.8{beam Down beam split}
+      r.8{beam split}
+      Bb4.8{beam Up beam merge}
+      A4{acc forcenatural}.8{beam Up beam split}
+    |
+      Bb4.8{beam Down beam merge}
+      A4{acc forcenatural}.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      C5.8{beam Down beam split}
+      C5{t}.4{beam Down beam split}
+      r.4{beam split}
+    |
+      r.4{beam split}
+      F4{st}.4{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Bb4.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      C5.8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      r.8{beam split}
+      G4.8{beam Up beam split}
+      G4{t}.2{beam Up beam split}
+    |
+      G4{t}.2{beam Up beam split}
+      F4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Bb4.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      D5.2{beam Down beam split}
+      Eb5.2{beam Down beam split}
+    |
+      F5.2{beam Down beam split}
+      Bb4.2{beam Down beam split}
+    |
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+    |
+      F5{t}.8{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      Eb5.8{beam Down beam split}
+      Eb5{t}.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+    |
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+    |
+      F5{t}.8{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      G5.8{beam Down beam split}
+      G5{t}.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+    |
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      Bb4.8{beam Down beam split}
+      Bb4.8{beam Down beam merge}
+      Bb4.8{beam Down beam merge}
+      F5.8{beam Down beam merge}
+      F5.8{beam Down beam split}
+    |
+      F5{t}.8{beam Down beam split}
+      Bb4.4{beam Down beam split}
+      Eb5.8{beam Down beam split}
+      Eb5{t}.4{beam Down beam split}
+      Bb4.4{beam Down beam split}
+    |
+      D5.2{beam Down beam split}
+      Eb5.2{beam Down beam split}
+    |
+      F5.2{beam Down beam split}
+      Bb4.2{beam Down beam split}
+    |
+      Eb5.1{beam split}
+    |
+      D5.1{beam split}
+    |
+    \barLineRight lightheavy
+      D5{t}.1{beam split}
+  \staff {
+    score
+  }
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineLeft heavylight
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineLeft heavylight
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineLeft heavylight
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineLeft heavylight
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      |
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \ks eb
+        G2.8{dy f beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+      |
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+      |
+        (G2 D3 G3).8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+      |
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+      |
+        (Eb2 Bb2 Eb3).8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+      |
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+      |
+        (C2 G2 C3).8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+      |
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+      |
+        (Eb2 Bb2 Eb3).8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        (F2 C3).8{beam Up beam merge}
+        (F2 C3).8{beam Up beam split}
+        (F2 C3 F3).8{beam Up beam merge}
+        (F2 C3 F3).8{beam Up beam merge}
+        (F2 C3 F3).8{beam Up beam merge}
+        (F2 C3 F3).8{beam Up beam split}
+      |
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+      |
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+      |
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+      |
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam merge}
+        G2.8{ot 8va beam Up beam merge}
+        G3.8{ot 8va beam Up beam split}
+      |
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+      |
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+      |
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+      |
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam merge}
+        C2.8{ot 8va beam Up beam merge}
+        C3.8{ot 8va beam Up beam split}
+      |
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam merge}
+        Eb2.8{ot 8va beam Up beam merge}
+        Eb3.8{ot 8va beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+      |
+      \barLineLeft heavylight
+        (Ab2 Eb3 Ab3).8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+      |
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+      |
+        (Bb2 F3 Bb3).8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+      |
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+      |
+        (Eb2 Bb2 Eb3).8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+      |
+      \barLineRight lightheavy
+        G2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        (Ab2 Eb3 Ab3).8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+      |
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+      |
+        (Bb2 F3 Bb3).8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+      |
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+      |
+        (Eb2 Bb2 Eb3).8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+      |
+        G2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        (Ab2 Eb3 Ab3).8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+      |
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+        Ab2.8{beam Down beam merge}
+        Ab2.8{beam Down beam merge}
+        Eb3.8{beam Down beam merge}
+        Ab3.8{beam Down beam split}
+      |
+        (Bb2 F3 Bb3).8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+      |
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+        Bb2.8{beam Down beam merge}
+        Bb2.8{beam Down beam merge}
+        F3.8{beam Down beam merge}
+        Bb3.8{beam Down beam split}
+      |
+        (Eb2 Bb2 Eb3).8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+        Eb2.8{beam Up beam merge}
+        Eb2.8{beam Up beam merge}
+        Bb2.8{beam Up beam merge}
+        Eb3.8{beam Up beam split}
+      |
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+        F2.8{beam Up beam merge}
+        F2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        F3.8{beam Up beam split}
+      |
+        G2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        G2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+      |
+        (Ab2 Eb3 Ab3).1{beam split}
+      |
+        (Ab2{t} Eb3{t} Ab3{t}).1{beam split}
+      |
+      \barLineRight lightheavy
+        (Ab2{t} Eb3{t} Ab3{t}).1{beam split}

@@ -68,8 +68,15 @@
 //   failure; 2 on usage / IO error.
 
 import * as fs from 'fs';
-import { loadTex, walkBeats, midiToName } from './lib/score-utils.mjs';
+import path from 'path';
+import { loadTex, walkBeats, midiToName, QUARTER_TICKS } from './lib/score-utils.mjs';
 import { fromAlphaTabNote, STRING_COUNT } from './lib/fretboard.mjs';
+// PTG: contract-backed gate (Improve_Plan §5) — melody-contract enforcement
+// for sidecar modes `contract` / `contract-recompose`.
+import { collectTieChains } from './lib/ties.mjs';
+import {
+  loadContract, validateContract, findPhrase, effectiveRelocation, pitchToMidi,
+} from './lib/contract.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -77,6 +84,7 @@ function parseArgs(argv) {
   let transpose = 0;
   let json = false;
   let map = null;
+  let contract = null; // PTG: --contract <melody-contract.json>
   const positional = [];
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -86,10 +94,15 @@ function parseArgs(argv) {
     else if (a.startsWith('--transpose=')) transpose = Number(a.slice('--transpose='.length));
     else if (a === '--map') map = argv[++i];
     else if (a.startsWith('--map=')) map = a.slice('--map='.length);
+    else if (a === '--contract') contract = argv[++i];
+    else if (a.startsWith('--contract=')) contract = a.slice('--contract='.length);
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) positional.push(a);
   }
-  return { file: positional[0] ?? null, digest: positional[1] ?? null, bars, transpose, json, map };
+  return {
+    file: positional[0] ?? null, digest: positional[1] ?? null,
+    bars, transpose, json, map, contract,
+  };
 }
 
 /** Parse "9-16" | "5" -> {lo, hi}; exit 2 on garbage. */
@@ -104,9 +117,11 @@ function parseBarRange(spec) {
   return { lo: Math.min(lo, hi), hi: Math.max(lo, hi) };
 }
 
-const { file, digest: digestPath, bars, transpose, json, map: mapPath } = parseArgs(process.argv.slice(2));
+const {
+  file, digest: digestPath, bars, transpose, json, map: mapPath, contract: contractArg,
+} = parseArgs(process.argv.slice(2));
 if (!file || !digestPath || !bars) {
-  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>]');
+  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>]');
   process.exit(2);
 }
 if (!Number.isFinite(transpose)) {
@@ -188,6 +203,40 @@ walkBeats(score, ({ staff, bar, beat }) => {
   }
 });
 
+// PTG: parser-grounded per-beat tab events, for the contract gate (§5). Tie
+// chains are read from the MODEL (never token placement): an attack is a
+// non-tie-destination note, and its sounding duration is its own chain's
+// merged length — the same rules tools/lib/ties.mjs pins for the source side.
+const tabTies = collectTieChains(score);
+const tabEvents = new Map(); // barNum -> [{onset, beats, notes:[{midi(src), attack, soundingBeats, letRing}]}]
+const tabBarBeats = new Map(); // barNum -> bar capacity in quarter beats
+walkBeats(score, ({ staff, bar, beat }) => {
+  const barNum = bar.index + 1;
+  if (barNum < range.lo || barNum > range.hi) return;
+  const mb = bar.masterBar;
+  if (mb && !tabBarBeats.has(barNum)) {
+    tabBarBeats.set(barNum, mb.timeSignatureNumerator * (4 / mb.timeSignatureDenominator));
+  }
+  if (beat.isRest || !beat.notes.length) return;
+  const stringCount = staff.stringTuning?.tunings?.length || STRING_COUNT;
+  if (!tabEvents.has(barNum)) tabEvents.set(barNum, []);
+  tabEvents.get(barNum).push({
+    onset: beat.playbackStart / QUARTER_TICKS,
+    beats: beat.playbackDuration / QUARTER_TICKS,
+    notes: beat.notes.map((n) => {
+      const { midi } = fromAlphaTabNote(n, stringCount);
+      const ti = tabTies.byNote.get(n);
+      return {
+        midi: Number.isFinite(midi) ? midi - transpose : NaN, // source space
+        attack: !n.isTieDestination,
+        soundingBeats: ti ? ti.chain.soundingBeats : beat.playbackDuration / QUARTER_TICKS,
+        letRing: !!n.isLetRing,
+      };
+    }).filter((n) => Number.isFinite(n.midi)),
+  });
+});
+for (const evs of tabEvents.values()) evs.sort((a, b) => a.onset - b.onset);
+
 // ---- compare, bar by bar --------------------------------------------------
 const digestByBar = new Map(digest.bars.map((b) => [b.bar, b]));
 
@@ -219,12 +268,18 @@ function badRange(r) {
 }
 
 /**
- * Load + fail-closed-validate a sidecar. Returns { song?, entries:[...] }.
- * Each normalized entry: { mode, tabBars:[s,e], sourceBars?:[s,e], note? }.
- * Source-bar existence in the digest is verified up front so per-mode logic
- * can index digestByBar.get() without re-checking.
+ * Load + fail-closed-validate a sidecar. Returns { song?, entries:[...], contract? }.
+ * Each normalized entry: { mode, tabBars:[s,e], sourceBars?:[s,e],
+ * contractPhrase?, note? }. Source-bar existence in the digest is verified up
+ * front so per-mode logic can index digestByBar.get() without re-checking.
+ *
+ * PTG (Improve_Plan §5): modes `contract` and `contract-recompose` pin a tab
+ * span to a melody-contract PHRASE (entry.contractPhrase). The contract file
+ * comes from --contract, or the sidecar's own top-level "contract" path
+ * (relative to the sidecar). It is fully validated against the digest before
+ * any gate runs — an invalid or vacuous contract is exit 2, never a PASS.
  */
-function loadAndValidateMap(mapPath, range, digestByBar) {
+function loadAndValidateMap(mapPath, range, digestByBar, contractArg, digest) {
   let raw;
   try {
     raw = fs.readFileSync(mapPath, 'utf8');
@@ -241,21 +296,60 @@ function loadAndValidateMap(mapPath, range, digestByBar) {
   if (!Array.isArray(parsed.entries)) mapUsage('map missing "entries" array');
   if (parsed.entries.length === 0) mapUsage('map "entries" is empty');
 
+  // PTG: resolve + validate the melody contract when any entry needs it.
+  const CONTRACT_MODES = ['contract', 'contract-recompose'];
+  const needsContract = parsed.entries.some((e) => CONTRACT_MODES.includes(e?.mode));
+  let contract = null;
+  if (needsContract) {
+    const contractPath = contractArg
+      ?? (typeof parsed.contract === 'string'
+        ? path.resolve(path.dirname(path.resolve(mapPath)), parsed.contract)
+        : null);
+    if (!contractPath) {
+      mapUsage('map has contract-mode entries but no contract file: pass --contract '
+        + 'or set a top-level "contract" path in the sidecar');
+    }
+    const loadedContract = loadContract(contractPath);
+    if (!loadedContract.ok) mapUsage(loadedContract.errors[0].message);
+    const validation = validateContract(loadedContract.contract, digest);
+    if (!validation.ok) {
+      mapUsage(`melody contract ${contractPath} is INVALID — the gate refuses to run on it:\n`
+        + validation.errors.map((e) => `  ${e.where}: ${e.message}`).join('\n'));
+    }
+    contract = loadedContract.contract;
+  }
+
   const seen = new Map(); // tabBar -> entryIndex, for coverage/overlap
   const entries = parsed.entries.map((entry, i) => {
     if (!entry || typeof entry !== 'object') mapUsage(`entry ${i} is not an object`);
     if (!('tabBars' in entry)) mapUsage(`entry ${i} missing "tabBars"`);
     if (!('mode' in entry)) mapUsage(`entry ${i} missing "mode"`);
     const mode = entry.mode;
-    if (!['free', 'quote', 'recompose'].includes(mode)) {
-      mapUsage(`entry ${i} mode "${mode}" not in {free, quote, recompose}`);
+    if (!['free', 'quote', 'recompose', ...CONTRACT_MODES].includes(mode)) {
+      mapUsage(`entry ${i} mode "${mode}" not in {free, quote, recompose, contract, contract-recompose}`);
     }
     const tb = badRange(entry.tabBars);
     if (tb) mapUsage(`entry ${i} tabBars ${tb} (got ${JSON.stringify(entry.tabBars)})`);
     const [tS, tE] = entry.tabBars;
 
     let sourceBars = undefined;
-    if (mode !== 'free') {
+    let contractPhrase = undefined;
+    if (CONTRACT_MODES.includes(mode)) {
+      if (typeof entry.contractPhrase !== 'string' || !entry.contractPhrase) {
+        mapUsage(`entry ${i} mode "${mode}" requires "contractPhrase"`);
+      }
+      const phrase = findPhrase(contract, entry.contractPhrase);
+      if (!phrase) mapUsage(`entry ${i} contractPhrase "${entry.contractPhrase}" not found in the contract`);
+      contractPhrase = entry.contractPhrase;
+      // sourceBars come from the PHRASE — a contract span is source-tied by
+      // construction; the contract validator already checked bar existence.
+      sourceBars = [phrase.sourceBars[0], phrase.sourceBars[1]];
+      for (let b = sourceBars[0]; b <= sourceBars[1]; b++) {
+        if (!digestByBar.has(b)) {
+          mapUsage(`entry ${i} phrase "${contractPhrase}" references bar ${b}, absent from the digest`);
+        }
+      }
+    } else if (mode !== 'free') {
       if (!('sourceBars' in entry)) mapUsage(`entry ${i} mode "${mode}" requires "sourceBars"`);
       const sb = badRange(entry.sourceBars);
       if (sb) mapUsage(`entry ${i} sourceBars ${sb} (got ${JSON.stringify(entry.sourceBars)})`);
@@ -278,6 +372,7 @@ function loadAndValidateMap(mapPath, range, digestByBar) {
 
     const out = { mode, tabBars: [tS, tE] };
     if (sourceBars) out.sourceBars = sourceBars;
+    if (contractPhrase) out.contractPhrase = contractPhrase;
     if ('note' in entry) out.note = entry.note;
     return out;
   });
@@ -288,7 +383,7 @@ function loadAndValidateMap(mapPath, range, digestByBar) {
     if (!seen.has(b)) mapUsage(`tab bar ${b} is uncovered`);
   }
 
-  const out = { entries };
+  const out = { entries, contract };
   if (parsed.song !== undefined) out.song = parsed.song;
   return out;
 }
@@ -313,7 +408,9 @@ function lowestTabPcInSpan(lo, hi, tabBars, transpose) {
     if (tb && Number.isFinite(tb.lowMidi) && tb.lowMidi < lowMidi) lowMidi = tb.lowMidi;
   }
   if (!Number.isFinite(lowMidi)) return null;
-  return pc(lowMidi - transpose); // transpose-aware (into source space)
+  // PTG: lowMidi was converted to source space while tabBars was collected.
+  // Applying transpose again here double-shifts every non-zero-transpose map.
+  return pc(lowMidi);
 }
 
 /** Concatenate per-beat top-note pc across tab bars [lo..hi] (transpose-aware). */
@@ -322,7 +419,8 @@ function tabTopPcSeq(lo, hi, tabBars, transpose) {
   for (let b = lo; b <= hi; b++) {
     const tb = tabBars.get(b);
     if (!tb) continue;
-    for (const m of tb.topSeq) seq.push(pc(m - transpose));
+    // PTG: topSeq already stores source-space MIDI.
+    for (const m of tb.topSeq) seq.push(pc(m));
   }
   return seq;
 }
@@ -364,14 +462,242 @@ function isSubsequence(needle, haystack) {
   return i === needle.length;
 }
 
+// PTG: the contract-backed gate (Improve_Plan §5.2-§5.4). Enforces a melody-
+// contract PHRASE over a tab span: octave-exact pitches (after the phrase's
+// relocation), phrase-order continuity, per-event minimum sounding durations
+// (tie-chain merged on the tab side), required repeated attacks, required
+// gaps, and forbidden textures. Never reduced to pitch-class membership.
+function runContractEntry(entry, contract, digestByBar, transpose) {
+  const failures = [];
+  const [tS, tE] = entry.tabBars;
+  const phrase = findPhrase(contract, entry.contractPhrase);
+  const [sS, sE] = entry.sourceBars;
+  const N = sE - sS + 1;
+
+  const totals = {
+    foregroundAttacks: { covered: 0, total: 0 },
+    durationObligations: { covered: 0, total: 0 },
+    requiredGaps: { covered: 0, total: 0 },
+    forbiddenRules: { covered: 0, total: 0 },
+  };
+
+  const sliceEvents = (lo, hi) => {
+    const evs = [];
+    for (let b = lo; b <= hi; b++) for (const e of tabEvents.get(b) ?? []) evs.push({ ...e, bar: b });
+    return evs;
+  };
+
+  // ---- required events, in phrase order -----------------------------------
+  // Events sharing a slice AND a pitch consume attacks CUMULATIVELY: two
+  // required B4 events need two distinct B4 attacks — one sustained B4 must
+  // never satisfy both (repeated melody attacks are not merged, §9 test 8).
+  const required = (phrase.events ?? [])
+    .filter((ev) => ev.required !== false)
+    .slice()
+    .sort((a, b) => (a.bar - b.bar) || (a.onset - b.onset));
+  const matchedPositions = [];
+  const groupNeed = new Map(); // "lo-hi-midi" -> total attacks required
+  const prepared = required.map((ev) => {
+    const reloc = effectiveRelocation(contract, phrase, ev);
+    const expected = pitchToMidi(ev.pitch) + reloc; // source space; tabEvents already source space
+    const [lo, hi] = proportionalSlice(tS, tE, ev.bar - sS, N);
+    const key = `${lo}-${hi}-${expected}`;
+    groupNeed.set(key, (groupNeed.get(key) ?? 0) + (ev.attacks ?? 1));
+    return { ev, reloc, expected, lo, hi, key };
+  });
+  const groupUsed = new Map();
+  for (const { ev, reloc, expected, lo, hi, key } of prepared) {
+    const attacks = [];
+    for (const e of sliceEvents(lo, hi)) {
+      for (const n of e.notes) {
+        if (n.attack && n.midi === expected) attacks.push({ bar: e.bar, onset: e.onset, n });
+      }
+    }
+    const need = ev.attacks ?? 1;
+    const used = groupUsed.get(key) ?? 0;
+    const label = `${ev.pitch}${reloc ? `${reloc > 0 ? '+' : ''}${reloc}` : ''}@${ev.bar}:${ev.onset}`;
+
+    totals.foregroundAttacks.total++;
+    if (attacks.length >= used + need) {
+      totals.foregroundAttacks.covered++;
+      matchedPositions.push({ ev, label, pos: [attacks[used].bar, attacks[used].onset] });
+    } else {
+      failures.push({
+        gate: 'contract', entry: entry.tabBars,
+        message: `contract "${entry.contractPhrase}": ${label} needs ${used + need} distinct `
+          + `attack(s) of MIDI ${expected} in tab bars [${lo},${hi}], found ${attacks.length} `
+          + '(octave-exact — a pitch-class match in the wrong octave does not count; '
+          + 'repeated melody notes are separate attacks, never one sustain)',
+      });
+    }
+    groupUsed.set(key, used + need);
+
+    if (ev.duration !== undefined) {
+      totals.durationObligations.total++;
+      const gapAllow = ev.allowLetRingThroughGap ?? 0;
+      const best = attacks.length ? Math.max(...attacks.map((a) => a.n.soundingBeats)) : 0;
+      if (attacks.length && best + gapAllow >= ev.duration - 1e-6) {
+        totals.durationObligations.covered++;
+      } else {
+        const detail = attacks.length ? `best tab sustain is ${best}` : 'no attack to sustain';
+        failures.push({
+          gate: 'contract', entry: entry.tabBars,
+          message: `contract "${entry.contractPhrase}": ${label} must sound >= ${ev.duration} `
+            + `beat(s) (gap allowance ${gapAllow}), ${detail}`,
+        });
+      }
+    }
+
+    // Reattack prohibition applies per pitch GROUP: extra attacks beyond the
+    // group's total requirement are reattacks inside a sustain.
+    if (ev.allowReattack === false && attacks.length > groupNeed.get(key)) {
+      failures.push({
+        gate: 'contract', entry: entry.tabBars,
+        message: `contract "${entry.contractPhrase}": ${label} forbids reattacks inside the `
+          + `sustain but the tab attacks it ${attacks.length}x (allowed ${groupNeed.get(key)})`,
+      });
+    }
+  }
+
+  // phrase-order continuity: first-match positions must be non-decreasing
+  for (let i = 1; i < matchedPositions.length; i++) {
+    const a = matchedPositions[i - 1];
+    const b = matchedPositions[i];
+    if (b.pos[0] < a.pos[0] || (b.pos[0] === a.pos[0] && b.pos[1] < a.pos[1] - 1e-6)) {
+      failures.push({
+        gate: 'contract', entry: entry.tabBars,
+        message: `contract "${entry.contractPhrase}": phrase order broken — ${b.label} sounds `
+          + `before ${a.label}`,
+      });
+    }
+  }
+
+  // ---- required gaps (breaths): no attack may fill them ---------------------
+  for (const gap of phrase.requiredGaps ?? []) {
+    totals.requiredGaps.total++;
+    const srcBar = digestByBar.get(gap.bar);
+    const [num, den] = (srcBar?.timeSig ?? '4/4').split('/').map(Number);
+    const srcBeats = (num * 4) / den;
+    const [lo, hi] = proportionalSlice(tS, tE, gap.bar - sS, N);
+    // Map the source-bar window onto the slice in bar-fraction units.
+    const k = hi - lo + 1;
+    const f0 = (gap.fromOnset / srcBeats) * k;
+    const f1 = (gap.toOnset / srcBeats) * k;
+    const offenders = [];
+    for (const e of sliceEvents(lo, hi)) {
+      if (!e.notes.some((n) => n.attack)) continue;
+      const beats = tabBarBeats.get(e.bar) ?? 4;
+      const posInSlice = (e.bar - lo) + e.onset / beats;
+      if (posInSlice >= f0 - 1e-6 && posInSlice < f1 - 1e-6) {
+        offenders.push(`bar ${e.bar} @${e.onset}`);
+      }
+    }
+    if (offenders.length === 0) {
+      totals.requiredGaps.covered++;
+    } else {
+      failures.push({
+        gate: 'contract', entry: entry.tabBars,
+        message: `contract "${entry.contractPhrase}": required gap (source bar ${gap.bar} `
+          + `beats ${gap.fromOnset}-${gap.toOnset}) is filled by attack(s) at ${offenders.slice(0, 4).join(', ')}`
+          + ' — a breath cannot be plugged with gate-serving notes',
+      });
+    }
+  }
+
+  // ---- forbidden textures (§5.4) --------------------------------------------
+  const allExpected = new Set((phrase.events ?? []).map(
+    (ev) => pitchToMidi(ev.pitch) + effectiveRelocation(contract, phrase, ev)));
+  const floor = allExpected.size ? Math.min(...allExpected) : null;
+  for (const rule of phrase.forbidden ?? []) {
+    totals.forbiddenRules.total++;
+    const offenders = [];
+    for (const e of sliceEvents(tS, tE)) {
+      const attacking = e.notes.filter((n) => n.attack);
+      if (!attacking.length) continue;
+      if (rule.kind === 'added-attacks') {
+        for (const n of attacking) {
+          if (!allExpected.has(n.midi)) offenders.push(`MIDI ${n.midi} bar ${e.bar} @${e.onset}`);
+        }
+      } else if (rule.kind === 'bass-ticks') {
+        if (floor === null) continue;
+        for (const n of attacking) {
+          if (n.midi < floor - 7) offenders.push(`MIDI ${n.midi} bar ${e.bar} @${e.onset}`);
+        }
+      } else if (rule.kind === 'chords-on-fast-attacks') {
+        const maxDur = rule.maxDuration ?? 0.25;
+        if (attacking.length >= 2 && e.beats <= maxDur + 1e-6) {
+          offenders.push(`${attacking.length}-note chord bar ${e.bar} @${e.onset}`);
+        }
+      }
+    }
+    if (offenders.length === 0) {
+      totals.forbiddenRules.covered++;
+    } else {
+      failures.push({
+        gate: 'contract', entry: entry.tabBars,
+        message: `contract "${entry.contractPhrase}": forbidden ${rule.kind} — `
+          + `${offenders.slice(0, 4).join(', ')}${offenders.length > 4 ? ` (+${offenders.length - 4} more)` : ''}`,
+      });
+    }
+  }
+
+  // ---- anti-vacuity (§5.3): a span protecting nothing is a FAIL -------------
+  const grandTotal = totals.foregroundAttacks.total + totals.durationObligations.total
+    + totals.requiredGaps.total + totals.forbiddenRules.total;
+  if (grandTotal === 0) {
+    failures.push({
+      gate: 'contract', entry: entry.tabBars,
+      message: `contract "${entry.contractPhrase}": ZERO protected events in this span — `
+        + 'a vacuous contract span must fail, not pass',
+    });
+  }
+
+  // ---- root motion (contract keeps harmony; contract-recompose relaxes it) --
+  if (entry.mode === 'contract') {
+    for (let i = 0; i < N; i++) {
+      const sb = digestByBar.get(sS + i);
+      const [lo, hi] = proportionalSlice(tS, tE, i, N);
+      const lowPc = lowestTabPcInSpan(lo, hi, tabBars, transpose);
+      const rootPc = noteNameToPc(sb.harmony?.root);
+      const pcset = new Set(sb.harmony?.pcset || []);
+      const ok = lowPc !== null && (lowPc === rootPc || pcset.has(lowPc));
+      if (!ok) {
+        const shown = lowPc === null ? 'no tab notes' : `lowest pc ${lowPc}`;
+        failures.push({
+          gate: 'harmonicRoots', entry: entry.tabBars, slice: i, sourceBar: sb.bar,
+          tabSlice: [lo, hi],
+          message: `contract slice ${i} (tab bars [${lo},${hi}] -> source bar ${sb.bar}): `
+            + `${shown} is neither root ${sb.harmony?.root} (pc ${rootPc}) `
+            + `nor a chord tone (pcset [${[...pcset].join(',')}])`,
+        });
+      }
+    }
+  }
+
+  return {
+    mode: entry.mode,
+    tabBars: entry.tabBars,
+    sourceBars: entry.sourceBars,
+    contractPhrase: entry.contractPhrase,
+    totals,
+    ok: failures.length === 0,
+    failures,
+  };
+}
+
 /** Run a single map entry's gate. Mutates `failures` (caller's) and returns
  *  { mode, tabBars, sourceBars?, ok, failures:[...] }. */
-function runMapEntry(entry, tabBars, digestByBar, transpose) {
+function runMapEntry(entry, tabBars, digestByBar, transpose, contract = null) {
   const failures = [];
   const [tS, tE] = entry.tabBars;
 
   if (entry.mode === 'free') {
     return { mode: entry.mode, tabBars: entry.tabBars, ok: true, failures };
+  }
+
+  // PTG: contract modes take their own path (§5) — never the pc-based one.
+  if (entry.mode === 'contract' || entry.mode === 'contract-recompose') {
+    return runContractEntry(entry, contract, digestByBar, transpose);
   }
 
   const [sS, sE] = entry.sourceBars;
@@ -431,7 +757,7 @@ function runMapEntry(entry, tabBars, digestByBar, transpose) {
 }
 
 if (mapPath) {
-  const map = loadAndValidateMap(mapPath, range, digestByBar);
+  const map = loadAndValidateMap(mapPath, range, digestByBar, contractArg, digest);
   // Filter to entries whose tabBars intersect --bars. Coverage has already
   // been verified on the union of all entries for the whole --bars range;
   // entries entirely outside --bars are skipped from evaluation but their
@@ -440,7 +766,7 @@ if (mapPath) {
     const [tS, tE] = e.tabBars;
     return tE >= range.lo && tS <= range.hi;
   });
-  const mapResults = activeEntries.map((e) => runMapEntry(e, tabBars, digestByBar, transpose));
+  const mapResults = activeEntries.map((e) => runMapEntry(e, tabBars, digestByBar, transpose, map.contract));
   const aggregated = mapResults.flatMap((r) => r.failures.map((f) => ({
     ...f,
     mode: r.mode,
@@ -484,9 +810,18 @@ if (mapPath) {
   lines.push(`${rangeLabel} vs source (transpose ${tsign}, map ${mapPath})`);
   for (const r of mapResults) {
     const tag = r.sourceBars ? `  sourceBars=[${r.sourceBars.join(',')}]` : '';
+    const ph = r.contractPhrase ? ` phrase="${r.contractPhrase}"` : '';
     const tail = r.ok ? 'PASS' : `FAIL: ${r.failures[0].message}`;
-    lines.push(`  ${r.mode.padEnd(9)} tabBars=[${r.tabBars.join(',')}]${tag}  ${tail}`);
+    lines.push(`  ${r.mode.padEnd(9)} tabBars=[${r.tabBars.join(',')}]${tag}${ph}  ${tail}`);
     for (const f of r.failures.slice(1)) lines.push(`                     ${f.message}`);
+    // PTG §5.3: contract spans always report their NON-ZERO obligation totals.
+    if (r.totals) {
+      const t = r.totals;
+      lines.push(`             foreground attacks   ${t.foregroundAttacks.covered}/${t.foregroundAttacks.total}`);
+      if (t.durationObligations.total) lines.push(`             duration obligations  ${t.durationObligations.covered}/${t.durationObligations.total}`);
+      if (t.requiredGaps.total) lines.push(`             required gaps         ${t.requiredGaps.covered}/${t.requiredGaps.total}`);
+      if (t.forbiddenRules.total) lines.push(`             forbidden rules       ${t.forbiddenRules.covered}/${t.forbiddenRules.total}`);
+    }
   }
   // PTG: SOFT, non-gating contour advisory — quote entries whose top line runs
   // strongly opposite the quoted source melody.

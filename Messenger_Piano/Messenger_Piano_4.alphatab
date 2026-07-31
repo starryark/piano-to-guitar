@@ -1,0 +1,3358 @@
+\artist "Takeshi Abo"
+\copyright "© MAGES. 2015"
+\music "vladislav"
+\title "Messenger"
+\track ("Piano" "Pno.") {
+  volume 12
+  balance 8
+  instrument acousticgrandpiano
+}
+  \staff {
+    score
+  }
+    \ts (7 4)
+    \tempo 78
+    \accidentals auto
+    \clef g2
+    \ottava regular
+    \simile none
+    \ks g
+      (G5 B5).4{dy p instrument acousticgrandpiano beam Down}
+      (Gb5 A5).4{beam Down}
+      (E5 G5).4{beam Down}
+      (D5 Gb5).4{beam Down}
+      (G5 B5).4{beam Down}
+      (Gb5 A5).4{beam Down}
+      (A5 D6).4{beam Down}
+    |
+      (G5 B5).4{ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (E5 G5).4{ot 8va beam Down}
+      (D5 Gb5).4{ot 8va beam Down}
+      (G5 B5).4{ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (A5 D6).4{ot 8va beam Down}
+    |
+      (E5 G5 B5).4{ad 0 ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (E5 G5).4{ot 8va beam Down}
+      (D5 Gb5).4{ot 8va beam Down}
+      (G5 B5).4{ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (A5 D6).4{ot 8va beam Down}
+    |
+      (D5 Gb5 B5).4{ad 0 ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (E5 G5).4{ot 8va beam Down}
+      (D5 Gb5).4{ot 8va beam Down}
+      (G5 B5).4{ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (Gb5 D6).4{ot 8va beam Down}
+    |
+      (E5 G5 B5).4{ad 0 ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (E5 G5).4{ot 8va beam Down}
+      (D5 Gb5).4{ot 8va beam Down}
+      (G5 B5).4{ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (A5 D6).4{ot 8va beam Down}
+    |
+    \barLineRight lightlight
+      (E5 G5 B5).4{ad 0 ot 8va beam Down}
+      (Gb5 A5).4{ot 8va beam Down}
+      (E5 G5).4{ot 8va beam Down}
+      (D5 Gb5).4{ot 8va beam Down}
+      (G5{ac} B5).4{ot 8va beam Down}
+      (Gb5{ac} A5).4{ot 8va beam Down}
+      (A5{ac} D6).4{ot 8va fermata (medium 0) beam Down}
+    |
+    \tempo 79.9998
+    \tempo 80
+      (G3 B3 E4).4{d ad 0 beam Up}
+      B4.8{beam Down}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      D5.4{beam Down beam split}
+      B4.2{beam Down beam split}
+    |
+      (G3 B3 E4).4{d ad 0 dy mf beam Up beam split}
+      B4.8{beam Down beam split}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      E4.2{d beam Up beam split}
+    |
+      (C4 E4).4{d beam Up beam split}
+      C5.8{beam Down beam split}
+      B4.8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      A4.8{beam Up beam split}
+      (D4 Gb4 B4).4{ad 0 beam Up beam split}
+      (D4{t} Gb4{t} B4{t}).8{beam Down beam merge}
+      G5.8{beam Down beam merge}
+      Gb5.8{beam Down beam merge}
+      E5.8{beam Down beam split}
+    |
+    \ts (6 4)
+      (Gb4 A4 Eb5{acc #}).4{d ad 0 beam Up beam split}
+      E5.8{beam Down beam merge}
+      Gb5.8{beam Down beam merge}
+      B4.8{beam Down beam split}
+      (E4 A4).8{ad 0 beam Up beam merge}
+      B4.8{beam Up beam split}
+      (Db4{acc #} E4 G4).4{beam Up beam split}
+      (Eb4{acc #} Gb4).4{beam Up beam split}
+    |
+    \ts (7 4)
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      B4.8{beam Down beam split}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      (A4 D5).4{ad 0 beam Down beam split}
+      (Gb4 B4).2{beam Up beam split}
+    |
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      B4.8{beam Down beam split}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      E4.4{beam Up beam split}
+      E4.4{beam Up beam split}
+      D4.4{beam Up beam split}
+    |
+      (C4 E4).4{d beam Up beam split}
+      (A4 C5).8{beam Down beam split}
+      (G4 B4).8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      (E4 G4).8{beam Up beam merge}
+      A4.8{beam Up beam split}
+      (D4 Gb4 B4).4{ad 0 beam Up beam split}
+      (D4{t} Gb4{t} B4{t}).8{beam Down beam merge}
+      (B4 G5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+    |
+    \ts (6 4)
+    \barLineRight lightlight
+      (Gb4 A4 Eb5{acc #}).4{d ad 0 beam Up beam split}
+      (E4 E5).8{beam Down beam merge}
+      (Gb4 Gb5).8{beam Down beam merge}
+      (E4 B4).8{beam Down beam split}
+      (Eb4{acc #} A4).4{beam Up beam split}
+      (E4 G4).4{beam Up beam split}
+      (Gb3 B3 Eb4 Gb4).4{beam Up beam split}
+    |
+    \ts (4 4)
+      r.8{beam split}
+      E4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      A4.8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      D5.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      B4.2{beam Down beam split}
+      (D4 G4).4{beam Up beam split}
+      (D4 G4).4{beam Up beam split}
+    |
+      r.8{beam split}
+      E4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      A4.8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      D5.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      B4.2{beam Down beam split}
+      (A3 C4 Gb4).4{beam Up beam split}
+      (A3 C4 Gb4).4{beam Up beam split}
+    |
+      r.8{beam split}
+      (B4 G5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+      (Gb4 D5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam split}
+      (E4 B4).4{beam Up beam split}
+    |
+      r.8{beam split}
+      (G5 B5).8{beam Down beam merge}
+      (Gb5 A5).8{beam Down beam merge}
+      (E5 G5).8{beam Down beam split}
+      (D5 Gb5).8{beam Down beam merge}
+      (Gb5 A5).8{beam Down beam merge}
+      B4.8{beam Down beam merge}
+      B5.8{beam Down beam split}
+    |
+      (B3 D4 G4).4{d ad 0 beam Up beam split}
+      E4.8{beam Up beam split}
+      Gb4.8{beam Up beam merge}
+      (D4 G4).8{beam Up beam merge}
+      (E4 A4).8{beam Up beam merge}
+      (Gb4 D5).8{beam Up beam split}
+    |
+      (E4 B4).4{d ad 0 beam Up beam split}
+      (Gb4 Gb5).8{beam Down beam split}
+      (A4 A5).8{beam Down beam merge}
+      (G4 G5).8{beam Down beam split}
+      (Gb4 Gb5).4{beam Down beam split}
+    |
+      (E4 G4 B4 E5).8{ad 0 beam Up beam merge}
+      E4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      A4.8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      D5.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      B4.8{beam Down beam merge}
+      (C5 E5).8{beam Down beam merge}
+      (D5 Gb5).8{beam Down beam merge}
+      (E5 G5).8{beam Down beam split}
+      (Gb5 A5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam merge}
+      (D5 D6).8{beam Down beam merge}
+      (C5 C6).8{beam Down beam split}
+    |
+      (B4 B5).8{beam Down beam merge}
+      E4.8{beam Down beam merge}
+      (D4 Gb4).8{beam Down beam merge}
+      (E4 G4).8{beam Down beam split}
+      (Gb4 A4).8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      (A4 D5).8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      (D4 B4).8{beam Down beam merge}
+      Gb5.16{beam Down beam merge}
+      G5.16{beam Down beam split}
+      (Gb4 Gb5).8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      E5.8{beam Down beam merge}
+      (B4 D5 B5).8{beam Down beam merge}
+      (C4 E4 A4).8{ad 0 beam Down beam merge}
+      B4.8{beam Down beam split}
+    |
+      (Eb4{acc #} G4 C5).8{beam Up beam merge}
+      Bb4{acc b}.8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      (C4 Gb4 Bb4).8{beam Up beam split}
+      A4.8{beam Down beam merge}
+      G4.8{beam Down beam merge}
+      (Gb4 Bb4{acc #} F5{acc #}).8{beam Down beam merge}
+      Eb5{acc #}.8{beam Down beam split}
+    |
+      Db5{acc #}.8{dy f beam Down beam merge}
+      (G4 Eb5{acc #}).8{beam Down beam merge}
+      Db5.8{beam Down beam merge}
+      C5{acc forcenatural}.8{beam Down beam split}
+      (C4 G4 Bb4{acc b}).8{beam Up beam merge}
+      C5.8{beam Up beam merge}
+      (C4 Gb4 Bb4 Db5{acc b}).8{beam Up beam merge}
+      (Eb4{acc b} Eb5{acc b}).8{beam Up beam split}
+    |
+      (F4{acc forcenatural} Bb4{acc b} C5 F5{acc forcenatural}).4{beam Down beam split}
+      Bb3{acc b}.16{beam Up beam merge}
+      C4.16{beam Up beam merge}
+      Eb4{acc #}.16{beam Up beam merge}
+      F4.16{beam Up beam split}
+      Bb4.16{beam Up beam merge}
+      C5.16{beam Up beam merge}
+      F4.16{beam Up beam merge}
+      Eb5{acc #}.16{beam Up beam split}
+      C5.16{beam Down beam split}
+      r.16{beam split}
+      r.8{beam split}
+    |
+      (G4 C5 D5 G5).4{ad 0 dec dy mf beam Down beam split}
+      D4.16{dec beam Up beam merge}
+      G4.16{dec beam Up beam merge}
+      C4.16{dec beam Up beam merge}
+      D4.16{dec beam Up beam split}
+      C5.16{dec beam Up beam merge}
+      D5.16{dec beam Up beam merge}
+      G4.16{dec beam Up beam merge}
+      D4.16{dec beam Up beam split}
+      C4.16{dec beam Up beam split}
+      r.16{dec beam split}
+      r.8{dec beam split}
+    |
+    \barLineRight lightlight
+      (F4{acc forcenatural} G4 B4).2{d dec dy p fermata (medium 0) beam Up beam split}
+      (G4 Ab4{acc b} F5{acc forcenatural}).4{beam Down beam split}
+    |
+    \ts (7 4)
+      (G4 B4 E5).4{ad 0 dy mp beam Down beam split}
+      (Gb4 A4).4{beam Up beam split}
+      (E4 G4).4{beam Up beam split}
+      (D4 Gb4).4{beam Up beam split}
+      (G4 B4).4{beam Up beam split}
+      (Gb4 A4).4{beam Up beam split}
+      (A4 D5).4{beam Down beam split}
+    |
+      (G4 B4).4{beam Up beam split}
+      (Gb4 A4).4{beam Up beam split}
+      (E4 G4).4{beam Up beam split}
+      (D4 Gb4).4{beam Up beam split}
+      (G4 B4).4{beam Up beam split}
+      (Gb4 A4).4{beam Up beam split}
+      (A4 D5).4{beam Down beam split}
+    |
+      (B4 G5 B5).4{ad 0 beam Down beam split}
+      (A4 Gb5 A5).4{beam Down beam split}
+      (G4 E5 G5).4{beam Down beam split}
+      (D5 Gb5).4{beam Down beam split}
+      (B4 G5 B5).4{beam Down beam split}
+      (A4 Gb5 A5).4{beam Down beam split}
+      (E5 A5 D6).4{beam Down beam split}
+    |
+    \barLineRight lightlight
+      (G5 B5 E6).4{ad 0 beam Down beam split}
+      (Gb5 A5).4{beam Down beam split}
+      (E5 G5).4{beam Down beam split}
+      (D5 Gb5).4{beam Down beam split}
+      (B4 E5).4{beam Down beam split}
+      (Gb4 A4 D5).4{beam Up beam split}
+      (B4 D5 Gb5 A5).4{fermata (medium 0) beam Down beam split}
+    |
+    \ts (4 4)
+    \tempo 78
+      (B4 E5).4{ad 0 beam Down beam split}
+      G5.4{ot 8va beam Up beam split}
+      B5.4{ot 8va beam Down beam split}
+      E6.4{ot 8va beam Down beam split}
+    |
+      (A5 Gb6).2{ad 0 ot 8va beam Down beam split}
+      (A5 Gb6).4{tu (3 2) ot 8va beam Down beam split}
+      (B5 G6).4{tu (3 2) ot 8va beam Down beam split}
+      (C6 A6).4{tu (3 2) ot 8va beam Down beam split}
+    |
+      (Gb5 D6 A6).4{d ad 0 ot 8va beam Down beam split}
+      G6.16{ot 8va beam Down beam merge}
+      Gb6.16{ot 8va beam Down beam split}
+      G6.2{ot 8va beam Down beam split}
+    |
+      r.4{ot 8va beam split}
+      r.8{ot 8va beam split}
+      (B5 G6).8{ot 8va beam Down beam split}
+      (A5 Gb6).8{ot 8va beam Up beam merge}
+      (Gb5 D6).8{ot 8va beam Up beam merge}
+      (D5 A5).8{ot 8va beam Up beam merge}
+      (Gb5 D6).8{ot 8va beam Up beam split}
+    |
+      (E5 B5 E6).4{d ad 0 ot 8va beam Up beam split}
+      B5.8{ot 8va beam Down beam split}
+      (C5 C6).4{tu (3 2) ot 8va beam Up beam split}
+      (E5 E6).4{tu (3 2) ot 8va beam Up beam split}
+      (B5 B6).4{tu (3 2) ot 8va beam Down beam split}
+    |
+      (B5 D6 B6).4{tu (3 2) ot 8va beam Down beam split}
+      (A5 C6 A6).4{tu (3 2) ot 8va beam Down beam split}
+      (G5 B5 G6).4{tu (3 2) ot 8va beam Down beam split}
+      (Gb5 A5 Gb6).4{tu (3 2) ot 8va beam Down beam split}
+      (G5 B5 G6).4{tu (3 2) ot 8va beam Down beam split}
+      (A5 C6 A6).4{tu (3 2) ot 8va beam Down beam split}
+    |
+      (G5 D6 Gb6).4{ad 0 ot 8va beam Down beam split}
+      r.8{ot 8va beam split}
+      D5.16{ot 8va beam Up beam merge}
+      Gb5.16{ot 8va beam Up beam split}
+      A5.8{tu (3 2) ot 8va beam Up beam merge}
+      B5.8{tu (3 2) ot 8va beam Up beam split}
+      D6.4{tu (3 2) ot 8va beam Down beam split}
+      E6.8{tu (3 2) ot 8va beam Down beam merge}
+      Gb6.8{tu (3 2) ot 8va beam Down beam split}
+    |
+      G6.8{tu (3 2) ot 8va beam Down beam merge}
+      Gb6.8{tu (3 2) ot 8va beam Down beam merge}
+      D6.8{tu (3 2) ot 8va beam Down beam split}
+      A5.8{tu (3 2) ot 8va beam Up beam merge}
+      G5.8{tu (3 2) ot 8va beam Up beam merge}
+      Gb5.8{tu (3 2) ot 8va beam Up beam split}
+      (G4 D5).8{tu (3 2) beam Down beam merge}
+      B4.8{tu (3 2) beam Down beam merge}
+      G4.8{tu (3 2) beam Down beam split}
+      Gb4.8{tu (3 2) beam Up beam merge}
+      D4.8{tu (3 2) beam Up beam merge}
+      A3.8{tu (3 2) beam Up beam split}
+    |
+      r.4{cre beam split}
+      (B3 E4 G4).4{cre beam Up beam split}
+      (G4 B4).4{cre beam Up beam split}
+      (B4 C5 E5).4{cre beam Down beam split}
+    |
+      (A4 D5 Gb5).2{dy mf beam Down beam split}
+      (A4 C5 Gb5).4{tu (3 2) ad 0 beam Down beam split}
+      (B4 D5 G5).4{tu (3 2) beam Down beam split}
+      (A4 C5 A5).4{tu (3 2) beam Down beam split}
+    |
+      (A4 C5 A5).4{tu (3 2) beam Down beam split}
+      (B4 D5 B5).4{tu (3 2) beam Down beam split}
+      (G4 B4 G5).4{tu (3 2) beam Down beam split}
+      (G4{t} B4{t} G5{t}).4{beam Down beam split}
+      (B4 D5 B5).4{beam Down beam split}
+    |
+      (B4 B5).4{tu (3 2) beam Down beam split}
+      (Db5{acc #} Db6{acc #}).4{tu (3 2) beam Down beam split}
+      (A4 A5).4{tu (3 2) beam Down beam split}
+      E5.4{beam Down beam split}
+      (B4 Db5 Gb5).4{beam Down beam split}
+    |
+      (D5 Gb5 D6).2{beam Down beam split}
+      (D5 F5{acc forcenatural} D6).4{tu (3 2) beam Down beam split}
+      (C5 E5 C6).4{tu (3 2) beam Down beam split}
+      (Bb4{acc b} D5 Bb5{acc b}).4{tu (3 2) beam Down beam split}
+    |
+      (A4 C5 A5).2{beam Down beam split}
+      (E5 G5 E6).2{beam Down beam split}
+    |
+      (C5 E5 Gb5 B5).2{dy f beam Down beam split}
+      E4.4{beam Up beam split}
+      (E4 Gb4).4{beam Up beam split}
+    |
+      (E4 Gb4 A4).4{cre dy p beam Up beam split}
+      (E4 Gb4 B4).4{cre beam Up beam split}
+      (Gb4 A4 B4 E5).4{cre beam Down beam split}
+      (G4 C5{acc #} C5 Gb5).4{cre fermata (medium 0) beam Down beam split}
+    |
+      (Eb4{acc #} Gb4 A4 Eb5{acc #}).4{d cre dy f beam Up beam split}
+      E4.8{cre dy pp beam Up beam split}
+      Gb4.8{cre beam Down beam merge}
+      B4.8{cre beam Down beam merge}
+      E5.8{cre beam Down beam merge}
+      Gb5.8{cre beam Down beam split}
+    |
+    \barLineRight lightlight
+      (C5 Eb5{acc #} Gb5{acc #} A5).1{ad 0 dy mp beam split}
+    |
+    \tempo 79.9998
+    \tempo 80
+      r.8{dy mf beam split}
+      E4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      A4.8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      D5.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      B4.2{beam Down beam split}
+      (D4 G4).4{beam Up beam split}
+      (D4 G4).4{beam Up beam split}
+    |
+      r.8{beam split}
+      E4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      A4.8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      D5.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      B4.2{beam Down beam split}
+      (A3 C4 Gb4).4{beam Up beam split}
+      (A3 C4 Gb4).4{beam Up beam split}
+    |
+      r.8{beam split}
+      (B4 G5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+      (Gb4 D5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (E4 B4).8{beam Down beam split}
+      r.8{beam split}
+    |
+      r.8{beam split}
+      (G5 B5).8{beam Down beam merge}
+      (Gb5 A5).8{beam Down beam merge}
+      (E5 G5).8{beam Down beam split}
+      (D5 Gb5).8{beam Down beam merge}
+      (Gb5 A5).8{beam Down beam merge}
+      B4.8{beam Down beam merge}
+      B5.8{beam Down beam split}
+    |
+      (B3 D4 G4).4{d ad 0 beam Up beam split}
+      E4.8{beam Up beam split}
+      Gb4.8{beam Up beam merge}
+      (D4 G4).8{beam Up beam merge}
+      (E4 A4).8{beam Up beam merge}
+      (Gb4 D5).8{beam Up beam split}
+    |
+      (E4 B4).8{ad 0 beam Down beam merge}
+      B5.8{beam Down beam merge}
+      B4.8{beam Down beam merge}
+      (E4 Gb5).8{beam Down beam split}
+      (A4 A5).8{beam Down beam merge}
+      (G4 G5).8{beam Down beam split}
+      (Gb4 Gb5).4{beam Down beam split}
+    |
+      (E4 G4 B4 E5).8{ad 0 beam Up beam merge}
+      E4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      A4.8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      D5.8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      B4.8{beam Down beam merge}
+      (C5 E5).8{beam Down beam merge}
+      (D5 Gb5).8{beam Down beam merge}
+      (E5 G5).8{beam Down beam split}
+      (Gb5 A5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam merge}
+      (D5 D6).8{beam Down beam merge}
+      (C5 C6).8{beam Down beam split}
+    |
+      (B4 B5).8{beam Down beam merge}
+      E4.8{beam Down beam merge}
+      (D4 Gb4).8{beam Down beam merge}
+      (E4 G4).8{beam Down beam split}
+      (Gb4 A4).8{beam Up beam merge}
+      E4.8{beam Up beam merge}
+      (A4 D5).8{beam Up beam merge}
+      C5.8{beam Up beam split}
+    |
+      (D4 B4).8{beam Down beam merge}
+      Gb5.16{beam Down beam merge}
+      G5.16{beam Down beam split}
+      (Gb4 Gb5).8{beam Down beam merge}
+      D5.8{beam Down beam split}
+      E5.8{beam Down beam merge}
+      (B4 D5 B5).8{beam Down beam merge}
+      (C4 E4 A4).8{ad 0 beam Down beam merge}
+      B4.8{beam Down beam split}
+    |
+      (Eb4{acc #} G4 C5).8{beam Up beam merge}
+      Bb4{acc b}.8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      (C4 Gb4 Bb4).8{beam Up beam split}
+      A4.8{beam Down beam merge}
+      G4.8{beam Down beam merge}
+      (Gb4 Bb4{acc #} F5{acc #}).8{beam Down beam merge}
+      Eb5{acc #}.8{beam Down beam split}
+    |
+      Db5{acc #}.8{dy f beam Down beam merge}
+      (G4 Eb5{acc #}).8{beam Down beam merge}
+      Db5.8{beam Down beam merge}
+      C5{acc forcenatural}.8{beam Down beam split}
+      (C4 G4 Bb4{acc b}).8{beam Up beam merge}
+      C5.8{beam Up beam merge}
+      (C4 Gb4 Bb4 Db5{acc b}).8{beam Up beam merge}
+      (Eb4{acc b} Eb5{acc b}).8{beam Up beam split}
+    |
+      (F4{acc forcenatural} Bb4{acc b} C5 F5{acc forcenatural}).4{beam Down beam split}
+      Bb3{acc b}.16{beam Up beam merge}
+      C4.16{beam Up beam merge}
+      Eb4{acc #}.16{beam Up beam merge}
+      F4.16{beam Up beam split}
+      Bb4.16{beam Up beam merge}
+      C5.16{beam Up beam merge}
+      F4.16{beam Up beam merge}
+      Eb5{acc #}.16{beam Up beam split}
+      C5.16{beam Down beam split}
+      r.16{beam split}
+      r.8{beam split}
+    |
+      (G4 C5 D5 G5).4{ad 0 dec beam Down beam split}
+      D4.16{dec beam Up beam merge}
+      G4.16{dec beam Up beam merge}
+      C4.16{dec beam Up beam merge}
+      D4.16{dec beam Up beam split}
+      C5.16{dec beam Up beam merge}
+      D5.16{dec beam Up beam merge}
+      G4.16{dec beam Up beam merge}
+      D4.16{dec beam Up beam split}
+      C4.16{dec beam Up beam split}
+      r.16{dec beam split}
+      r.8{dec beam split}
+    |
+    \barLineRight lightlight
+      (F4{acc forcenatural} G4 B4).1{dy p beam split}
+    |
+    \ts (7 4)
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      B4.8{beam Down beam split}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      D5.4{beam Down beam split}
+      B4.2{beam Down beam split}
+    |
+      (G3 B3 E4).4{d ad 0 dy mf beam Up beam split}
+      B4.8{beam Down beam split}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      E4.2{d beam Up beam split}
+    |
+      (C4 E4).4{d beam Up beam split}
+      C5.8{beam Down beam split}
+      B4.8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      A4.8{beam Up beam split}
+      (D4 Gb4 B4).4{ad 0 beam Up beam split}
+      (D4{t} Gb4{t} B4{t}).8{beam Down beam merge}
+      G5.8{beam Down beam merge}
+      Gb5.8{beam Down beam merge}
+      E5.8{beam Down beam split}
+    |
+    \ts (6 4)
+      (Gb4 A4 Eb5{acc #}).4{d ad 0 beam Up beam split}
+      E5.8{beam Down beam merge}
+      Gb5.8{beam Down beam merge}
+      B4.8{beam Down beam split}
+      (E4 A4).8{ad 0 beam Up beam merge}
+      B4.8{beam Up beam split}
+      (Db4{acc #} E4 G4).4{beam Up beam split}
+      (Eb4{acc #} Gb4).4{beam Up beam split}
+    |
+    \ts (7 4)
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      (Gb4 B4).8{beam Up beam split}
+      (D4 A4).8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      (E4 G4).8{beam Up beam split}
+      (A4 D5).4{beam Down beam split}
+      (Gb4 B4).2{beam Up beam split}
+    |
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      (Gb4 B4).8{beam Up beam split}
+      (D4 A4).8{beam Up beam merge}
+      G4.8{beam Up beam merge}
+      Gb4.8{beam Up beam merge}
+      G4.8{beam Up beam split}
+      (B3 E4).4{beam Up beam split}
+      (B3 E4).4{beam Up beam split}
+      (A3 D4).4{beam Up beam split}
+    |
+      (C4 E4).4{d beam Up beam split}
+      (A4 C5).8{beam Down beam split}
+      (G4 B4).8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      (E4 G4).8{beam Up beam merge}
+      A4.8{beam Up beam split}
+      (D4 Gb4 B4).4{ad 0 beam Up beam split}
+      (D4{t} Gb4{t} B4{t}).8{beam Down beam merge}
+      (B4 G5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+    |
+    \ts (6 4)
+      (Gb4 A4 Eb5{acc #}).4{d ad 0 beam Up beam split}
+      (E4 E5).8{beam Down beam merge}
+      (Gb4 Gb5).8{beam Down beam merge}
+      (E4 B4).8{beam Down beam split}
+      (Eb4{acc #} A4).4{beam Up beam split}
+      (E4 G4).4{beam Up beam split}
+      (Gb3 B3 Eb4 Gb4).4{beam Up beam split}
+    |
+    \ts (7 4)
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      (B4 G5).8{beam Down beam split}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam merge}
+      (Gb4 D5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+      (B4 D5).4{beam Down beam split}
+      (G4 B4).2{beam Up beam split}
+    |
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      (B4 G5 B5).8{beam Down beam split}
+      (A4 Gb5 A5).8{beam Down beam merge}
+      (G4 E5 G5).8{beam Down beam merge}
+      (Gb4 D5 Gb5).8{beam Down beam merge}
+      (G4 E5 G5).8{beam Down beam split}
+      E4.4{beam Up beam split}
+      (B4 E5 G5).4{beam Down beam split}
+      (A4 D5 Gb5).4{beam Down beam split}
+    |
+      (C4 E4 B4 E5).4{d beam Up beam split}
+      (A4 C5).8{beam Down beam split}
+      (G4 B4).8{beam Up beam merge}
+      (Gb4 A4).8{beam Up beam merge}
+      (E4 G4).8{beam Up beam merge}
+      (Gb4 A4).8{beam Up beam split}
+      (D4 Gb4 B4).4{ad 0 beam Up beam split}
+      (D4{t} Gb4{t} B4{t}).8{beam Down beam merge}
+      (B4 G5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+    |
+    \ts (6 4)
+      (Gb4 A4 Eb5{acc #}).4{d ad 0 beam Up beam split}
+      (Gb4 E5).8{beam Down beam merge}
+      Gb5.8{beam Down beam merge}
+      B4.8{beam Down beam split}
+      (E4 A4).8{ad 0 beam Up beam merge}
+      B4.8{beam Up beam split}
+      (Db4{acc #} E4 G4).4{beam Up beam split}
+      (Eb4{acc #} Gb4).4{beam Up beam split}
+    |
+    \ts (7 4)
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      (B4 Gb5 B5).8{beam Down beam split}
+      (A4 D5 A5).8{beam Down beam merge}
+      (G4 G5).8{beam Down beam merge}
+      (Gb4 Gb5).8{beam Down beam merge}
+      (G4 E5 G5).8{beam Down beam split}
+      (A4 D5).4{beam Down beam split}
+      (Gb4 B4).2{beam Up beam split}
+    |
+      (G3 B3 E4).4{d ad 0 beam Up beam split}
+      (B4 Gb5 B5).8{beam Down beam split}
+      (A4 D5 A5).8{beam Down beam merge}
+      (G4 G5).8{beam Down beam merge}
+      (Gb4 D5 Gb5).8{beam Down beam merge}
+      (G4 E5 G5).8{beam Down beam split}
+      (B3 E4).4{beam Up beam split}
+      (B3 E4).4{beam Up beam split}
+      (A3 D4).4{beam Up beam split}
+    |
+      (C4 E4).4{d beam Up beam split}
+      (A4 C5).8{beam Down beam split}
+      (G4 B4).8{beam Up beam merge}
+      A4.8{beam Up beam merge}
+      (E4 G4).8{beam Up beam merge}
+      A4.8{beam Up beam split}
+      (D4 Gb4 B4).4{ad 0 beam Up beam split}
+      (D4{t} Gb4{t} B4{t}).8{beam Down beam merge}
+      (B4 G5).8{beam Down beam merge}
+      (A4 Gb5).8{beam Down beam merge}
+      (G4 E5).8{beam Down beam split}
+    |
+    \ts (6 4)
+    \barLineRight lightlight
+      (Gb4 A4 Eb5{acc #}).4{d ad 0 beam Up beam split}
+      (E4 E5).8{beam Down beam merge}
+      (Gb4 Gb5).8{beam Down beam merge}
+      (E4 B4).8{beam Down beam split}
+      (Eb4{acc #} A4).4{beam Up beam split}
+      (E4 G4).4{beam Up beam split}
+      (Gb3 B3 Eb4 Gb4).4{beam Up beam split}
+    |
+    \ts (7 4)
+      (E5 G5 B5).4{d ad 0 dy mp beam Down beam split}
+      (E5 A5).4{d beam Down beam split}
+      (Gb5 D6).4{beam Down beam split}
+      (G5 B5).4{beam Down beam split}
+      (G5{t} B5{t}).8{beam Down beam split}
+      A5.4{d beam Down beam split}
+    |
+      (C5 Eb5{acc #} G5).4{d ad 0 beam Down beam split}
+      (C5 F5{acc forcenatural}).4{d beam Down beam split}
+      (D5{acc forcenatural} Bb5{acc b}).4{beam Down beam split}
+      (Eb5{acc #} G5).4{beam Down beam split}
+      (Eb5{t} G5{t}).8{beam Down beam split}
+      F5.4{d beam Down beam split}
+    |
+      (A4 C5 E5).4{d ad 0 beam Down beam split}
+      (A4 D5).4{d beam Down beam split}
+      (B4 G5).4{beam Down beam split}
+      (C5 E5).4{beam Down beam split}
+      (C5{t} E5{t}).8{beam Down beam split}
+      D5.4{d beam Down beam split}
+    |
+      (F4{acc forcenatural} Ab4{acc #} C5).4{d ad 0 beam Up beam split}
+      (F4 Bb4{acc b}).4{d beam Up beam split}
+      (G4{acc forcenatural} Eb5{acc #}).4{beam Down beam split}
+      (Ab4{acc #} C5).4{beam Up beam split}
+      (Ab4{t} C5{t}).8{beam Up beam split}
+      (F4 Bb4).4{d beam Up beam split}
+    |
+      G5.8{dec beam Down beam merge}
+      Ab5{acc #}.8{dec beam Down beam split}
+      Bb5{acc b}.4{d dec beam Down beam split}
+      Ab5.8{dec beam Down beam split}
+      Ab5{t}.4{dec beam Down beam split}
+      Eb6{acc #}.2{d dy p beam Down beam split}
+    |
+    \barLineRight lightheavy
+      Eb6{t}.1{d beam split}
+      r.4{beam split}
+  \staff {
+    score
+  }
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \spd 0
+      \spu 1
+      \ks g
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      |
+      \sph 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 0.6666666666666666
+      \spd 0.6666666666666666
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \spd 0
+      \spu 1
+      \ks g
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      |
+      \sph 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 0.6666666666666666
+      \spd 0.6666666666666666
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \spd 0
+      \spu 1
+      \ks g
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      |
+      \sph 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 0.6666666666666666
+      \spd 0.6666666666666666
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \spd 0
+      \spu 1
+      \ks g
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      |
+      \sph 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 0.6666666666666666
+      \spd 0.6666666666666666
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      \spu 1
+      |
+      \spd 0
+      |
+      \sph 0
+      \barLineRight lightheavy
+    \voice 
+      \clef f4
+      \ottava regular
+      \simile none
+      \spd 0
+      \spu 1
+      \ks g
+        r.8{ot 8va dy p}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+      |
+      \spd 0
+      \spu 1
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+        r.8{ot 8va}
+        B4.8{ot 8va beam Down}
+      |
+      \spd 0
+      \spu 1
+        C4.8{ot 8va beam Down beam merge}
+        G4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        G4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        G4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        G4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        G4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        G4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        G4.8{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D4.8{ot 8va beam Down beam merge}
+        A4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        A4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        A4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        A4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        A4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        A4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        A4.8{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        E4.8{ot 8va beam Down beam merge}
+        B4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        B4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        B4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        B4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        B4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        B4.8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        B4.8{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+        E4.8{ot 8va beam Down beam merge}
+        (G4 B4).8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        (G4 B4).8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        (G4 B4).8{ot 8va beam Down beam split}
+        r.8{ot 8va beam split}
+        (G4 B4).8{ot 8va beam Down beam split}
+        (E4{ac} G4).4{ot 8va beam Down beam split}
+        (D4{ac} Gb4 A4).4{ot 8va beam Down beam split}
+        (A3{ac} A4).4{ot 8va fermata (medium 0) beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        E2.8{dy mf beam Up beam merge}
+        B2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        D3.8{beam Down beam split}
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam split}
+        (Gb3 B3).4{beam Down beam split}
+        (A3 D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        C2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam split}
+        A3{t}.4{beam Down beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        (G3 B3).4{beam Down beam split}
+        (B2 Gb3 A3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        A2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        C4{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        G2.8{beam Down beam merge}
+        D3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+        Gb2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        Db4{acc #}.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        B2.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+        A3.4{beam Down beam split}
+        A3.4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        D3.8{beam Down beam split}
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam split}
+        (Gb3 B3).4{beam Down beam split}
+        (A3 D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        C2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam split}
+        A3{t}.4{beam Down beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        (E3 G3 B3).4{beam Down beam split}
+        (B2 Gb3 A3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        A2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        C4{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        G2.8{beam Down beam merge}
+        D3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+        Gb2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        Db4{acc #}.8{beam Down beam merge}
+        B3.8{beam Down beam split}
+        B2.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+        A3.4{beam Down beam split}
+        B1.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        C2.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        E4{t}.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+        C3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        (C3 A3).4{beam Down beam split}
+        (C3 A3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+        D4{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+        D2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        A3.8{beam Up beam split}
+        D3.4{beam Down beam split}
+        D2.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        E2.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        E3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        Gb4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        E3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        Gb4.8{beam Down beam split}
+        E3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        G2.8{beam Down beam merge}
+        D3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        (G2 G3).8{beam Down beam split}
+        B3.4{beam Down beam split}
+        G1.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        B2.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        A3.8{beam Up beam merge}
+        Gb2.8{beam Up beam split}
+        Gb3.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Eb3{acc #}.8{beam Up beam merge}
+        B1.8{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        A3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        E3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        C3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        (C4 E4).8{beam Down beam merge}
+        C3.8{beam Down beam split}
+        D4.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        C3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        A3.8{beam Up beam split}
+        C4.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        A3.8{beam Down beam merge}
+        B3.8{beam Down beam split}
+        D2.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        (C3 A3).4{d dy f beam Down beam split}
+        (D3 A3).8{beam Down beam split}
+        (D3{t} A3{t}).4{beam Down beam split}
+        (Eb3{acc b} Bb3{acc b} C4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (Eb3{t} Bb3{t} C4{t}).8{beam Down beam split}
+        (F3{acc forcenatural} Ab3{acc b} C4).4{d beam Down beam split}
+        (G2 D3).4{beam Up beam split}
+        (Gb2{acc #} Eb3{acc b}).4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        F2{acc forcenatural}.16{dy mf beam Up beam merge}
+        C3.16{beam Up beam merge}
+        Eb3{acc #}.16{beam Up beam merge}
+        F3{acc forcenatural}.16{beam Up beam split}
+        r.4{beam split}
+        r.4{beam split}
+        r.16{beam split}
+        Eb4{acc #}.16{beam Down beam merge}
+        Bb3{acc b}.16{beam Down beam merge}
+        F3.16{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        G2.16{dec beam Down beam merge}
+        D3.16{dec beam Down beam merge}
+        G3.16{dec beam Down beam merge}
+        C4.16{dec beam Down beam split}
+        r.4{dec beam split}
+        r.4{dec beam split}
+        r.16{dec beam split}
+        G3.16{dec beam Down beam merge}
+        D3.16{dec beam Down beam merge}
+        C3.16{dec beam Down beam split}
+      |
+      \barLineRight lightlight
+        G2.2{d dy p fermata (medium 0) beam Up beam split}
+        (F3{acc forcenatural} Db4{acc #} D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        E3.8{dy mp beam Down beam merge}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        (B2 B3).8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        E2.8{beam Up beam merge}
+        E3.8{beam Up beam split}
+        r.8{beam split}
+        G3.8{beam Down beam split}
+        r.8{beam split}
+        E3.8{beam Down beam split}
+        r.8{beam split}
+        B3.8{beam Down beam split}
+        r.8{beam split}
+        G3.8{beam Down beam split}
+        r.8{beam split}
+        E3.8{beam Down beam split}
+        r.8{beam split}
+        B2.8{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        Gb4.8{beam Down beam split}
+        G4.8{beam Down beam merge}
+        Gb4.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        Gb4.8{beam Down beam merge}
+        G4.8{beam Down beam split}
+        A4.4{beam Down beam split}
+        (E3 B3).4{beam Down beam split}
+        (D4 Gb4).4{fermata (medium 0) beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (C4 G4).2{ad 0 ot 8va beam Down beam split}
+        B4.2{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (D4 Gb4 C5).2{ad 0 ot 8va beam Down beam split}
+        D5.2{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (E4 B4).2{d ad 0 ot 8va beam Down beam split}
+        E5.4{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (E4 Gb4 G4 B4).1{ot 8va beam split}
+      |
+      \spd 0
+      \spu 1
+        (C4 G4).4{d ot 8va beam Down beam split}
+        B4.8{ot 8va beam Down beam split}
+        (B3 E4 G4).2{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (A3 D4 Gb4).4{ot 8va beam Up beam split}
+        (Gb3 C4 G4).4{ot 8va beam Up beam split}
+        (Gb3 D4 A4).4{ot 8va beam Up beam split}
+        (Gb4 D5).4{ot 8va beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (E4 B4).2{ot 8va beam Down beam split}
+        (B3 D4 Gb4 A4).4{ot 8va beam Down beam split}
+        B3.4{ot 8va beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        (E4 G4 B4).4{cre beam Down beam split}
+        (D4 Gb4 A4).4{cre beam Down beam split}
+        (E3 A3 D4).4{cre beam Down beam split}
+        (E2 A3).4{cre beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        C2.8{tu (3 2) cre dy mf beam Up beam merge}
+        G2.8{tu (3 2) beam Up beam merge}
+        E3.8{tu (3 2) beam Up beam split}
+        Gb3.8{tu (3 2) beam Down beam merge}
+        G3.8{tu (3 2) beam Down beam merge}
+        B3.8{tu (3 2) beam Down beam split}
+        E4.8{tu (3 2) beam Down beam merge}
+        Gb4.8{tu (3 2) beam Down beam merge}
+        G4.8{tu (3 2) beam Down beam split}
+        Gb4.8{tu (3 2) beam Down beam merge}
+        E4.8{tu (3 2) beam Down beam merge}
+        B3.8{tu (3 2) beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{tu (3 2) beam Up beam merge}
+        A2.8{tu (3 2) beam Up beam merge}
+        E3.8{tu (3 2) beam Up beam split}
+        Gb3.8{tu (3 2) beam Down beam merge}
+        G3.8{tu (3 2) beam Down beam merge}
+        D4.8{tu (3 2) beam Down beam split}
+        Gb4.8{tu (3 2) beam Down beam merge}
+        D4.8{tu (3 2) beam Down beam merge}
+        C4.8{tu (3 2) beam Down beam split}
+        A3.8{tu (3 2) beam Down beam merge}
+        Gb3.8{tu (3 2) beam Down beam merge}
+        D3.8{tu (3 2) beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        E2.8{tu (3 2) beam Up beam merge}
+        B2.8{tu (3 2) beam Up beam merge}
+        E3.8{tu (3 2) beam Up beam split}
+        Gb3.8{tu (3 2) beam Down beam merge}
+        G3.8{tu (3 2) beam Down beam merge}
+        B3.8{tu (3 2) beam Down beam split}
+        E4.8{tu (3 2) beam Down beam merge}
+        B3.8{tu (3 2) beam Down beam merge}
+        G3.8{tu (3 2) beam Down beam split}
+        Gb3.8{tu (3 2) beam Down beam merge}
+        G3.8{tu (3 2) beam Down beam merge}
+        B3.8{tu (3 2) beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        Gb2.8{tu (3 2) beam Up beam merge}
+        Db3{acc #}.8{tu (3 2) beam Up beam merge}
+        Ab3{acc #}.8{tu (3 2) beam Up beam split}
+        A3.8{tu (3 2) beam Down beam merge}
+        Db4{acc #}.8{tu (3 2) beam Down beam merge}
+        Ab4{acc #}.8{tu (3 2) beam Down beam split}
+        A4.8{tu (3 2) beam Down beam merge}
+        Ab4.8{tu (3 2) beam Down beam merge}
+        Db4.8{tu (3 2) beam Down beam split}
+        A3.8{tu (3 2) beam Down beam merge}
+        Ab3.8{tu (3 2) beam Down beam merge}
+        Db3.8{tu (3 2) beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        G2.8{tu (3 2) beam Down beam merge}
+        D3.8{tu (3 2) beam Down beam merge}
+        A3.8{tu (3 2) beam Down beam split}
+        Bb3{acc b}.8{tu (3 2) beam Down beam merge}
+        D4.8{tu (3 2) beam Down beam merge}
+        F4{acc forcenatural}.8{tu (3 2) beam Down beam split}
+        A4.4{tu (3 2) beam Down beam split}
+        (G3 Bb3 F4).4{tu (3 2) beam Down beam split}
+        (G3 Bb3 D4).4{tu (3 2) beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (A2 E3 B3).2{dy f beam Down beam split}
+        (E2 B2 Gb3).2{beam Up beam split}
+      |
+      \spd 0
+        B1.4{beam Up beam split}
+        (E3 Gb3 B3).4{cre dy p beam Down beam split}
+        (B2 Gb3 B3).4{cre beam Down beam split}
+        (Gb3 B3).4{cre beam Down beam split}
+      |
+      \sph 0
+        (Gb3 B3).4{cre beam Down beam split}
+        D3.4{cre beam Down beam split}
+        A2.4{cre beam Up beam split}
+        E2.4{cre fermata (medium 0) beam Up beam split}
+      |
+      \sph 0
+      \spu 1
+        (B2 Gb3 B3).2{d dy pp beam Down beam split}
+        Gb2.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+      \barLineRight lightlight
+        B1.2{d dy mp beam Up beam split}
+        B1.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        C2.8{dy mf beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        E4{t}.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+        C3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        (C3 A3).4{beam Down beam split}
+        (C3 A3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+        D4{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+        D2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        A3.8{beam Up beam split}
+        D3.4{beam Down beam split}
+        D2.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        E2.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        E3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        E3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        Gb4.8{beam Down beam split}
+        E3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        G2.8{beam Down beam merge}
+        D3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        (G2 G3).8{beam Down beam split}
+        B3.4{beam Down beam split}
+        G1.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        B2.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        A3.8{beam Up beam merge}
+        Gb2.8{beam Up beam split}
+        Gb3.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Eb3{acc #}.8{beam Up beam merge}
+        B1.8{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        A3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        E3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        C3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        (C4 E4).8{beam Down beam merge}
+        C3.8{beam Down beam split}
+        D4.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        C3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        A3.8{beam Up beam split}
+        C4.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        D2.8{beam Up beam merge}
+        D3.8{beam Up beam merge}
+        Gb3.8{beam Up beam merge}
+        G3.8{beam Up beam split}
+        A3.8{beam Down beam merge}
+        B3.8{beam Down beam split}
+        D2.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        (C3 A3).4{d dy f beam Down beam split}
+        (D3 A3).8{beam Down beam split}
+        (D3{t} A3{t}).4{beam Down beam split}
+        (Eb3{acc b} Bb3{acc b} C4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        (Eb3{t} Bb3{t} C4{t}).8{beam Down beam split}
+        (F3{acc forcenatural} Ab3{acc b} C4).4{d beam Down beam split}
+        (G2 D3).4{beam Up beam split}
+        (Gb2{acc #} Eb3{acc b}).4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        F2{acc forcenatural}.16{beam Up beam merge}
+        C3.16{beam Up beam merge}
+        Eb3{acc #}.16{beam Up beam merge}
+        F3{acc forcenatural}.16{beam Up beam split}
+        r.4{beam split}
+        r.4{beam split}
+        r.16{beam split}
+        Eb4{acc #}.16{beam Down beam merge}
+        Bb3{acc b}.16{beam Down beam merge}
+        F3.16{beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        G2.16{beam Down beam merge}
+        D3.16{beam Down beam merge}
+        G3.16{beam Down beam merge}
+        C4.16{beam Down beam split}
+        r.4{beam split}
+        r.4{beam split}
+        r.16{beam split}
+        G3.16{beam Down beam merge}
+        D3.16{beam Down beam merge}
+        C3.16{beam Down beam split}
+      |
+      \barLineRight lightlight
+        G2.1{dy p beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        E2.8{dy mf beam Up beam merge}
+        B2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        D3.8{beam Down beam split}
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam split}
+        (Gb3 B3).4{beam Down beam split}
+        (A3 D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        C2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam split}
+        A3{t}.4{beam Down beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        (G3 B3).4{beam Down beam split}
+        (B2 Gb3 A3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        A2.8{beam Down beam merge}
+        (E3 B3).8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        E3.8{beam Down beam split}
+        E3{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        G2.8{beam Down beam merge}
+        (D3 A3).8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        (E3 D4).8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+        Gb2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        Db4{acc #}.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        B2.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+        A3.4{beam Down beam split}
+        A3.8{beam Up beam merge}
+        Gb2.8{beam Up beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        D3.8{beam Down beam split}
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam split}
+        (Gb3 B3).4{beam Down beam split}
+        (A3 D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        C2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        A3.8{beam Down beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        (E3 G3).4{beam Down beam split}
+        (B2 Gb3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        A2.8{beam Down beam merge}
+        (E3 B3).8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        E4{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        G2.8{beam Down beam merge}
+        (D3 A3).8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 0.6666666666666666
+      \spd 0.6666666666666666
+      \spu 1
+        Gb2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        Db4{acc #}.8{beam Down beam merge}
+        B3.8{beam Down beam split}
+        B2.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+        A3.4{beam Down beam split}
+        B1.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        D3.8{beam Down beam split}
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam split}
+        (Gb3 B3).4{beam Down beam split}
+        (A3 D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        C2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam split}
+        A3{t}.4{beam Down beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        (G3 B3).4{beam Down beam split}
+        (B2 Gb3 A3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        A2.8{beam Down beam merge}
+        (E3 B3).8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        E3.8{beam Down beam split}
+        E3{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        G2.8{beam Down beam merge}
+        (D3 A3).8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        (G3 D4).8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+        Gb2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        Db4{acc #}.8{beam Down beam merge}
+        E4.8{beam Down beam split}
+        B2.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+        A3.4{beam Down beam split}
+        A3.8{beam Up beam merge}
+        Gb2.8{beam Up beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        D3.8{beam Down beam split}
+        E2.8{beam Up beam merge}
+        B2.8{beam Up beam split}
+        (Gb3 B3).4{beam Down beam split}
+        (A3 D4).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 0.7142857142857143
+      \spd 0.7142857142857143
+      \spu 1
+        C2.8{beam Up beam merge}
+        G2.8{beam Up beam merge}
+        E3.8{beam Up beam merge}
+        Gb3.8{beam Up beam split}
+        G3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        A3{t}.8{beam Down beam merge}
+        A3.8{beam Down beam split}
+        C2.8{beam Up beam merge}
+        C3.8{beam Up beam split}
+        (E3 G3).4{beam Down beam split}
+        (B2 Gb3).4{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5714285714285714
+      \spd 0.5714285714285714
+      \spu 1
+        A2.8{beam Down beam merge}
+        (E3 B3).8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        E4.8{beam Down beam merge}
+        E4{t}.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        G2.8{beam Down beam merge}
+        (D3 A3).8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        C4.8{beam Down beam merge}
+        D4.8{beam Down beam split}
+      |
+      \spd 0
+      \spu 0.5
+      \spd 0.5
+      \spu 1
+      \barLineRight lightlight
+        Gb2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        Gb3.8{beam Down beam merge}
+        A3.8{beam Down beam merge}
+        Db4{acc #}.8{beam Down beam merge}
+        B3.8{beam Down beam split}
+        B2.8{beam Down beam merge}
+        Gb3.8{beam Down beam split}
+        A3.4{beam Down beam split}
+        B1.4{beam Up beam split}
+      |
+      \spd 0
+      \spu 1
+        E3.8{dy mp beam Down beam merge}
+        B3.8{beam Down beam merge}
+        Gb4.8{beam Down beam merge}
+        G4.8{beam Down beam split}
+        A4.8{beam Down beam merge}
+        D5.8{beam Down beam split}
+        D5{t}.4{beam Down beam split}
+        D5{t}.2{d beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        C3.8{beam Down beam merge}
+        G3.8{beam Down beam merge}
+        D4.8{beam Down beam merge}
+        Eb4{acc #}.8{beam Down beam split}
+        F4{acc forcenatural}.8{beam Down beam merge}
+        Bb4{acc b}.8{beam Down beam split}
+        Bb4{t}.4{beam Down beam split}
+        Bb4{t}.2{d beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        A2.8{beam Down beam merge}
+        E3.8{beam Down beam merge}
+        B3.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        E4.8{beam Down beam merge}
+        G4.8{beam Down beam split}
+        G4{t}.4{beam Down beam split}
+        G4{t}.2{d beam Down beam split}
+      |
+      \spd 0
+      \spu 1
+        F2{acc forcenatural}.8{beam Up beam merge}
+        C3.8{beam Up beam merge}
+        G3.8{beam Up beam merge}
+        Ab3{acc #}.8{beam Up beam split}
+        Bb3{acc b}.8{beam Down beam merge}
+        C4.8{beam Down beam split}
+        C4{t}.2{beam Down beam split}
+        C4{t}.4{d beam Down beam split}
+        Bb3.8{beam Down beam split}
+      |
+      \spd 0
+        Ab3{acc #}.4{dy p beam Down beam split}
+        (F3{acc forcenatural} Bb3{acc b} Eb4{acc b} Ab4{acc b}).4{d beam Down beam split}
+        (Eb3{acc b} A3 Db4{acc b} Gb4{acc #}).8{beam Down beam split}
+        (Eb3{t} A3{t} Db4{t} Gb4{t}).4{beam Down beam split}
+        (Db3{acc b} F3{acc forcenatural} Bb3 Eb4).2{d beam Down beam split}
+      |
+      \sph 0
+      \barLineRight lightheavy
+        (Db3{t} F3{t} Bb3{t} Eb4{t}).1{d beam split}
+        r.4{beam split}

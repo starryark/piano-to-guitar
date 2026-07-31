@@ -45,6 +45,7 @@ import * as alphaTab from '@coderline/alphatab';
 import * as fs from 'fs';
 import * as path from 'path';
 import { QUARTER_TICKS } from './score-utils.mjs';
+import { collectTieChains, buildTieAudit } from './ties.mjs';
 
 export { QUARTER_TICKS };
 
@@ -806,8 +807,10 @@ const ARPEGGIO_BRUSH = new Set([3, 4]); // BrushType.ArpeggioUp / ArpeggioDown
 // 0 or a truthiness test would flag every bar in the corpus.
 const OTTAVA_REGULAR = 2;
 
-/** Read a single bar (across every track/staff/voice) into a raw record. */
-function readBar(score, barIndex, state, preferFlat) {
+/** Read a single bar (across every track/staff/voice) into a raw record.
+ *  `tieInfo` is the score-wide tie-chain index from collectTieChains —
+ *  optional so unit tests can call readBar without it (raw fragment view). */
+function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
   const mb = score.masterBars[barIndex];
   const timeNum = mb.timeSignatureNumerator;
   const timeDen = mb.timeSignatureDenominator;
@@ -842,6 +845,12 @@ function readBar(score, barIndex, state, preferFlat) {
   for (let t = 0; t < score.tracks.length; t++) {
     const track = score.tracks[t];
     for (const staff of track.staves) {
+      // PTG: Percussion articulations expose a synthetic realValue (commonly
+      // MIDI 0 / C-1). Treating that as pitched material makes a drum voice
+      // win the bass selection and can pin harmony.root to C across an
+      // orchestral source. Drums are rhythmic context, not melody/harmony
+      // evidence for a solo-guitar reduction.
+      if (staff.isPercussion || track.isPercussion) continue;
       const bar = staff.bars[barIndex];
       if (!bar) continue;
       for (const voice of bar.voices) {
@@ -881,6 +890,19 @@ function readBar(score, barIndex, state, preferFlat) {
               tuplet,
               ornaments,
             };
+            // Tie-chain fields (Improve_Plan §2.2), additive. A note in a
+            // multi-fragment chain carries its chain id; the HEAD additionally
+            // carries the chain's merged sounding duration and fragment count.
+            // `attack:false` marks a continuation — it is NOT a new onset.
+            const ti = tieInfo?.byNote.get(note);
+            if (ti && (ti.chain.fragments > 1 || ti.chain.orphanContinuation)) {
+              rec.tieChainId = ti.chain.id;
+              rec.attack = ti.attack;
+              if (ti.attack) {
+                rec.soundingBeats = ti.chain.soundingBeats;
+                rec.notatedFragments = ti.chain.fragments;
+              }
+            }
             if (!notesByVoice.has(vid)) {
               notesByVoice.set(vid, []);
               voiceMeta.set(vid, { track: t, staff: staff.index, voice: voice.index });
@@ -922,8 +944,18 @@ function readBar(score, barIndex, state, preferFlat) {
     bassV = ranked[ranked.length - 1];
   }
 
-  const melody = topLine(notesByVoice.get(trebleV) || [], true);
-  const bass = topLine(notesByVoice.get(bassV) || [], false);
+  // §2.2 (Improve_Plan): coalesce ties BEFORE interpreting attacks. A tie
+  // continuation is not a new onset — it must never become a melody/bass event
+  // (and therefore never a skeleton "attack" the gate would demand the tab
+  // restate). The chain HEAD keeps the merged sounding duration, so a note a
+  // noisy transcription shattered into tied microfragments reads as ONE long
+  // note. Tie-free sources are byte-identical through this path.
+  const attacksOnly = (recs) => recs
+    .filter((n) => n.attack !== false)
+    .map((n) => (n.soundingBeats !== undefined ? { ...n, beats: n.soundingBeats } : n));
+
+  const melody = topLine(attacksOnly(notesByVoice.get(trebleV) || []), true);
+  const bass = topLine(attacksOnly(notesByVoice.get(bassV) || []), false);
   const bassFolded = bass.map((n) => ({
     ...n,
     midi: foldIntoGuitar(n.midi),
@@ -968,14 +1000,33 @@ function readBar(score, barIndex, state, preferFlat) {
   const allPcs = [];
   const allMidis = [];
   // Per-half-bar note buckets, carrying the duration needed to pick the stratum.
+  // Tie-chain fragments are merged WITHIN the bar first (sum of this bar's
+  // fragment durations, earliest onset), so a sustained note a transcription
+  // shattered into tied dust still counts as one LONG note for the >= 1 beat
+  // harmonic stratum. Tie-free sources take the else-branch unchanged.
   const halfA = []; // onset in [0, halfBeats)
   const halfB = []; // onset in [halfBeats, barBeats]
   for (const v of voices) {
+    const chainMerged = new Map(); // tieChainId -> { midi, beats, onset }
     for (const n of v.notes) {
       allPcs.push(mod12(n.midi));
       allMidis.push(n.midi);
-      const bucket = n.onset < halfBeats ? halfA : halfB;
-      bucket.push({ midi: n.midi, beats: n.beats });
+      if (n.tieChainId) {
+        const cur = chainMerged.get(n.tieChainId);
+        if (cur) {
+          cur.beats = round4(cur.beats + n.beats);
+          cur.onset = Math.min(cur.onset, n.onset);
+        } else {
+          chainMerged.set(n.tieChainId, { midi: n.midi, beats: n.beats, onset: n.onset });
+        }
+      } else {
+        const bucket = n.onset < halfBeats ? halfA : halfB;
+        bucket.push({ midi: n.midi, beats: n.beats });
+      }
+    }
+    for (const m of chainMerged.values()) {
+      const bucket = m.onset < halfBeats ? halfA : halfB;
+      bucket.push({ midi: m.midi, beats: m.beats });
     }
   }
   const bassPc = allMidis.length ? mod12(Math.min(...allMidis)) : null;
@@ -1014,6 +1065,84 @@ function readBar(score, barIndex, state, preferFlat) {
     return detectHarmony(pcs, spanBassPc, preferFlat);
   });
 
+  // ---- foregroundEvidence: the per-bar attack graph (Improve_Plan §2) -------
+  // One gesture per raw onset, across EVERY pitched voice in the bar — the
+  // evidence layer M3's foreground scoring reads. Two invariants:
+  //   * a note's `duration` is its OWN sounding duration (tie-chain merged),
+  //     NEVER the gesture envelope — `maxEnvelopeDuration` records the
+  //     envelope separately so nothing is tempted to assign it to a pitch;
+  //   * tie continuations are not attacks — they appear in `sounding`, the
+  //     pitches held over this onset, not in `notes`.
+  // Timing keeps BOTH views: the raw onset and a sixteenth-grid normalization
+  // with its displacement and a linear confidence (1 − |displacement| beats).
+  // A beat with real parsed tuplet metadata is on ITS OWN grid: onset is
+  // trusted verbatim (confidence 1) and the ratio is reported — an irregular
+  // offset alone is never classified as a tuplet (§2.3).
+  const GRID = 0.25;
+  const gestureMap = new Map(); // onset(4dp) -> [attack rec + location]
+  const soundSpans = [];
+  for (const v of voices) {
+    for (const n of v.notes) {
+      soundSpans.push({
+        midi: n.midi, name: n.name,
+        start: n.onset, end: round4(n.onset + n.beats),
+      });
+      if (n.attack === false) continue; // continuation: sustains, never attacks
+      const key = n.onset.toFixed(4);
+      if (!gestureMap.has(key)) gestureMap.set(key, []);
+      gestureMap.get(key).push({ n, track: v.track, staff: v.staff, voice: v.voice });
+    }
+  }
+  const foregroundEvidence = [...gestureMap.values()].map((group) => {
+    const onset = group[0].n.onset;
+    const tuplet = group.find((g) => g.n.tuplet)?.n.tuplet ?? null;
+    let normalizedOnset;
+    let displacement;
+    let confidence;
+    if (tuplet) {
+      normalizedOnset = onset;
+      displacement = 0;
+      confidence = 1;
+    } else {
+      normalizedOnset = round4(Math.round(onset / GRID) * GRID);
+      displacement = round4(onset - normalizedOnset);
+      confidence = round4(Math.max(0, 1 - Math.abs(displacement)));
+    }
+    const notes = group.map(({ n, track, voice }) => {
+      const out = {
+        midi: n.midi,
+        name: n.name,
+        duration: n.soundingBeats !== undefined ? n.soundingBeats : n.beats,
+        track,
+        voice,
+      };
+      if (n.tieChainId) {
+        out.tieChainId = n.tieChainId;
+        out.fragments = n.notatedFragments;
+      }
+      return out;
+    }).sort((a, b) => b.midi - a.midi);
+    const soundingMap = new Map();
+    for (const s of soundSpans) {
+      if (s.start < onset - 1e-4 && s.end > onset + 1e-4
+        && !notes.some((n) => n.midi === s.midi) && !soundingMap.has(s.midi)) {
+        soundingMap.set(s.midi, { midi: s.midi, name: s.name });
+      }
+    }
+    const gesture = {
+      onset,
+      normalizedOnset,
+      displacement,
+      normalizationConfidence: confidence,
+      maxEnvelopeDuration: Math.max(...notes.map((n) => n.duration)),
+      notes,
+    };
+    if (tuplet) gesture.tuplet = tuplet;
+    const sounding = [...soundingMap.values()].sort((a, b) => b.midi - a.midi);
+    if (sounding.length) gesture.sounding = sounding;
+    return gesture;
+  }).sort((a, b) => a.onset - b.onset);
+
   return {
     record: {
       timeSig: `${timeNum}/${timeDen}`,
@@ -1039,6 +1168,7 @@ function readBar(score, barIndex, state, preferFlat) {
       bassFolded: bassFolded.map(slim),
       harmony,
       harmonySpans,
+      foregroundEvidence,
     },
     flatNotes,
   };
@@ -1066,10 +1196,205 @@ function finalizeBar(rec) {
     bassFolded: rec.bassFolded,
     harmony: rec.harmony,
     harmonySpans: rec.harmonySpans,
+    foregroundEvidence: rec.foregroundEvidence,
     flags: rec.flags,
   };
   if (rec.pickup) out.pickup = true;
   return out;
+}
+
+// --------------------------------------------------------------------------- //
+// source profile — transcription-noise detection (Improve_Plan §1)
+// --------------------------------------------------------------------------- //
+// Answers Gate A's source-reliability questions from structure, never from
+// track names: which tracks are one performance, which are percussion, and how
+// noisy the transcription is. Every signal below is computed on the NORMALIZED
+// gesture view (gestures merged by normalizedOnset), because Basic Pitch's
+// characteristic noise is exactly "the same musical moment scattered across
+// nearby raw onsets and voices".
+
+const FRAG_REGISTER_SEMITONES = 7; // same-register: within a fifth
+const OCTAVE_ARTIFACT_MAX_BEATS = 1.0;
+
+/** Rate a 0..1 fraction on the none/low/medium/high ladder. */
+function rateFraction(frac) {
+  if (frac >= 0.25) return 'high';
+  if (frac >= 0.10) return 'medium';
+  if (frac >= 0.02) return 'low';
+  return 'none';
+}
+
+export function buildSourceProfile(score, barRecords, tieAudit) {
+  // ---- structural percussion detection (§1.2): never the name alone --------
+  const excludedTracks = [];
+  const pitchedTracks = [];
+  score.tracks.forEach((track, t) => {
+    const evidence = [];
+    if (track.staves.some((s) => s.isPercussion)) evidence.push('unpitched staff');
+    if (track.playbackInfo && track.playbackInfo.primaryChannel === 9) {
+      evidence.push('MIDI channel 10');
+    }
+    if (track.staves.some((s) => (s.percussionArticulations?.length ?? 0) > 0)) {
+      evidence.push('drum articulation mapping');
+    }
+    const structurallyPercussion = evidence.length > 0 || track.isPercussion;
+    if (structurallyPercussion) {
+      // The name is reported as SUPPORTING evidence only — it never decides.
+      if (/drum|perc/i.test(track.name || '')) evidence.push(`name "${track.name}" (supporting only)`);
+      excludedTracks.push({
+        track: t, name: track.name || null, role: 'percussion', confidence: 1, evidence,
+      });
+    } else {
+      pitchedTracks.push(t);
+    }
+  });
+
+  // ---- per-track attack/register footprint, for performance grouping -------
+  const trackOnsets = new Map();  // track -> Set("bar:normalizedOnset")
+  const trackRange = new Map();   // track -> {lo, hi}
+  const trackVoices = new Map();  // track -> Set(voice index)
+  for (const rec of barRecords) {
+    for (const g of rec.foregroundEvidence || []) {
+      for (const n of g.notes) {
+        if (!trackOnsets.has(n.track)) {
+          trackOnsets.set(n.track, new Set());
+          trackRange.set(n.track, { lo: Infinity, hi: -Infinity });
+          trackVoices.set(n.track, new Set());
+        }
+        trackOnsets.get(n.track).add(`${rec.bar}:${g.normalizedOnset}`);
+        const r = trackRange.get(n.track);
+        r.lo = Math.min(r.lo, n.midi);
+        r.hi = Math.max(r.hi, n.midi);
+        trackVoices.get(n.track).add(n.voice);
+      }
+    }
+  }
+
+  // ---- pitched-performance groups (§1.1): shared attacks + register overlap.
+  // Union-find over pitched tracks; two tracks merge when at least half of the
+  // sparser track's attacks land on the denser track's normalized onsets AND
+  // their sounding registers overlap.
+  const parent = new Map(pitchedTracks.map((t) => [t, t]));
+  const find = (x) => (parent.get(x) === x ? x : (parent.set(x, find(parent.get(x))), parent.get(x)));
+  const mergeReasons = new Map();
+  for (let i = 0; i < pitchedTracks.length; i++) {
+    for (let j = i + 1; j < pitchedTracks.length; j++) {
+      const a = pitchedTracks[i];
+      const b = pitchedTracks[j];
+      const oa = trackOnsets.get(a) ?? new Set();
+      const ob = trackOnsets.get(b) ?? new Set();
+      if (!oa.size || !ob.size) continue;
+      const [small, big] = oa.size <= ob.size ? [oa, ob] : [ob, oa];
+      let shared = 0;
+      for (const k of small) if (big.has(k)) shared++;
+      const agreement = shared / small.size;
+      const ra = trackRange.get(a);
+      const rb = trackRange.get(b);
+      const overlap = Math.min(ra.hi, rb.hi) - Math.max(ra.lo, rb.lo);
+      const registerOverlap = overlap > 0
+        && overlap >= 0.5 * Math.min(ra.hi - ra.lo || 1, rb.hi - rb.lo || 1);
+      if (agreement >= 0.5 && registerOverlap) {
+        parent.set(find(a), find(b));
+        mergeReasons.set(`${a}-${b}`,
+          `${Math.round(agreement * 100)}% shared attacks and overlapping registers`);
+      }
+    }
+  }
+  const groupsByRoot = new Map();
+  for (const t of pitchedTracks) {
+    const root = find(t);
+    if (!groupsByRoot.has(root)) groupsByRoot.set(root, []);
+    groupsByRoot.get(root).push(t);
+  }
+  const pitchedPerformanceGroups = [...groupsByRoot.values()].map((tracks, i) => {
+    const voices = [...new Set(tracks.flatMap((t) => [...(trackVoices.get(t) ?? [])]))]
+      .sort((a, b) => a - b);
+    const reasons = tracks.length > 1
+      ? [...mergeReasons.entries()]
+        .filter(([k]) => k.split('-').some((x) => tracks.includes(Number(x))))
+        .map(([, v]) => v)
+      : [];
+    return {
+      id: `pitched-${i + 1}`,
+      tracks: tracks.sort((a, b) => a - b),
+      voices,
+      reason: tracks.length > 1
+        ? (reasons[0] ?? 'shared attacks and register overlap')
+        : 'single pitched track',
+    };
+  });
+
+  // ---- noise signals on the normalized gesture view -------------------------
+  let gestures = 0;
+  let multiNoteGestures = 0;
+  let fragmentedGestures = 0;      // same-register attacks split across voices
+  let octaveArtifacts = 0;         // short upper note exactly 12 above a longer lower
+  let offGridOnsets = 0;
+  let nearSimultaneousSplits = 0;  // >1 raw onset collapsing onto one grid slot
+  let mixedDurationGestures = 0;   // >=4x duration spread inside one gesture
+  let confidenceSum = 0;
+  for (const rec of barRecords) {
+    const byNorm = new Map();
+    for (const g of rec.foregroundEvidence || []) {
+      gestures++;
+      confidenceSum += g.normalizationConfidence;
+      if (!g.tuplet && Math.abs(g.displacement) > 0.01) offGridOnsets++;
+      const key = g.normalizedOnset;
+      if (!byNorm.has(key)) byNorm.set(key, []);
+      byNorm.get(key).push(g);
+    }
+    for (const group of byNorm.values()) {
+      if (group.length > 1) nearSimultaneousSplits += group.length - 1;
+      const notes = group.flatMap((g) => g.notes).sort((a, b) => b.midi - a.midi);
+      if (notes.length < 2) continue;
+      multiNoteGestures++;
+      const durations = notes.map((n) => n.duration).filter((d) => d > 0);
+      if (durations.length >= 2
+        && Math.max(...durations) >= 4 * Math.min(...durations)) mixedDurationGestures++;
+      let fragmented = false;
+      for (let i = 0; i < notes.length; i++) {
+        for (let j = i + 1; j < notes.length; j++) {
+          const a = notes[i];
+          const b = notes[j];
+          if (Math.abs(a.midi - b.midi) <= FRAG_REGISTER_SEMITONES
+            && (a.track !== b.track || a.voice !== b.voice)) fragmented = true;
+        }
+      }
+      if (fragmented) fragmentedGestures++;
+      const [top, second] = notes;
+      if (top.midi - second.midi === 12
+        && top.duration <= second.duration
+        && top.duration < OCTAVE_ARTIFACT_MAX_BEATS) octaveArtifacts++;
+    }
+  }
+  const fragFraction = multiNoteGestures ? fragmentedGestures / multiNoteGestures : 0;
+  const voiceFragmentation = rateFraction(fragFraction);
+  const offGridFraction = gestures ? offGridOnsets / gestures : 0;
+
+  const noiseSignals = {
+    voiceFragmentation,
+    fragmentedGestures,
+    isolatedOctaveArtifacts: octaveArtifacts,
+    microTieFragments: tieAudit?.microFragmentChains ?? 0,
+    overlappingForegroundCandidates: fragmentedGestures,
+    nearSimultaneousSplits,
+    offGridOnsets,
+    mixedDurationGestures,
+    meanNormalizationConfidence: gestures
+      ? Math.round((confidenceSum / gestures) * 1e4) / 1e4 : 1,
+  };
+
+  // ---- verdict ---------------------------------------------------------------
+  const noisy = voiceFragmentation === 'medium' || voiceFragmentation === 'high'
+    || (tieAudit?.microFragmentChains ?? 0) >= 10
+    || offGridFraction >= 0.05
+    || nearSimultaneousSplits >= Math.max(4, gestures * 0.02);
+  return {
+    kind: noisy ? 'noisy-transcription' : 'clean-notation',
+    pitchedPerformanceGroups,
+    excludedTracks,
+    noiseSignals,
+  };
 }
 
 /**
@@ -1079,6 +1404,10 @@ function finalizeBar(rec) {
  */
 export function buildDigest(score, meta = {}) {
   const nBars = score.masterBars.length;
+
+  // Score-wide tie-chain index (Improve_Plan §2.2): built once, consumed by
+  // every readBar (coalesced attacks) and by the digest-level tieAudit.
+  const tieInfo = collectTieChains(score);
 
   // --- pass 1: duration-weighted pitch-class histogram, for key inference ----
   const weights = new Array(12).fill(0);
@@ -1117,7 +1446,7 @@ export function buildDigest(score, meta = {}) {
   let hasPickup = false;
 
   for (let i = 0; i < nBars; i++) {
-    const { record, flatNotes } = readBar(score, i, state, preferFlat);
+    const { record, flatNotes } = readBar(score, i, state, preferFlat, tieInfo);
     record.bar = i + 1;
     // Bar identity is POSITIONAL — detectSections/detectDuplicates index by
     // position, so any other numbering desynchronises every downstream range.
@@ -1166,6 +1495,16 @@ export function buildDigest(score, meta = {}) {
   const harmonicLoop = detectHarmonicLoop(
     barRecords.map((r) => ({ bar: r.bar, harmony: r.harmony })));
 
+  // Digest-level tie audit (additive) + per-bar anomaly flags. The audit's
+  // intent cross-check needs the raw text; buildDigest callers that have it
+  // pass meta.sourceText (extractDigest does), others get the model-only view.
+  const tieAudit = buildTieAudit(score, meta.sourceText ?? null, tieInfo.chains);
+  const tieAnomalyBars = new Set();
+  for (const c of tieInfo.chains) {
+    if (c.orphanContinuation || c.pitchChanged) tieAnomalyBars.add(c.startBar);
+    for (const g of c.gaps) tieAnomalyBars.add(g.bar);
+  }
+
   for (const rec of barRecords) {
     const flags = [];
     if (rec.arpeggio) flags.push('arpeggio');
@@ -1190,6 +1529,9 @@ export function buildDigest(score, meta = {}) {
     // 6 beats of one voice inside a 4/4 bar). Report it — the onsets past the
     // barline are real, and an arranger reading the map needs to know.
     if (rec.filledBeats > rec.barBeats + 0.01) flags.push('overfull');
+    // A tie chain in this bar crosses a gap of silence, changes pitch, or has
+    // no reachable origin (§2.2). The evidence is in digest.tieAudit.anomalies.
+    if (tieAnomalyBars.has(rec.bar)) flags.push('tieAnomaly');
     rec.flags = flags;
   }
 
@@ -1221,6 +1563,8 @@ export function buildDigest(score, meta = {}) {
     duplicateRanges,
     bars: barRecords.map(finalizeBar),
     harmonicLoop,
+    tieAudit,
+    sourceProfile: buildSourceProfile(score, barRecords, tieAudit),
   };
 }
 
@@ -1237,6 +1581,9 @@ export async function extractDigest(file) {
     sourceFile: path.basename(file),
     stem,
     song: loaded.score.title || stem,
+    // The NORMALIZED text is what actually parsed — the tie-intent audit must
+    // compare like with like (the raw text's -1.N tokens never reach the model).
+    sourceText: loaded.normalized,
   });
   return { digest, preferFlat: digest.keyFifths < 0, normalizer: loaded.normalizer };
 }
@@ -1364,6 +1711,49 @@ export function renderMap(digest, preferFlat) {
     + `\`melodySkeleton\`, **${withRoot}/${digest.bars.length}** carry a \`harmony.root\`. `
     + '(compare.mjs gates are `covered === total` and are vacuous at total 0.)');
   lines.push('');
+
+  const sp = digest.sourceProfile;
+  if (sp) {
+    lines.push(`- Source profile: **${sp.kind}**`
+      + (sp.excludedTracks.length
+        ? `  |  excluded: ${sp.excludedTracks.map(
+          (e) => `track ${e.track}${e.name ? ` "${e.name}"` : ''} (${e.role})`).join(', ')}`
+        : '')
+      + `  |  pitched groups: ${sp.pitchedPerformanceGroups.map(
+        (g) => `${g.id} tracks [${g.tracks.join(',')}]`).join('; ') || 'none'}`);
+    if (sp.kind === 'noisy-transcription') {
+      const ns = sp.noiseSignals;
+      lines.push(`  - Noise: voice fragmentation **${ns.voiceFragmentation}** `
+        + `(${ns.fragmentedGestures} fragmented gesture(s)), `
+        + `${ns.isolatedOctaveArtifacts} isolated octave artifact(s), `
+        + `${ns.microTieFragments} microfragment tie chain(s), `
+        + `${ns.nearSimultaneousSplits} near-simultaneous split(s), `
+        + `${ns.offGridOnsets} off-grid onset(s) `
+        + `(mean normalization confidence ${ns.meanNormalizationConfidence}).`);
+      lines.push('  - **Doctrine:** on a noisy transcription the highest voice is a CANDIDATE, '
+        + 'not perceptual truth — review the foreground evidence before drafting, and do not '
+        + 'declare source-tied spans `free` just because the extractor disagrees.');
+    }
+    lines.push('');
+  }
+
+  const ta = digest.tieAudit;
+  if (ta && ta.multiFragmentChains > 0) {
+    const bits = [
+      `**${ta.multiFragmentChains}** multi-fragment tie chain(s) `
+      + `(longest ${ta.longestChainFragments} fragments, `
+      + `${ta.microFragmentChains} microfragment chain(s))`,
+    ];
+    if (ta.tieAcrossGap) bits.push(`**${ta.tieAcrossGap}** chain(s) tie across silence`);
+    if (ta.orphanContinuations) bits.push(`**${ta.orphanContinuations}** orphan continuation(s)`);
+    if (ta.intent && ta.intent.dropped > 0) {
+      bits.push(`**${ta.intent.dropped}** tie intent(s) DROPPED by the parser — each is a `
+        + 'reattack the source author never wrote');
+    }
+    lines.push(`- Tie audit: ${bits.join('; ')}. Melody/bass/skeleton are tie-coalesced: `
+      + 'continuations are not attacks, and a chain head carries its merged sounding duration.');
+    lines.push('');
+  }
 
   lines.push('## Sections');
   lines.push('');

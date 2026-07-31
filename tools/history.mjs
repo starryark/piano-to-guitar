@@ -41,10 +41,11 @@ const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const CHECK = path.join(TOOLS_DIR, 'check.mjs');
 
 const USAGE =
-  'Usage: node tools/history.mjs <check|snap|verdict|list|diff|show|restore|export> …\n' +
+  'Usage: node tools/history.mjs <check|snap|verdict|final-review|list|diff|show|restore|export> …\n' +
   '  check <tab> [check-args…]                 gate + snapshot (the Gate-B command)\n' +
   '  snap [--note "…"] [--project D]           checkpoint without gating\n' +
-  '  verdict <APPROVED|REVISE:tag> [--note …] [--no-log]\n' +
+  '  verdict <APPROVED|REVISE:tag> [--note …] [--recognizability A] [--playability-review A] [--no-log]\n' +
+  '  final-review <tab> [--map S] [--contract C] [--policy P] [--digest D] [--json]\n' +
   '  list [--all] [--project D]\n' +
   '  diff <a> [<b>] [--bars N-M] [--project D]\n' +
   '  show <seq> [--tab] [--project D]\n' +
@@ -97,19 +98,35 @@ function findEntry(entries, seqArg) {
 }
 
 /**
- * De-dup snapshot of cover + sidecar. Returns {created, entry?|seq,short}.
- * The dedup key is sha256(cover || 0x00 || sidecar): a sidecar-only change is
- * still a distinct iteration, since the sidecar is the gate contract.
+ * De-dup snapshot of cover + sidecar (+ any analytical artifacts in force).
+ * Returns {created, entry?|seq,short}.
+ *
+ * The dedup key is sha256 over cover, sidecar, AND the melody contract +
+ * guitar policy when supplied (0x00-separated): a contract or policy edit
+ * changes WHAT A PASS MEANS, so it is a distinct iteration even when the tab
+ * bytes are identical (Improve_Plan §8.1). Each snapshot stores its own copy
+ * of those artifacts plus the machine gate report, and the entry records
+ * `contractHash`/`policyHash` so an old PASS stays reproducible against the
+ * exact contract it was graded by.
  */
-function capture(p, { bars = null, gate = null, note = '', coverPath = null, sidecarPath = null }) {
+function capture(p, {
+  bars = null, gate = null, note = '', coverPath = null, sidecarPath = null,
+  contractPath = null, policyPath = null, report = null,
+}) {
   const cover = coverPath ?? p.cover;
   const sc = sidecarPath ?? p.sidecar;
   if (!fs.existsSync(cover)) die(2, `no tab at ${cover}`);
   const coverBytes = fs.readFileSync(cover);
   const hasSidecar = sc && fs.existsSync(sc);
   const sidecarBytes = hasSidecar ? fs.readFileSync(sc) : Buffer.alloc(0);
+  const hasContract = contractPath && fs.existsSync(contractPath);
+  const contractBytes = hasContract ? fs.readFileSync(contractPath) : Buffer.alloc(0);
+  const hasPolicy = policyPath && fs.existsSync(policyPath);
+  const policyBytes = hasPolicy ? fs.readFileSync(policyPath) : Buffer.alloc(0);
+  const SEP = Buffer.from([0]);
   const hash = createHash('sha256')
-    .update(coverBytes).update(Buffer.from([0])).update(sidecarBytes)
+    .update(coverBytes).update(SEP).update(sidecarBytes)
+    .update(SEP).update(contractBytes).update(SEP).update(policyBytes)
     .digest('hex');
 
   const entries = loadEntries(p.log);
@@ -126,10 +143,38 @@ function capture(p, { bars = null, gate = null, note = '', coverPath = null, sid
     sidecarName = `${pad(seq)}-${short}.sidecar.json`;
     fs.writeFileSync(path.join(p.historyDir, sidecarName), sidecarBytes);
   }
+  let contractName = null;
+  if (hasContract) {
+    contractName = `${pad(seq)}-${short}.contract.json`;
+    fs.writeFileSync(path.join(p.historyDir, contractName), contractBytes);
+  }
+  let policyName = null;
+  if (hasPolicy) {
+    policyName = `${pad(seq)}-${short}.policy.json`;
+    fs.writeFileSync(path.join(p.historyDir, policyName), policyBytes);
+  }
+  let reportName = null;
+  if (report) {
+    reportName = `${pad(seq)}-${short}.report.json`;
+    fs.writeFileSync(path.join(p.historyDir, reportName), `${JSON.stringify(report, null, 2)}\n`);
+  }
+  // foreground.json is an analysis artifact of the SOURCE, not the tab, but a
+  // Gate-B iteration graded while it existed should keep it inspectable.
+  let foregroundName = null;
+  const fg = path.join(p.projectDir, 'foreground.json');
+  if (fs.existsSync(fg)) {
+    foregroundName = `${pad(seq)}-${short}.foreground.json`;
+    fs.writeFileSync(path.join(p.historyDir, foregroundName), fs.readFileSync(fg));
+  }
   const entry = {
     seq, ts: new Date().toISOString(), hash, parent: last ? last.seq : null,
     bars, gate, verdict: null, tag: '', note,
-    files: { cover: coverName, sidecar: sidecarName },
+    contractHash: hasContract ? createHash('sha256').update(contractBytes).digest('hex').slice(0, 16) : null,
+    policyHash: hasPolicy ? createHash('sha256').update(policyBytes).digest('hex').slice(0, 16) : null,
+    files: {
+      cover: coverName, sidecar: sidecarName, contract: contractName,
+      policy: policyName, report: reportName, foreground: foregroundName,
+    },
   };
   fs.appendFileSync(p.log, JSON.stringify(entry) + '\n');
   return { created: true, entry };
@@ -195,9 +240,11 @@ function resolveProject(flags) {
 function cmdCheck(argv) {
   // Split history-only flags from check.mjs passthrough. Known value-flags
   // consume their next token so a value ("1-45") is never mistaken for the tab.
-  const VALUE = new Set(['--bars', '--map', '--transpose', '--gain', '--digest']);
+  // PTG: --contract (melody contract, §5) and --policy (guitar policy, §7)
+  // are value flags — without this their values would be taken for the tab.
+  const VALUE = new Set(['--bars', '--map', '--transpose', '--gain', '--digest', '--contract', '--policy']);
   const passthrough = [];
-  let note = '', bars = null, map = null, tab = null;
+  let note = '', bars = null, map = null, tab = null, contract = null, policy = null;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--note') { note = argv[++i] ?? ''; continue; }
@@ -207,6 +254,10 @@ function cmdCheck(argv) {
     else if (a.startsWith('--bars=')) bars = a.slice('--bars='.length);
     else if (a === '--map') map = argv[i + 1];
     else if (a.startsWith('--map=')) map = a.slice('--map='.length);
+    else if (a === '--contract') contract = argv[i + 1];
+    else if (a.startsWith('--contract=')) contract = a.slice('--contract='.length);
+    else if (a === '--policy') policy = argv[i + 1];
+    else if (a.startsWith('--policy=')) policy = a.slice('--policy='.length);
     passthrough.push(a);
     if (VALUE.has(a)) { passthrough.push(argv[++i]); continue; }
     if (!a.startsWith('--') && tab === null) tab = a;
@@ -230,7 +281,33 @@ function cmdCheck(argv) {
   const projectDir = path.dirname(tab) || '.';
   const p = paths(projectDir);
   const sidecarPath = map ? map : p.sidecar;
-  const cap = capture(p, { bars: bars ?? null, gate, note, coverPath: tab, sidecarPath });
+
+  // PTG §8.1: resolve the analytical artifacts this gate ran under, so the
+  // snapshot preserves what the PASS/FAIL actually meant. Resolution:
+  // explicit flag > the sidecar's own "contract" field > co-located file.
+  let contractPath = contract ?? null;
+  if (!contractPath && sidecarPath && fs.existsSync(sidecarPath)) {
+    try {
+      const sc = JSON.parse(fs.readFileSync(sidecarPath, 'utf8'));
+      if (typeof sc.contract === 'string') {
+        contractPath = path.resolve(path.dirname(sidecarPath), sc.contract);
+      }
+    } catch { /* malformed sidecar is check.mjs's problem, reported above */ }
+  }
+  if (!contractPath) {
+    const co = path.join(projectDir, 'melody-contract.json');
+    if (fs.existsSync(co)) contractPath = co;
+  }
+  let policyPath = policy ?? null;
+  if (!policyPath) {
+    const co = path.join(projectDir, 'guitar-policy.json');
+    if (fs.existsSync(co)) policyPath = co;
+  }
+
+  const cap = capture(p, {
+    bars: bars ?? null, gate, note, coverPath: tab, sidecarPath,
+    contractPath, policyPath, report: machine,
+  });
   if (cap.created) {
     console.log(`\nhistory: saved seq ${cap.entry.seq} (${cap.entry.files.cover}) — gate ${gate.ok ? 'PASS' : 'FAIL'}`);
   } else {
@@ -258,7 +335,7 @@ function cmdSnap(argv) {
 }
 
 function cmdVerdict(argv) {
-  const { positional, flags } = parseFlags(argv, ['note', 'project']);
+  const { positional, flags } = parseFlags(argv, ['note', 'project', 'recognizability', 'playability-review']);
   const call = positional[0];
   if (!call) die(2, 'verdict needs a call: APPROVED or REVISE:<tag>');
   if (!/^(APPROVED|REVISE(:[\w-]+)?)$/i.test(call)) {
@@ -271,6 +348,10 @@ function cmdVerdict(argv) {
   target.verdict = call;
   target.tag = call.includes(':') ? call.split(':')[1] : '';
   if (flags.note) target.note = String(flags.note);
+  // PTG §8.2: optional musical-review status, separate from the mechanical
+  // gate — final-review reports chunks that never received it.
+  if (flags.recognizability) target.recognizability = String(flags.recognizability).toUpperCase();
+  if (flags['playability-review']) target.playabilityReview = String(flags['playability-review']).toUpperCase();
   writeEntries(p.log, entries);
 
   if (!flags['no-log']) {
@@ -421,10 +502,173 @@ function cmdExport(argv) {
 
 // ---- dispatch -------------------------------------------------------------
 const [sub, ...rest] = process.argv.slice(2);
+// ---- final-review (PTG §8.3) ------------------------------------------------
+// Consolidated end-of-project evidence assembly: what recurs, what relocates,
+// what is fastest/longest/thickest, and which chunks never got a musical
+// verdict. It ASSEMBLES evidence for the human's final audition — it never
+// replaces it. Exit 0 whenever the report could be built; 2 on IO problems.
+function cmdFinalReview(argv) {
+  const VALUE = new Set(['--map', '--contract', '--policy', '--digest', '--transpose', '--bars']);
+  let tab = null;
+  const flags = {};
+  let json = false;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--json') { json = true; continue; }
+    if (VALUE.has(a)) { flags[a.slice(2)] = argv[++i]; continue; }
+    const eq = a.indexOf('=');
+    if (a.startsWith('--') && eq !== -1 && VALUE.has(a.slice(0, eq))) {
+      flags[a.slice(2, eq)] = a.slice(eq + 1);
+      continue;
+    }
+    if (!a.startsWith('--') && tab === null) tab = a;
+  }
+  if (!tab || !fs.existsSync(tab)) die(2, 'final-review needs a tab file');
+  const projectDir = path.dirname(tab) || '.';
+  const p = paths(projectDir);
+
+  const readJson = (file, label, required = false) => {
+    if (!file || !fs.existsSync(file)) {
+      if (required) die(2, `final-review: no ${label} at "${file}"`);
+      return null;
+    }
+    try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
+    catch (e) { die(2, `final-review: unreadable ${label}: ${e.message}`); return null; }
+  };
+
+  const digest = readJson(flags.digest ?? path.join(projectDir, 'source.json'), 'digest');
+  const sidecar = readJson(flags.map ?? p.sidecar, 'sidecar');
+  let contractPath = flags.contract ?? null;
+  if (!contractPath && sidecar && typeof sidecar.contract === 'string') {
+    contractPath = path.resolve(path.dirname(flags.map ?? p.sidecar), sidecar.contract);
+  }
+  if (!contractPath && fs.existsSync(path.join(projectDir, 'melody-contract.json'))) {
+    contractPath = path.join(projectDir, 'melody-contract.json');
+  }
+  const contract = readJson(contractPath, 'contract');
+  const policy = readJson(flags.policy ?? path.join(projectDir, 'guitar-policy.json'), 'policy');
+
+  // Parser-grounded tab events, via the existing inspector (one parser, reused).
+  const ev = spawnSync(process.execPath,
+    [path.join(TOOLS_DIR, 'tab-events.mjs'), tab, '--json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  let events = null;
+  try { events = JSON.parse(ev.stdout); } catch { die(2, `final-review: tab-events failed:\n${ev.stderr || ev.stdout}`); }
+
+  // ---- assemble ------------------------------------------------------------
+  const struck = [];
+  for (const b of events.bars) {
+    for (const e of b.events) {
+      if (!e.rest && (e.notes ?? []).some((n) => n.attack)) struck.push({ bar: b.bar, ...e });
+    }
+  }
+  const fastest = struck.length ? Math.min(...struck.map((e) => e.duration)) : null;
+  const fastestBars = [...new Set(struck.filter((e) => e.duration === fastest).map((e) => e.bar))];
+  const tuplets = [...new Set(struck.filter((e) => e.tuplet).map((e) => e.bar))];
+  const longArrivals = [];
+  for (const b of events.bars) {
+    for (const e of b.events) {
+      for (const n of e.notes ?? []) {
+        const sounding = n.soundingBeats ?? e.duration;
+        if (n.attack && sounding >= 2) longArrivals.push({ bar: b.bar, name: n.name, beats: sounding });
+      }
+    }
+  }
+  const multiNote = struck.filter((e) => (e.notes ?? []).filter((n) => n.attack).length >= 2);
+  const maxChord = multiNote.reduce((a, e) => Math.max(a, e.notes.filter((n) => n.attack).length), 0);
+
+  const modeCounts = {};
+  for (const e of sidecar?.entries ?? []) modeCounts[e.mode] = (modeCounts[e.mode] ?? 0) + 1;
+
+  const entries = loadEntries(p.log);
+  const chunks = entries.map((e) => ({
+    seq: e.seq,
+    bars: e.bars ?? null,
+    gate: e.gate ? (e.gate.ok ? 'PASS' : 'FAIL') : null,
+    verdict: e.verdict,
+    recognizability: e.recognizability ?? null,
+    playabilityReview: e.playabilityReview ?? null,
+    contractHash: e.contractHash ?? null,
+  }));
+  const unreviewed = chunks.filter((c) => c.gate === 'PASS' && (!c.verdict || !c.recognizability));
+
+  // contract drift: entries graded under a different contract than today's
+  let currentContractHash = null;
+  if (contractPath && fs.existsSync(contractPath)) {
+    currentContractHash = createHash('sha256').update(fs.readFileSync(contractPath)).digest('hex').slice(0, 16);
+  }
+  const driftedChunks = currentContractHash
+    ? chunks.filter((c) => c.contractHash && c.contractHash !== currentContractHash).map((c) => c.seq)
+    : [];
+
+  const report = {
+    tab,
+    digest: digest ? { song: digest.song, bars: digest.bars.length } : null,
+    themes: digest?.duplicateRanges ?? [],
+    sections: digest?.sections ?? [],
+    pickup: digest?.pickup ?? false,
+    sidecarModes: modeCounts,
+    relocationGroups: contract?.relocationGroups ?? [],
+    policy: policy ? { maxFret: policy.maxFret ?? null, fastAttackMaxNotes: policy.fastAttackMaxNotes ?? null } : null,
+    fastestEvent: fastest === null ? null : { beats: fastest, bars: fastestBars.slice(0, 8) },
+    tupletBars: tuplets,
+    longArrivals: longArrivals.slice(0, 24),
+    multiNoteAttacks: { count: multiNote.length, maxNotes: maxChord },
+    tieIntentAudit: events.tieIntentAudit,
+    chunks,
+    chunksLackingReview: unreviewed.map((c) => c.seq),
+    contractHash: currentContractHash,
+    chunksGradedUnderOlderContract: driftedChunks,
+  };
+
+  if (json) {
+    console.log(JSON.stringify(report, null, 2));
+    process.exit(0);
+  }
+  const L = [];
+  L.push(`FINAL REVIEW  ${tab}`);
+  if (report.digest) L.push(`  source "${report.digest.song}" (${report.digest.bars} bars)`);
+  L.push('');
+  L.push(`  recurring themes     ${report.themes.length
+    ? report.themes.map((d) => `${d.a[0]}-${d.a[1]}~${d.b[0]}-${d.b[1]} (${d.kind})`).join(', ') : 'none detected'}`);
+  L.push(`  sections             ${report.sections.map((s) => `${s.startBar}-${s.endBar}(${s.reason})`).join(', ') || 'n/a'}`);
+  L.push(`  pickup               ${report.pickup ? 'yes' : 'no'}`);
+  L.push(`  sidecar modes        ${Object.entries(modeCounts).map(([k, v]) => `${k}:${v}`).join('  ') || 'no sidecar'}`);
+  L.push(`  relocation groups    ${report.relocationGroups.length
+    ? report.relocationGroups.map((g) => `bars ${g.sourceBars[0]}-${g.sourceBars[1]} ${g.semitones > 0 ? '+' : ''}${g.semitones}`).join(', ') : 'none'}`);
+  L.push(`  fastest events       ${fastest === null ? 'n/a' : `${fastest} beats (bars ${fastestBars.slice(0, 8).join(', ')})`}`);
+  L.push(`  tuplets              ${tuplets.length ? `bars ${tuplets.join(', ')}` : 'none'}`);
+  L.push(`  long arrivals (>=2b) ${longArrivals.length}`);
+  L.push(`  multi-note attacks   ${multiNote.length} (max ${maxChord} notes)`);
+  if (events.tieIntentAudit?.dropped > 0) {
+    L.push(`  !! ${events.tieIntentAudit.dropped} dropped tie intent(s) — run tab-events.mjs before shipping`);
+  }
+  L.push('');
+  L.push('  chunk status (history):');
+  if (!chunks.length) L.push('    (no history — run history.mjs check during Gate B)');
+  for (const c of chunks) {
+    L.push(`    seq ${String(c.seq).padStart(3)}  bars ${String(c.bars ?? '?').padEnd(9)} gate ${c.gate ?? 'n/a'}  `
+      + `verdict ${c.verdict ?? '—'}  recog ${c.recognizability ?? '—'}  play ${c.playabilityReview ?? '—'}`);
+  }
+  if (unreviewed.length) {
+    L.push('');
+    L.push(`  !! ${unreviewed.length} PASS chunk(s) lack a recognizability acceptance: `
+      + `seq ${unreviewed.map((c) => c.seq).join(', ')}`);
+  }
+  if (driftedChunks.length) {
+    L.push(`  !! chunk(s) graded under an OLDER contract than today's: seq ${driftedChunks.join(', ')} — `
+      + 'their PASS meant something else; regate or restore that contract from history');
+  }
+  L.push('');
+  L.push('  This assembles the evidence; the final audition and verdict stay human.');
+  console.log(L.join('\n'));
+  process.exit(0);
+}
+
 switch (sub) {
   case 'check': cmdCheck(rest); break;
   case 'snap': cmdSnap(rest); break;
   case 'verdict': cmdVerdict(rest); break;
+  case 'final-review': cmdFinalReview(rest); break;
   case 'list': cmdList(rest); break;
   case 'diff': cmdDiff(rest); break;
   case 'show': cmdShow(rest); break;

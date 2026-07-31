@@ -60,9 +60,17 @@ defer to the human's verdict.
 ```
 node tools/piano-validate.mjs projects/<slug>/source.alphatab   # exit 0 + rewrites count (AT218 -1.N tokens normalized)
 node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>   # writes projects/<slug>/source.json + source-map.md
+node tools/source-profile.mjs projects/<slug>/source.alphatab   # clean notation or NOISY TRANSCRIPTION? (see below)
 # Then create projects/<slug>/sidecar.json = { "song": "<name>", "entries": [] }  (Gate-B fills entries[])
 # Audition: open source.alphatab in VS Code (alphaTab extension) and play it — your reference for A/B
 ```
+
+Multiple transcriptions of the same performance (e.g. Basic Pitch run on a
+piano-only mix and on the full mix) ingest together through a manifest:
+`node tools/piano-extract.mjs --manifest projects/<slug>/source-set.json --out projects/<slug>`
+(schema: `{ "sources": [{ "file": "…", "role": "pitched-reference", "weight": 1 }, …] }`).
+Cross-source agreement raises foreground confidence later; disagreement stays
+visible — it is never silently resolved.
 
 Initialize the empty **sidecar** now, at ingest, so the schema is never re-invented
 mid-session: `projects/<slug>/sidecar.json` = `{ "song": "<name>", "entries": [] }`.
@@ -96,6 +104,29 @@ default; a wrong answer here silently mis-shapes everything downstream.
       return is often only approximately identical.
 - [ ] Harmonic loop (`harmonicLoop`, if present) — plan pass-by-pass texture
       escalation toward the climax.
+- [ ] **Source kind (`sourceProfile.kind`)** — clean notation or noisy automatic
+      transcription? On a **noisy transcription** the digest's `melodyVoice` /
+      `melodySkeleton` are DIAGNOSTICS, not perceptual truth: one piano
+      performance may be fragmented across voices, topped with isolated octave
+      artifacts and tied microfragments (`tieAudit`). Track boundaries do not
+      necessarily imply instrument boundaries (`pitchedPerformanceGroups`), and
+      percussion is excluded structurally (`excludedTracks`), never by name.
+
+**Noisy-transcription path (mandatory when `sourceProfile.kind` says so):**
+
+```
+node tools/foreground.mjs projects/<slug>/source.json [more-digests.json] --out projects/<slug>
+# -> foreground.json + foreground-map.md: candidate melody lines per bar WITH
+#    alternatives and confidence. Review the ambiguous bars; they are Gate A rows.
+```
+
+Then write `projects/<slug>/melody-contract.json` — the human-reviewed statement
+of what the arrangement must preserve (octave-exact pitches, durations, required
+gaps/breaths, forbidden textures, whole-phrase octave relocations) — and validate
+it: `node tools/contract-validate.mjs melody-contract.json --digest source.json`.
+The contract, not the skeleton, is the fidelity authority for those spans
+(sidecar mode `contract`). **Never declare a source-tied span `free` because the
+extractor disagrees with your ear — `free` means added material, nothing else.**
 
 Then run the **AlphaTex piano-export hazard checks** in
 `reference/piano-to-guitar-arranging.md` → "AlphaTex piano-export hazards".
@@ -129,6 +160,16 @@ Present the plan table from `docs/gate-templates.md`. Fill every row from the ma
 - **Technique palette** — per `reference/piano-to-guitar-arranging.md` +
   `reference/electric-guitar-voice.md`.
 - **Deliberate losses** — what the reduction drops and why (Rule 4).
+- **Source reliability** — fill the source-reliability block from
+  `docs/gate-templates.md`: transcription kind, pitched-performance groups,
+  excluded tracks, the foreground authority (digest skeleton vs reviewed
+  foreground contract), the ambiguous bars needing a human decision, and any
+  relocation groups (complete out-of-range phrases moved coherently, by whole
+  octaves — never note-by-note).
+- **Guitar policy** (optional but recommended) — a
+  `projects/<slug>/guitar-policy.json` recording the player's physical limits and
+  the texture rules (`maxFret`, `fastAttackMaxNotes`, `maxSimultaneousNotes`,
+  brush/roll/mute bans). It rides every gate via `--policy`.
 
 **Wait for explicit human approval before writing any tab.** This is a HARD
 STOP: do not draft, do not present a chunk, do not run check.mjs on a draft
@@ -139,12 +180,20 @@ go ahead," that is approval; if they say nothing, you are still waiting.
 
 1. **Intent** — state the chunk's goal in one sentence, tied to its section role.
 2. **Declare the map entry** for this chunk before writing any bar. Each span
-   has a mode (`free` / `quote` / `recompose`) and, for `quote` or `recompose`,
-   the source bar range it is tied to. Write it into the song's sidecar
-   (`projects/<slug>/sidecar.json`, schema:
-   `{ song, entries: [{ tabBars: [a,b], mode, sourceBars?:[c,d], note? }] }`)
-   so the gate can enforce it. Additions (`free` spans) are named here, not
-   smuggled in silently.
+   has a mode and, for source-tied modes, its tie-in. Write it into the song's
+   sidecar (`projects/<slug>/sidecar.json`, schema:
+   `{ song, contract?, entries: [{ tabBars: [a,b], mode, sourceBars?:[c,d], contractPhrase?, note? }] }`)
+   so the gate can enforce it. The five modes:
+   - `free` — **added material** (intro/coda/the guitar's own contribution); no
+     fidelity gate. Never a euphemism for "the extractor disagrees with me."
+   - `quote` — digest skeleton (in order) + root motion protected.
+   - `recompose` — root motion only.
+   - `contract` — a melody-contract **phrase** enforced (octave-exact pitches,
+     order, durations, repeated attacks, required gaps, forbidden textures)
+     PLUS root motion. Requires `contractPhrase` and a contract file (the
+     sidecar's top-level `"contract"` path, or `--contract`).
+   - `contract-recompose` — the contract phrase with harmony relaxed.
+   Additions (`free` spans) are named here, not smuggled in silently.
 3. **Write** ≤ 8 bars into `projects/<slug>/cover.alphatab` (the single growing file;
    approved bars are NEVER rewritten). Use `reference/alphatex-language.md`.
    Before a bar leaves your hands, use the three pre-write guards so the gate passes
@@ -177,8 +226,23 @@ go ahead," that is approval; if they say nothing, you are still waiting.
    is useless for a cover. Therefore:
    ```
    cd projects/<slug>
-   node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean]
+   node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean] [--policy guitar-policy.json] [--warnings-as-errors]
    ```
+
+   `--policy` applies the project's texture constraints inside playability
+   (exact fret ceiling, fast-attack note caps, brush/roll/mute bans);
+   `--warnings-as-errors` makes every soft advisory gate, for a zero-warning
+   approval standard. Each `history.mjs check` run snapshots the tab, sidecar,
+   melody contract, policy, and the machine report together — the snapshot's
+   `contractHash` is what keeps an old PASS meaningful after a contract edit.
+
+   **Whenever a chunk introduces ties, cross-bar sustains, or unusual effects,
+   inspect what the parser ACTUALLY built before gating:**
+   `node ../../tools/tab-events.mjs cover.alphatab --bars <N-M>`. A tie-shaped
+   token with no resolvable origin silently parses as a fresh attack (of the
+   OPEN STRING on a tab staff) — tab-events shows every note as ATTACK or
+   CONTINUATION and audits the text against the model. Tie behaviour is
+   confirmed from the parsed score model, never from how the AlphaTex looks.
    `--bars` **without** `--map` is a **debugging fallback only** (bar-locked 1:1 mode,
    for a chunk you are inspecting in isolation); it is never the gate command for a
    cover. If you find yourself dropping `--map`, STOP — you have not built the sidecar
@@ -231,14 +295,49 @@ go ahead," that is approval; if they say nothing, you are still waiting.
 
 Full-file check (from inside the project dir,
 `node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last>`
-covers the whole tab when the sidecar's entries span it), then a full-piece
-audition (open `projects/<slug>/cover.alphatab` in VS Code, alphaTab extension), and a
-summary of what was approved and when, drawn from the log.
+covers the whole tab when the sidecar's entries span it), then the consolidated
+evidence report:
+
+```
+node ../../tools/history.mjs final-review cover.alphatab --map sidecar.json \
+  [--contract melody-contract.json] [--policy guitar-policy.json]
+```
+
+It assembles: recurring theme statements, sections and pickups, relocation
+groups, the fastest events, tuplets, long arrivals, multi-note attacks, the
+tab's tie-intent audit, and every chunk's gate/verdict/recognizability status —
+flagging PASS chunks that never received a musical acceptance and chunks graded
+under an older contract than today's. It assembles the evidence consistently;
+**it does not replace the human's full-piece audition** (open
+`projects/<slug>/cover.alphatab` in VS Code, alphaTab extension), after which you
+summarize what was approved and when, drawn from the log.
+
+## Doctrine for noisy transcriptions (hold these; each one was paid for)
+
+- The **highest sounding voice is a candidate, not perceptual truth** — on a
+  Basic Pitch export the artifact voice often wins the register contest.
+- **Multiple voices (or tracks) may be one instrument**; track boundaries do
+  not imply instrument boundaries. Read `sourceProfile.pitchedPerformanceGroups`.
+- **A note's duration comes from its own parsed event or tie chain, never the
+  group envelope** — a sixteenth over a whole-note bed is a sixteenth.
+- **Repeated pitches can be essential rhythmic events** — the contract's
+  per-event attacks are distinct; one sustain never satisfies two.
+- **Absence of accompaniment may be a fidelity obligation** — required gaps
+  and forbidden textures gate exactly like required notes.
+- **Out-of-range notes are relocated by phrase group**, whole octaves, the
+  complete phrase together — never note-by-note.
+- **Tie behaviour is confirmed from the parsed score model** (`tab-events.mjs`),
+  never inferred from AlphaTex token placement.
+- **`free` means added material**, not "source-tied but the extractor
+  disagrees" — that case is a `contract` span.
+- **A noisy source requires a reviewed foreground contract before drafting.**
 
 ## Remember
 
-- [ ] Ingest ran (validate → extract → audition in VS Code); read
+- [ ] Ingest ran (validate → extract → source-profile → audition in VS Code); read
       `projects/<slug>/source-map.md`, not the raw `.alphatab`
+- [ ] On a noisy transcription: foreground reviewed, melody contract written and
+      validated BEFORE drafting; source-tied spans use `contract`, never `free`
 - [ ] Gate A plan approved by the human before any tab was written (hard stop)
 - [ ] Every presented chunk passed `check.mjs --map sidecar.json --bars 1-<last>` this session
       (all hard gates) — no tab shown to the human until it did

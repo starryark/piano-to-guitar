@@ -91,6 +91,10 @@ function parseArgs(argv) {
   // applied. Same rule for --style and every flag added after it.
   let gain;
   let style;
+  // PTG (Wave 5, contract C9): track roles. Same absent-is-not-a-default rule.
+  let arrangementMode;
+  let lead;
+  let rhythm;
   let digest = null;
   let map = null;
   let contract = null;      // PTG: melody contract for contract-mode sidecars
@@ -109,6 +113,12 @@ function parseArgs(argv) {
     else if (a.startsWith('--gain=')) gain = a.slice('--gain='.length);
     else if (a === '--style') style = argv[++i];                      // PTG Wave 3
     else if (a.startsWith('--style=')) style = a.slice('--style='.length);
+    else if (a === '--arrangement-mode') arrangementMode = argv[++i];  // PTG Wave 5
+    else if (a.startsWith('--arrangement-mode=')) arrangementMode = a.slice('--arrangement-mode='.length);
+    else if (a === '--lead') lead = argv[++i];
+    else if (a.startsWith('--lead=')) lead = a.slice('--lead='.length);
+    else if (a === '--rhythm') rhythm = argv[++i];
+    else if (a.startsWith('--rhythm=')) rhythm = a.slice('--rhythm='.length);
     else if (a === '--digest') digest = argv[++i];
     else if (a.startsWith('--digest=')) digest = a.slice('--digest='.length);
     else if (a === '--map') map = argv[++i];
@@ -123,7 +133,8 @@ function parseArgs(argv) {
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) file = file ?? a;
   }
-  return { file, bars, transpose, gain, style, digest, map, contract, policy, maxFret, warningsAsErrors, json };
+  return { file, bars, transpose, gain, style, arrangementMode, lead, rhythm, digest, map,
+    contract, policy, maxFret, warningsAsErrors, json };
 }
 
 function usage(msg) {
@@ -131,15 +142,29 @@ function usage(msg) {
   console.error(
     'Usage: node tools/check.mjs <tab.alphatab> --bars N-M ' +
     '[--transpose N] [--gain high|crunch|clean] [--style hard-rock|metal|blues|jazz] ' +
+    '[--arrangement-mode solo|dual-guitar] [--lead 0,2] [--rhythm 1,3] ' +
     '[--digest <path>] [--map <sidecar.json>] [--contract <melody-contract.json>] ' +
     '[--policy <guitar-policy.json>] [--max-fret N] [--warnings-as-errors] [--json]');
   process.exit(2);
 }
 
 const {
-  file, bars, transpose, gain: gainArg, style: styleArg, digest: digestArg, map: mapArg,
+  file, bars, transpose, gain: gainArg, style: styleArg,
+  arrangementMode: modeArg, lead: leadArg, rhythm: rhythmArg,
+  digest: digestArg, map: mapArg,
   contract: contractArg, policy: policyArg, maxFret: maxFretArg, warningsAsErrors, json,
 } = parseArgs(process.argv.slice(2));
+
+/** "0,2" -> [0,2]; undefined stays undefined (§A1: absent is not a default). */
+function parseTrackList(spec, flag) {
+  if (spec === undefined) return undefined;
+  const parts = String(spec).split(',').map((x) => x.trim()).filter((x) => x !== '');
+  const out = parts.map(Number);
+  if (!out.length || out.some((n) => !Number.isInteger(n) || n < 0)) {
+    usage(`Bad ${flag} "${spec}"; expected a comma-separated list of track indices, e.g. 0,2`);
+  }
+  return out;
+}
 
 if (!file) usage('No tab file given.');
 if (!bars) usage('--bars N-M is required (compare needs a bar range).');
@@ -178,6 +203,9 @@ const cliOverrides = {
   style: styleArg,
   gain: gainArg,
   maxFret: maxFretArg === null ? undefined : Number(maxFretArg),
+  arrangementMode: modeArg,
+  lead: parseTrackList(leadArg, '--lead'),
+  rhythm: parseTrackList(rhythmArg, '--rhythm'),
 };
 const stage1 = resolveConfig({ anchorPath: file, cli: cliOverrides });
 if (!stage1.ok) usage(stage1.errors.join('\n'));
@@ -281,7 +309,10 @@ if (!parseFailed) {
   // exactly as `--max-fret` does. compare would otherwise re-walk the filesystem
   // for a config and could reach a different answer than the gate printed.
   const cmpArgs = [file, digestPath, '--bars', bars, '--transpose', String(transposeNum),
-    '--style', config.style, '--gain', gain, '--json'];
+    '--style', config.style, '--gain', gain,
+    '--arrangement-mode', config.arrangementMode, '--json'];
+  if (config.tracks.lead.length) cmpArgs.push('--lead', config.tracks.lead.join(','));
+  if (config.tracks.rhythm.length) cmpArgs.push('--rhythm', config.tracks.rhythm.join(','));
   if (mapPath) cmpArgs.push('--map', mapPath);
   if (contractPath) cmpArgs.push('--contract', contractPath);   // PTG
   const C = run('compare.mjs', cmpArgs);
@@ -313,8 +344,12 @@ let idiomSoft = null;
 let sidecarSoft = null;
 
 if (!parseFailed && !toolError) {
-  const F = run('fingering.mjs', [
-    file, '--bars', bars, '--max-fret', String(config.instrument.maxFret), '--json']);
+  const fingArgs = [file, '--bars', bars, '--max-fret', String(config.instrument.maxFret),
+    '--arrangement-mode', config.arrangementMode];
+  if (config.tracks.lead.length) fingArgs.push('--lead', config.tracks.lead.join(','));
+  if (config.tracks.rhythm.length) fingArgs.push('--rhythm', config.tracks.rhythm.join(','));
+  fingArgs.push('--json');
+  const F = run('fingering.mjs', fingArgs);
   if (F.code !== 0 || F.json === null || F.json.ok !== true) {
     toolError = toolError ?? `fingering.mjs could not analyse the tab (exit ${F.code}):\n`
       + `${(F.json?.errors ?? []).join('\n') || (F.stderr || F.stdout || '').trim()}`;
@@ -504,6 +539,7 @@ const machine = {
     style: config.style,
     gain: config.gain,
     arrangementMode: config.arrangementMode,
+    tracks: { lead: config.tracks.lead, rhythm: config.tracks.rhythm },
     maxFret: config.instrument.maxFret,
     stringCount: config.instrument.stringCount,
     provenance: config.sources,
@@ -557,6 +593,10 @@ const machine = {
       settings: idiomSoft.settings,
     },
     sidecar: sidecarSoft && { metrics: sidecarSoft.metrics, stats: sidecarSoft.stats },
+    // PTG (Wave 5): the roles compare RESOLVED against the parsed score — which
+    // tracks each question was allowed to look at. `configuration.tracks` above
+    // says what was ASKED for; this says what it resolved to.
+    roles: cmpHard?.roles ?? null,
     // compare's harmonic-colour pass is a property of the fidelity stage, so its
     // summary rides with the compare result rather than becoming a sixth stage.
     harmonicColor: cmpHard?.harmonicColor?.stats ?? null,

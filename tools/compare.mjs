@@ -88,6 +88,8 @@ import { loadSidecar, validateSidecar, resolveMappedSpans } from './lib/sidecar.
 import { analyzeHarmonicColor } from './lib/harmonic-color.mjs';
 import { loadStyleProfile } from './lib/style-profile.mjs';
 import { resolveConfig } from './lib/project-config.mjs';
+// PTG (Wave 5, contract C9): which tracks a given question may look at.
+import { resolveTrackRoles, sameView, trackFilter } from './lib/track-roles.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -99,6 +101,10 @@ function parseArgs(argv) {
   // PTG (Wave 4, addendum §A1): absent stays undefined so config/profile can speak.
   let style;
   let gain;
+  // PTG (Wave 5, contract C9): track roles.
+  let arrangementMode;
+  let lead;
+  let rhythm;
   const positional = [];
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -114,13 +120,31 @@ function parseArgs(argv) {
     else if (a.startsWith('--style=')) style = a.slice('--style='.length);
     else if (a === '--gain') gain = argv[++i];                      // PTG Wave 4
     else if (a.startsWith('--gain=')) gain = a.slice('--gain='.length);
+    else if (a === '--arrangement-mode') arrangementMode = argv[++i];   // PTG Wave 5
+    else if (a.startsWith('--arrangement-mode=')) arrangementMode = a.slice('--arrangement-mode='.length);
+    else if (a === '--lead') lead = argv[++i];
+    else if (a.startsWith('--lead=')) lead = a.slice('--lead='.length);
+    else if (a === '--rhythm') rhythm = argv[++i];
+    else if (a.startsWith('--rhythm=')) rhythm = a.slice('--rhythm='.length);
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) positional.push(a);
   }
   return {
     file: positional[0] ?? null, digest: positional[1] ?? null,
-    bars, transpose, json, map, contract, style, gain,
+    bars, transpose, json, map, contract, style, gain, arrangementMode, lead, rhythm,
   };
+}
+
+/** "0,2" -> [0,2]; undefined stays undefined (§A1: absent is not a default). */
+function parseTrackList(spec, flag) {
+  if (spec === undefined) return undefined;
+  const parts = String(spec).split(',').map((s) => s.trim()).filter((s) => s !== '');
+  const out = parts.map(Number);
+  if (!out.length || out.some((n) => !Number.isInteger(n) || n < 0)) {
+    console.error(`Bad ${flag} "${spec}"; expected a comma-separated list of track indices, e.g. 0,2`);
+    process.exit(2);
+  }
+  return out;
 }
 
 /** Parse "9-16" | "5" -> {lo, hi}; exit 2 on garbage. */
@@ -138,9 +162,10 @@ function parseBarRange(spec) {
 const {
   file, digest: digestPath, bars, transpose, json, map: mapPath, contract: contractArg,
   style: styleArg, gain: gainArg,
+  arrangementMode: modeArg, lead: leadArg, rhythm: rhythmArg,
 } = parseArgs(process.argv.slice(2));
 if (!file || !digestPath || !bars) {
-  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>] [--style NAME] [--gain high|crunch|clean]');
+  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>] [--style NAME] [--gain high|crunch|clean] [--arrangement-mode solo|dual-guitar] [--lead 0,2] [--rhythm 1,3]');
   process.exit(2);
 }
 if (!Number.isFinite(transpose)) {
@@ -154,14 +179,19 @@ const range = parseBarRange(bars);
 // move a fidelity verdict would be exactly the weakening C6 forbids. Two-stage
 // for the same reason as everywhere else (§A1): the profile supplies
 // `defaultGain`, so its name must resolve first.
-const cfgStage1 = resolveConfig({ anchorPath: file, cli: { style: styleArg, gain: gainArg } });
+const cliOverrides = {
+  style: styleArg,
+  gain: gainArg,
+  arrangementMode: modeArg,
+  lead: parseTrackList(leadArg, '--lead'),
+  rhythm: parseTrackList(rhythmArg, '--rhythm'),
+};
+const cfgStage1 = resolveConfig({ anchorPath: file, cli: cliOverrides });
 if (!cfgStage1.ok) { console.error(cfgStage1.errors.join('\n')); process.exit(2); }
 const loadedStyle = loadStyleProfile(cfgStage1.style);
 if (!loadedStyle.ok) { console.error(loadedStyle.errors.join('\n')); process.exit(2); }
 const styleProfile = loadedStyle.profile;
-const cfg = resolveConfig({
-  anchorPath: file, cli: { style: styleArg, gain: gainArg }, styleProfile,
-});
+const cfg = resolveConfig({ anchorPath: file, cli: cliOverrides, styleProfile });
 if (!cfg.ok) { console.error(cfg.errors.join('\n')); process.exit(2); }
 
 // ---- pitch-class helpers --------------------------------------------------
@@ -204,38 +234,70 @@ if (!loaded.ok) {
 }
 const { score } = loaded;
 
+// ---- PTG (Wave 5, contract C9): track roles --------------------------------
+// Resolved here, against the PARSED score, because "track 3" is only meaningful
+// once you know how many tracks there are. A role assignment that names a track
+// the score does not have is exit 2 — not a silently ignored line of config.
+const resolvedRoles = resolveTrackRoles(score, cfg);
+if (!resolvedRoles.ok) { console.error(resolvedRoles.errors.join('\n')); process.exit(2); }
+const roles = resolvedRoles.roles;
+
 // ---- collect the tab, per bar, in SOURCE pitch space ----------------------
 // For each bar we need: the top-sounding line (highest MIDI per beat), the set
 // of all pitch classes present, the lowest pitch class, and an ordered top-line
 // sequence for contour. Every tab MIDI is shifted DOWN by `transpose` first.
-const tabBars = new Map(); // barNum -> { topPcs:Set, allPcs:Set, lowMidi, topSeq:[], noteCount }
-walkBeats(score, ({ staff, bar, beat }) => {
-  const barNum = bar.index + 1;
-  if (barNum < range.lo || barNum > range.hi) return;
-  if (beat.isRest || !beat.notes.length) return;
-  const stringCount = staff.stringTuning?.tunings?.length || STRING_COUNT;
+// PTG (Wave 5, contract C9): collection is now parametrised by a ROLE VIEW —
+// the set of tracks a given question is allowed to look at. With one guitar the
+// two views are the same set, so `collectTabBars` is called once and the two
+// names alias ONE object; there is no second code path to keep in sync, and a
+// role-filtered read cannot diverge from the pre-Wave-5 aggregate read because
+// it IS that read. See lib/track-roles.mjs.
+function collectTabBars(view) {
+  const out = new Map(); // barNum -> { topPcs:Set, allPcs:Set, lowMidi, topSeq:[], noteCount }
+  const inView = trackFilter(view);
+  walkBeats(score, ({ staff, bar, beat, trackIndex }) => {
+    if (!inView(trackIndex)) return;
+    const barNum = bar.index + 1;
+    if (barNum < range.lo || barNum > range.hi) return;
+    if (beat.isRest || !beat.notes.length) return;
+    const stringCount = staff.stringTuning?.tunings?.length || STRING_COUNT;
 
-  let entry = tabBars.get(barNum);
-  if (!entry) {
-    entry = { topPcs: new Set(), allPcs: new Set(), lowMidi: Infinity, topSeq: [], noteCount: 0 };
-    tabBars.set(barNum, entry);
-  }
+    let entry = out.get(barNum);
+    if (!entry) {
+      entry = { topPcs: new Set(), allPcs: new Set(), lowMidi: Infinity, topSeq: [], noteCount: 0 };
+      out.set(barNum, entry);
+    }
 
-  let beatTop = -Infinity;
-  for (const n of beat.notes) {
-    const { midi } = fromAlphaTabNote(n, stringCount); // the ONE correct MIDI read
-    if (!Number.isFinite(midi)) continue;
-    const src = midi - transpose;                      // into source space
-    entry.allPcs.add(pc(src));
-    entry.noteCount++;
-    if (src < entry.lowMidi) entry.lowMidi = src;
-    if (src > beatTop) beatTop = src;
-  }
-  if (Number.isFinite(beatTop)) {
-    entry.topPcs.add(pc(beatTop));
-    entry.topSeq.push(beatTop);
-  }
-});
+    let beatTop = -Infinity;
+    for (const n of beat.notes) {
+      const { midi } = fromAlphaTabNote(n, stringCount); // the ONE correct MIDI read
+      if (!Number.isFinite(midi)) continue;
+      const src = midi - transpose;                      // into source space
+      entry.allPcs.add(pc(src));
+      entry.noteCount++;
+      if (src < entry.lowMidi) entry.lowMidi = src;
+      if (src > beatTop) beatTop = src;
+    }
+    if (Number.isFinite(beatTop)) {
+      entry.topPcs.add(pc(beatTop));
+      entry.topSeq.push(beatTop);
+    }
+  });
+  return out;
+}
+
+// MELODY reads the lead view; ROOTS and pitch-class colour read the harmonic
+// union (C9). In solo both are every track, and `sameView` makes that literal
+// object identity rather than a coincidence two collectors happen to share.
+const leadBars = collectTabBars(roles.views.lead);
+const harmonyBars = sameView(roles.views.lead, roles.views.harmony)
+  ? leadBars
+  : collectTabBars(roles.views.harmony);
+
+// The historical name, kept pointing at the harmonic view: every legacy read of
+// `tabBars` that is NOT specifically about the melody is a harmonic or aggregate
+// read, and in solo mode this is the same object either way.
+const tabBars = harmonyBars;
 
 // PTG: parser-grounded per-beat tab events, for the contract gate (§5). Tie
 // chains are read from the MODEL (never token placement): an attack is a
@@ -244,7 +306,11 @@ walkBeats(score, ({ staff, bar, beat }) => {
 const tabTies = collectTieChains(score);
 const tabEvents = new Map(); // barNum -> [{onset, beats, notes:[{midi(src), attack, soundingBeats, letRing}]}]
 const tabBarBeats = new Map(); // barNum -> bar capacity in quarter beats
-walkBeats(score, ({ staff, bar, beat }) => {
+// PTG (Wave 5, C9): a melody CONTRACT is a melodic obligation, so its events
+// come from the LEAD view. In solo that is every track, exactly as before.
+const inLeadView = trackFilter(roles.views.lead);
+walkBeats(score, ({ staff, bar, beat, trackIndex }) => {
+  if (!inLeadView(trackIndex)) return;
   const barNum = bar.index + 1;
   if (barNum < range.lo || barNum > range.hi) return;
   const mb = bar.masterBar;
@@ -596,7 +662,7 @@ function runContractEntry(entry, contract, digestByBar, transpose) {
 
 /** Run a single map entry's gate. Mutates `failures` (caller's) and returns
  *  { mode, tabBars, sourceBars?, ok, failures:[...] }. */
-function runMapEntry(entry, tabBars, digestByBar, transpose, contract = null) {
+function runMapEntry(entry, views, digestByBar, transpose, contract = null) {
   const failures = [];
   const [tS, tE] = entry.tabBars;
 
@@ -629,7 +695,9 @@ function runMapEntry(entry, tabBars, digestByBar, transpose, contract = null) {
     for (const sb of sourceBarsList) {
       for (const n of (sb.melodySkeleton || [])) needle.push(pc(n.midi));
     }
-    const hay = tabTopPcSeq(tS, tE, tabBars, transpose);
+    // MELODY reads the LEAD view (C9): a rhythm voicing's top note must never
+    // become the melody the quote gate grades.
+    const hay = tabTopPcSeq(tS, tE, views.lead, transpose);
     if (!isSubsequence(needle, hay)) {
       failures.push({
         gate: 'melodicSkeleton', entry: entry.tabBars,
@@ -644,7 +712,9 @@ function runMapEntry(entry, tabBars, digestByBar, transpose, contract = null) {
   for (let i = 0; i < N; i++) {
     const sb = sourceBarsList[i];
     const [lo, hi] = proportionalSlice(tS, tE, i, N);
-    const lowPc = lowestTabPcInSpan(lo, hi, tabBars, transpose);
+    // ROOTS read the harmonic UNION (C9): harmonic support is a property of
+    // what SOUNDS, and the lead guitar is sounding too.
+    const lowPc = lowestTabPcInSpan(lo, hi, views.harmony, transpose);
     const rootPc = noteNameToPc(sb.harmony?.root);
     const pcset = new Set(sb.harmony?.pcset || []);
     const ok = lowPc !== null && (lowPc === rootPc || pcset.has(lowPc));
@@ -678,7 +748,8 @@ if (mapPath) {
   // entries entirely outside --bars are skipped from evaluation but their
   // tabBars still participated in the coverage/overlap checks above.
   const activeEntries = resolveMappedSpans(map.entries, range);
-  const mapResults = activeEntries.map((e) => runMapEntry(e, tabBars, digestByBar, transpose, map.contract));
+  const views = { lead: leadBars, harmony: harmonyBars };
+  const mapResults = activeEntries.map((e) => runMapEntry(e, views, digestByBar, transpose, map.contract));
   const aggregated = mapResults.flatMap((r) => r.failures.map((f) => ({
     ...f,
     mode: r.mode,
@@ -692,7 +763,7 @@ if (mapPath) {
   const contourWarnings = [];
   for (const e of activeEntries) {
     if (e.mode !== 'quote') continue;
-    const r = entryContourR(e, tabBars, digestByBar, transpose);
+    const r = entryContourR(e, leadBars, digestByBar, transpose);
     if (r !== null && r < CONTOUR_WARN_R) {
       contourWarnings.push({ tabBars: e.tabBars, sourceBars: e.sourceBars, r: Number(r.toFixed(3)) });
     }
@@ -706,7 +777,7 @@ if (mapPath) {
   const harmonicColor = analyzeHarmonicColor({
     entries: activeEntries,
     digestByBar,
-    tabBars,
+    tabBars: harmonyBars,
     profile: styleProfile,
     gain: cfg.gain,
   });
@@ -720,6 +791,10 @@ if (mapPath) {
     map: mapPath,
     style: styleProfile.name,
     gain: cfg.gain,
+    // PTG (Wave 5): which tracks each question looked at, so a stored report can
+    // say WHY a melody gate passed without anyone re-deriving the views.
+    roles: { arrangementMode: roles.arrangementMode, lead: roles.lead,
+      rhythm: roles.rhythm, views: roles.views, labels: roles.labels },
     mapResults,
     // PTG (Wave 4, Plan §8.1): ADDITIVE. `contourWarnings` keeps its exact
     // historical shape and name — existing tests and check.mjs's adapter both
@@ -786,13 +861,18 @@ for (let barNum = range.lo; barNum <= range.hi; barNum++) {
   const db = digestByBar.get(barNum);
   if (!db) continue; // digest has no such bar; nothing to protect here
   comparedBars.push(barNum);
-  const tb = tabBars.get(barNum) || { topPcs: new Set(), allPcs: new Set(), lowMidi: Infinity, topSeq: [], noteCount: 0 };
+  const EMPTY_BAR = { topPcs: new Set(), allPcs: new Set(), lowMidi: Infinity, topSeq: [], noteCount: 0 };
+  // PTG (Wave 5, C9): the melody gate reads the LEAD view, the root gate and the
+  // soft harmonic signals read the harmonic UNION. In solo these are the same
+  // object, so this loop is byte-identical to its pre-Wave-5 self.
+  const tbLead = leadBars.get(barNum) || EMPTY_BAR;
+  const tb = harmonyBars.get(barNum) || EMPTY_BAR;
 
   // --- HARD GATE 1: melodic skeleton coverage (octave-equivalent) ---------
   const skeleton = db.melodySkeleton || [];
   for (const note of skeleton) {
     skelTotal++;
-    if (tb.topPcs.has(pc(note.midi))) {
+    if (tbLead.topPcs.has(pc(note.midi))) {
       skelCovered++;
     } else {
       failures.push({
@@ -847,9 +927,10 @@ for (let barNum = range.lo; barNum <= range.hi; barNum++) {
   if (dropNames.length) dropped.push({ bar: barNum, notes: dropNames });
 
   // --- SOFT: contour (align per bar by index to avoid cross-bar drift) -----
+  // Contour is a MELODIC question, so it reads the lead view like gate 1 does.
   const sk = skeleton.map((n) => n.midi);
-  const k = Math.min(sk.length, tb.topSeq.length);
-  for (let i = 0; i < k; i++) { srcContour.push(sk[i]); tabContour.push(tb.topSeq[i]); }
+  const k = Math.min(sk.length, tbLead.topSeq.length);
+  for (let i = 0; i < k; i++) { srcContour.push(sk[i]); tabContour.push(tbLead.topSeq[i]); }
 }
 
 /** Pearson correlation of two equal-length series, or null if undefined. */
@@ -903,6 +984,9 @@ const result = {
   bars,
   transpose,
   comparedBars,
+  // PTG (Wave 5): additive — which tracks each question looked at.
+  roles: { arrangementMode: roles.arrangementMode, lead: roles.lead,
+    rhythm: roles.rhythm, views: roles.views, labels: roles.labels },
   hardGates: { melodicSkeleton, harmonicRoots },
   soft: {
     chordQuality: { power: powerCount, exact: exactCount },

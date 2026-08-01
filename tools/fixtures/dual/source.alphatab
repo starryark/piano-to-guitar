@@ -1,0 +1,15 @@
+\title "Dual-guitar fixture source — a melody over a moving bass"
+\tempo 100
+.
+\staff { score }
+\ks c
+\voice
+D5.4 F#5.4 A5.4 F#5.4 |
+G5.4 B5.4 D6.4 B5.4 |
+D5.4 F#5.4 A5.4 F#5.4 |
+G5.4 B5.4 D6.4 B5.4 |
+\voice
+D3.1 |
+G2.1 |
+D3.1 |
+G2.1 |

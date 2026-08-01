@@ -34,6 +34,10 @@ import { analyzeFingering, analyzeLeadStringLeaps } from './lib/fingering.mjs';
 function parseArgs(argv) {
   let bars = null;
   let maxFret = null;      // null = "not set on the CLI" (C5 precedence)
+  // PTG (Wave 5, contract C9): roles select which tracks carry the lead line.
+  let arrangementMode;
+  let lead;
+  let rhythm;
   let json = false;
   let file = null;
   for (let i = 0; i < argv.length; i++) {
@@ -42,16 +46,25 @@ function parseArgs(argv) {
     else if (a.startsWith('--bars=')) bars = a.slice('--bars='.length);
     else if (a === '--max-fret') maxFret = argv[++i];
     else if (a.startsWith('--max-fret=')) maxFret = a.slice('--max-fret='.length);
+    else if (a === '--arrangement-mode') arrangementMode = argv[++i];
+    else if (a.startsWith('--arrangement-mode=')) arrangementMode = a.slice('--arrangement-mode='.length);
+    else if (a === '--lead') lead = argv[++i];
+    else if (a.startsWith('--lead=')) lead = a.slice('--lead='.length);
+    else if (a === '--rhythm') rhythm = argv[++i];
+    else if (a.startsWith('--rhythm=')) rhythm = a.slice('--rhythm='.length);
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) file = file ?? a;
   }
-  return { bars, maxFret, json, file };
+  return { bars, maxFret, arrangementMode, lead, rhythm, json, file };
 }
 
 const USAGE = 'Usage: node tools/fingering.mjs <file.alphatab> [--bars N-M] '
-  + '[--max-fret N] [--json]';
+  + '[--max-fret N] [--arrangement-mode solo|dual-guitar] [--lead 0,2] [--rhythm 1,3] [--json]';
 
-const { bars, maxFret: maxFretArg, json, file } = parseArgs(process.argv.slice(2));
+const {
+  bars, maxFret: maxFretArg, arrangementMode: modeArg, lead: leadArg, rhythm: rhythmArg,
+  json, file,
+} = parseArgs(process.argv.slice(2));
 
 /** Every failure route out of this tool is exit 2 (C2). */
 function fail(...messages) {
@@ -86,9 +99,25 @@ const range = parseBarRange(bars);
 if (maxFretArg !== null && !/^\d+$/.test(String(maxFretArg).trim())) {
   fail(`Bad --max-fret "${maxFretArg}"; expected a positive integer`);
 }
+/** "0,2" -> [0,2]; undefined stays undefined (§A1: absent is not a default). */
+function parseTrackList(spec, flag) {
+  if (spec === undefined) return undefined;
+  const parts = String(spec).split(',').map((x) => x.trim()).filter((x) => x !== '');
+  const out = parts.map(Number);
+  if (!out.length || out.some((n) => !Number.isInteger(n) || n < 0)) {
+    fail(`Bad ${flag} "${spec}"; expected a comma-separated list of track indices, e.g. 0,2`);
+  }
+  return out;
+}
+
 const config = resolveConfig({
   anchorPath: file,
-  cli: { maxFret: maxFretArg === null ? undefined : Number(maxFretArg) },
+  cli: {
+    maxFret: maxFretArg === null ? undefined : Number(maxFretArg),
+    arrangementMode: modeArg,
+    lead: parseTrackList(leadArg, '--lead'),
+    rhythm: parseTrackList(rhythmArg, '--rhythm'),
+  },
 });
 if (!config.ok) fail(...config.errors);
 

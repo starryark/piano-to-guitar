@@ -122,9 +122,18 @@ exactly as the fingering engine does.
 | `leadArticulation` | attacks carrying bend / slide / vibrato / hammer-pull | all attack events |
 | `riffCell` | attacks inside a cell that recurs ≥ 2× | all attack events |
 | `syncopation` | attacks landing off the beat-level grid | all attack events |
-| `blockChord` | multi-note attacks that are neither power chords nor octaves | all attack events |
+| `blockChord` | multi-note attacks that are **no recognised guitar grip** | all attack events |
 | `fragmentation` | attacks shorter than a quarter note | all attack events |
-| `shellVoicing` *(Tier 2)* | 3-note grips omitting the 5th | multi-note attack events |
+| `shellVoicing` | 3-note grips with root + 3rd + 7th and no 5th | multi-note attack events |
+
+`blockChord` subtracts *only* where the simultaneity is not a power chord, an
+octave or a shell. Charging a power-chord riff — or a jazz comp — the
+piano-writing penalty is precisely the false positive Implement.md §3.2 forbids.
+
+Run detectors (palm mute, pedal) break at a rest **and** at a tie continuation:
+a held note is not a repetition. `riffCell` deliberately does *not* break at a
+rest — a rest is part of a rhythmic figure — and instead carries the inter-onset
+intervals in its key and refuses to span a gap longer than 4 beats.
 
 **An empty denominator yields `0` and sets `measured: false` for that feature.**
 A feature that was not measured contributes nothing to the numerator *and nothing
@@ -135,7 +144,9 @@ to the denominator* of the weighted score, so "we could not look" never reads as
 
 ```
 raw   = Σ  wᵢ · vᵢ            over measured features
-posW  = Σ  max(wᵢ, 0)         over measured features   (the explicit denominator)
+posW  = Σ  max(wᵢ, 0)         over measured features, with the GRIP FAMILY
+                              {powerChord, octave, shellVoicing} contributing
+                              max(w) ONCE rather than its sum
 score = posW > 0 ? clamp(raw / posW, 0, 1) · 10 : null
 ```
 
@@ -143,14 +154,32 @@ score = posW > 0 ? clamp(raw / posW, 0, 1) · 10 : null
 (`blockChord`) subtract, which is what "negative pressure" means, and the clamp
 keeps a heavily piano-like passage at 0 rather than at a meaningless −3.
 
+**Why the grip family shares one denominator slot.** The three grip features
+classify the *same* event and are mutually exclusive. Summing their weights into
+the denominator would mark an all-octave riff down for the power chords it did
+not simultaneously play — an artefact of the arithmetic, not an opinion any
+profile holds. `max(w)` asks the question that has an answer: *of this style's
+recognised grips, how fully is the best-weighted one used?*
+
 **No verdict without evidence.** `idiom.low-density` is emitted only when
 `score !== null` **and** the analysed span has ≥ `profile.idiom.minAttacks`
 attack events. Below that the result still reports its features; it simply
 declines to grade them.
 
-**Tier 2 discipline.** `shellVoicing` is extracted and reported, and ships at
-weight **0** in every built-in profile. A shape label gets a nonzero weight only
-after a calibrated fixture pair exists for it. A test pins this.
+**Tier-2 discipline, in its strong form.** A shape label gets a weight only once
+a calibrated fixture *pair* exists. `shellVoicing` graduated —
+`tools/fixtures/idiom/jazz-shell.alphatab` fires it, `piano-block.alphatab` and
+`metal-riff.alphatab` do not — and only `jazz` weights it. CAGED shapes, drop
+voicings and stylistic chord-extension labels have no fixtures, so they have **no
+implementation and no weight name**; a profile that tries to set one is refused
+(`UNCALIBRATED_SHAPE_LABELS`, pinned by a test). Not offering the key is a
+stronger guarantee than shipping a zero.
+
+**Calibrated thresholds.** `warnBelow` is not a guess: it was measured against
+`tools/fixtures/idiom/*` and set so the piano-literal fixture warns in every
+style while idiomatic writing stays quiet in the style that claims it.
+hard-rock 2.5, metal 3.0, blues 2.5, jazz 2.5. Wave 6 re-runs this calibration
+against the paired scenario fixtures.
 
 ---
 

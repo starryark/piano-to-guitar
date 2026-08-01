@@ -3,7 +3,7 @@
   "name": "jazz",
   "defaultGain": "clean",
   "idiom": {
-    "warnBelow": 3,
+    "warnBelow": 2.5,
     "minAttacks": 8,
     "weights": {
       "powerChord": 0.5,
@@ -15,7 +15,7 @@
       "syncopation": 2.5,
       "blockChord": -0.5,
       "fragmentation": 1,
-      "shellVoicing": 0
+      "shellVoicing": 3
     }
   },
   "harmonicColor": {

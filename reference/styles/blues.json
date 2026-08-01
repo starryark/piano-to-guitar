@@ -3,7 +3,7 @@
   "name": "blues",
   "defaultGain": "crunch",
   "idiom": {
-    "warnBelow": 4,
+    "warnBelow": 2.5,
     "minAttacks": 8,
     "weights": {
       "powerChord": 1.5,

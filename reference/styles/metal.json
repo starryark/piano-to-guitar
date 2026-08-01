@@ -3,7 +3,7 @@
   "name": "metal",
   "defaultGain": "high",
   "idiom": {
-    "warnBelow": 5,
+    "warnBelow": 3.0,
     "minAttacks": 8,
     "weights": {
       "powerChord": 3.5,

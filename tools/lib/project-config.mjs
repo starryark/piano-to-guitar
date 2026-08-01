@@ -329,7 +329,12 @@ export function resolveConfig({ anchorPath, configPath, cli, styleProfile } = {}
     return fallback;
   };
 
-  const style = pick('style', cliIn.style, fileConfig.style, profile?.name, DEFAULTS.style);
+  // A style profile can NEVER be a source of the style NAME — it was selected by
+  // that name, so feeding `profile.name` back into the ladder is circular and
+  // reports `sources.style: 'style-profile'` for what is really the built-in
+  // default. (Wave 3 found this the moment the second resolution pass existed.)
+  // The profile's real contribution to this ladder is `defaultGain`, below.
+  const style = pick('style', cliIn.style, fileConfig.style, undefined, DEFAULTS.style);
   const maxFret = pick('maxFret', cliIn.maxFret, fileConfig.instrument?.maxFret, undefined, DEFAULTS.instrument.maxFret);
   const stringCount = pick('stringCount', cliIn.stringCount, fileConfig.instrument?.stringCount, undefined, DEFAULTS.instrument.stringCount);
   const arrangementMode = pick('arrangementMode', cliIn.arrangementMode, fileConfig.arrangementMode, undefined, DEFAULTS.arrangementMode);

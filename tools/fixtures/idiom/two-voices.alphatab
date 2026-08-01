@@ -1,0 +1,9 @@
+\title "Idiom — two independent voices must not merge into one stream"
+\tempo 120
+.
+\ts 4 4
+5.4.4 7.4.4 5.4.4 7.4.4 |
+5.4.4 7.4.4 5.4.4 7.4.4 |
+\voice
+0.6{pm}.4 0.6{pm}.4 0.6{pm}.4 0.6{pm}.4 |
+0.6{pm}.4 0.6{pm}.4 0.6{pm}.4 0.6{pm}.4 |

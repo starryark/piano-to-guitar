@@ -62,9 +62,12 @@ export const IDIOM_WEIGHTS = Object.freeze([
   'shellVoicing',
 ]);
 
-/** Tier-2 features (§A3): extracted and reported, but not yet trusted with a
- *  nonzero weight anywhere. `style-profile.test.mjs` pins that. */
-export const TIER2_WEIGHTS = Object.freeze(['shellVoicing']);
+/** Shape labels that stay UNIMPLEMENTED until a calibrated fixture pair exists
+ *  for each (Wave 3 §7.3, Tier 2). `shellVoicing` graduated off this list once
+ *  `tools/fixtures/idiom/jazz-shell.alphatab` (fires) and `piano-block.alphatab`
+ *  (does not) pinned it; the rest have no fixtures, so they have no code and no
+ *  weight name. A weight nobody can set is better than a label nobody checked. */
+export const UNCALIBRATED_SHAPE_LABELS = Object.freeze(['caged', 'dropVoicing', 'chordExtension']);
 
 const GAINS = ['high', 'crunch', 'clean'];
 const PICK_LEVELS = ['hard', 'expert', 'avoid'];

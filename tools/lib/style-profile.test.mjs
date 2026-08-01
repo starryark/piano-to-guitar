@@ -24,7 +24,7 @@ import {
   KNOWN_STYLES,
   STYLES_DIR,
   STYLE_SCHEMA_VERSION,
-  TIER2_WEIGHTS,
+  UNCALIBRATED_SHAPE_LABELS,
   loadStyleProfile,
   mergeStyleProfile,
   validateStyleProfile,
@@ -106,14 +106,26 @@ test('C6/§A1.1: hard-rock defaultGain is "high" — the legacy default, unchang
   assert.equal(profile.defaultGain, 'high');
 });
 
-test('§A3: every Tier-2 feature ships at weight 0 in every profile', () => {
-  for (const name of KNOWN_STYLES) {
-    const { profile } = loadStyleProfile(name);
-    for (const k of TIER2_WEIGHTS) {
-      assert.equal(profile.idiom.weights[k], 0,
-        `${name}.idiom.weights.${k} must stay 0 until a calibrated fixture pair exists`);
-    }
+test('§A3 Tier-2 discipline: an uncalibrated shape label has no weight name at all', () => {
+  // The rule is "do not award confidence to a shape label without calibrated
+  // fixtures". The strongest form of that is not shipping a zero — it is not
+  // offering the key. A profile that tries to weight CAGED shapes is refused,
+  // because nothing in this repo can recognise one.
+  for (const label of UNCALIBRATED_SHAPE_LABELS) {
+    assert.ok(!IDIOM_WEIGHTS.includes(label), `${label} must not be a settable weight`);
+    const p = goodProfile();
+    p.idiom.weights[label] = 2;
+    assertRejects(validateStyleProfile(p), `unknown key "idiom.weights.${label}"`);
   }
+});
+
+test('a weight that IS offered is one a fixture pair calibrated', () => {
+  // shellVoicing graduated out of Tier 2 because jazz-shell.alphatab fires it
+  // and piano-block.alphatab does not (pinned in idiom.test.mjs). Only jazz
+  // weights it — hard-rock has no opinion about shell voicings.
+  assert.ok(IDIOM_WEIGHTS.includes('shellVoicing'));
+  assert.ok(loadStyleProfile('jazz').profile.idiom.weights.shellVoicing > 0);
+  assert.equal(loadStyleProfile('hard-rock').profile.idiom.weights.shellVoicing, 0);
 });
 
 test('every profile declares every known weight — no silent zeroes', () => {
@@ -326,10 +338,11 @@ test('loadStyleProfile applies overrides through the same merge path', () => {
 
 test('a returned profile is deep-frozen, and merging does not mutate the base', () => {
   const base = loadStyleProfile('hard-rock').profile;
+  const before = base.idiom.warnBelow;
   assert.throws(() => { base.idiom.warnBelow = 0; }, TypeError);
   assert.throws(() => { base.idiom.weights.powerChord = 99; }, TypeError);
   const merged = mergeStyleProfile(base, { idiom: { warnBelow: 1 } }).profile;
-  assert.equal(base.idiom.warnBelow, 4.5, 'the base profile must be untouched by a merge');
+  assert.equal(base.idiom.warnBelow, before, 'the base profile must be untouched by a merge');
   assert.equal(merged.idiom.warnBelow, 1);
   assert.throws(() => { merged.name = 'x'; }, TypeError, 'a merged profile is frozen too');
 });

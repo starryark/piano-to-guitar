@@ -3,7 +3,7 @@
   "name": "hard-rock",
   "defaultGain": "high",
   "idiom": {
-    "warnBelow": 4.5,
+    "warnBelow": 2.5,
     "minAttacks": 8,
     "weights": {
       "powerChord": 3,

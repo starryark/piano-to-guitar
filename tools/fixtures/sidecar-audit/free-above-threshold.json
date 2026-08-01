@@ -1,0 +1,7 @@
+{
+  "song": "audit fixture — free share just above the hard-rock guide (5 of 10)",
+  "entries": [
+    { "mode": "quote", "tabBars": [1, 5], "sourceBars": [1, 5] },
+    { "mode": "free", "tabBars": [6, 10], "note": "intro plus outro" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "song": "audit fixture — half the source is never referenced at all",
+  "entries": [
+    { "mode": "quote", "tabBars": [1, 4], "sourceBars": [1, 4] },
+    { "mode": "free", "tabBars": [5, 8], "note": "a composed second half" }
+  ]
+}

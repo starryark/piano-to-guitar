@@ -1,0 +1,9 @@
+{
+  "song": "audit fixture — contract and contract-recompose share the contract bucket",
+  "contract": "../contract-melody.json",
+  "entries": [
+    { "tabBars": [1, 1], "mode": "contract", "contractPhrase": "theme-1" },
+    { "tabBars": [2, 2], "mode": "contract-recompose", "contractPhrase": "breath-1" },
+    { "tabBars": [3, 3], "mode": "contract-recompose", "contractPhrase": "solo-high" }
+  ]
+}

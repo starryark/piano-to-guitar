@@ -1,0 +1,9 @@
+{
+  "song": "audit fixture — quote / recompose / contract-recompose / free in one map",
+  "entries": [
+    { "mode": "quote", "tabBars": [1, 2], "sourceBars": [1, 2] },
+    { "mode": "recompose", "tabBars": [3, 5], "sourceBars": [3, 5] },
+    { "mode": "free", "tabBars": [6, 7], "note": "an added lift into the last phrase" },
+    { "mode": "quote", "tabBars": [8, 8], "sourceBars": [6, 6] }
+  ]
+}

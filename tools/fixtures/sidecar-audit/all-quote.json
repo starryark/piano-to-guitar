@@ -1,0 +1,7 @@
+{
+  "song": "audit fixture — every tab bar quotes the source",
+  "entries": [
+    { "mode": "quote", "tabBars": [1, 4], "sourceBars": [1, 4] },
+    { "mode": "quote", "tabBars": [5, 8], "sourceBars": [5, 8] }
+  ]
+}

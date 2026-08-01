@@ -206,6 +206,45 @@ Every one of these ships with a positive and a negative fixture (C11.6).
 
 ---
 
+## A4.1 — Sidecar-audit category membership (closes C10 for five modes)
+
+C10 names four tab-space buckets but the sidecar has **five** modes, so
+`contract-recompose` had no stated home. Frozen:
+
+**Tab space** — the axis is *which mode label*, and the four buckets are mutually
+exclusive and sum to `totalTabBars`:
+
+| Bucket | Modes |
+|---|---|
+| `quoteTabBars` | `quote` |
+| `recomposeTabBars` | `recompose` |
+| `contractTabBars` | `contract`, `contract-recompose` |
+| `freeTabBars` | `free` |
+
+The exact per-mode counts are *also* emitted as `tabBarsByMode`, so no reader
+has to trust the aggregation.
+
+**Source space** — the axis is different, and deliberately so: what matters
+there is *whether the entry preserves the melodic skeleton*, which is what makes
+a source bar "covered". C10 states it directly and it is implemented verbatim:
+`sourceBarsByQuote` = referenced by ≥ 1 `quote`/`contract` entry;
+`sourceBarsByRecompose` = referenced **only** by `recompose`/`contract-recompose`.
+
+Using two different axes in the two spaces is intentional. A tab bar's question is
+"what did the arranger declare here?"; a source bar's question is "is anything
+protecting my melody?". Answering both with one axis would make one of them wrong.
+
+**Range semantics.** Tab-space counts are **clipped** to `--bars`. Source-space and
+skeleton-space metrics use the **whole** of every entry that intersects `--bars`,
+because a sidecar entry states a *span*-level correspondence — slicing it per bar
+would fabricate a per-bar one the sidecar never claimed.
+
+**No `free` bucket in source or skeleton space** (C10). Free spans deliberately
+have no source correspondence; a metric that asks "what share of the SOURCE is
+free" is ill-defined and is not computed.
+
+---
+
 ## A5 — Track roles (closes C9 for Wave 5)
 
 * `solo` (default): `lead = config.tracks.lead` (default `[0]`), `rhythm = []`.

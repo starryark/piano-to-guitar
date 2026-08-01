@@ -1,0 +1,7 @@
+{
+  "song": "audit fixture — the same source bars quoted twice (a returning phrase)",
+  "entries": [
+    { "mode": "quote", "tabBars": [1, 4], "sourceBars": [1, 4] },
+    { "mode": "quote", "tabBars": [5, 8], "sourceBars": [1, 4], "note": "the return, varied" }
+  ]
+}

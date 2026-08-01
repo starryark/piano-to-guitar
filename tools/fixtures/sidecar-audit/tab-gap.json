@@ -1,0 +1,7 @@
+{
+  "song": "audit fixture — a hole in tab coverage must be refused",
+  "entries": [
+    { "mode": "quote", "tabBars": [1, 3], "sourceBars": [1, 3] },
+    { "mode": "quote", "tabBars": [6, 8], "sourceBars": [6, 8] }
+  ]
+}

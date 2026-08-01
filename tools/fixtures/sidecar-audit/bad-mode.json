@@ -1,0 +1,6 @@
+{
+  "song": "audit fixture — an invalid mode must be refused, not audited",
+  "entries": [
+    { "mode": "paraphrase", "tabBars": [1, 8], "sourceBars": [1, 8] }
+  ]
+}

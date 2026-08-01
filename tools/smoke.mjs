@@ -505,6 +505,150 @@ check('history: snapshots carry contract+policy+report; final-review flags drift
 });
 
 // ---------------------------------------------------------------------------
+// 17. Every style profile loads, and NONE of them can move a hard result
+// ---------------------------------------------------------------------------
+// Waves 3-4 gave the gate a style knob. The knob is soft musical policy (C6),
+// and the property worth a smoke check is the NEGATIVE one: turning it must
+// change the advice and leave validate/playability/compare bit-identical. A
+// regression here would be silent — every run still passes, just graded against
+// the wrong genre's expectations.
+
+check('all styles: soft advice moves, hard results do not', () => {
+  const ex = node([tool('piano-extract.mjs'), fix('harmonic-color/jazz-source.alphatab'), '--out', SMOKE_OUT]);
+  assert(ex.code === 0, `piano-extract exit ${ex.code}`);
+  const digest = digestOf('jazz-source');
+
+  const styles = ['hard-rock', 'metal', 'blues', 'jazz'];
+  const hard = new Set();
+  const advice = new Set();
+  for (const style of styles) {
+    const { code, json } = nodeJson([
+      tool('check.mjs'), fix('harmonic-color/flattened-tab.alphatab'),
+      '--bars', '1-8', '--digest', digest,
+      '--map', fix('harmonic-color/sidecar.json'), '--style', style, '--json']);
+    assert(code === 0, `--style ${style} exit ${code}`);
+    assert(json?.configuration?.style === style, `--style ${style} was not the style used`);
+    hard.add(JSON.stringify(json.hard));
+    advice.add(Object.values(json.soft).flat().map((a) => a.code ?? a.type).sort().join(','));
+  }
+  assert(hard.size === 1, `a style profile moved a HARD result (${hard.size} distinct hard blocks)`);
+  assert(advice.size > 1, 'no style changed the advice — the profiles are not being read');
+  return `${styles.length} styles, 1 hard result, ${advice.size} distinct advisory sets`;
+});
+
+// ---------------------------------------------------------------------------
+// 18. Every soft analyzer is reachable from the one command a human runs
+// ---------------------------------------------------------------------------
+// Wave 0 shipped `soft.fingering`/`soft.idiom`/`soft.sidecar` as permanently
+// empty arrays, and nothing noticed for two waves — an empty array is
+// indistinguishable from a working analyzer with nothing to say. This check
+// asserts each subsystem actually PRODUCED something on material chosen to
+// provoke it, so "wired up" cannot silently become "wired to nothing".
+
+check('all soft analyzers reachable from check.mjs (C4 five keys, none vacuous)', () => {
+  const ex = node([tool('piano-extract.mjs'), fix('chaconne-excerpt.alphatab'), '--out', SMOKE_OUT]);
+  assert(ex.code === 0, `piano-extract exit ${ex.code}`);
+  const { code, json } = nodeJson([
+    tool('check.mjs'), fix('e2e-tab.alphatab'), '--bars', '1-8',
+    '--digest', digestOf('chaconne-excerpt'),
+    '--map', fix('sidecar-audit/free-half.json'), '--json']);
+  assert(code === 0, `check exit ${code}`);
+
+  const keys = Object.keys(json.soft ?? {}).sort();
+  assert(keys.join(',') === 'compare,fingering,idiom,playability,sidecar',
+    `C4: expected five soft keys, got [${keys}]`);
+  for (const [k, v] of Object.entries(json.soft)) assert(Array.isArray(v), `soft.${k} is not an array`);
+
+  // Each analyzer must have RUN, not merely have a key.
+  assert(json.analyzers?.fingering?.stats, 'the fingering analyzer did not run');
+  assert(json.analyzers?.idiom?.stats, 'the idiom analyzer did not run');
+  assert(json.analyzers?.sidecar?.metrics, 'the sidecar audit did not run');
+  assert(json.analyzers.idiom.stats.attackEvents > 0, 'idiom saw no attacks');
+  assert(json.analyzers.sidecar.metrics.tabSpace.totalTabBars === 8, 'the audit read the wrong span');
+
+  const codes = Object.values(json.soft).flat().map((a) => a.code ?? a.type);
+  assert(codes.includes('sidecar.high-free-share'), 'the 50%-free map produced no sidecar advisory');
+  return `5 keys, 3 analyzers ran, ${codes.length} finding(s)`;
+});
+
+// ---------------------------------------------------------------------------
+// 19. Dual-guitar mode grades the declared LEAD, not whatever is highest
+// ---------------------------------------------------------------------------
+// The Wave 5 property that cannot be checked by looking at one run: the same two
+// tracks, the same notes, roles declared the other way round, must reach the
+// OPPOSITE verdict. If role selection ever silently degrades back to the
+// aggregate, both runs pass and nothing looks wrong.
+
+check('dual-guitar: swapping the roles flips the melody verdict', () => {
+  const ex = node([tool('piano-extract.mjs'), fix('dual/source.alphatab'), '--out', SMOKE_OUT]);
+  assert(ex.code === 0, `piano-extract exit ${ex.code}`);
+  const digest = digestOf('source');
+  const run = (lead, rhythm) => nodeJson([
+    tool('check.mjs'), fix('dual/cover.alphatab'), '--bars', '1-4', '--digest', digest,
+    '--map', fix('dual/sidecar.json'), '--arrangement-mode', 'dual-guitar',
+    '--lead', lead, '--rhythm', rhythm, '--json']);
+
+  const right = run('0', '1');
+  assert(right.code === 0, `correct roles should PASS, got exit ${right.code}`);
+  const wrong = run('1', '0');
+  assert(wrong.code === 1, `swapped roles should FAIL the melody gate, got exit ${wrong.code}`);
+  assert(wrong.json.failReasons.includes('compare melodic skeleton'),
+    `expected a melodic-skeleton failure, got [${wrong.json?.failReasons}]`);
+
+  // And solo mode — the default — still aggregates, so it passes either way.
+  const solo = nodeJson([tool('check.mjs'), fix('dual/cover.alphatab'), '--bars', '1-4',
+    '--digest', digest, '--map', fix('dual/sidecar.json'), '--json']);
+  assert(solo.code === 0, 'solo mode must remain the compatible aggregate');
+  return 'lead=0 PASS, lead=1 FAIL (melody), solo PASS';
+});
+
+// ---------------------------------------------------------------------------
+// 20. MIDI export produces a real file, and never a truncated one
+// ---------------------------------------------------------------------------
+// The audition path. `MThd` plus a length beyond the bare header is the whole
+// contract; the multi-track assertion is what proves a dual arrangement does not
+// arrive in a DAW collapsed into one track.
+
+check('MIDI export: MThd, multi-track, and nothing left behind on failure', () => {
+  const dest = path.join(SMOKE_OUT, 'dual.mid');
+  const { code, json } = nodeJson([tool('export-midi.mjs'), fix('dual/cover.alphatab'),
+    '--out', dest, '--force', '--json']);
+  assert(code === 0, `export-midi exit ${code}`);
+  const bytes = fs.readFileSync(dest);
+  assert(bytes.subarray(0, 4).toString('ascii') === 'MThd', 'not a Standard MIDI File');
+  assert(bytes.length > 14, `only ${bytes.length} bytes — header and nothing else`);
+  assert(json.tracks === 2, `expected 2 MIDI tracks from a 2-track score, got ${json.tracks}`);
+
+  // A refused overwrite must leave the good file exactly as it was.
+  const before = fs.readFileSync(dest);
+  const refused = node([tool('export-midi.mjs'), fix('dual/cover.alphatab'), '--out', dest]);
+  assert(refused.code === 2, 'overwrite without --force must be refused');
+  assert(before.equals(fs.readFileSync(dest)), 'the existing file was damaged by a refused write');
+  return `${bytes.length} bytes, 2 track(s), overwrite refused without --force`;
+});
+
+// ---------------------------------------------------------------------------
+// 21. Determinism across the whole soft pipeline
+// ---------------------------------------------------------------------------
+// Every analyzer sorts its output and rounds its floats at the boundary (§A6).
+// That is a lot of separate promises, and a single unsorted Set or unrounded
+// float anywhere would break reproducibility of a stored gate report without
+// breaking any individual test.
+
+check('determinism: the full gate produces byte-identical JSON twice', () => {
+  const args = [tool('check.mjs'), fix('harmonic-color/flattened-tab.alphatab'),
+    '--bars', '1-8', '--digest', digestOf('jazz-source'),
+    '--map', fix('harmonic-color/sidecar.json'), '--style', 'jazz', '--json'];
+  const a = nodeJson(args);
+  const b = nodeJson(args);
+  assert(a.code === 0 && b.code === 0, 'both runs should pass');
+  assert(a.stdout === b.stdout, 'two identical gate runs produced different JSON');
+  const findings = Object.values(a.json.soft).flat().length;
+  assert(findings > 0, 'a determinism check over an empty result proves nothing');
+  return `identical across 2 runs, ${findings} soft finding(s) compared`;
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 const width = Math.max(...results.map((r) => r.name.length));

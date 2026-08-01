@@ -451,6 +451,9 @@ function analyzeSequence(seq, ctx) {
   // per beat — a bar of 16ths would otherwise emit sixteen copies of the same
   // sentence, which is how a real finding gets scrolled past.
   let pickRun = { count: 0, subdivision: null, warned: false };
+  // PTG (Wave 6): one `gain-voicing` finding per distinct low-third GRIP in this
+  // sequence, not one per beat. Keyed by (root, third) midi pair.
+  const gainVoicingSeen = new Map();
   for (let i = 0; i < seq.length; i++) {
     const cur = seq[i];
     const { beat, barNum, notes } = cur;
@@ -585,6 +588,13 @@ function analyzeSequence(seq, ctx) {
     }
 
     // ---- per-beat: gain-aware voicing (low 3rd under high gain) ----------
+    // PTG (Wave 6 calibration): deduplicated per DISTINCT GRIP, the same way
+    // pick-demand is deduplicated per run. A bar of repeated low-third chords is
+    // ONE arranging decision, and emitting it once per beat produced eight
+    // copies of one sentence on the metal-literal scenario fixture — which is
+    // how a real finding gets scrolled past. The repeat count is kept in
+    // `occurrences`, because "this happens eight times" is itself information;
+    // it is just not eight findings.
     if (gain === 'high' && notes.length >= 2) {
       const midis = notes.map((n) => n.midi).filter((m) => Number.isFinite(m));
       if (midis.length >= 2) {
@@ -592,13 +602,22 @@ function analyzeSequence(seq, ctx) {
         const third = midis.find((m) => m !== root && (((m - root) % 12) + 12) % 12 !== 0 &&
           ([3, 4].includes((((m - root) % 12) + 12) % 12)));
         if (root < G3 && third !== undefined) {
-          const quality = ((((third - root) % 12) + 12) % 12) === 4 ? 'major' : 'minor';
-          add(warnings, 'gain-voicing',
-            `Bar ${barNum}: ${quality} 3rd (${midiToName(root)} + ${midiToName(third)}) over a root ` +
-            `below G3 under high gain. Distortion is a nonlinear transfer function: it generates ` +
-            `intermodulation (sum & difference) tones. A 3rd (5:4 / 6:5) yields dense dissonant ` +
-            `products that read as mud, worsening as pitch drops — this is why rock uses power chords. ` +
-            `Move the 3rd up an octave or drop it (root + 5th).`, loc);
+          const key = `${root}:${third}`;
+          const prior = gainVoicingSeen.get(key);
+          if (prior) {
+            prior.occurrences++;
+          } else {
+            const quality = ((((third - root) % 12) + 12) % 12) === 4 ? 'major' : 'minor';
+            add(warnings, 'gain-voicing',
+              `Bar ${barNum}: ${quality} 3rd (${midiToName(root)} + ${midiToName(third)}) over a root ` +
+              `below G3 under high gain. Distortion is a nonlinear transfer function: it generates ` +
+              `intermodulation (sum & difference) tones. A 3rd (5:4 / 6:5) yields dense dissonant ` +
+              `products that read as mud, worsening as pitch drops — this is why rock uses power chords. ` +
+              `Move the 3rd up an octave or drop it (root + 5th).`, loc);
+            const emitted = warnings[warnings.length - 1];
+            emitted.occurrences = 1;
+            gainVoicingSeen.set(key, emitted);
+          }
         }
       }
     }

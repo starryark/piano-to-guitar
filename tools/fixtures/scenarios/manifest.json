@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "notes": [
+    "Paired scenario fixtures (Plan §10.1-§10.2). Each PAIR shares one source and",
+    "one sidecar, and differs only in the target tab — so a difference in the",
+    "advisories is a difference in the ARRANGEMENT, never in the inputs.",
+    "",
+    "Expectations are stated as advisory CODES, never as prose (Plan §6.3), so the",
+    "wording of a message stays free to improve. `advisoriesAbsent` is the half",
+    "that matters most: it is where a false positive gets caught.",
+    "",
+    "Paths are relative to tools/fixtures/. The runner is",
+    "tools/lib/scenarios.test.mjs."
+  ],
+  "scenarios": [
+    {
+      "name": "jazz-shell-positive",
+      "intent": "Shell voicings keep the 3rd and 7th of every chord. A jazz arranger did the jazz thing; nothing should complain.",
+      "source": "harmonic-color/jazz-source.alphatab",
+      "target": "harmonic-color/shell-tab.alphatab",
+      "map": "harmonic-color/sidecar.json",
+      "bars": "1-8",
+      "style": "jazz",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": [],
+        "advisoriesAbsent": ["harmonic-flattening", "idiom.low-density"]
+      }
+    },
+    {
+      "name": "jazz-flattened-negative",
+      "intent": "The same ii-V-I-VI reduced to bare power chords. Root motion is still correct, so the HARD gate passes — and eight consecutive harmonies lose their identity, which is exactly what the soft signal is for.",
+      "source": "harmonic-color/jazz-source.alphatab",
+      "target": "harmonic-color/flattened-tab.alphatab",
+      "map": "harmonic-color/sidecar.json",
+      "bars": "1-8",
+      "style": "jazz",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": ["harmonic-flattening"],
+        "advisoriesAbsent": []
+      }
+    },
+    {
+      "name": "jazz-flattened-under-metal",
+      "intent": "Calibration: the SAME flattened tab under metal. Sustained root-fifth writing is the genre, so the colour analyzer is off entirely. Changing the style must remove irrelevant advice.",
+      "source": "harmonic-color/jazz-source.alphatab",
+      "target": "harmonic-color/flattened-tab.alphatab",
+      "map": "harmonic-color/sidecar.json",
+      "bars": "1-8",
+      "style": "metal",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": [],
+        "advisoriesAbsent": ["harmonic-flattening"]
+      }
+    },
+    {
+      "name": "metal-riff-positive",
+      "intent": "A palm-muted root pedal with power-chord stabs: the reduction a metal arranger would actually write. Omitted thirds are correct here and must draw no criticism.",
+      "source": "scenarios/metal/source.alphatab",
+      "target": "scenarios/metal/positive.alphatab",
+      "map": "scenarios/metal/sidecar.json",
+      "bars": "1-4",
+      "style": "metal",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": [],
+        "advisoriesAbsent": ["idiom.low-density", "harmonic-flattening"]
+      }
+    },
+    {
+      "name": "metal-literal-negative",
+      "intent": "The same chords typed onto the guitar unchanged — piano writing with a pick. Low thirds under high gain, no riff, no mute, no pedal.",
+      "source": "scenarios/metal/source.alphatab",
+      "target": "scenarios/metal/negative.alphatab",
+      "map": "scenarios/metal/sidecar.json",
+      "bars": "1-4",
+      "style": "metal",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": ["idiom.low-density", "gain-voicing"],
+        "advisoriesAbsent": []
+      }
+    },
+    {
+      "name": "blues-lead-positive",
+      "intent": "A pentatonic lead with bends, slides, vibrato and a repeating call. Blues weights articulation heavily, and this passage is made of it.",
+      "source": "scenarios/blues/source.alphatab",
+      "target": "scenarios/blues/positive.alphatab",
+      "map": "scenarios/blues/sidecar.json",
+      "bars": "1-4",
+      "style": "blues",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": [],
+        "advisoriesAbsent": ["idiom.low-density", "lead.string-leap"]
+      }
+    },
+    {
+      "name": "blues-literal-negative",
+      "intent": "The same dominant chords transcribed rigidly: no bend, no slide, no vibrato, no phrasing. Every expressive marker the style is built on is absent.",
+      "source": "scenarios/blues/source.alphatab",
+      "target": "scenarios/blues/negative.alphatab",
+      "map": "scenarios/blues/sidecar.json",
+      "bars": "1-4",
+      "style": "blues",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": ["idiom.low-density"],
+        "advisoriesAbsent": []
+      }
+    },
+    {
+      "name": "role-aware-correct",
+      "intent": "Dual guitar: the melody lives only in the lead track, the roots only in the rhythm track, and both parts are independently playable.",
+      "source": "dual/source.alphatab",
+      "target": "dual/cover.alphatab",
+      "map": "dual/sidecar.json",
+      "bars": "1-4",
+      "style": "hard-rock",
+      "arrangementMode": "dual-guitar",
+      "lead": [0],
+      "rhythm": [1],
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": [],
+        "advisoriesAbsent": []
+      }
+    },
+    {
+      "name": "role-aware-swapped",
+      "intent": "The same two tracks with the roles declared backwards. The melody is still SOMEWHERE in the score, and the aggregate view would happily pass it — the whole point of roles is that this must fail.",
+      "source": "dual/source.alphatab",
+      "target": "dual/cover.alphatab",
+      "map": "dual/sidecar.json",
+      "bars": "1-4",
+      "style": "hard-rock",
+      "arrangementMode": "dual-guitar",
+      "lead": [1],
+      "rhythm": [0],
+      "expect": {
+        "exit": 1,
+        "hardPass": false,
+        "failReasons": ["compare melodic skeleton"],
+        "advisoriesPresent": [],
+        "advisoriesAbsent": []
+      }
+    },
+    {
+      "name": "sidecar-responsible",
+      "intent": "Every tab bar is tied to the source. A responsibly mapped arrangement draws no proportion advice.",
+      "source": "chaconne-excerpt.alphatab",
+      "target": "e2e-tab.alphatab",
+      "map": "e2e-sidecar.json",
+      "bars": "1-8",
+      "style": "hard-rock",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": [],
+        "advisoriesAbsent": ["sidecar.high-free-share"]
+      }
+    },
+    {
+      "name": "sidecar-excessively-free",
+      "intent": "Half the tab is declared free. The map is entirely VALID and the gate passes — the advisory asks whether that much added material is intended, and does not accuse anyone of evading anything.",
+      "source": "chaconne-excerpt.alphatab",
+      "target": "e2e-tab.alphatab",
+      "map": "sidecar-audit/free-half.json",
+      "bars": "1-8",
+      "style": "hard-rock",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "advisoriesPresent": ["sidecar.high-free-share"],
+        "advisoriesAbsent": []
+      }
+    }
+  ]
+}

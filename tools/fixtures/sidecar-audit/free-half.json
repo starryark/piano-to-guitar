@@ -1,0 +1,7 @@
+{
+  "song": "audit fixture — recompose the first half, compose the second (50% free)",
+  "entries": [
+    { "mode": "recompose", "tabBars": [1, 4], "sourceBars": [1, 4] },
+    { "mode": "free", "tabBars": [5, 8], "note": "a composed second half" }
+  ]
+}

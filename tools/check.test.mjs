@@ -41,9 +41,11 @@ fs.mkdirSync(SCRATCH, { recursive: true });
 const node = (args, opts = {}) => spawnSync(process.execPath, args, { encoding: 'utf8', ...opts });
 const fix = (n) => path.join(FIX, n);
 
-/** Build a digest for a source fixture, once, into the scratch dir. */
+/** Build a digest for a source fixture, once, into the scratch dir. `stem` may
+ *  name a fixture subdirectory; piano-extract writes by BASENAME, so the output
+ *  path must be flattened or the digest is looked for where it never lands. */
 function digestOf(stem) {
-  const out = path.join(SCRATCH, `${stem}.json`);
+  const out = path.join(SCRATCH, `${path.basename(stem)}.json`);
   if (!fs.existsSync(out)) {
     const r = node([path.join(ROOT, 'tools', 'piano-extract.mjs'), fix(`${stem}.alphatab`), '--out', SCRATCH]);
     assert.equal(r.status, 0, `piano-extract ${stem} failed: ${r.stderr}`);
@@ -246,6 +248,77 @@ test('the human report marks the soft stages SOFT, never PASS/FAIL', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Wave 4 advisories reach the report
+// ---------------------------------------------------------------------------
+
+test('soft.sidecar is populated when --map is given, and empty when it is not', () => {
+  // The empty array has to mean the honest thing. With no map there is no
+  // correspondence claim to audit — which is exactly what [] says here — and the
+  // analyzers block above is what distinguishes that from "audited, found none".
+  const withMap = check(e2e()).json;
+  assert.notEqual(withMap.analyzers.sidecar, null);
+  assert.ok(withMap.analyzers.sidecar.metrics.tabSpace.totalTabBars > 0);
+
+  const barLocked = check([fix('e2e-tab.alphatab'), '--bars', '1-8',
+    '--digest', digestOf('chaconne-excerpt')]).json;
+  assert.deepEqual(barLocked.soft.sidecar, []);
+  assert.equal(barLocked.analyzers.sidecar, null, 'no map audited is null, not {}');
+});
+
+test('a high-free-share advisory reaches soft.sidecar, and the gate still passes', () => {
+  const { status, json } = check([fix('e2e-tab.alphatab'), '--bars', '1-8',
+    '--digest', digestOf('chaconne-excerpt'),
+    '--map', fix('sidecar-audit/free-half.json')]);
+  assert.equal(status, 0, 'a high free share is a question, never a gate failure');
+  assert.equal(json.ok, true, 'and the map it describes passes every hard gate');
+  assert.equal(hasAdvisory(json.soft.sidecar, 'sidecar.high-free-share'), true);
+});
+
+test('a harmonic-flattening advisory reaches soft.compare', () => {
+  const { status, json } = check([fix('harmonic-color/flattened-tab.alphatab'), '--bars', '1-8',
+    '--digest', digestOf('harmonic-color/jazz-source'),
+    '--map', fix('harmonic-color/sidecar.json'), '--style', 'jazz']);
+  assert.equal(status, 0, 'root motion passes while the colour warning fires');
+  assert.equal(hasAdvisory(json.soft.compare, 'harmonic-flattening'), true);
+  assert.equal(json.analyzers.harmonicColor.style, 'jazz');
+});
+
+test('the resolved style and gain travel DOWN to compare, not re-derived there', () => {
+  // Two tools independently walking the filesystem for a config is how they come
+  // to disagree about which arrangement they are grading.
+  const { json } = check(e2e(['--style', 'metal']));
+  assert.equal(json.analyzers.harmonicColor.style, 'metal');
+  assert.equal(json.analyzers.harmonicColor.enabled, false, 'metal disables colour analysis');
+  assert.equal(json.configuration.gain, 'high');
+});
+
+test('a lead.string-leap advisory reaches soft.fingering', () => {
+  const { json } = check([fix('lead/leap-fast.alphatab'), '--bars', '1-2',
+    '--digest', digestOf('chaconne-excerpt')]);
+  assert.equal(hasAdvisory(json.soft.fingering, 'lead.string-leap'), true,
+    'Plan §8.4: lead findings land in the fingering soft namespace');
+});
+
+test('C4: still exactly five soft keys, all arrays, after every Wave 4 addition', () => {
+  const { json } = check(e2e());
+  assert.deepEqual(Object.keys(json.soft).sort(),
+    ['compare', 'fingering', 'idiom', 'playability', 'sidecar']);
+  for (const v of Object.values(json.soft)) assert.ok(Array.isArray(v));
+});
+
+test('every soft advisory carries a code or a native type — nothing anonymous', () => {
+  const { json } = check([fix('harmonic-color/flattened-tab.alphatab'), '--bars', '1-8',
+    '--digest', digestOf('harmonic-color/jazz-source'),
+    '--map', fix('harmonic-color/sidecar.json'), '--style', 'jazz']);
+  const all = Object.values(json.soft).flat();
+  assert.ok(all.length > 0);
+  for (const a of all) {
+    assert.ok(typeof (a.code ?? a.type) === 'string' && (a.code ?? a.type).length,
+      `an advisory with no code reached the report: ${JSON.stringify(a)}`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Operational failures are exit 2 — never a quiet empty advisory list
 // ---------------------------------------------------------------------------
 
@@ -308,6 +381,15 @@ test('an analyzer that exits 2 propagates as exit 2', () => {
   const r = node([broken, ...e2e(), '--json']);
   assert.equal(r.status, 2);
   assert.match(r.stderr, /deliberate failure/);
+});
+
+test('a broken sidecar-audit is exit 2 too', () => {
+  const broken = sabotagedToolchain('missing-audit', (tools) => {
+    fs.rmSync(path.join(tools, 'sidecar-audit.mjs'));
+  });
+  const r = node([broken, ...e2e(), '--json']);
+  assert.equal(r.status, 2);
+  assert.match(r.stderr, /sidecar-audit\.mjs could not audit/);
 });
 
 test('an unmodified copy of the toolchain still passes — the sabotage tests are honest', () => {

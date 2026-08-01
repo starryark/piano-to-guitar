@@ -277,7 +277,11 @@ if (!parseFailed) {
   }
 
   // STAGE 3: compare — the fidelity gate. Exit 0 pass / 1 hard-fail / 2 IO.
-  const cmpArgs = [file, digestPath, '--bars', bars, '--transpose', String(transposeNum), '--json'];
+  // PTG (Wave 4): the ALREADY-RESOLVED style and gain travel down explicitly,
+  // exactly as `--max-fret` does. compare would otherwise re-walk the filesystem
+  // for a config and could reach a different answer than the gate printed.
+  const cmpArgs = [file, digestPath, '--bars', bars, '--transpose', String(transposeNum),
+    '--style', config.style, '--gain', gain, '--json'];
   if (mapPath) cmpArgs.push('--map', mapPath);
   if (contractPath) cmpArgs.push('--contract', contractPath);   // PTG
   const C = run('compare.mjs', cmpArgs);
@@ -306,6 +310,7 @@ if (!parseFailed) {
 // exit from either can only mean usage/IO/parse trouble.
 let fingeringSoft = null;
 let idiomSoft = null;
+let sidecarSoft = null;
 
 if (!parseFailed && !toolError) {
   const F = run('fingering.mjs', [
@@ -323,6 +328,20 @@ if (!parseFailed && !toolError) {
       + `${(I.json?.errors ?? []).join('\n') || (I.stderr || I.stdout || '').trim()}`;
   } else {
     idiomSoft = I.json;
+  }
+
+  // STAGE 6 (PTG, Wave 4): the sidecar audit — ONLY when a map was supplied.
+  // Without one there is no correspondence map to read, and a `[]` here means
+  // exactly that: not "we audited and found nothing".
+  if (mapPath) {
+    const S = run('sidecar-audit.mjs', [
+      '--digest', digestPath, '--map', mapPath, '--bars', bars, '--style', config.style, '--json']);
+    if (S.code !== 0 || S.json === null || S.json.ok !== true) {
+      toolError = toolError ?? `sidecar-audit.mjs could not audit the map (exit ${S.code}):\n`
+        + `${(S.json?.errors ?? []).join('\n') || (S.stderr || S.stdout || '').trim()}`;
+    } else {
+      sidecarSoft = S.json;
+    }
   }
 }
 
@@ -397,6 +416,12 @@ function deriveCompareAdvisories(cmp) {
         { data: { tabBars: cw.tabBars, sourceBars: cw.sourceBars, r: cw.r } },
       ));
     }
+    // PTG (Wave 4): compare's own C3-shaped advisories — today that means
+    // `harmonic-flattening`. They arrive already normalized (the Wave-4 library
+    // was built against the advisory contract), so unlike the two legacy shapes
+    // above there is nothing to translate: pass them through verbatim rather
+    // than re-wording them and inventing a second source of truth.
+    out.push(...(cmp.soft?.advisories ?? []));
     return out;
   }
 
@@ -514,7 +539,10 @@ const machine = {
     // toolError above, not an empty array.
     fingering: fingeringSoft ? fingeringSoft.advisories : [],
     idiom: idiomSoft ? idiomSoft.advisories : [],
-    sidecar: [],     // Wave 4 — tools/sidecar-audit.mjs
+    // [] with no --map means "there was no map to audit", which is the honest
+    // reading of an empty array here: bar-locked mode has no correspondence
+    // claims to check.
+    sidecar: sidecarSoft ? sidecarSoft.advisories : [],
   },
   // PTG (Wave 3): the soft analyzers' own summaries, so a stored report can say
   // WHY an idiom advisory did or did not fire without re-running anything.
@@ -528,6 +556,10 @@ const machine = {
       stats: idiomSoft.stats,
       settings: idiomSoft.settings,
     },
+    sidecar: sidecarSoft && { metrics: sidecarSoft.metrics, stats: sidecarSoft.stats },
+    // compare's harmonic-colour pass is a property of the fidelity stage, so its
+    // summary rides with the compare result rather than becoming a sixth stage.
+    harmonicColor: cmpHard?.harmonicColor?.stats ?? null,
   },
   failReasons: hardFailReasons,
 };
@@ -649,6 +681,13 @@ if (idiomSoft) {
   L.push(`  idiom                SOFT   ${detail}`);
 } else if (parseFailed) {
   L.push(`  idiom                SKIPPED   (tab did not parse)`);
+}
+if (sidecarSoft) {
+  const t = sidecarSoft.metrics.tabSpace;
+  const m = sidecarSoft.metrics.melodySkeletonSpace;
+  L.push(`  sidecar audit        SOFT   ${t.quoteTabBars} quote / ${t.recomposeTabBars} recompose / `
+    + `${t.contractTabBars} contract / ${t.freeTabBars} free of ${t.totalTabBars} tab bar(s); `
+    + `${m.coveredByQuote}/${m.total} skeleton note(s) protected`);
 }
 
 // -- SOFT ADVISORIES (PTG, Wave 0, contract C4) --

@@ -68,15 +68,19 @@
 //   failure; 2 on usage / IO error.
 
 import * as fs from 'fs';
-import path from 'path';
+// PTG (Wave 0): `path` moved out with the sidecar loader — the only remaining
+// path work (resolving a sidecar-relative contract) lives in lib/sidecar.mjs.
 import { loadTex, walkBeats, midiToName, QUARTER_TICKS } from './lib/score-utils.mjs';
 import { fromAlphaTabNote, STRING_COUNT } from './lib/fretboard.mjs';
 // PTG: contract-backed gate (Improve_Plan §5) — melody-contract enforcement
 // for sidecar modes `contract` / `contract-recompose`.
 import { collectTieChains } from './lib/ties.mjs';
-import {
-  loadContract, validateContract, findPhrase, effectiveRelocation, pitchToMidi,
-} from './lib/contract.mjs';
+import { findPhrase, effectiveRelocation, pitchToMidi } from './lib/contract.mjs';
+// PTG (Wave 0, contract C8): sidecar schema/validation lives in ONE module so
+// compare.mjs and the Wave-4 audit tool cannot drift apart. The library never
+// exits — it RETURNS the first validation failure — so the exit-2 text and code
+// stay exactly where they were: `mapUsage()` below.
+import { loadSidecar, validateSidecar, resolveMappedSpans } from './lib/sidecar.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -257,136 +261,11 @@ function mapUsage(msg) {
   process.exit(2);
 }
 
-/** Validate a [start, end] inclusive range; return null on malformation. */
-function badRange(r) {
-  if (!Array.isArray(r) || r.length !== 2) return 'not a 2-element array';
-  const [s, e] = r;
-  if (!Number.isInteger(s) || !Number.isInteger(e)) return 'values not integers';
-  if (s < 1 || e < 1) return 'values < 1';
-  if (e < s) return 'end < start';
-  return null;
-}
-
-/**
- * Load + fail-closed-validate a sidecar. Returns { song?, entries:[...], contract? }.
- * Each normalized entry: { mode, tabBars:[s,e], sourceBars?:[s,e],
- * contractPhrase?, note? }. Source-bar existence in the digest is verified up
- * front so per-mode logic can index digestByBar.get() without re-checking.
- *
- * PTG (Improve_Plan §5): modes `contract` and `contract-recompose` pin a tab
- * span to a melody-contract PHRASE (entry.contractPhrase). The contract file
- * comes from --contract, or the sidecar's own top-level "contract" path
- * (relative to the sidecar). It is fully validated against the digest before
- * any gate runs — an invalid or vacuous contract is exit 2, never a PASS.
- */
-function loadAndValidateMap(mapPath, range, digestByBar, contractArg, digest) {
-  let raw;
-  try {
-    raw = fs.readFileSync(mapPath, 'utf8');
-  } catch (e) {
-    mapUsage(`map file unreadable: ${e.message}`);
-  }
-  let parsed;
-  try {
-    parsed = JSON.parse(raw);
-  } catch (e) {
-    mapUsage(`map file unreadable: ${e.message}`);
-  }
-  if (!parsed || typeof parsed !== 'object') mapUsage('map file unreadable: top level is not an object');
-  if (!Array.isArray(parsed.entries)) mapUsage('map missing "entries" array');
-  if (parsed.entries.length === 0) mapUsage('map "entries" is empty');
-
-  // PTG: resolve + validate the melody contract when any entry needs it.
-  const CONTRACT_MODES = ['contract', 'contract-recompose'];
-  const needsContract = parsed.entries.some((e) => CONTRACT_MODES.includes(e?.mode));
-  let contract = null;
-  if (needsContract) {
-    const contractPath = contractArg
-      ?? (typeof parsed.contract === 'string'
-        ? path.resolve(path.dirname(path.resolve(mapPath)), parsed.contract)
-        : null);
-    if (!contractPath) {
-      mapUsage('map has contract-mode entries but no contract file: pass --contract '
-        + 'or set a top-level "contract" path in the sidecar');
-    }
-    const loadedContract = loadContract(contractPath);
-    if (!loadedContract.ok) mapUsage(loadedContract.errors[0].message);
-    const validation = validateContract(loadedContract.contract, digest);
-    if (!validation.ok) {
-      mapUsage(`melody contract ${contractPath} is INVALID — the gate refuses to run on it:\n`
-        + validation.errors.map((e) => `  ${e.where}: ${e.message}`).join('\n'));
-    }
-    contract = loadedContract.contract;
-  }
-
-  const seen = new Map(); // tabBar -> entryIndex, for coverage/overlap
-  const entries = parsed.entries.map((entry, i) => {
-    if (!entry || typeof entry !== 'object') mapUsage(`entry ${i} is not an object`);
-    if (!('tabBars' in entry)) mapUsage(`entry ${i} missing "tabBars"`);
-    if (!('mode' in entry)) mapUsage(`entry ${i} missing "mode"`);
-    const mode = entry.mode;
-    if (!['free', 'quote', 'recompose', ...CONTRACT_MODES].includes(mode)) {
-      mapUsage(`entry ${i} mode "${mode}" not in {free, quote, recompose, contract, contract-recompose}`);
-    }
-    const tb = badRange(entry.tabBars);
-    if (tb) mapUsage(`entry ${i} tabBars ${tb} (got ${JSON.stringify(entry.tabBars)})`);
-    const [tS, tE] = entry.tabBars;
-
-    let sourceBars = undefined;
-    let contractPhrase = undefined;
-    if (CONTRACT_MODES.includes(mode)) {
-      if (typeof entry.contractPhrase !== 'string' || !entry.contractPhrase) {
-        mapUsage(`entry ${i} mode "${mode}" requires "contractPhrase"`);
-      }
-      const phrase = findPhrase(contract, entry.contractPhrase);
-      if (!phrase) mapUsage(`entry ${i} contractPhrase "${entry.contractPhrase}" not found in the contract`);
-      contractPhrase = entry.contractPhrase;
-      // sourceBars come from the PHRASE — a contract span is source-tied by
-      // construction; the contract validator already checked bar existence.
-      sourceBars = [phrase.sourceBars[0], phrase.sourceBars[1]];
-      for (let b = sourceBars[0]; b <= sourceBars[1]; b++) {
-        if (!digestByBar.has(b)) {
-          mapUsage(`entry ${i} phrase "${contractPhrase}" references bar ${b}, absent from the digest`);
-        }
-      }
-    } else if (mode !== 'free') {
-      if (!('sourceBars' in entry)) mapUsage(`entry ${i} mode "${mode}" requires "sourceBars"`);
-      const sb = badRange(entry.sourceBars);
-      if (sb) mapUsage(`entry ${i} sourceBars ${sb} (got ${JSON.stringify(entry.sourceBars)})`);
-      const [sS, sE] = entry.sourceBars;
-      for (let b = sS; b <= sE; b++) {
-        if (!digestByBar.has(b)) {
-          mapUsage(`entry ${i} sourceBars references bar ${b}, absent from the digest`);
-        }
-      }
-      sourceBars = [sS, sE];
-    }
-
-    // Overlap check across tabBars ranges (any bar in exactly two entries =>
-    // covered-by-multiple, which also fails the coverage check below; this
-    // explicit pass makes the message unambiguous).
-    for (let b = tS; b <= tE; b++) {
-      if (seen.has(b)) mapUsage(`tab bar ${b} is covered by multiple entries`);
-      seen.set(b, i);
-    }
-
-    const out = { mode, tabBars: [tS, tE] };
-    if (sourceBars) out.sourceBars = sourceBars;
-    if (contractPhrase) out.contractPhrase = contractPhrase;
-    if ('note' in entry) out.note = entry.note;
-    return out;
-  });
-
-  // Coverage check: every tab bar in --bars must be covered by exactly one
-  // entry. (Overlaps were rejected above, so this only catches gaps.)
-  for (let b = range.lo; b <= range.hi; b++) {
-    if (!seen.has(b)) mapUsage(`tab bar ${b} is uncovered`);
-  }
-
-  const out = { entries, contract };
-  if (parsed.song !== undefined) out.song = parsed.song;
-  return out;
-}
+// PTG (Wave 0, contract C8): `badRange` and `loadAndValidateMap` used to live
+// here. They now live in tools/lib/sidecar.mjs, unchanged in behavior — see the
+// call site further down, which turns the library's returned first-failure
+// message back into this file's own `mapUsage()` (same stderr text, same
+// exit 2).
 
 /**
  * Proportional slice of a tab span for source bar i (0-indexed) of N.
@@ -757,15 +636,18 @@ function runMapEntry(entry, tabBars, digestByBar, transpose, contract = null) {
 }
 
 if (mapPath) {
-  const map = loadAndValidateMap(mapPath, range, digestByBar, contractArg, digest);
+  // PTG (Wave 0, C8): load -> validate -> resolve, through tools/lib/sidecar.mjs.
+  // The library returns the FIRST validation failure instead of exiting, so the
+  // exit-2 decision (and its exact `compare: <msg>` text) stays here.
+  const loadedMap = loadSidecar(mapPath);
+  if (!loadedMap.ok) mapUsage(loadedMap.errors[0].message);
+  const map = validateSidecar(loadedMap.data, { range, digestByBar, digest, contractArg, mapPath });
+  if (!map.ok) mapUsage(map.errors[0].message);
   // Filter to entries whose tabBars intersect --bars. Coverage has already
   // been verified on the union of all entries for the whole --bars range;
   // entries entirely outside --bars are skipped from evaluation but their
   // tabBars still participated in the coverage/overlap checks above.
-  const activeEntries = map.entries.filter((e) => {
-    const [tS, tE] = e.tabBars;
-    return tE >= range.lo && tS <= range.hi;
-  });
+  const activeEntries = resolveMappedSpans(map.entries, range);
   const mapResults = activeEntries.map((e) => runMapEntry(e, tabBars, digestByBar, transpose, map.contract));
   const aggregated = mapResults.flatMap((r) => r.failures.map((f) => ({
     ...f,

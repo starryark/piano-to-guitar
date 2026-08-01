@@ -1,0 +1,11 @@
+\title "Harmonic nodes — reliable (1-2), extended (3-4), invalid (5), non-natural (6-7)"
+\tempo 100
+.
+\ts 4 4
+5.1{nh}.4 7.1{nh}.4 12.1{nh}.4 r.4 |
+19.1{nh}.4 r.4 r.2 |
+r.4 4.1{nh}.4 9.1{nh}.4 r.4 |
+16.1{nh}.4 r.4 r.2 |
+r.4 3.1{nh}.4 6.1{nh}.4 r.4 |
+r.4 3.1{ah}.4 6.1{ph}.4 r.4 |
+r.4 3.1{th}.4 6.1{fh}.4 r.4 |

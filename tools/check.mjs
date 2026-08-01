@@ -5,7 +5,7 @@
 // Usage:
 //   node tools/check.mjs <tab.alphatab> --bars N-M
 //        [--transpose N] [--gain high|crunch|clean] [--digest <path>]
-//        [--map <sidecar.json>] [--json]
+//        [--map <sidecar.json>] [--max-fret N] [--json]
 //
 // Runs validate --strict -> playability -> compare in order, prints ONE
 // consolidated report, and exits non-zero if any HARD gate fails. The skill
@@ -33,11 +33,25 @@
 //     • playability `warnings[]` (tone/physics advisories), PLUS
 //     • ALL of compare's soft signals (chord quality, density, dropped, contour).
 //
-//   CRITICAL: playability exits 1 on EITHER errors[] OR warnings[] being
-//   non-empty, so its EXIT CODE is NOT trustworthy here. We parse its JSON and
-//   key the hard fail on `errors[]` ONLY; `warnings[]` are surfaced but never
-//   gate. (validate's exit code, by contrast, IS trustworthy and used directly;
-//   compare's exit code is trustworthy too — 0 pass / 1 hard-fail / 2 IO error.)
+//   PTG (Wave 0, contract C4): the SOFT block of --json ALWAYS carries all five
+//   subsystem keys — playability, compare, fingering, idiom, sidecar — as
+//   ARRAYS, in bar-locked AND --map mode. An analyzer that did not run
+//   contributes []. `soft.compare` used to be `cmpHard.mapResults ? null :
+//   cmpHard.soft`, i.e. null in exactly the mode every real Gate-B run uses, so
+//   compare's map-mode contour advisory reached nobody. Soft findings are
+//   derived AFTER the verdict below and can never influence it.
+//
+//   PTG (Wave 1, contract C7): playability's exit code is now TRUSTWORTHY —
+//   0 when errors[] is empty, 1 when it is not, 2 on usage/IO — the same rule
+//   validate and compare already follow. (It used to exit 1 on warnings too,
+//   which is why the code below was written to ignore it.)
+//   We nonetheless still key the hard fail on the PARSED `errors[]` rather than
+//   on the exit code, and that is deliberate, not leftover distrust: this stage
+//   needs the error LIST to print anyway, `errors[]` is the thing the contract
+//   defines the gate in terms of, and deriving the verdict from the same datum
+//   we report makes the report and the verdict incapable of disagreeing. The
+//   defensive JSON parsing stays for the same reason — a sub-tool that produces
+//   no JSON at all is an exit-2 setup problem, not a silent pass.
 //
 // Exit codes: 0 = no hard failure, 1 = a hard gate failed, 2 = usage / IO error
 // (bad args, missing --bars, unresolvable digest, or a sub-tool that could not
@@ -47,6 +61,14 @@ import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+// PTG (Wave 0, contract C3): the one normalized soft-finding shape. This is the
+// ONLY library check.mjs imports — the three sub-tools stay child processes.
+import { advisory } from './lib/advisory.mjs';
+// PTG (Wave 1, contract C5): configuration precedence lives in ONE module. The
+// gate resolves it here, at the CLI boundary, and passes the resolved instrument
+// limits down to playability explicitly — so the two stages can never disagree
+// about which guitar is being checked.
+import { resolveConfig } from './lib/project-config.mjs';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.dirname(TOOLS_DIR);
@@ -61,6 +83,7 @@ function parseArgs(argv) {
   let map = null;
   let contract = null;      // PTG: melody contract for contract-mode sidecars
   let policy = null;        // PTG: guitar policy for playability (§7)
+  let maxFret = null;       // PTG Wave 1 (C5): null = "not set on the CLI"
   let warningsAsErrors = false; // PTG §7.3
   let json = false;
   let file = null;
@@ -80,11 +103,13 @@ function parseArgs(argv) {
     else if (a.startsWith('--contract=')) contract = a.slice('--contract='.length);
     else if (a === '--policy') policy = argv[++i];       // PTG: guitar policy (§7)
     else if (a.startsWith('--policy=')) policy = a.slice('--policy='.length);
+    else if (a === '--max-fret') maxFret = argv[++i];    // PTG Wave 1 (C5)
+    else if (a.startsWith('--max-fret=')) maxFret = a.slice('--max-fret='.length);
     else if (a === '--warnings-as-errors') warningsAsErrors = true;  // PTG §7.3
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) file = file ?? a;
   }
-  return { file, bars, transpose, gain, digest, map, contract, policy, warningsAsErrors, json };
+  return { file, bars, transpose, gain, digest, map, contract, policy, maxFret, warningsAsErrors, json };
 }
 
 function usage(msg) {
@@ -93,13 +118,13 @@ function usage(msg) {
     'Usage: node tools/check.mjs <tab.alphatab> --bars N-M ' +
     '[--transpose N] [--gain high|crunch|clean] [--digest <path>] ' +
     '[--map <sidecar.json>] [--contract <melody-contract.json>] ' +
-    '[--policy <guitar-policy.json>] [--warnings-as-errors] [--json]');
+    '[--policy <guitar-policy.json>] [--max-fret N] [--warnings-as-errors] [--json]');
   process.exit(2);
 }
 
 const {
   file, bars, transpose, gain, digest: digestArg, map: mapArg, contract: contractArg,
-  policy: policyArg, warningsAsErrors, json,
+  policy: policyArg, maxFret: maxFretArg, warningsAsErrors, json,
 } = parseArgs(process.argv.slice(2));
 
 if (!file) usage('No tab file given.');
@@ -109,6 +134,21 @@ if (!['high', 'crunch', 'clean'].includes(gain)) usage(`Bad --gain "${gain}"; ex
 const transposeNum = Number(transpose);
 if (!Number.isFinite(transposeNum)) usage(`Bad --transpose "${transpose}"; expected an integer semitone offset.`);
 if (!fs.existsSync(file)) usage(`No tab at "${file}".`);
+
+// ---- PTG (Wave 1, contract C5): instrument configuration ------------------
+// Resolved HERE so a malformed `config.json` is a clear exit 2 from the gate
+// itself, not an opaque failure inside a child process — and so the resolved
+// number is passed to playability EXPLICITLY (as `--max-fret`) instead of both
+// tools independently re-walking the filesystem and hoping to agree.
+// Precedence: --max-fret > <dir of tab>/…/config.json > built-in 22.
+if (maxFretArg !== null && !/^\d+$/.test(String(maxFretArg).trim())) {
+  usage(`Bad --max-fret "${maxFretArg}"; expected a positive integer.`);
+}
+const config = resolveConfig({
+  anchorPath: file,
+  cli: { maxFret: maxFretArg === null ? undefined : Number(maxFretArg) },
+});
+if (!config.ok) usage(config.errors.join('\n'));
 
 // ---- digest resolution ----------------------------------------------------
 // Resolution order: --digest (explicit, wins) -> co-located ./source.json next
@@ -175,8 +215,12 @@ let cmpIoError = null; // compare exit 2 => IO/usage problem, not a fidelity fai
 let toolError = null;  // a sub-tool that could not produce JSON at all
 
 if (!parseFailed) {
-  // STAGE 2: playability — DO NOT trust exit code; gate on errors[] ONLY.
+  // STAGE 2: playability — gate on the parsed errors[] (see the header note).
   const playArgs = [file, '--bars', bars, '--gain', gain];
+  // PTG (Wave 1, C5): pass the ALREADY-RESOLVED instrument limit. Because CLI
+  // beats config in playability too, this is idempotent — the child reaches the
+  // same answer whether or not it finds the same config.json.
+  playArgs.push('--max-fret', String(config.instrument.maxFret));
   if (policyPath) playArgs.push('--policy', policyPath);          // PTG §7
   if (warningsAsErrors) playArgs.push('--warnings-as-errors');    // PTG §7.3
   const P = run('playability.mjs', playArgs);
@@ -188,7 +232,7 @@ if (!parseFailed) {
       errors: P.json.errors ?? [],
       warnings: P.json.warnings ?? [],          // SOFT — surfaced, never gates
       stats: P.json.stats,
-      exitCode: P.code,                          // recorded to show it's ignored
+      exitCode: P.code,   // recorded for diagnostics; C7 makes it agree with ok
     };
   }
 
@@ -238,6 +282,106 @@ if (cmpHard && !cmpHard.ok) {
 }
 const gateOk = hardFailReasons.length === 0;
 
+// ---- SOFT advisories (contracts C3 + C4) ----------------------------------
+// Everything below this line is DERIVED from results already computed above.
+// `gateOk` is fixed; nothing here can move it. That ordering is the guarantee
+// the contract asks for ("soft output never influences the gate result"), made
+// structural rather than promised.
+//
+// The subsystem order is the report order, and it is stable: playability and
+// compare exist today, fingering/idiom/sidecar are filled by Waves 2/3/4 and
+// ship as [] now so a consumer never has to feature-detect a key.
+const SOFT_SUBSYSTEMS = ['playability', 'compare', 'fingering', 'idiom', 'sidecar'];
+
+/**
+ * Adapt compare's TWO legacy soft shapes into contract-C3 advisories.
+ *
+ * compare.mjs speaks a different soft dialect per mode — map mode emits
+ * `soft.contourWarnings[]`, bar-locked mode emits a nested
+ * `{chordQuality, density, dropped, contour}` object. Neither is retro-fitted
+ * (existing tests pin both, and C3 says so explicitly); they are translated
+ * HERE, at the boundary, so every consumer downstream sees one shape.
+ *
+ * Each advisory is emitted only when its underlying datum actually exists — an
+ * absent measurement must read as "not measured", never as a finding of zero.
+ */
+function deriveCompareAdvisories(cmp) {
+  const out = [];
+  if (!cmp) return out;
+
+  // --- map mode -------------------------------------------------------------
+  // compare computes these per `quote` entry and prints them in its own human
+  // report; before Wave 0 they never reached check.mjs's JSON at all.
+  if (cmp.mapResults) {
+    for (const cw of cmp.soft?.contourWarnings ?? []) {
+      out.push(advisory(
+        'compare.contour',
+        `quote span tab bars [${cw.tabBars.join(',')}] (source bars [${cw.sourceBars.join(',')}]): `
+        + `top line runs opposite the quoted source melody (r=${cw.r}) — confirm the inversion is intended`,
+        { data: { tabBars: cw.tabBars, sourceBars: cw.sourceBars, r: cw.r } },
+      ));
+    }
+    return out;
+  }
+
+  // --- bar-locked mode ------------------------------------------------------
+  const soft = cmp.soft ?? {};
+
+  // Dropped notes: one advisory per bar, so a consumer can locate them. The
+  // list is capped in the PROSE only — `data.notes` keeps every name.
+  for (const dr of soft.dropped ?? []) {
+    const shown = dr.notes.slice(0, 8).join(' ');
+    const more = dr.notes.length > 8 ? ` (+${dr.notes.length - 8} more)` : '';
+    out.push(advisory(
+      'compare.dropped-notes',
+      `bar ${dr.bar}: source pitch class(es) absent from the tab bar — ${shown}${more}`,
+      { bar: dr.bar, data: { bar: dr.bar, notes: dr.notes } },
+    ));
+  }
+
+  // Density: INFO, never a warning. A rock reduction is supposed to be sparse
+  // (AGENTS.md: "Low density is expected and good") — this is context for the
+  // human at the gate, not a defect claim.
+  const percent = soft.density?.percent;
+  if (percent !== undefined && percent !== null && percent < 100) {
+    out.push(advisory(
+      'compare.low-density',
+      `${percent}% of source notes retained — reduction is expected in a cover; `
+      + 'weigh it against the source, do not treat it as a loss to fix',
+      { severity: 'info', data: { percent } },
+    ));
+  }
+
+  // Contour: any NEGATIVE correlation is surfaced here (C4), which is a wider
+  // net than compare's own printed warning (r < -0.5). Inverting the top line
+  // is a legitimate arranging choice; the advisory asks for confirmation, and
+  // `data.r` carries the magnitude so the reader can judge how strong it is.
+  const r = soft.contour?.r;
+  if (r !== undefined && r !== null && r < 0) {
+    out.push(advisory(
+      'compare.contour',
+      `tab top line correlates ${r} with the source melody — the shapes run opposite; `
+      + 'confirm the inversion is intended',
+      { data: { r } },
+    ));
+  }
+
+  // Chord quality: INFO, and deliberately not framed as a miss. A power chord
+  // (root+5th, no 3rd) renders BOTH major and minor correctly — C11 invariant 4
+  // says a missing 3rd is never a fidelity failure.
+  const q = soft.chordQuality;
+  if (q) {
+    out.push(advisory(
+      'compare.chord-quality',
+      `${q.power ?? 0} bar(s) voiced as power chords (major/minor neutral), `
+      + `${q.exact ?? 0} with an explicit 3rd — a missing 3rd is never a miss`,
+      { severity: 'info', data: { power: q.power, exact: q.exact } },
+    ));
+  }
+
+  return out;
+}
+
 // ---- machine output -------------------------------------------------------
 const machine = {
   ok: gateOk,
@@ -246,6 +390,11 @@ const machine = {
   transpose: transposeNum,
   gain,
   digest: digestPath,
+  // PTG (Wave 1, C5): the resolved instrument and its provenance travel with the
+  // verdict, so a stored gate report says which guitar it graded.
+  instrument: config.instrument,
+  configPath: config.configPath,
+  configSources: config.sources,
   hard: {
     validate: validateHard,
     playability: playHard && { ok: playHard.ok, errors: playHard.errors, stats: playHard.stats },
@@ -255,11 +404,24 @@ const machine = {
         ok: cmpHard.ok,
         hardGates: cmpHard.hardGates,
         failures: cmpHard.failures,
+        // PTG (Wave 0, C4): compare's raw bar-locked soft object, preserved
+        // VERBATIM. `soft.compare` below is now the derived advisory view; a
+        // reader (or an older consumer) that wants the original
+        // chordQuality/density/dropped/contour numbers still finds them, so
+        // normalizing the soft channel regressed nothing.
+        soft: cmpHard.soft,
       }),
   },
+  // PTG (Wave 0, contract C4): all five keys, always, as arrays, in both modes.
   soft: {
+    // playability keeps its NATIVE {type, message, bar, …} warning shape —
+    // existing tests pin it and C3 forbids retro-fitting it. [] when the stage
+    // did not run, never null.
     playability: playHard ? playHard.warnings : [],
-    compare: cmpHard ? (cmpHard.mapResults ? null : cmpHard.soft) : null,
+    compare: deriveCompareAdvisories(cmpHard),
+    fingering: [],   // Wave 2 — tools/lib/fingering.mjs
+    idiom: [],       // Wave 3 — tools/lib/idiom.mjs
+    sidecar: [],     // Wave 4 — tools/sidecar-audit.mjs
   },
   failReasons: hardFailReasons,
 };
@@ -276,6 +438,14 @@ const L = [];
 
 L.push(`CHECK  ${file}`);
 L.push(`       bars ${bars}   transpose ${tsign}   gain ${gain}   digest ${digestPath}`);
+// PTG (Wave 1, C5): print the instrument line only when something OVERRODE the
+// built-in. On a default run it is noise; on a configured run it is the first
+// thing a reader needs to interpret a fret-range finding.
+if (config.sources.maxFret !== 'default' || config.sources.stringCount !== 'default') {
+  L.push(`       instrument max fret ${config.instrument.maxFret} (${config.sources.maxFret})`
+    + `   strings ${config.instrument.stringCount} (${config.sources.stringCount})`
+    + (config.configPath ? `   config ${config.configPath}` : ''));
+}
 L.push('');
 
 // -- validate --
@@ -295,8 +465,12 @@ if (parseFailed) {
 if (playHard) {
   const nErr = playHard.errors.length;
   const nWarn = playHard.warnings.length;
+  // PTG (Wave 1, C7): the old text read "exit N ignored" — accurate when
+  // playability exited 1 on warnings, and actively misleading now that it does
+  // not. Soft warnings are still reported and still never gate; the exit code
+  // simply agrees with the verdict.
   L.push(`  playability          ${mark(playHard.ok)}   ${nErr} error${nErr === 1 ? '' : 's'}` +
-    ` (${nWarn} soft warning${nWarn === 1 ? '' : 's'}; exit ${playHard.exitCode} ignored)`);
+    ` (${nWarn} soft warning${nWarn === 1 ? '' : 's'}, non-gating)`);
   for (const e of playHard.errors) L.push(`       ! ${e.message}`);
   for (const w of playHard.warnings) L.push(`       ~ soft: ${w.message}`);
 } else if (!parseFailed) {
@@ -347,6 +521,33 @@ if (cmpHard) {
   L.push(`  compare (fidelity)   n/a`);
 } else {
   L.push(`  compare (fidelity)   SKIPPED   (tab did not parse)`);
+}
+
+// -- SOFT ADVISORIES (PTG, Wave 0, contract C4) --
+// ONE trailing roll-up of every soft finding, grouped by subsystem. The
+// per-stage `~ soft:` lines above are untouched — this is an ADDITIONAL
+// summary, not a replacement, because those lines carry per-stage context this
+// one deliberately drops.
+//
+// Printed only when something is in it. An always-present empty
+// "SOFT ADVISORIES" header would train the reader to skip the section, which is
+// the exact failure mode a summary exists to prevent.
+const softLines = [];
+for (const name of SOFT_SUBSYSTEMS) {
+  const list = machine.soft[name] ?? [];
+  if (!list.length) continue;
+  softLines.push(`  ${name.padEnd(14)}(${list.length})`);
+  for (const a of list) {
+    // `code` for C3 advisories, `type` for playability's native warning shape.
+    const tag = a.code ?? a.type ?? 'soft';
+    softLines.push(`    ~ [${tag}] ${a.message}`);
+  }
+}
+if (softLines.length) {
+  L.push('');
+  L.push('SOFT ADVISORIES');
+  L.push('---------------');
+  L.push(...softLines);
 }
 
 L.push('');

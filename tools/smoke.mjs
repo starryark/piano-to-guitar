@@ -166,19 +166,37 @@ check('validate --strict: an overfull voice exits 1', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 6. playability flags non-adjacent strings (the §2.2 fact 10 constraint)
+// 6. playability grades non-adjacent strings by note count (contract C14)
 // ---------------------------------------------------------------------------
 // Across both real covers: 74 multi-note attacks, max 4 notes, ZERO
-// non-adjacent string pairs. A dyad on strings 2 and 6 is unplayable with a
-// flatpick and must be flagged as an error (a HARD gate signal).
+// non-adjacent string pairs. A simultaneous grip a pick cannot take must be
+// caught — but PTG Wave 1 splits it by how the player would actually answer it:
+//   • a DYAD on strings 2 and 6 is the textbook hybrid-picking grip (pick + a
+//     finger). It is a warning, and — with C7's corrected exit semantics — the
+//     process exits 0. This check asserts BOTH halves, because a warning that
+//     still exited 1 would be indistinguishable from the old hard failure.
+//   • a THREE-note non-contiguous grip is not something a flatpick or a hybrid
+//     grip absorbs mid-line; it stays a HARD error and exits 1.
+// Asserting them together is what stops the split from silently collapsing back
+// into one rule in either direction.
 
-check('playability: non-adjacent strings are an error', () => {
-  const { code, json } = nodeJson([
+check('playability: non-adjacent dyad warns (exit 0), 3-note grip errors (exit 1)', () => {
+  const dyad = nodeJson([
     tool('playability.mjs'), fix('non-adjacent-dyad.alphatab'), '--bars', '1', '--json']);
-  assert((json?.errors?.length ?? 0) > 0, 'expected a non-adjacent-strings error');
-  const na = json.errors.find((e) => /non-adjacent/.test(e.type ?? '') || /non-adjacent/.test(e.message ?? ''));
-  assert(na, `expected a non-adjacent-strings error, got: ${JSON.stringify(json.errors)}`);
-  return `${json.errors.length} error(s); exit code ${code} (ignored by check.mjs — it gates on errors[])`;
+  assert((dyad.json?.errors?.length ?? -1) === 0,
+    `a non-adjacent DYAD must not be a hard error, got: ${JSON.stringify(dyad.json?.errors)}`);
+  const warn = (dyad.json?.warnings ?? []).find((w) => w.type === 'non-adjacent-dyad');
+  assert(warn, `expected a non-adjacent-dyad warning, got: ${JSON.stringify(dyad.json?.warnings)}`);
+  assert(/Non-adjacent dyad: hybrid picking or a roll may be required\./.test(warn.message),
+    `the C14 wording must survive edits, got: ${warn.message}`);
+  assert(dyad.code === 0, `warning-only run must exit 0 (contract C7), got ${dyad.code}`);
+
+  const triad = nodeJson([
+    tool('playability.mjs'), fix('non-adjacent-triad.alphatab'), '--bars', '1', '--json']);
+  const na = (triad.json?.errors ?? []).find((e) => e.type === 'non-adjacent-strings');
+  assert(na, `expected a non-adjacent-strings error, got: ${JSON.stringify(triad.json?.errors)}`);
+  assert(triad.code === 1, `a hard playability error must exit 1, got ${triad.code}`);
+  return `dyad -> 1 warning, exit ${dyad.code}; 3-note grip -> hard error, exit ${triad.code}`;
 });
 
 // ---------------------------------------------------------------------------

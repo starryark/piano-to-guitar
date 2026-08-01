@@ -16,7 +16,8 @@ throwaway `node` run before this spec was written — they are facts, not guesse
 
   | Need | Export | File |
   |---|---|---|
-  | open-string MIDI array (`OPEN[1]=64=E4 … OPEN[6]=40=E2`) | `OPEN`, `STRING_COUNT`, `MAX_FRET` | `tools/lib/fretboard.mjs` |
+  | open-string MIDI array (`OPEN[1]=64=E4 … OPEN[6]=40=E2`) | `OPEN`, `STRING_COUNT`, `DEFAULT_MAX_FRET` (alias `MAX_FRET`) | `tools/lib/fretboard.mjs` |
+  | resolved project configuration (`--max-fret` > `config.json` > built-in) | `resolveConfig`, `findProjectConfig`, `loadProjectConfig` | `tools/lib/project-config.mjs` |
   | all `{string,fret}` positions for a MIDI, `{maxFret,tuning}` opts | `positionsFor(midi, opts)` | `tools/lib/fretboard.mjs` |
   | MIDI → scientific name (sharps only), e.g. `50→"D3"` | `midiToName(midi)` | `tools/lib/score-utils.mjs` |
   | expected tick length of a bar from its time sig | `expectedBarTicks(masterBar)` | `tools/lib/score-utils.mjs` |
@@ -59,7 +60,7 @@ node tools/fret.mjs <fret>.<string> [<fret>.<string> …] --pcset <tok> [<tok> �
 - A **positional** is any argument not beginning with `--`. All positionals must appear
   **before** any flag (this disambiguates the variadic `--pcset`).
 - `<fret>.<string>` = two non-negative integers separated by a dot, e.g. `10.6` (fret 10 on
-  string 6). `string` must be `1..6`; `fret` must be `0..MAX_FRET` (22) unless a wider
+  string 6). `string` must be `1..6`; `fret` must be `0..DEFAULT_MAX_FRET` (22) unless a wider
   `--maxfret` says otherwise (see A.4). Parse with `/^(\d+)\.(\d+)$/`.
 - `<NoteName>` = scientific pitch, `/^([A-Ga-g])([#b]?)(-?\d+)$/`: letter (upper- or lower-cased
   → uppercased), optional `#` or `b`, signed integer octave, e.g. `Ab3`, `C#6`, `F2`, `d5`.
@@ -102,8 +103,8 @@ Note name → MIDI, then all playable positions.
 - pitch class: `pc = nameToPc(letter+accidental)` (reuses `nameToPc`, which accepts sharps AND
   flats; `null` → usage error exit 2: `fret.mjs: unknown note name '<token>'`).
 - MIDI (inverse of `analysis.mjs`'s `midiName`): **`midi = pc + 12 * (octave + 1)`**.
-- positions: `positionsFor(midi, { maxFret })` (default `maxFret = MAX_FRET = 22`, overridable
-  by `--maxfret`). Returns `{string,fret,midi}[]` already sorted by string ascending.
+- positions: `positionsFor(midi, { maxFret })` (default `maxFret = DEFAULT_MAX_FRET = 22`,
+  overridable by `--maxfret`). Returns `{string,fret,midi}[]` already sorted by string ascending.
 
 **Exact stdout:** header line then a space-joined position list rendered as `fret.string`
 tokens (so they are copy-paste ready as AlphaTex the arranger writes):

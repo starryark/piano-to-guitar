@@ -1,0 +1,11 @@
+{
+  "song": "chaconne-excerpt bars 1-4, quoted with an INVERTED top line (Wave 0 fixture)",
+  "entries": [
+    {
+      "mode": "quote",
+      "tabBars": [1, 4],
+      "sourceBars": [1, 4],
+      "note": "Every skeleton pitch class is present in order and every root is supported, so the HARD quote gate passes. The tab's top line ascends where the source descends, so the SOFT contour advisory fires. This is the trigger case for compare.contour in --map mode; tools/fixtures/e2e-sidecar.json is the non-trigger case."
+    }
+  ]
+}

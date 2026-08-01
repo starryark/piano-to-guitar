@@ -38,7 +38,31 @@ function num(v) {
 export const OPEN = [null, 64, 59, 55, 50, 45, 40]; // OPEN[1]=E4 … OPEN[6]=E2
 
 export const STRING_COUNT = 6;
-export const MAX_FRET = 22;
+
+/**
+ * The instrument's fret count when nobody said otherwise.
+ *
+ * PTG (Wave 1, contract C5): 22 is a DEFAULT, not a law — 24-fret guitars are
+ * ordinary. Callers override it per run via `opts.maxFret`; the resolved value
+ * comes from `tools/lib/project-config.mjs` at a CLI boundary
+ * (`--max-fret` > `projects/<slug>/config.json` > this constant).
+ *
+ * THIS MODULE MUST NEVER READ THE FILESYSTEM to learn it. Config resolution
+ * happens once, at the edge; limits travel inward as plain `opts`. A geometry
+ * library that reads a file has a hidden input, and every test of it becomes
+ * dependent on the cwd it happens to run in.
+ */
+export const DEFAULT_MAX_FRET = 22;
+
+/**
+ * Compatibility alias for `DEFAULT_MAX_FRET`.
+ *
+ * PTG (Wave 1): kept deliberately. `tools/fret.mjs`, `tools/lib/fretboard.test.mjs`
+ * and `docs/specs/tooling.md` all name `MAX_FRET`, and renaming a public export
+ * to express a nuance ("it is only a default") would break callers for a comment.
+ * New code should prefer `DEFAULT_MAX_FRET` and pass `opts.maxFret`.
+ */
+export const MAX_FRET = DEFAULT_MAX_FRET;
 
 /**
  * THE inversion boundary. sourceString = (stringCount + 1) - internalString.
@@ -151,7 +175,7 @@ function normalizeTuning(tuning) {
 export function positionsFor(midi, opts = {}) {
   const m = num(midi);
   if (m === null) return [];
-  const maxFret = num(opts.maxFret) ?? MAX_FRET;
+  const maxFret = num(opts.maxFret) ?? DEFAULT_MAX_FRET;   // PTG (Wave 1): a default, overridable per run
   const tuning = normalizeTuning(opts.tuning);
 
   const out = [];
@@ -210,8 +234,8 @@ export function spanOf(positions) {
  *   "duplicate-string" — two notes assigned to the same string. Physically
  *                        impossible; usually a voicing-assignment bug.
  *   "span"             — fretted span exceeds `maxSpan`.
- *   "fret-range"       — fret outside 0..MAX_FRET, or string outside
- *                        1..STRING_COUNT, or a non-finite value.
+ *   "fret-range"       — fret outside 0..`opts.maxFret`, or string outside
+ *                        1..`opts.stringCount`, or a non-finite value.
  *   "unreachable"      — needs more than four distinct fretted frets (four
  *                        fingers, each able to barre at most one fret), or
  *                        more notes than the instrument has strings.
@@ -219,8 +243,14 @@ export function spanOf(positions) {
  * Default `maxSpan` is 5 when `minFret >= 7` (frets are narrower up the neck)
  * and 4 otherwise — matching the playability thresholds in §4.
  *
+ * PTG (Wave 1, contract C5): `maxFret` and `stringCount` are INSTRUMENT facts,
+ * so they are inputs, not constants. They default to `DEFAULT_MAX_FRET` (22)
+ * and `STRING_COUNT` (6) — i.e. a caller that passes nothing gets exactly the
+ * pre-Wave-1 behavior — and a CLI resolves the real values through
+ * `tools/lib/project-config.mjs`. This module still never reads a file.
+ *
  * @param {Array<{ string: number, fret: number }>} positions
- * @param {{ maxSpan?: number }} [opts]
+ * @param {{ maxSpan?: number, maxFret?: number, stringCount?: number }} [opts]
  * @returns {{ ok: boolean, span: number,
  *             violations: Array<{ rule: string, message: string }> }}
  */
@@ -229,20 +259,27 @@ export function isPlayableVoicing(positions, opts = {}) {
   const violations = [];
   const { span, minFret, maxFret, frettedCount } = spanOf(list);
 
+  // PTG (Wave 1): instrument limits for THIS call. Note the shadowing hazard —
+  // `maxFret` above is the voicing's HIGHEST FRETTED FRET (from spanOf), a
+  // measurement; `fretLimit` is the instrument's fret COUNT, a constraint. They
+  // are deliberately named apart so the fret-range test below cannot be misread.
+  const fretLimit = num(opts.maxFret) ?? DEFAULT_MAX_FRET;
+  const stringLimit = num(opts.stringCount) ?? STRING_COUNT;
+
   // fret-range / malformed positions
   for (const p of list) {
     const s = num(p?.string);
     const f = num(p?.fret);
-    if (s === null || !Number.isInteger(s) || s < 1 || s > STRING_COUNT) {
+    if (s === null || !Number.isInteger(s) || s < 1 || s > stringLimit) {
       violations.push({
         rule: 'fret-range',
-        message: `String ${p?.string} is outside 1..${STRING_COUNT}`,
+        message: `String ${p?.string} is outside 1..${stringLimit}`,
       });
     }
-    if (f === null || f < 0 || f > MAX_FRET) {
+    if (f === null || f < 0 || f > fretLimit) {
       violations.push({
         rule: 'fret-range',
-        message: `Fret ${p?.fret} is outside 0..${MAX_FRET}`,
+        message: `Fret ${p?.fret} is outside 0..${fretLimit}`,
       });
     }
   }
@@ -272,10 +309,10 @@ export function isPlayableVoicing(positions, opts = {}) {
   }
 
   // unreachable
-  if (list.length > STRING_COUNT) {
+  if (list.length > stringLimit) {
     violations.push({
       rule: 'unreachable',
-      message: `${list.length} notes on a ${STRING_COUNT}-string instrument`,
+      message: `${list.length} notes on a ${stringLimit}-string instrument`,
     });
   }
   const distinctFrettedFrets = new Set(

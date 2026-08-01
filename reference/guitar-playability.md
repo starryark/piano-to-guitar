@@ -12,20 +12,34 @@ shapes named below are in [guitar-fretboard.md](guitar-fretboard.md).
 
 `tools/playability.mjs` checks fret span, one-note-per-string, fast-jump distance, the
 gain-aware voicing rules, and (as of WP7) **pick reachability** — a struck beat on
-non-adjacent strings with no brush/arpeggio effect fails with `non-adjacent-strings`.
-Keeping drafts consistent with those means `check.mjs` passes the first time.
+non-adjacent strings with no brush/arpeggio effect is flagged, as an error or a warning
+depending on how many notes sound at once (rule 18). Keeping drafts consistent with those
+means `check.mjs` passes the first time.
+
+**Exit codes.** `playability.mjs` exits `0` when it found no hard error — *warnings do not
+fail it* — `1` on any hard error, `2` on a usage/IO problem. Warnings are still printed and
+still serialized in `warnings[]`; they are advisories to weigh, not refusals. Pass
+`--warnings-as-errors` when you want a zero-warning bar.
+
+**The instrument is configurable.** The fret ceiling defaults to 22 but is not a law:
+`--max-fret N`, or an `instrument.maxFret` in the nearest `config.json` at or above the tab
+(e.g. `projects/<slug>/config.json`), sets it. A fret past that ceiling is a hard
+`fret-range` error. A `--policy` file's own `maxFret` is a *separate* project-texture
+ceiling (`policy-max-fret`) and both stay in force.
 
 > **Pick reachability is checked as of WP7.** A struck dyad on **non-adjacent** strings
-> — `(0.6 5.2)` (6th + 2nd), `(2.6 2.1)` (6th + 1st) — fails `playability.mjs` with a
-> `non-adjacent-strings` error: it cannot be sounded with a flatpick, because the pick
-> crosses and rings the strings in between. MIDI will not tell you, because MIDI has no
-> pick; the lint does.
+> — `(0.6 5.2)` (6th + 2nd), `(2.6 2.1)` (6th + 1st) — cannot be sounded with a single
+> flatpick stroke, because the pick crosses and rings the strings in between. MIDI will not
+> tell you, because MIDI has no pick; the lint does. A **dyad** raises a
+> `non-adjacent-dyad` **warning** (hybrid picking realises it as written); **three or more**
+> simultaneous non-contiguous notes are a `non-adjacent-strings` **error**.
 >
-> Only two simultaneous attacks are legal: a **brush across all the strings**
-> (`{bd}`/`{bu}`), an **arpeggio roll** (`{au}`/`{ad}`), or a double-stop on **adjacent**
-> strings. Anything else must be arpeggiated into single-string attacks. A brushed or
-> rolled beat is exempt from the check by construction; the arranger still owns the
-> musical decision of *which* remedy fits the texture.
+> Only these simultaneous attacks are straightforwardly legal: a **brush across all the
+> strings** (`{bd}`/`{bu}`), an **arpeggio roll** (`{au}`/`{ad}`), a double-stop on
+> **adjacent** strings, or a two-note **hybrid-picked** grip. Anything else must be
+> arpeggiated into single-string attacks. A brushed or rolled beat is exempt from the check
+> by construction; the arranger still owns the musical decision of *which* remedy fits the
+> texture.
 
 Also not checked: whether a chord shape is *fingerable as a shape* rather than merely
 within span, and whether a position shift is reachable in the time available. Both are
@@ -75,7 +89,15 @@ yours.
 11. Tapping (`tt`) implies the fretting hand holds the lower notes: keep the
     tapped note ≥ 5 frets above the fretted ones.
 12. Tremolo bar (`tb`) requires a beat where no other picking happens.
-13. Natural harmonics (`nh`) only ring reliably at frets 5, 7, 12, 19.
+13. Natural harmonics (`nh`) only ring **reliably** at frets 5, 7, 12, 19 — those speak on
+    any guitar, with any touch, at any gain. Frets **4, 9, 16, 24** are real nodes too but
+    **extended** ones: they ring weakly, need an accurate touch and a hot pickup, and may
+    not speak at low gain. `playability.mjs` says nothing about the reliable four, raises a
+    `harmonic-node-extended` **warning** on the extended four, and errors
+    (`harmonic-node`) anywhere else. **Artificial / pinch / tapped / semi / feedback**
+    harmonics (`ah`/`ph`/`th`/`sh`/`fh`) are made by the picking hand relative to the
+    fretted note, so the written fret says nothing about a node — the node table does not
+    apply to them at all and the lint leaves them alone.
 
 ## Tempo × subdivision ceiling (physical speed limit)
 
@@ -89,6 +111,17 @@ yours.
 Sustained 16ths above 160 BPM only as tremolo picking (`tp`) on one pitch or
 with heavy legato (`h`). A "fast run" should last ≤ 2 beats before a breath
 (longer note or rest) unless it is the climax.
+
+`tools/playability.mjs` encodes this table in `tools/lib/pick-demand.mjs`
+(`classifyPickDemand`) and reports it as `pick-demand.hard` / `.expert` / `.avoid`
+**warnings — pick demand never fails the gate.** Two details the prose leaves implicit and
+the code has to pin down: the tempo bands are **[lo, hi)** with boundaries at 100 / 140 /
+180, so 100 BPM is in the *second* row; and only **genuine pick attacks** count toward a
+run — tied continuations, tremolo beats and legato destinations do not, and each of them
+*breaks* the run. That is why a tremolo-picked or heavily-legato passage never accumulates
+one. `advanced` and `expert, short bursts only` map to `expert`, `no` maps to `avoid`; the
+"short bursts" nuance is carried separately, so `hard`/`expert` warn only once a run
+exceeds the ≤ 2-beat budget above, while `avoid` warns immediately.
 
 ## Gain-aware voicing
 
@@ -141,14 +174,25 @@ crossing; these cover *which strings a single gesture can and cannot sound*. Ful
     like a clean dyad but a strum through it sounds open D3 and G3 as well — if those do not
     belong, the notation is a lie. Three legal fixes: fret them in, mute them, or mark the
     beat as **hybrid-picked** (pick the low note, fingers the high) and *not* strummed.
-18. **Non-adjacent notes struck together want hybrid picking or a roll.** Two notes on
+18. **Non-adjacent notes struck together want hybrid picking or a roll.** Notes on
     non-adjacent strings that must hit simultaneously cannot be picked with a single plectrum
     stroke. Realise them as hybrid picking (pick + finger), or as a fast arpeggio `{au}`/`{ad}`
     across the gap. Do not silently leave a two-string skip as if a pick could take it.
-    **The mechanical version of this rule is now enforced** — `playability.mjs` emits a
-    `non-adjacent-strings` error on any struck beat with ≥2 notes on non-adjacent strings
-    unless it carries a brush (`{bd}`/`{bu}`) or arpeggio (`{au}`/`{ad}`) effect (checked
-    as of WP7). Rule 17 — *which* strings a strum rings — stays the arranger's call.
+    **The mechanical version of this rule is enforced**, and it is graded by how many notes
+    sound at once, because the two cases are different problems:
+
+    | Simultaneous notes on non-contiguous strings | `playability.mjs` |
+    |---|---|
+    | **2** (a dyad) | `non-adjacent-dyad` **warning** — "Non-adjacent dyad: hybrid picking or a roll may be required." |
+    | **3 or more** | `non-adjacent-strings` **error** (hard) |
+
+    A dyad is the textbook hybrid grip — pick the low note, middle finger the high one — so
+    the notation is already correct and needs only a deliberate right-hand decision; failing
+    the gate on it would be telling the arranger to rewrite playable music. Three or more
+    non-contiguous simultaneous attacks are not a grip a rock player throws inside a line:
+    they need a brush, a roll, or a re-voicing. Beats carrying a brush (`{bd}`/`{bu}`) or
+    arpeggio (`{au}`/`{ad}`) effect are exempt from both (checked as of WP7). Rule 17 —
+    *which* strings a strum rings — stays the arranger's call.
 19. **Big skips at speed cost accuracy.** Crossing one string between fast notes is free;
     skipping **2+ strings between consecutive 16ths** is a red flag unless it is a repeating,
     hand-learnable pattern (a pedal-point lick earns it — see rule 5). A wide interval a pick

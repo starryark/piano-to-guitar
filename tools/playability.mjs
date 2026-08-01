@@ -4,7 +4,7 @@
 //
 // Usage:
 //   node tools/playability.mjs tabs/x.alphatab [--bars 9-16] [--gain high|crunch|clean]
-//        [--policy guitar-policy.json] [--warnings-as-errors]
+//        [--policy guitar-policy.json] [--max-fret N] [--warnings-as-errors]
 //
 // Turns reference/guitar-playability.md's prose into mechanical checks. Every
 // finding is either a hard mechanical impossibility (errors) or a tone/physics
@@ -19,23 +19,38 @@
 // --warnings-as-errors escalates every soft advisory into errors[] so an
 // automatic approval policy can require a zero-warning tab.
 //
-// PICK REACHABILITY IS CHECKED HERE: a struck beat with >=2 notes on
-// non-adjacent strings and no brush/arpeggio effect fails with the
-// `non-adjacent-strings` error. A flatpick cannot isolate two non-adjacent
-// strings in a single stroke; the arranger must brush (`{bd}`/`{bu}`), roll
-// (`{au}`/`{ad}`), or re-voice onto adjacent strings. The musical doctrine
-// behind the check is in reference/guitar-playability.md → "Pick reachability
-// across strings" (rules 17–19).
+// PICK REACHABILITY IS CHECKED HERE (PTG Wave 1, contract C14): a struck beat
+// with simultaneous notes on non-adjacent strings and no brush/arpeggio effect
+// is graded BY NOTE COUNT, because the remedies differ in kind:
+//   • exactly 2 notes -> `non-adjacent-dyad` WARNING. A flatpick cannot take it,
+//     but hybrid picking (pick the low note, middle finger the high) is a
+//     completely ordinary right-hand technique that needs no re-voicing and no
+//     notation change. It is a thing to be AWARE of, not a thing to fix.
+//   • 3+ notes -> `non-adjacent-strings` ERROR (unchanged). Three simultaneous
+//     non-contiguous attacks are not a hybrid-picking grip a rock player throws
+//     mid-line; the arranger must brush (`{bd}`/`{bu}`), roll (`{au}`/`{ad}`),
+//     or re-voice onto adjacent strings.
+// The musical doctrine is in reference/guitar-playability.md → "Pick
+// reachability across strings" (rules 17–19).
 //
 // Output: JSON to stdout, same shape as validate.mjs
 //   { ok, file, gain, bars, stats, errors, warnings }
 //
-// EXIT / `ok` SEMANTICS — deliberate divergence from validate.mjs:
-//   This tool is strict by nature (it is the guitar-feasibility gate). ANY
-//   finding — error OR warning — fails the gate: `ok` is true only when both
-//   arrays are empty, and the process exits 1 on any finding, 0 when clean.
-//   That is why the low-third-high-gain fixture (a "warning") still exits 1.
-//   validate.mjs, by contrast, needs --strict to make warnings fatal.
+// EXIT / `ok` SEMANTICS (PTG Wave 1, contract C7) — now the SAME rule the rest
+// of the toolchain uses:
+//   0 = ran to completion, no HARD gate failed (soft warnings may be present)
+//   1 = a HARD musical gate failed (`errors[]` is non-empty)
+//   2 = usage / malformed input / IO failure
+//   `ok` means `errors.length === 0`. Warnings are still serialized in
+//   `warnings[]` and printed; they no longer decide process success.
+//
+//   This CORRECTS the historical behavior, where any finding at all — warning
+//   included — exited 1. That made the exit code uninformative: check.mjs had to
+//   ignore it and re-derive the verdict from `errors[]`, and every other caller
+//   had to know the same folklore or be silently wrong. A gain-voicing advisory
+//   is not a reason to refuse a tab.
+//   `--warnings-as-errors` is the deliberate, opt-in way back to strictness: it
+//   MOVES warnings into `errors[]`, which then legitimately drives exit 1.
 //
 // String numbering: alphaTab's note.string is INTERNAL (1 = low E). Every note
 // is passed through fromAlphaTabNote() exactly once, at the walk site, to get
@@ -52,22 +67,58 @@ import {
   STRING_COUNT,
 } from './lib/fretboard.mjs';
 import { auditTieIntents, collectTieChains } from './lib/ties.mjs'; // PTG §7
+import { resolveConfig } from './lib/project-config.mjs';           // PTG Wave 1, C5
+import { advisory } from './lib/advisory.mjs';                      // PTG Wave 0, C3
+import {
+  classifyPickDemand, pickDemandAdvisoryCode, subdivisionOf,
+} from './lib/pick-demand.mjs'; // PTG Wave 1, C12
 
 // ---- thresholds -----------------------------------------------------------
 const G3 = 55;                       // ~G3: below this a 3rd muds under gain
 const SUSTAIN_TICKS = 2 * QUARTER_TICKS; // "longer than ~2 beats"
-const PICK_CEILING_NPS = 16;         // sustained single-picking ceiling, notes/sec
 const FAST_JUMP_FRETS = 5;           // position jump > this between fast notes
 const SLOW_JUMP_FRETS = 6;   // PTG: hand-station shift > this between sub-16th beats warns
 const HAMMER_MAX_FRETS = 4;          // hammer/pull reach on one string
 const BEND_MAX_QUARTERS = 4;         // max bend depth (a whole step)
-const NAT_HARMONIC_NODES = new Set([5, 7, 12, 19]);
 const WOUND_STRINGS = new Set([4, 5, 6]); // where palm muting lives
 
+// PTG (Wave 1, contract C13): natural-harmonic nodes come in two grades, not one.
+// A string's harmonic series has a node wherever the string divides into equal
+// parts, so frets 4, 9, 16 and 24 (the major-3rd/2-octave-and-a-3rd nodes) DO
+// ring — reference/guitar-playability.md rule 13 lists only 5/7/12/19 because
+// those are the ones that speak reliably on any guitar, with any touch, under
+// any gain. Calling fret 9 "impossible" was wrong; calling it "free" would be
+// equally wrong, because it needs an accurate touch and a hot pickup.
+const RELIABLE_NAT_HARMONIC_NODES = new Set([5, 7, 12, 19]);   // rule 13, unchanged
+const EXTENDED_NAT_HARMONIC_NODES = new Set([4, 9, 16, 24]);   // ring, but weakly
+
 // alphaTab enum handles (with literal fallbacks in case of version drift).
-const HARMONIC_NATURAL = at.HarmonicType?.Natural ?? 1;
-const SLIDE_NONE = at.SlideOutType?.None ?? 0;
-const VIBRATO_NONE = at.VibratoType?.None ?? 0;
+// PTG (Wave 1): these enums live under the `model` NAMESPACE
+// (`at.model.HarmonicType`), not at the package top level — `at.HarmonicType` is
+// `undefined` in @coderline/alphatab 1.5, so the pre-Wave-1 code was silently
+// running on its literal fallbacks alone. The fallbacks happened to be correct;
+// the defence was not defending anything. Both spellings are tried before the
+// literal so the guard is real again.
+const enumValue = (name, member, literal) =>
+  at.model?.[name]?.[member] ?? at[name]?.[member] ?? literal;
+
+const HARMONIC_NONE = enumValue('HarmonicType', 'None', 0);
+const HARMONIC_NATURAL = enumValue('HarmonicType', 'Natural', 1);
+// Every harmonic type that is NOT a natural harmonic. Observed in
+// @coderline/alphatab 1.5: None 0, Natural 1, Artificial 2, Pinch 3, Tap 4,
+// Semi 5, Feedback 6. An artificial/pinch/tap harmonic is produced by the
+// RIGHT hand at a node the player picks relative to the fretted note, so the
+// fretted fret number says nothing about whether a node exists there — the
+// natural-node table simply does not apply (C13).
+const NON_NATURAL_HARMONIC_TYPES = new Set([
+  enumValue('HarmonicType', 'Artificial', 2),
+  enumValue('HarmonicType', 'Pinch', 3),
+  enumValue('HarmonicType', 'Tap', 4),
+  enumValue('HarmonicType', 'Semi', 5),
+  enumValue('HarmonicType', 'Feedback', 6),
+]);
+const SLIDE_NONE = enumValue('SlideOutType', 'None', 0);
+const VIBRATO_NONE = enumValue('VibratoType', 'None', 0);
 // BrushType is not re-exported at the top level of @coderline/alphatab, so we
 // hold the literals. alphaTab stores BOTH brush (`{bd}`/`{bu}`) AND arpeggio
 // (`{au}`/`{ad}`) effects on the SAME field `beat.brushType`:
@@ -82,6 +133,7 @@ function parseArgs(argv) {
   let bars = null;
   let gain = null;                 // PTG: null = "not set on the CLI" (policy may supply it)
   let policy = null;               // PTG §7
+  let maxFret = null;              // PTG Wave 1 (C5): null = "not set on the CLI"
   let warningsAsErrors = false;    // PTG §7.3
   let file = null;
   for (let i = 0; i < argv.length; i++) {
@@ -92,10 +144,12 @@ function parseArgs(argv) {
     else if (a.startsWith('--gain=')) gain = a.slice('--gain='.length);
     else if (a === '--policy') policy = argv[++i];
     else if (a.startsWith('--policy=')) policy = a.slice('--policy='.length);
+    else if (a === '--max-fret') maxFret = argv[++i];               // PTG Wave 1
+    else if (a.startsWith('--max-fret=')) maxFret = a.slice('--max-fret='.length);
     else if (a === '--warnings-as-errors') warningsAsErrors = true;
     else if (!a.startsWith('--')) file = a;
   }
-  return { bars, gain, policy, warningsAsErrors, file };
+  return { bars, gain, policy, maxFret, warningsAsErrors, file };
 }
 
 // PTG §7.1: load + fail-closed-validate a guitar-policy.json. Unknown keys are
@@ -150,10 +204,13 @@ function parseBarRange(spec) {
   return { lo: Math.min(lo, hi), hi: Math.max(lo, hi) };
 }
 
-const { bars, gain: gainArg, policy: policyPath, warningsAsErrors, file } = parseArgs(process.argv.slice(2));
+const {
+  bars, gain: gainArg, policy: policyPath, maxFret: maxFretArg, warningsAsErrors, file,
+} = parseArgs(process.argv.slice(2));
 if (!file) {
   console.error('Usage: node tools/playability.mjs <file.alphatab> [--bars N-M] '
-    + '[--gain high|crunch|clean] [--policy guitar-policy.json] [--warnings-as-errors]');
+    + '[--gain high|crunch|clean] [--policy guitar-policy.json] [--max-fret N] '
+    + '[--warnings-as-errors]');
   process.exit(2);
 }
 // PTG: precedence — explicit --gain > policy.gain > the historical default.
@@ -163,6 +220,45 @@ if (!['high', 'crunch', 'clean'].includes(gain)) {
   console.error(`Bad --gain "${gain}"; expected high|crunch|clean`);
   process.exit(2);
 }
+
+// ---- PTG (Wave 1, contract C5): instrument configuration --------------------
+// This is the CLI BOUNDARY where configuration is resolved — once, here — so
+// that lib/fretboard.mjs never reads a file and every geometry call downstream
+// takes plain numbers. Precedence, identical everywhere in the toolchain:
+//
+//     --max-fret N  >  <dir of the tab>/…/config.json  >  built-in 22
+//
+// `config.json` is optional; a project without one behaves exactly as before.
+//
+// HOW THIS RELATES TO `--policy`'s OWN `maxFret` — they are different questions
+// and BOTH stay in force:
+//   • the resolved instrument maxFret (here) is a PHYSICAL fact about the
+//     guitar. Exceeding it is `fret-range`, a hard error, because the fret does
+//     not exist. It is the number lib/fretboard.mjs is handed.
+//   • `policy.maxFret` is a PROJECT TEXTURE constraint — "on this arrangement I
+//     do not want to go above fret 21" — checked separately as
+//     `policy-max-fret`. It is normally stricter than the instrument, and it is
+//     meaningful even on a 24-fret neck.
+// A note above BOTH reports both findings. That is correct, not duplication:
+// one says the fret is not there, the other says the project said not to.
+if (maxFretArg !== null && !/^\d+$/.test(String(maxFretArg).trim())) {
+  console.error(`Bad --max-fret "${maxFretArg}"; expected a positive integer`);
+  process.exit(2);
+}
+const config = resolveConfig({
+  anchorPath: file,
+  cli: { maxFret: maxFretArg === null ? undefined : Number(maxFretArg) },
+});
+if (!config.ok) {
+  // Fail closed, exit 2 — same doctrine as loadPolicy() above: a typo in a
+  // config file must never silently weaken a gate.
+  for (const e of config.errors) console.error(e);
+  process.exit(2);
+}
+// Named apart from fretboard.mjs's `MAX_FRET`/`DEFAULT_MAX_FRET` on purpose:
+// this is the value RESOLVED FOR THIS RUN, not the library's fallback.
+const INSTRUMENT_MAX_FRET = config.instrument.maxFret;
+const INSTRUMENT_STRING_COUNT = config.instrument.stringCount;
 const range = parseBarRange(bars);
 const inRange = (barNum1) => !range || (barNum1 >= range.lo && barNum1 <= range.hi);
 
@@ -181,6 +277,23 @@ let notesAnalyzed = 0;
 
 function add(list, type, message, loc) {
   list.push({ type, message, ...loc });
+}
+
+/**
+ * PTG (Wave 1): push a contract-C3 advisory into playability's NATIVE warning
+ * channel.
+ *
+ * C3/C4 pin playability's `warnings[]` as `{type, message, bar, …}` and forbid
+ * retro-fitting it — existing tests read `w.type`. But C3 also reserves the
+ * `pick-demand.*` NAMESPACE for this file, and namespaced codes are the thing
+ * `advisory()` validates. So the two are merged rather than chosen between: the
+ * object carries `type` (native readers, check.mjs's `a.code ?? a.type`, and
+ * --warnings-as-errors escalation) AND `code`/`severity`/`data` (C3 readers).
+ * `type === code` always, so the two views can never drift apart.
+ */
+function addAdvisory(list, code, message, opts = {}) {
+  const a = advisory(code, message, opts);
+  list.push({ type: a.code, ...a });
 }
 
 // ---- PTG §7.2: tie integrity (always on) ------------------------------------
@@ -233,11 +346,60 @@ function beatSlidesOut(beat) {
   return beat.notes.some((n) => (n.slideOutType ?? SLIDE_NONE) !== SLIDE_NONE);
 }
 
-/** Notes-per-second implied by one beat's subdivision at a tempo. */
-function notesPerSecond(durationValue, tempoBpm) {
-  // duration 4 = quarter = 1 beat; nps = (duration/4) * (tempo/60).
-  return (durationValue / 4) * (tempoBpm / 60);
+/**
+ * PTG (Wave 1, C12): the beat's duration value ADJUSTED FOR TUPLETS, which is
+ * what the pick-demand table has to see.
+ *
+ * A 16th triplet is `duration 16` with a 3:2 tuplet — six attacks per beat, not
+ * four. Handing the raw 16 to the classifier would file the reference's hardest
+ * column ("16th triplets / 32nds") under 16ths. alphaTab reports -1/-1 for
+ * `tupletNumerator`/`tupletDenominator` when no tuplet is in force, hence the
+ * `> 0` guards rather than a null check.
+ */
+function effectiveDuration(beat) {
+  const d = Number(beat.duration);
+  if (!Number.isFinite(d) || d <= 0) return 0;
+  const n = Number(beat.tupletNumerator);
+  const den = Number(beat.tupletDenominator);
+  if (Number.isFinite(n) && Number.isFinite(den) && n > 0 && den > 0) return d * (n / den);
+  return d;
 }
+
+/**
+ * PTG (Wave 1, C12): is this beat a GENUINE pick attack?
+ *
+ * "Genuine" excludes everything the picking hand does not have to strike:
+ *   • rests — nothing is struck;
+ *   • tied continuations — the note is already ringing (`note.isTieDestination`);
+ *   • tremolo beats — one notated beat, one gesture, however many strokes;
+ *   • legato destinations — the PREVIOUS beat hammered/pulled or slid into this
+ *     one, so the left hand sounds it.
+ * Each of those also BREAKS the run: a run is a count of consecutive strokes,
+ * and anything the pick did not strike is a gap in it, not a member of it.
+ */
+function isPickAttack(cur, prev) {
+  const { beat, notes } = cur;
+  if (beat.isRest || !notes.length) return false;
+  if (beat.isTremolo) return false;
+  if (notes.every((n) => n.raw.isTieDestination)) return false;
+  if (prev && !prev.beat.isRest) {
+    const legatoInto = prev.notes.some((p) =>
+      p.raw.isHammerPullOrigin || (p.raw.slideOutType ?? SLIDE_NONE) !== SLIDE_NONE);
+    if (legatoInto) return false;
+  }
+  return true;
+}
+
+// NOTE on `classifyPickDemand`'s `articulation` parameter: this consumer always
+// passes `'picked'`, and that is not a shortcut. `isPickAttack` has ALREADY
+// removed every tremolo beat and every legato destination from the run, so by
+// construction each beat still counted is one the pick struck. Downgrading the
+// level for articulation on top of that would discount the same relief twice —
+// a tremolo-picked 32nd passage simply never accumulates a run at all, which is
+// exactly what the reference prescribes ("sustained 16ths above 160 BPM only as
+// tremolo picking or with heavy legato"). The parameter exists for callers that
+// classify a passage WITHOUT doing this per-beat exclusion (Wave 3's idiom
+// engine, and pick-demand.test.mjs, which pins it).
 
 // ---- walk -----------------------------------------------------------------
 // Build an ordered beat sequence PER (track, staff, voice-index) so that
@@ -247,7 +409,13 @@ for (let ti = 0; ti < score.tracks.length; ti++) {
   const track = score.tracks[ti];
   const multiTrack = score.tracks.length > 1;
   for (const staff of track.staves) {
-    const stringCount = staff.stringTuning?.tunings?.length || STRING_COUNT;
+    // PTG (Wave 1, C5): the STAFF's own tuning is the physical truth for this
+    // staff (it is also what `fromAlphaTabNote` inverts against, so the two must
+    // agree or every string number is mirrored). The resolved config supplies
+    // the value only when the staff declares no tuning — a default, not an
+    // override. `STRING_COUNT` remains the final fallback.
+    const stringCount = staff.stringTuning?.tunings?.length
+      || INSTRUMENT_STRING_COUNT || STRING_COUNT;
     const voiceCount = staff.bars.reduce((m, b) => Math.max(m, b.voices.length), 0);
     for (let vi = 0; vi < voiceCount; vi++) {
       const multiVoice = voiceCount > 1;
@@ -268,7 +436,9 @@ for (let ti = 0; ti < score.tracks.length; ti++) {
         }
       }
 
-      analyzeSequence(seq, { multiTrack, multiVoice, trackIndex: ti, voiceIndex: vi });
+      analyzeSequence(seq, {
+        multiTrack, multiVoice, trackIndex: ti, voiceIndex: vi, stringCount,
+      });
     }
   }
 }
@@ -276,6 +446,11 @@ for (let ti = 0; ti < score.tracks.length; ti++) {
 function analyzeSequence(seq, ctx) {
   let gripStreak = 0;      // PTG §7.2: consecutive identical fast multi-note grips
   let prevGripKey = null;
+  // PTG (Wave 1, C12): the current run of genuine pick attacks at ONE
+  // subdivision. `warned` makes the advisory fire once PER RUN rather than once
+  // per beat — a bar of 16ths would otherwise emit sixteen copies of the same
+  // sentence, which is how a real finding gets scrolled past.
+  let pickRun = { count: 0, subdivision: null, warned: false };
   for (let i = 0; i < seq.length; i++) {
     const cur = seq[i];
     const { beat, barNum, notes } = cur;
@@ -353,7 +528,12 @@ function analyzeSequence(seq, ctx) {
     // ---- per-beat: voicing geometry (span / one-note-per-string / reach) --
     if (notes.length >= 1) {
       const positions = notes.map(({ string, fret }) => ({ string, fret }));
-      const v = isPlayableVoicing(positions);
+      // PTG (Wave 1, C5): the instrument's limits, resolved once at the CLI
+      // boundary, travel in as plain opts. fretboard.mjs reads no files.
+      const v = isPlayableVoicing(positions, {
+        maxFret: INSTRUMENT_MAX_FRET,
+        stringCount: ctx.stringCount,
+      });
       for (const viol of v.violations) {
         const type = viol.rule === 'duplicate-string' ? 'two-notes-one-string'
           : viol.rule === 'span' ? 'chord-span'
@@ -364,16 +544,31 @@ function analyzeSequence(seq, ctx) {
 
     // ---- per-beat: pick reachability (non-adjacent struck strings) -------
     // A single flatpick stroke can only sound ADJACENT strings (a double-stop)
-    // or sweep ALL intervening strings in one brush/arpeggio gesture. A struck
-    // dyad or chord on non-adjacent strings with no brush/arpeggio effect is
-    // unplayable with a plectrum — realise it as hybrid picking or a roll.
+    // or sweep ALL intervening strings in one brush/arpeggio gesture.
     // `notes[]` is already source-numbered (1 = high e). Exempt rests and any
     // beat carrying a brush/arpeggio effect (`beat.brushType !== 0`).
+    //
+    // PTG (Wave 1, contract C14): the finding is graded by SIMULTANEOUS NOTE
+    // COUNT, because the two cases are different problems, not two sizes of one.
+    //   • A DYAD is the textbook hybrid-picking grip — pick the low note, middle
+    //     finger the high one. Rule 18 itself names hybrid picking as a legal
+    //     realisation. It needs no re-voicing and no notation change, so failing
+    //     the gate on it was a false hard failure: it told the arranger to
+    //     rewrite playable music. It is now a WARNING — a thing to be aware of
+    //     and to decide deliberately.
+    //   • THREE OR MORE non-contiguous simultaneous notes stay an ERROR. That is
+    //     not a grip a rock player throws inside a line; it needs a brush, a
+    //     roll, or a re-voicing, and C6 lists it among the hard physical gates a
+    //     style profile may never relax.
     if (!beat.isRest && notes.length >= 2 && (beat.brushType ?? BRUSH_NONE) === BRUSH_NONE) {
       const strings = [...new Set(notes.map((n) => n.string))].sort((a, b) => a - b);
       const contiguous = strings.length <= 1 ||
         (strings[strings.length - 1] - strings[0] + 1 === strings.length);
-      if (!contiguous) {
+      if (!contiguous && notes.length === 2) {
+        add(warnings, 'non-adjacent-dyad',
+          `Bar ${barNum}: beat strikes non-adjacent strings ${strings.join(',')}. ` +
+          `Non-adjacent dyad: hybrid picking or a roll may be required.`, loc);
+      } else if (!contiguous) {
         add(errors, 'non-adjacent-strings',
           `beat strikes non-adjacent strings ${strings.join(',')} — unplayable with a flatpick; ` +
           `arpeggiate ({au}/{ad}), brush ({bd}/{bu}), or re-voice onto adjacent strings`, loc);
@@ -435,10 +630,29 @@ function analyzeSequence(seq, ctx) {
           `Bar ${barNum}: palm mute on string ${n.string} — {pm} responds on the wound strings (4-6), not the plain strings.`, loc);
       }
 
-      // Natural harmonics only at frets 5 / 7 / 12 / 19.
-      if ((raw.harmonicType ?? 0) === HARMONIC_NATURAL && !NAT_HARMONIC_NODES.has(n.fret)) {
-        add(errors, 'harmonic-node',
-          `Bar ${barNum}: natural harmonic at fret ${n.fret} (string ${n.string}) — nodes exist only at frets 5, 7, 12, 19.`, loc);
+      // Natural harmonics (PTG Wave 1, contract C13).
+      //
+      // The node table applies to NATURAL harmonics ONLY. An artificial, pinch,
+      // tapped, semi or feedback harmonic is produced by the RIGHT hand, at a
+      // node measured from the FRETTED note — the written fret number carries no
+      // information about whether a natural node lives there, so validating it
+      // against the natural-node table was simply asking the wrong question and
+      // failing correct notation (`3.1{ah}` is an everyday artificial harmonic).
+      // `HARMONIC_NONE` beats out early: it is by far the common case.
+      const ht = raw.harmonicType ?? HARMONIC_NONE;
+      if (ht !== HARMONIC_NONE && !NON_NATURAL_HARMONIC_TYPES.has(ht) && ht === HARMONIC_NATURAL) {
+        if (RELIABLE_NAT_HARMONIC_NODES.has(n.fret)) {
+          // Rule 13's four nodes — speak on any guitar, any touch. No finding.
+        } else if (EXTENDED_NAT_HARMONIC_NODES.has(n.fret)) {
+          add(warnings, 'harmonic-node-extended',
+            `Bar ${barNum}: natural harmonic at fret ${n.fret} (string ${n.string}) — a real node, ` +
+            `but an EXTENDED one (frets ${[...EXTENDED_NAT_HARMONIC_NODES].join(', ')}). It rings ` +
+            `weakly: it needs an accurate touch and a hot pickup, and it may not speak at low gain. ` +
+            `The reliable nodes are frets ${[...RELIABLE_NAT_HARMONIC_NODES].join(', ')}.`, loc);
+        } else {
+          add(errors, 'harmonic-node',
+            `Bar ${barNum}: natural harmonic at fret ${n.fret} (string ${n.string}) — nodes exist only at frets 5, 7, 12, 19.`, loc);
+        }
       }
     }
 
@@ -494,19 +708,71 @@ function analyzeSequence(seq, ctx) {
       }
     }
 
-    // ---- pick-speed ceiling ----------------------------------------------
-    // Only genuine pick attacks count: rests, tremolo-picked beats, and legato
-    // destinations (previous beat hammered or slid into this one) are exempt.
-    if (!beat.isRest && !beat.isTremolo) {
+    // ---- pick demand (PTG Wave 1, contract C12) ---------------------------
+    // Replaces the invented `PICK_CEILING_NPS = 16` with the reference's own
+    // "Tempo × subdivision ceiling" table, encoded in lib/pick-demand.mjs.
+    //
+    // Two independent facts decide the finding, which is why the old single
+    // notes-per-second scalar could not express it:
+    //   (a) STROKE RATE — tempo × subdivision, straight off the table;
+    //   (b) HOW LONG IT LASTS — the reference gives a fast run a <= 2-beat
+    //       budget before a breath. That is what `sustained` measures, and it is
+    //       why the run counter lives here (in the sequence walk) rather than in
+    //       the classifier: only the walk knows which beats the pick struck.
+    //
+    // PICK DEMAND NEVER FAILS THE GATE (C12). Everything below lands in
+    // `warnings[]`, and `--warnings-as-errors` remains the only route to
+    // errors[] — an explicit, opt-in choice by the caller.
+    {
       const prev = seq[i - 1];
-      const legatoInto = prev && !prev.beat.isRest &&
-        prev.notes.some((p) => p.raw.isHammerPullOrigin || (p.raw.slideOutType ?? SLIDE_NONE) !== SLIDE_NONE);
-      if (!legatoInto) {
-        const nps = notesPerSecond(beat.duration, cur.tempo);
-        if (nps > PICK_CEILING_NPS) {
-          add(warnings, 'pick-speed',
-            `Bar ${barNum}: ~${nps.toFixed(1)} notes/sec (1/${beat.duration}-notes at ${Math.round(cur.tempo)} BPM) ` +
-            `exceeds the sustained single-picking ceiling (~${PICK_CEILING_NPS}/sec) — use legato or tremolo picking.`, loc);
+      const dur = effectiveDuration(beat);
+      if (!isPickAttack(cur, prev) || dur <= 0) {
+        // A non-attack (rest, tie continuation, tremolo, legato destination)
+        // BREAKS the run — it is a gap in the picking, not a member of it.
+        pickRun = { count: 0, subdivision: null, warned: false };
+      } else {
+        const subdivision = subdivisionOf(dur);
+        if (subdivision !== pickRun.subdivision) {
+          // A change of subdivision starts a new run: the table is indexed by
+          // one subdivision, so a mixed count would describe no real passage.
+          pickRun = { count: 1, subdivision, warned: false };
+        } else {
+          pickRun.count++;
+        }
+        const demand = classifyPickDemand({
+          tempo: cur.tempo,
+          duration: dur,
+          consecutiveAttacks: pickRun.count,
+          articulation: 'picked',   // see the note above analyzeSequence
+        });
+        const code = pickDemandAdvisoryCode(demand);
+        if (code && !pickRun.warned) {
+          pickRun.warned = true;
+          const nth = demand.subdivision === '32nd' ? '32nd-note / 16th-triplet' : `${demand.subdivision}-note`;
+          addAdvisory(warnings, code,
+            `Bar ${barNum}: ${demand.consecutiveAttacks} consecutive picked ${nth} attacks at ` +
+            `${Math.round(demand.tempo)} BPM — the tempo x subdivision table rates this ` +
+            `"${demand.level}"` +
+            (demand.sustained
+              ? `, and the run is ${demand.runBeats.toFixed(2)} beats long, past the ~2-beat burst a `
+                + `fast run gets before a breath. `
+              : `. `) +
+            `Break it with a rest or a longer note, or realise it as tremolo picking {tp} or legato {h}.`,
+            {
+              // `loc` carries bar/track/beat; advisory() copies only its known
+              // location keys, so `voice` rides along in `data` instead of being
+              // silently dropped.
+              ...loc,
+              data: {
+                level: demand.level,
+                tempo: demand.tempo,
+                subdivision: demand.subdivision,
+                consecutiveAttacks: demand.consecutiveAttacks,
+                sustained: demand.sustained,
+                runBeats: Number(demand.runBeats.toFixed(4)),
+                ...(loc.voice !== undefined ? { voice: loc.voice } : {}),
+              },
+            });
         }
       }
     }
@@ -521,13 +787,25 @@ if (warningsAsErrors && warnings.length) {
   for (const w of warnings) errors.push({ ...w, escalatedFromWarning: true });
   warnings.length = 0;
 }
-const ok = errors.length === 0 && warnings.length === 0;
+// PTG (Wave 1, contract C7): `ok` — and the exit code below — mean
+// "no HARD gate failed", i.e. `errors.length === 0`. Warnings are reported, not
+// fatal. Before Wave 1 this line also required `warnings.length === 0`, which
+// made a tone advisory indistinguishable from a physical impossibility at the
+// process boundary and forced every caller to re-derive the verdict from the
+// JSON. `--warnings-as-errors` (just above) is the opt-in route back: it MOVES
+// warnings into errors[], so strictness is requested rather than assumed.
+const ok = errors.length === 0;
 const out = {
   ok,
   file,
   gain,
   bars: bars ?? null,
   policy: policyPath ?? null,
+  // PTG (Wave 1, C5): the resolved instrument + where each value came from, so
+  // "why was fret 23 rejected?" is answerable from the JSON alone.
+  instrument: config.instrument,
+  configPath: config.configPath,
+  configSources: config.sources,
   warningsAsErrors,
   stats: {
     tracks: score.tracks.length,

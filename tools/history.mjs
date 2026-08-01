@@ -242,7 +242,12 @@ function cmdCheck(argv) {
   // consume their next token so a value ("1-45") is never mistaken for the tab.
   // PTG: --contract (melody contract, §5) and --policy (guitar policy, §7)
   // are value flags — without this their values would be taken for the tab.
-  const VALUE = new Set(['--bars', '--map', '--transpose', '--gain', '--digest', '--contract', '--policy']);
+  // PTG (Wave 3): --style joins them, and --max-fret is added at the same time —
+  // it has been a value flag since Wave 1 and was missing here, so
+  // `history.mjs check --max-fret 24 cover.alphatab` took "24" for the tab.
+  // Any check.mjs flag that consumes a value MUST be listed here.
+  const VALUE = new Set(['--bars', '--map', '--transpose', '--gain', '--digest',
+    '--contract', '--policy', '--style', '--max-fret']);
   const passthrough = [];
   let note = '', bars = null, map = null, tab = null, contract = null, policy = null;
   for (let i = 0; i < argv.length; i++) {

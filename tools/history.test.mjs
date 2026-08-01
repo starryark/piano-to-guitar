@@ -177,6 +177,28 @@ test('list hides failed intermediates by default, shows them with --all', () => 
   assert.doesNotMatch(all, /hidden/, '--all shows every row');
 });
 
+test('every check.mjs value-flag is split correctly, so none is taken for the tab', () => {
+  // The regression: `history.mjs check` splits its own flags from check.mjs
+  // passthrough, and a value-flag missing from that set makes its VALUE look
+  // like a positional argument — i.e. like the tab path. `--max-fret` was
+  // missing since Wave 1 and `--style` would have been missing from Wave 3.
+  //
+  // Driven through the real CLI with the flag placed FIRST, which is the
+  // position that actually reproduces the bug. There is no digest here, so the
+  // run cannot reach a verdict; what is asserted is which FILE it complained
+  // about — "no tab at 24" is the bug, "no digest" is correct parsing.
+  const dir = freshProject();
+  for (const [flag, value] of [['--style', 'metal'], ['--max-fret', '24'],
+    ['--gain', 'crunch'], ['--transpose', '2']]) {
+    const r = run(dir, ['check', flag, value, 'cover.alphatab', '--bars', '1-3']);
+    assert.equal(r.code, 2, `${flag}: expected an operational failure (no digest here)`);
+    const text = r.stdout + r.stderr;
+    assert.doesNotMatch(text, new RegExp(`tab at "?${value}`),
+      `${flag} was not treated as a value flag — "${value}" was taken for the tab path`);
+    assert.match(text, /digest/i, `${flag}: the run should have got as far as digest resolution`);
+  }
+});
+
 let failed = 0;
 for (const [name, fn] of tests) {
   try {

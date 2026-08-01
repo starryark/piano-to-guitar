@@ -81,6 +81,13 @@ import { findPhrase, effectiveRelocation, pitchToMidi } from './lib/contract.mjs
 // exits — it RETURNS the first validation failure — so the exit-2 text and code
 // stay exactly where they were: `mapUsage()` below.
 import { loadSidecar, validateSidecar, resolveMappedSpans } from './lib/sidecar.mjs';
+// PTG (Wave 4): sustained harmonic-colour loss is a SOFT map-mode signal. It is
+// a pure library (Plan §8.1) reading the ADDITIVE `harmonySpans[]` field, so
+// nothing here goes anywhere near the §A.2 pcset narrowing the hard gate
+// depends on. It cannot influence `mapOk`; see the call site.
+import { analyzeHarmonicColor } from './lib/harmonic-color.mjs';
+import { loadStyleProfile } from './lib/style-profile.mjs';
+import { resolveConfig } from './lib/project-config.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -89,6 +96,9 @@ function parseArgs(argv) {
   let json = false;
   let map = null;
   let contract = null; // PTG: --contract <melody-contract.json>
+  // PTG (Wave 4, addendum §A1): absent stays undefined so config/profile can speak.
+  let style;
+  let gain;
   const positional = [];
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -100,12 +110,16 @@ function parseArgs(argv) {
     else if (a.startsWith('--map=')) map = a.slice('--map='.length);
     else if (a === '--contract') contract = argv[++i];
     else if (a.startsWith('--contract=')) contract = a.slice('--contract='.length);
+    else if (a === '--style') style = argv[++i];                    // PTG Wave 4
+    else if (a.startsWith('--style=')) style = a.slice('--style='.length);
+    else if (a === '--gain') gain = argv[++i];                      // PTG Wave 4
+    else if (a.startsWith('--gain=')) gain = a.slice('--gain='.length);
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) positional.push(a);
   }
   return {
     file: positional[0] ?? null, digest: positional[1] ?? null,
-    bars, transpose, json, map, contract,
+    bars, transpose, json, map, contract, style, gain,
   };
 }
 
@@ -123,9 +137,10 @@ function parseBarRange(spec) {
 
 const {
   file, digest: digestPath, bars, transpose, json, map: mapPath, contract: contractArg,
+  style: styleArg, gain: gainArg,
 } = parseArgs(process.argv.slice(2));
 if (!file || !digestPath || !bars) {
-  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>]');
+  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>] [--style NAME] [--gain high|crunch|clean]');
   process.exit(2);
 }
 if (!Number.isFinite(transpose)) {
@@ -133,6 +148,21 @@ if (!Number.isFinite(transpose)) {
   process.exit(2);
 }
 const range = parseBarRange(bars);
+
+// PTG (Wave 4, contracts C5/C6): resolved for the SOFT harmonic-colour pass
+// only. Nothing below reads it on any hard path — a style profile that could
+// move a fidelity verdict would be exactly the weakening C6 forbids. Two-stage
+// for the same reason as everywhere else (§A1): the profile supplies
+// `defaultGain`, so its name must resolve first.
+const cfgStage1 = resolveConfig({ anchorPath: file, cli: { style: styleArg, gain: gainArg } });
+if (!cfgStage1.ok) { console.error(cfgStage1.errors.join('\n')); process.exit(2); }
+const loadedStyle = loadStyleProfile(cfgStage1.style);
+if (!loadedStyle.ok) { console.error(loadedStyle.errors.join('\n')); process.exit(2); }
+const styleProfile = loadedStyle.profile;
+const cfg = resolveConfig({
+  anchorPath: file, cli: { style: styleArg, gain: gainArg }, styleProfile,
+});
+if (!cfg.ok) { console.error(cfg.errors.join('\n')); process.exit(2); }
 
 // ---- pitch-class helpers --------------------------------------------------
 const pc = (midi) => (((midi % 12) + 12) % 12);
@@ -668,6 +698,19 @@ if (mapPath) {
     }
   }
 
+  // PTG (Wave 4): sustained harmonic-colour loss. Computed AFTER `mapOk` is
+  // fixed, so the ordering makes "soft output never influences the gate result"
+  // structural rather than promised — exactly as check.mjs does it. A crash here
+  // would be an operational failure, not a silent empty array, so it is not
+  // wrapped in a try/catch that could swallow one.
+  const harmonicColor = analyzeHarmonicColor({
+    entries: activeEntries,
+    digestByBar,
+    tabBars,
+    profile: styleProfile,
+    gain: cfg.gain,
+  });
+
   const mapResult = {
     ok: mapOk,
     file,
@@ -675,8 +718,17 @@ if (mapPath) {
     bars,
     transpose,
     map: mapPath,
+    style: styleProfile.name,
+    gain: cfg.gain,
     mapResults,
-    soft: { contourWarnings },
+    // PTG (Wave 4, Plan §8.1): ADDITIVE. `contourWarnings` keeps its exact
+    // historical shape and name — existing tests and check.mjs's adapter both
+    // read it — and `advisories` is the new C3-shaped channel beside it.
+    soft: { contourWarnings, advisories: harmonicColor.advisories },
+    harmonicColor: {
+      stats: harmonicColor.stats,
+      slices: harmonicColor.slices,
+    },
     failures: aggregated,
   };
 
@@ -710,6 +762,10 @@ if (mapPath) {
   for (const cw of contourWarnings) {
     lines.push(`  ~ contour  tabBars=[${cw.tabBars.join(',')}] r=${cw.r} — top line runs opposite ` +
       `the quoted source melody; confirm this inversion is intended (soft, non-gating).`);
+  }
+  // PTG (Wave 4): sustained harmonic-colour loss, one line per REGION.
+  for (const a of harmonicColor.advisories) {
+    lines.push(`  ~ [${a.code}] ${a.message}`);
   }
   console.log(lines.join('\n'));
   process.exit(mapOk ? 0 : 1);

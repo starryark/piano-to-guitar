@@ -1,0 +1,13 @@
+\title "Harmonic colour — a ii-V-I-VI turnaround with sustained 3rds and 7ths"
+\tempo 100
+.
+\staff { score }
+\ks c
+(D4 F4 C5).1 |
+(G3 B3 F4).1 |
+(C4 E4 B4).1 |
+(A3 C4 G4).1 |
+(D4 F4 C5).1 |
+(G3 B3 F4).1 |
+(C4 E4 B4).1 |
+(A3 C4 G4).1 |

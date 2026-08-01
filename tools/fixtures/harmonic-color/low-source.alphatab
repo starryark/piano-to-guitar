@@ -1,0 +1,13 @@
+\title "Harmonic colour — low minor triads: thirds only, no sevenths at stake"
+\tempo 100
+.
+\staff { score }
+\ks c
+(E2 G2 B2).1 |
+(G2 Bb2 D3).1 |
+(A2 C3 E3).1 |
+(B2 D3 F#3).1 |
+(E2 G2 B2).1 |
+(G2 Bb2 D3).1 |
+(A2 C3 E3).1 |
+(B2 D3 F#3).1 |

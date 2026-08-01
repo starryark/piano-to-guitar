@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "name": "blues",
+  "defaultGain": "crunch",
+  "idiom": {
+    "warnBelow": 4,
+    "minAttacks": 8,
+    "weights": {
+      "powerChord": 1.5,
+      "octave": 1,
+      "pedalTone": 1,
+      "palmMutedRepetition": 0.5,
+      "leadArticulation": 3.5,
+      "riffCell": 2.5,
+      "syncopation": 2,
+      "blockChord": -1,
+      "fragmentation": 1,
+      "shellVoicing": 0
+    }
+  },
+  "harmonicColor": {
+    "enabled": true,
+    "consecutiveSlicesBeforeWarn": 3
+  },
+  "pickDemand": {
+    "warnAtLevel": "hard",
+    "maxBurstBeats": 2
+  },
+  "techniqueBias": {},
+  "freeSpanWarnShare": 0.5
+}

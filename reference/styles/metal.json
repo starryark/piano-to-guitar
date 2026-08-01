@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "name": "metal",
+  "defaultGain": "high",
+  "idiom": {
+    "warnBelow": 5,
+    "minAttacks": 8,
+    "weights": {
+      "powerChord": 3.5,
+      "octave": 0.5,
+      "pedalTone": 3,
+      "palmMutedRepetition": 3,
+      "leadArticulation": 0.5,
+      "riffCell": 3,
+      "syncopation": 1.5,
+      "blockChord": -3,
+      "fragmentation": 2,
+      "shellVoicing": 0
+    }
+  },
+  "harmonicColor": {
+    "enabled": false,
+    "consecutiveSlicesBeforeWarn": 8
+  },
+  "pickDemand": {
+    "warnAtLevel": "expert",
+    "maxBurstBeats": 4
+  },
+  "techniqueBias": {},
+  "freeSpanWarnShare": 0.4
+}

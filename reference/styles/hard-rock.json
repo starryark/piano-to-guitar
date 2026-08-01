@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "name": "hard-rock",
+  "defaultGain": "high",
+  "idiom": {
+    "warnBelow": 4.5,
+    "minAttacks": 8,
+    "weights": {
+      "powerChord": 3,
+      "octave": 1,
+      "pedalTone": 2,
+      "palmMutedRepetition": 2,
+      "leadArticulation": 1,
+      "riffCell": 2.5,
+      "syncopation": 1,
+      "blockChord": -2,
+      "fragmentation": 1.5,
+      "shellVoicing": 0
+    }
+  },
+  "harmonicColor": {
+    "enabled": true,
+    "consecutiveSlicesBeforeWarn": 4
+  },
+  "pickDemand": {
+    "warnAtLevel": "hard",
+    "maxBurstBeats": 2
+  },
+  "techniqueBias": {},
+  "freeSpanWarnShare": 0.4
+}

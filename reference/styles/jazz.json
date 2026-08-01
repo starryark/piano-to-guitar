@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "name": "jazz",
+  "defaultGain": "clean",
+  "idiom": {
+    "warnBelow": 3,
+    "minAttacks": 8,
+    "weights": {
+      "powerChord": 0.5,
+      "octave": 1.5,
+      "pedalTone": 0.5,
+      "palmMutedRepetition": 0,
+      "leadArticulation": 1,
+      "riffCell": 1,
+      "syncopation": 2.5,
+      "blockChord": -0.5,
+      "fragmentation": 1,
+      "shellVoicing": 0
+    }
+  },
+  "harmonicColor": {
+    "enabled": true,
+    "consecutiveSlicesBeforeWarn": 2
+  },
+  "pickDemand": {
+    "warnAtLevel": "hard",
+    "maxBurstBeats": 2
+  },
+  "techniqueBias": {},
+  "freeSpanWarnShare": 0.4
+}

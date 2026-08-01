@@ -64,6 +64,11 @@ import { fileURLToPath } from 'node:url';
 // PTG (Wave 0, contract C3): the one normalized soft-finding shape. This is the
 // ONLY library check.mjs imports — the three sub-tools stay child processes.
 import { advisory } from './lib/advisory.mjs';
+// PTG (Wave 3, contract C6): the style profile is resolved HERE, at the gate's
+// CLI boundary, for the same reason the instrument is — so a malformed profile
+// is a clear exit 2 from the gate rather than an opaque failure three child
+// processes down, and so every analyzer grades against the same one.
+import { loadStyleProfile } from './lib/style-profile.mjs';
 // PTG (Wave 1, contract C5): configuration precedence lives in ONE module. The
 // gate resolves it here, at the CLI boundary, and passes the resolved instrument
 // limits down to playability explicitly — so the two stages can never disagree
@@ -78,7 +83,14 @@ const tool = (name) => path.join(TOOLS_DIR, name);
 function parseArgs(argv) {
   let bars = null;
   let transpose = 0;
-  let gain = 'high';        // matches playability's own default
+  // PTG (Wave 3, addendum §A1): ABSENT IS NOT A DEFAULT. This used to be the
+  // literal string 'high', which erased the difference between "the user asked
+  // for high gain" and "the user said nothing" — so a project config or a style
+  // profile could never supply a gain, because the CLI had already spoken for
+  // the user. `undefined` here; `resolveConfig` is the only place a default is
+  // applied. Same rule for --style and every flag added after it.
+  let gain;
+  let style;
   let digest = null;
   let map = null;
   let contract = null;      // PTG: melody contract for contract-mode sidecars
@@ -95,6 +107,8 @@ function parseArgs(argv) {
     else if (a.startsWith('--transpose=')) transpose = a.slice('--transpose='.length);
     else if (a === '--gain') gain = argv[++i];
     else if (a.startsWith('--gain=')) gain = a.slice('--gain='.length);
+    else if (a === '--style') style = argv[++i];                      // PTG Wave 3
+    else if (a.startsWith('--style=')) style = a.slice('--style='.length);
     else if (a === '--digest') digest = argv[++i];
     else if (a.startsWith('--digest=')) digest = a.slice('--digest='.length);
     else if (a === '--map') map = argv[++i];
@@ -109,28 +123,32 @@ function parseArgs(argv) {
     else if (a === '--json') json = true;
     else if (!a.startsWith('--')) file = file ?? a;
   }
-  return { file, bars, transpose, gain, digest, map, contract, policy, maxFret, warningsAsErrors, json };
+  return { file, bars, transpose, gain, style, digest, map, contract, policy, maxFret, warningsAsErrors, json };
 }
 
 function usage(msg) {
   if (msg) console.error(msg);
   console.error(
     'Usage: node tools/check.mjs <tab.alphatab> --bars N-M ' +
-    '[--transpose N] [--gain high|crunch|clean] [--digest <path>] ' +
-    '[--map <sidecar.json>] [--contract <melody-contract.json>] ' +
+    '[--transpose N] [--gain high|crunch|clean] [--style hard-rock|metal|blues|jazz] ' +
+    '[--digest <path>] [--map <sidecar.json>] [--contract <melody-contract.json>] ' +
     '[--policy <guitar-policy.json>] [--max-fret N] [--warnings-as-errors] [--json]');
   process.exit(2);
 }
 
 const {
-  file, bars, transpose, gain, digest: digestArg, map: mapArg, contract: contractArg,
-  policy: policyArg, maxFret: maxFretArg, warningsAsErrors, json,
+  file, bars, transpose, gain: gainArg, style: styleArg, digest: digestArg, map: mapArg,
+  contract: contractArg, policy: policyArg, maxFret: maxFretArg, warningsAsErrors, json,
 } = parseArgs(process.argv.slice(2));
 
 if (!file) usage('No tab file given.');
 if (!bars) usage('--bars N-M is required (compare needs a bar range).');
 if (!/^\d+(?:-\d+)?$/.test(String(bars).trim())) usage(`Bad --bars "${bars}"; expected N or N-M.`);
-if (!['high', 'crunch', 'clean'].includes(gain)) usage(`Bad --gain "${gain}"; expected high|crunch|clean.`);
+// Shape-check a SUPPLIED value here (so the message names the flag); an absent
+// one is left for resolveConfig to fill from config > profile > built-in.
+if (gainArg !== undefined && !['high', 'crunch', 'clean'].includes(gainArg)) {
+  usage(`Bad --gain "${gainArg}"; expected high|crunch|clean.`);
+}
 const transposeNum = Number(transpose);
 if (!Number.isFinite(transposeNum)) usage(`Bad --transpose "${transpose}"; expected an integer semitone offset.`);
 if (!fs.existsSync(file)) usage(`No tab at "${file}".`);
@@ -144,11 +162,33 @@ if (!fs.existsSync(file)) usage(`No tab at "${file}".`);
 if (maxFretArg !== null && !/^\d+$/.test(String(maxFretArg).trim())) {
   usage(`Bad --max-fret "${maxFretArg}"; expected a positive integer.`);
 }
-const config = resolveConfig({
-  anchorPath: file,
-  cli: { maxFret: maxFretArg === null ? undefined : Number(maxFretArg) },
-});
+
+// ---- PTG (Wave 3, contract C6 + addendum §A1): style, in TWO stages ---------
+// The profile supplies `defaultGain` to the configuration ladder, but the
+// profile cannot be loaded until its NAME is resolved, and the name comes from
+// the config file. So: resolve the name with no profile in play, load and
+// validate that profile, then resolve everything again WITH it. The config file
+// is read twice in the worst case; that is cheaper than a cache whose staleness
+// nobody can see, and the file is a few hundred bytes.
+//
+// An unknown or malformed style is exit 2, never a fallback to hard-rock: a run
+// that grades a jazz arrangement against rock weights while printing "jazz" is
+// worse than a run that refuses.
+const cliOverrides = {
+  style: styleArg,
+  gain: gainArg,
+  maxFret: maxFretArg === null ? undefined : Number(maxFretArg),
+};
+const stage1 = resolveConfig({ anchorPath: file, cli: cliOverrides });
+if (!stage1.ok) usage(stage1.errors.join('\n'));
+
+const loadedStyle = loadStyleProfile(stage1.style);
+if (!loadedStyle.ok) usage(loadedStyle.errors.join('\n'));
+const styleProfile = loadedStyle.profile;
+
+const config = resolveConfig({ anchorPath: file, cli: cliOverrides, styleProfile });
 if (!config.ok) usage(config.errors.join('\n'));
+const gain = config.gain;
 
 // ---- digest resolution ----------------------------------------------------
 // Resolution order: --digest (explicit, wins) -> co-located ./source.json next
@@ -247,6 +287,42 @@ if (!parseFailed) {
     toolError = toolError ?? `compare.mjs produced no JSON:\n${(C.stderr || C.stdout || '').trim()}`;
   } else {
     cmpHard = { ok: C.code === 0, ...C.json };   // C.json.ok already === (code===0)
+  }
+}
+
+// ---- STAGES 4 & 5: the SOFT analyzers (PTG, Wave 3) ------------------------
+// Same subprocess design as the hard stages, for the same reason: these tools
+// each `process.exit`, and running the gate's analyzers exactly the way a human
+// runs them by hand is what keeps the two from drifting.
+//
+// They run only on a tab that PARSED. Anything else would be analysing a file
+// the gate has already declared unreadable, and the advisories would describe a
+// score nobody has.
+//
+// THE ONE RULE THAT MATTERS HERE (Implement.md §3.6): a soft analyzer that could
+// not run is an OPERATIONAL failure (exit 2), never an empty advisory array. An
+// empty array is a claim — "we looked and found nothing" — and a crashed
+// analyzer has no right to make it. Both tools are soft-only (C2), so a nonzero
+// exit from either can only mean usage/IO/parse trouble.
+let fingeringSoft = null;
+let idiomSoft = null;
+
+if (!parseFailed && !toolError) {
+  const F = run('fingering.mjs', [
+    file, '--bars', bars, '--max-fret', String(config.instrument.maxFret), '--json']);
+  if (F.code !== 0 || F.json === null || F.json.ok !== true) {
+    toolError = toolError ?? `fingering.mjs could not analyse the tab (exit ${F.code}):\n`
+      + `${(F.json?.errors ?? []).join('\n') || (F.stderr || F.stdout || '').trim()}`;
+  } else {
+    fingeringSoft = F.json;
+  }
+
+  const I = run('idiom.mjs', [file, '--bars', bars, '--style', config.style, '--json']);
+  if (I.code !== 0 || I.json === null || I.json.ok !== true) {
+    toolError = toolError ?? `idiom.mjs could not analyse the tab (exit ${I.code}):\n`
+      + `${(I.json?.errors ?? []).join('\n') || (I.stderr || I.stdout || '').trim()}`;
+  } else {
+    idiomSoft = I.json;
   }
 }
 
@@ -395,6 +471,18 @@ const machine = {
   instrument: config.instrument,
   configPath: config.configPath,
   configSources: config.sources,
+  // PTG (Wave 3): the resolved run configuration, ADDITIVELY — every historical
+  // field above is untouched. `provenance` is what makes a stored report
+  // self-explaining: "gain: high (style-profile)" answers "why was it high?"
+  // without anyone re-deriving the merge months later.
+  configuration: {
+    style: config.style,
+    gain: config.gain,
+    arrangementMode: config.arrangementMode,
+    maxFret: config.instrument.maxFret,
+    stringCount: config.instrument.stringCount,
+    provenance: config.sources,
+  },
   hard: {
     validate: validateHard,
     playability: playHard && { ok: playHard.ok, errors: playHard.errors, stats: playHard.stats },
@@ -419,9 +507,27 @@ const machine = {
     // did not run, never null.
     playability: playHard ? playHard.warnings : [],
     compare: deriveCompareAdvisories(cmpHard),
-    fingering: [],   // Wave 2 — tools/lib/fingering.mjs
-    idiom: [],       // Wave 3 — tools/lib/idiom.mjs
+    // Already C3-shaped at the source — these two analyzers were built against
+    // the advisory contract, so unlike playability/compare there is nothing to
+    // adapt at this boundary. [] here means "the stage did not run", which only
+    // happens on a tab that did not parse; a stage that ran and failed is a
+    // toolError above, not an empty array.
+    fingering: fingeringSoft ? fingeringSoft.advisories : [],
+    idiom: idiomSoft ? idiomSoft.advisories : [],
     sidecar: [],     // Wave 4 — tools/sidecar-audit.mjs
+  },
+  // PTG (Wave 3): the soft analyzers' own summaries, so a stored report can say
+  // WHY an idiom advisory did or did not fire without re-running anything.
+  analyzers: {
+    fingering: fingeringSoft && { stats: fingeringSoft.stats, settings: fingeringSoft.settings },
+    idiom: idiomSoft && {
+      score: idiomSoft.score,
+      graded: idiomSoft.graded,
+      features: idiomSoft.features,
+      weightedScore: idiomSoft.weightedScore,
+      stats: idiomSoft.stats,
+      settings: idiomSoft.settings,
+    },
   },
   failReasons: hardFailReasons,
 };
@@ -437,7 +543,9 @@ const tsign = transposeNum >= 0 ? `+${transposeNum}` : `${transposeNum}`;
 const L = [];
 
 L.push(`CHECK  ${file}`);
-L.push(`       bars ${bars}   transpose ${tsign}   gain ${gain}   digest ${digestPath}`);
+L.push(`       bars ${bars}   transpose ${tsign}   gain ${gain} (${config.sources.gain})`
+  + `   style ${config.style} (${config.sources.style})`);
+L.push(`       digest ${digestPath}`);
 // PTG (Wave 1, C5): print the instrument line only when something OVERRODE the
 // built-in. On a default run it is noise; on a configured run it is the first
 // thing a reader needs to interpret a fret-range finding.
@@ -521,6 +629,26 @@ if (cmpHard) {
   L.push(`  compare (fidelity)   n/a`);
 } else {
   L.push(`  compare (fidelity)   SKIPPED   (tab did not parse)`);
+}
+
+// -- soft analyzers (PTG, Wave 3): one line each, never a verdict -------------
+// Deliberately marked SOFT rather than PASS/FAIL. These stages have no pass, and
+// printing one in the same column as the hard gates would train the eye to read
+// them as gates — which is exactly the confusion contract C4 exists to prevent.
+if (fingeringSoft) {
+  const s = fingeringSoft.stats;
+  L.push(`  fingering            SOFT   ${s.phrasesImproved}/${s.phrases} phrase(s) have a `
+    + `cheaper alternative (${s.events} attacks)`);
+} else if (parseFailed) {
+  L.push(`  fingering            SKIPPED   (tab did not parse)`);
+}
+if (idiomSoft) {
+  const detail = idiomSoft.graded
+    ? `density ${idiomSoft.score}/10 vs ${idiomSoft.settings.style} floor ${idiomSoft.settings.warnBelow}`
+    : `not graded — ${idiomSoft.stats.attackEvents} attack(s) is too little evidence`;
+  L.push(`  idiom                SOFT   ${detail}`);
+} else if (parseFailed) {
+  L.push(`  idiom                SKIPPED   (tab did not parse)`);
 }
 
 // -- SOFT ADVISORIES (PTG, Wave 0, contract C4) --

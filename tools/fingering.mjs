@@ -28,7 +28,7 @@
 
 import { loadTex } from './lib/score-utils.mjs';
 import { resolveConfig } from './lib/project-config.mjs';
-import { analyzeFingering } from './lib/fingering.mjs';
+import { analyzeFingering, analyzeLeadStringLeaps } from './lib/fingering.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -113,6 +113,20 @@ const result = analyzeFingering(loaded.score, {
   stringCount: config.instrument.stringCount,
 });
 
+// PTG (Wave 4, Implement.md §4.4): lead-line string motion is the same question
+// about the same hand, so it ships through the same CLI and reaches check.mjs's
+// `soft.fingering` without a second wiring path. Wave 5 will pass the declared
+// lead tracks here; today every standard-tuned fretted staff is lead-eligible,
+// which is exactly what §4.5 says solo mode means.
+const lead = analyzeLeadStringLeaps(loaded.score, {
+  range,
+  trackIndices: config.arrangementMode === 'dual-guitar' ? config.tracks.lead : null,
+});
+
+// Stable order (§A6): the phrase-level findings, then the located ones, then
+// lead motion. Each group is already internally ordered by (track, bar, beat).
+const advisories = [...result.advisories, ...lead.advisories];
+
 const out = {
   ok: true,                     // soft-only: there is no hard gate here to fail
   file,
@@ -120,10 +134,11 @@ const out = {
   instrument: config.instrument,
   configPath: config.configPath,
   configSources: config.sources,
-  stats: result.stats,
+  stats: { ...result.stats, lead: lead.stats },
   settings: result.settings,
   phrases: result.phrases,
-  advisories: result.advisories,
+  leaps: lead.leaps,
+  advisories,
 };
 
 if (json) {
@@ -194,11 +209,17 @@ if (!result.stats.phrases) {
   }
 }
 
-if (result.advisories.length) {
+if (lead.stats.leaps) {
+  L.push(`  lead motion: ${lead.stats.leaps} unexplained string leap(s) across `
+    + `${lead.stats.transitions} lead transition(s) in ${lead.stats.streams} voice(s)`);
+  L.push('');
+}
+
+if (advisories.length) {
   L.push('SOFT ADVISORIES');
   L.push('---------------');
-  L.push(`  fingering     (${result.advisories.length})`);
-  for (const a of result.advisories) L.push(`    ~ [${a.code}] ${a.message}`);
+  L.push(`  fingering     (${advisories.length})`);
+  for (const a of advisories) L.push(`    ~ [${a.code}] ${a.message}`);
   L.push('');
   L.push('NOTE  These are recommendations, never edits: nothing here rewrites the tab, and');
   L.push('      a cheaper fingering is not automatically a better one. The same pitch in two');

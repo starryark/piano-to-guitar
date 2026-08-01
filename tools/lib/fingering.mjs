@@ -1331,3 +1331,313 @@ export function assertPitchPreserved(events, path) {
   }
   return true;
 }
+
+// ---------------------------------------------------------------------------
+// Lead-string motion (Wave 4, contract C3 namespace `lead.*`)
+// ---------------------------------------------------------------------------
+//
+// WHY THIS LIVES HERE AND NOT IN compare.mjs
+// -------------------------------------------
+// Implement.md §4.4 is explicit: physical string navigation is not a FIDELITY
+// question. compare.mjs answers "does the tab keep the source's skeleton and
+// roots"; whether the player's hand can get from one note to the next is the
+// same question this module already answers for grips, one line up. Putting it
+// in the fidelity gate would have made an ergonomic finding capable of arguing
+// with a musical one.
+//
+// WHAT IT ANSWERS
+// ---------------
+// "Does the melodic line jump across the neck faster than a hand can follow, and
+// without any of the things that make such a jump deliberate?" A big skip is not
+// a defect — it is a defect ONLY when nothing in the writing explains it. So the
+// analyzer is mostly suppression rules, and every one of them is reported
+// (`considered`) even when it does not fire, because "we looked at the slide and
+// it was not there" is the evidence a reader needs in order to disagree.
+
+/** More than two strings, per Implement.md §4.4 — so three is the first leap. */
+export const LEAD_LEAP_MIN_STRINGS = 3;
+
+/** "The temporal gap is short enough for the skip to matter." Overridable per
+ *  call, never per style — how far a hand can move is physics, not taste. */
+export const LEAD_LEAP_MAX_GAP_BEATS = 1;
+
+/** A gap this long is a breath: the hand is free and any leap is fine. Shared
+ *  with the phrase model, because it is the same claim about the same hand. */
+export const LEAD_REST_SUPPRESS_BEATS = PHRASE_BREAK_BEATS;
+
+/**
+ * The lead note of an attack, frozen (Plan §8.3): the HIGHEST attacked pitch.
+ *
+ * Frozen deliberately, and never style-dependent. A rule that picked the lead
+ * differently per genre would make the same tab produce different findings for
+ * reasons no reader could reconstruct — and would quietly let a rhythm voicing's
+ * top note become "the melody" whenever that flattered the score.
+ */
+function leadNoteOf(notes) {
+  let best = null;
+  for (const n of notes) if (best === null || n.midi > best.midi) best = n;
+  return best;
+}
+
+/**
+ * Walk the score into per-(track, staff, voice) LEAD event streams.
+ *
+ * Deliberately NOT built on `buildPhrases`: a phrase ENDS at a rest, and the
+ * rest is exactly the datum this analyzer needs (a long one suppresses, a short
+ * one does not). So this walk keeps rests as measurable gaps rather than as
+ * boundaries, and carries absolute ticks so adjacency is measured in TIME and
+ * never in array index (§8.3 policy 7).
+ */
+function buildLeadStreams(score, opts = {}) {
+  const range = opts.range ?? null;
+  const trackIndices = Array.isArray(opts.trackIndices) ? new Set(opts.trackIndices) : null;
+  const inRange = (barNum) => !range || (barNum >= range.lo && barNum <= range.hi);
+
+  const streams = [];
+  const skippedStaves = [];
+
+  for (let ti = 0; ti < score.tracks.length; ti++) {
+    if (trackIndices && !trackIndices.has(ti)) continue;
+    const track = score.tracks[ti];
+    for (let si = 0; si < track.staves.length; si++) {
+      const staff = track.staves[si];
+      const tunings = staff.stringTuning?.tunings ?? [];
+      if (tunings.length !== STRING_COUNT) {
+        skippedStaves.push({
+          track: ti,
+          staff: si,
+          stringCount: tunings.length,
+          reason: tunings.length === 0
+            ? 'not a fretted staff (no string tuning) — its notes have no string to leap between'
+            : 'non-standard string count',
+        });
+        continue;
+      }
+      const voiceCount = staff.bars.reduce((m, b) => Math.max(m, b.voices.length), 0);
+
+      for (let vi = 0; vi < voiceCount; vi++) {
+        const events = [];
+        let runningBarStart = 0;
+
+        for (const bar of staff.bars) {
+          const master = bar.masterBar;
+          const barNum = bar.index + 1;
+          const tsNum = master?.timeSignatureNumerator ?? 4;
+          const tsDen = master?.timeSignatureDenominator ?? 4;
+          const barTicks = tsNum * (4 / tsDen) * QUARTER_TICKS;
+          const rawStart = master?.start;
+          const barStart = Number.isFinite(rawStart) ? rawStart : runningBarStart;
+          runningBarStart = barStart + barTicks;
+          if (!inRange(barNum)) continue;
+
+          const voice = bar.voices[vi];
+          if (!voice) continue;
+          for (const beat of voice.beats) {
+            if (beat.isRest || !beat.notes?.length) continue;
+            if (Number(beat.graceType ?? 0) !== 0) continue;   // an ornament is not a lead event
+
+            const notes = [];
+            for (const raw of beat.notes) {
+              if (!Number.isInteger(raw.string) || raw.string < 1 || raw.string > STRING_COUNT
+                || !Number.isInteger(raw.fret) || raw.fret < 0) continue;
+              const pos = fromAlphaTabNote(raw, STRING_COUNT);
+              if (!Number.isFinite(pos.midi)) continue;
+              notes.push({ raw, ...pos });
+            }
+            if (!notes.length) continue;
+
+            // §8.3 policy 2: a tie DESTINATION is not a new attack. The line did
+            // not move; it is still sounding the note it already had.
+            const attacked = notes.filter((n) => !n.raw.isTieDestination);
+            const beatStart = barStart
+              + (Number.isFinite(beat.playbackStart) ? beat.playbackStart : 0);
+            if (!attacked.length) {
+              // A pure continuation still occupies TIME, and the gap this
+              // analyzer measures is silence between one note ending and the
+              // next beginning. Dropping the continuation entirely would end the
+              // held note at its first fragment and make a note sustained across
+              // three beats look like a note followed by three beats of freedom.
+              const prior = events[events.length - 1];
+              if (prior) prior.endTick = Math.max(prior.endTick, beatStart + beat.playbackDuration);
+              continue;
+            }
+
+            const lead = leadNoteOf(attacked);
+            // THE TICK TRAP: `beat.playbackStart` is **bar-relative** (every bar
+            // restarts at 0); `masterBar.start` is the bar's ABSOLUTE tick.
+            // Treating playbackStart as absolute makes every bar overlap every
+            // other, which here re-sorted the lead line into an interleaving of
+            // all bars at once and invented leaps that are not in the music.
+            const startTick = beatStart;
+            events.push({
+              track: ti,
+              staff: si,
+              voice: vi,
+              bar: barNum,
+              beatIndex: beat.index,
+              startTick,
+              endTick: startTick + beat.playbackDuration,
+              durationBeats: beat.playbackDuration / QUARTER_TICKS,
+              // §8.3 policy 4: the ACTUAL written assignment, never a proposal.
+              string: lead.string,
+              fret: lead.fret,
+              midi: lead.midi,
+              slidesOut: attacked.some((n) => (n.raw.slideOutType ?? SLIDE_NONE) !== SLIDE_NONE),
+              slidesIn: attacked.some((n) => Number(n.raw.slideInType ?? 0) !== 0),
+              hammerOrigin: attacked.some((n) => !!n.raw.isHammerPullOrigin),
+              hammerDestination: attacked.some((n) => !!n.raw.isHammerPullDestination),
+              tieOrigin: attacked.some((n) => !!n.raw.isTieOrigin),
+              letRing: !!lead.raw.isLetRing || !!beat.isLetRing,
+            });
+          }
+        }
+        if (events.length) {
+          events.sort((a, b) => (a.startTick - b.startTick) || (a.beatIndex - b.beatIndex));
+          streams.push({ track: ti, staff: si, voice: vi, events });
+        }
+      }
+    }
+  }
+
+  streams.sort((a, b) => (a.track - b.track) || (a.staff - b.staff) || (a.voice - b.voice));
+  return { streams, skippedStaves };
+}
+
+/**
+ * Find lead-line string leaps that nothing in the writing explains.
+ *
+ * A pair of consecutive lead attacks in ONE stream (§8.3 policies 5 and 6 — the
+ * last note of one voice is never joined to the first of another) is reported
+ * when all of these hold:
+ *
+ *   • the strings differ by at least `minStrings`;
+ *   • the SILENT gap between them is short. The gap measured is
+ *     `next.start - prev.end`, not onset-to-onset, so a short note followed by a
+ *     rest is correctly counted as slow rather than fast;
+ *   • no suppressor applies.
+ *
+ * Suppressors, each recorded whether or not it fired:
+ *   rest      a breath of `LEAD_REST_SUPPRESS_BEATS` or more — the hand is free
+ *   slide     either end carries a slide: the leap IS the gesture
+ *   legato    a hammer/pull links the pair
+ *   tie       the pair is one sounding note, not two attacks
+ *   letRing   the previous note is written to keep ringing across the move
+ *
+ * @param {object} score alphaTab Score.
+ * @param {object} [opts]
+ * @param {{lo:number,hi:number}|null} [opts.range]
+ * @param {number[]|null} [opts.trackIndices] Wave 5 passes the declared lead
+ *        tracks; null analyses every standard-tuned fretted staff.
+ * @param {number} [opts.maxGapBeats]
+ * @param {number} [opts.minStrings]
+ * @returns {{ leaps: object[], advisories: object[], stats: object }}
+ */
+export function analyzeLeadStringLeaps(score, opts = {}) {
+  const maxGapBeats = Number.isFinite(opts.maxGapBeats) ? opts.maxGapBeats : LEAD_LEAP_MAX_GAP_BEATS;
+  const minStrings = Number.isFinite(opts.minStrings) ? opts.minStrings : LEAD_LEAP_MIN_STRINGS;
+  const { streams, skippedStaves } = buildLeadStreams(score, opts);
+
+  const leaps = [];
+  let transitions = 0;
+
+  for (const stream of streams) {
+    const evs = stream.events;
+    for (let i = 1; i < evs.length; i++) {
+      const prev = evs[i - 1];
+      const cur = evs[i];
+      transitions++;
+      const strings = Math.abs(cur.string - prev.string);
+      if (strings < minStrings) continue;
+
+      const gapBeats = Math.max(0, (cur.startTick - prev.endTick) / QUARTER_TICKS);
+      const considered = {
+        rest: gapBeats >= LEAD_REST_SUPPRESS_BEATS,
+        slide: prev.slidesOut || cur.slidesIn,
+        legato: prev.hammerOrigin || cur.hammerDestination,
+        tie: prev.tieOrigin,
+        letRing: prev.letRing,
+      };
+      if (Object.values(considered).some(Boolean)) continue;
+      if (gapBeats > maxGapBeats) continue;
+
+      leaps.push({
+        track: prev.track,
+        staff: prev.staff,
+        voice: prev.voice,
+        fromBar: prev.bar,
+        fromBeat: prev.beatIndex,
+        toBar: cur.bar,
+        toBeat: cur.beatIndex,
+        fromString: prev.string,
+        toString: cur.string,
+        strings,
+        fromNote: midiToName(prev.midi),
+        toNote: midiToName(cur.midi),
+        semitones: cur.midi - prev.midi,
+        gapBeats: round(gapBeats, 4),
+        pressure: round(timePressure(prev.durationBeats), 2),
+        considered,
+      });
+    }
+  }
+
+  // Determinism (§A6): the walk already produces this order; the sort states the
+  // contract instead of relying on it.
+  leaps.sort((a, b) => (a.track - b.track) || (a.staff - b.staff) || (a.voice - b.voice)
+    || (a.fromBar - b.fromBar) || (a.fromBeat - b.fromBeat));
+
+  // ONE finding per distinct problem, not one per occurrence — the doctrine
+  // `locatedAdvisories` and playability's pick-demand already settled. A riff
+  // that alternates a low pedal with a high stab poses the same question
+  // fourteen times, and fourteen copies of it is how a real finding gets
+  // scrolled past. The repeat count lives in `data.occurrences`.
+  const advisories = [];
+  const firstSeen = new Map();
+  for (const leap of leaps) {
+    const key = `${leap.track}:${leap.staff}:${leap.voice}:${leap.fromString}->${leap.toString}`;
+    const prior = firstSeen.get(key);
+    if (prior) { prior.data.occurrences++; continue; }
+    const a = advisory(
+      'lead.string-leap',
+      `bar ${leap.fromBar}: the lead line jumps ${leap.strings} strings `
+      + `(string ${leap.fromString} -> ${leap.toString}, ${leap.fromNote} -> ${leap.toNote}) `
+      + `with ${leap.gapBeats} beat(s) of silence between the attacks, and no slide, legato, tie `
+      + `or let-ring to make the move deliberate. Consider re-fingering the line in one position, `
+      + `or writing the gesture in.`,
+      {
+        track: leap.track,
+        staff: leap.staff,
+        bar: leap.fromBar,
+        beat: leap.fromBeat,
+        data: {
+          fromString: leap.fromString,
+          toString: leap.toString,
+          strings: leap.strings,
+          fromBar: leap.fromBar,
+          toBar: leap.toBar,
+          fromNote: leap.fromNote,
+          toNote: leap.toNote,
+          semitones: leap.semitones,
+          gapBeats: leap.gapBeats,
+          voice: leap.voice,
+          considered: leap.considered,
+          occurrences: 1,
+        },
+      },
+    );
+    firstSeen.set(key, a);
+    advisories.push(a);
+  }
+
+  return {
+    leaps,
+    advisories,
+    stats: {
+      streams: streams.length,
+      events: streams.reduce((n, s) => n + s.events.length, 0),
+      transitions,
+      leaps: leaps.length,
+      skippedStaves,
+    },
+  };
+}

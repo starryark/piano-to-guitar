@@ -170,9 +170,13 @@ export function extractIdiomEvents(score, opts = {}) {
           const tsNum = master?.timeSignatureNumerator ?? 4;
           const tsDen = master?.timeSignatureDenominator ?? 4;
           const barTicks = tsNum * (4 / tsDen) * QUARTER_TICKS;
-          // `masterBar.start` is the absolute tick of the bar; when a build does
-          // not populate it we accumulate instead. Either way `tickInBar` — the
-          // only number the metrical grid needs — is exact.
+          // THE TICK TRAP, measured rather than assumed: `beat.playbackStart` is
+          // **bar-relative** (every bar restarts at 0), while `masterBar.start`
+          // is the bar's ABSOLUTE tick. Reading playbackStart as absolute makes
+          // `tickInBar` go negative from bar 2 on — which silently switched the
+          // syncopation grid off for every bar but the first — and turns a
+          // cross-bar inter-onset interval into a large negative number.
+          // So: tickInBar IS playbackStart; absolute tick is barStart + it.
           const barStart = num(master?.start) ?? runningBarStart;
           runningBarStart = barStart + barTicks;
 
@@ -185,14 +189,13 @@ export function extractIdiomEvents(score, opts = {}) {
 
           for (const beat of voice.beats) {
             const durationBeats = beat.playbackDuration / QUARTER_TICKS;
-            const absTick = num(beat.playbackStart);
-            const tickInBar = absTick === null ? 0 : absTick - barStart;
+            const tickInBar = num(beat.playbackStart) ?? 0;
             const base = {
               track: ti,
               staff: si,
               voice: vi,
               bar: barNum,
-              tick: absTick ?? barStart,
+              tick: barStart + tickInBar,
               tickInBar,
               beatIndex: beat.index,
               durationBeats,

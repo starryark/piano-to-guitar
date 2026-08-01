@@ -195,6 +195,13 @@ against the paired scenario fixtures.
 `harmonic-flattening` keeps the un-namespaced code C3's table reserves for it —
 `groupByPrefix` treats a dot-less code as its own namespace by design.
 
+**`lead.*` rides in `soft.fingering`.** C4 fixes the five soft keys, and Plan §8.4
+explicitly permits lead findings to land in `soft.fingering`. That is the choice
+made: lead motion is the same question about the same hand the fingering engine
+already answers, it ships through the same CLI, and adding a sixth soft key would
+break every consumer that feature-detects on the five. The `code` namespace stays
+distinct (`lead.*` vs `fingering.*`), so `groupByPrefix` still separates them.
+
 Every one of these ships with a positive and a negative fixture (C11.6).
 
 ---

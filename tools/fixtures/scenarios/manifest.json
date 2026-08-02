@@ -1,20 +1,41 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "notes": [
-    "Paired scenario fixtures (Plan §10.1-§10.2). Each PAIR shares one source and",
-    "one sidecar, and differs only in the target tab — so a difference in the",
-    "advisories is a difference in the ARRANGEMENT, never in the inputs.",
+    "Paired scenario fixtures. Every scenario belongs to exactly one PAIR, and the",
+    "pair declares the ONE dimension it varies (`variantAxis`). The runner enforces",
+    "that: a pair whose members differ in anything else fails BEFORE check.mjs is",
+    "invoked, because a difference in the advice would then prove nothing.",
     "",
-    "Expectations are stated as advisory CODES, never as prose (Plan §6.3), so the",
-    "wording of a message stays free to improve. `advisoriesAbsent` is the half",
-    "that matters most: it is where a false positive gets caught.",
+    "  variantAxis   members must share                      members must vary",
+    "  -----------   --------------------------------------  -----------------",
+    "  target        source, map, style, gain, mode, roles    target",
+    "  style         source, target, map, mode, roles         style",
+    "  map           source, target, style, gain, mode, roles map",
+    "  roles         source, target, map, style, gain         lead/rhythm",
+    "  configuration source, target, map, style               any other run flag",
     "",
-    "Paths are relative to tools/fixtures/. The runner is",
-    "tools/lib/scenarios.test.mjs."
+    "`polarity` says what the pair member CLAIMS: `positive` = the toolchain should",
+    "stay quiet about the thing under test, `negative` = it should speak,",
+    "`comparison` = neither, this member exists to be diffed. Every pair needs at",
+    "least one positive and at least one non-positive.",
+    "",
+    "Expectations are advisory CODES, never prose (C3), so wording stays free to",
+    "improve. `forbiddenAdvisoryCodes` is the half that earns its keep: it is where",
+    "a false positive gets caught.",
+    "",
+    "`map: null` means BAR-LOCKED (no --map) and must be written explicitly — an",
+    "omitted key is a schema error, so 'I forgot the map' can never read as 'I meant",
+    "bar-locked'.",
+    "",
+    "Paths are relative to tools/fixtures/. The runner is tools/lib/scenarios.test.mjs.",
+    "The coverage ledger is docs/specs/wave6-advisory-coverage.md."
   ],
   "scenarios": [
     {
-      "name": "jazz-shell-positive",
+      "id": "jazz-shell-positive",
+      "pairId": "jazz-color-quality",
+      "polarity": "positive",
+      "variantAxis": "target",
       "intent": "Shell voicings keep the 3rd and 7th of every chord. A jazz arranger did the jazz thing; nothing should complain.",
       "source": "harmonic-color/jazz-source.alphatab",
       "target": "harmonic-color/shell-tab.alphatab",
@@ -24,12 +45,20 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": [],
-        "advisoriesAbsent": ["harmonic-flattening", "idiom.low-density"]
+        "requiredAdvisoryCodes": [],
+        "forbiddenAdvisoryCodes": ["harmonic-flattening", "idiom.low-density"],
+        "requiredStats": {
+          "analyzers.harmonicColor.slicesExamined": { "minimum": 1 },
+          "analyzers.harmonicColor.flattened": { "equals": 0 },
+          "analyzers.idiom.stats.attackEvents": { "minimum": 8 }
+        }
       }
     },
     {
-      "name": "jazz-flattened-negative",
+      "id": "jazz-flattened-negative",
+      "pairId": "jazz-color-quality",
+      "polarity": "negative",
+      "variantAxis": "target",
       "intent": "The same ii-V-I-VI reduced to bare power chords. Root motion is still correct, so the HARD gate passes — and eight consecutive harmonies lose their identity, which is exactly what the soft signal is for.",
       "source": "harmonic-color/jazz-source.alphatab",
       "target": "harmonic-color/flattened-tab.alphatab",
@@ -39,13 +68,24 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": ["harmonic-flattening"],
-        "advisoriesAbsent": []
+        "requiredAdvisoryCodes": ["harmonic-flattening", "idiom.low-density"],
+        "forbiddenAdvisoryCodes": [],
+        "requiredDataFields": {
+          "harmonic-flattening": ["style", "gain", "consecutiveSlices", "threshold", "tabBars", "sourceBars", "omittedFunctions", "slices"],
+          "idiom.low-density": ["style", "score", "threshold", "attackEvents"]
+        },
+        "requiredStats": {
+          "analyzers.harmonicColor.slicesExamined": { "minimum": 1 },
+          "analyzers.harmonicColor.flattened": { "minimum": 2 }
+        }
       }
     },
     {
-      "name": "jazz-flattened-under-metal",
-      "intent": "Calibration: the SAME flattened tab under metal. Sustained root-fifth writing is the genre, so the colour analyzer is off entirely. Changing the style must remove irrelevant advice.",
+      "id": "flattened-under-metal",
+      "pairId": "harmonic-color-style",
+      "polarity": "positive",
+      "variantAxis": "style",
+      "intent": "Calibration: the flattened tab under metal. Sustained root-fifth writing IS the genre, so the colour analyzer is off entirely and advising against it would be wrong advice.",
       "source": "harmonic-color/jazz-source.alphatab",
       "target": "harmonic-color/flattened-tab.alphatab",
       "map": "harmonic-color/sidecar.json",
@@ -54,12 +94,40 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": [],
-        "advisoriesAbsent": ["harmonic-flattening"]
+        "requiredAdvisoryCodes": [],
+        "forbiddenAdvisoryCodes": ["harmonic-flattening"],
+        "requiredStats": {
+          "analyzers.harmonicColor.enabled": { "equals": false }
+        }
       }
     },
     {
-      "name": "metal-riff-positive",
+      "id": "flattened-under-hard-rock",
+      "pairId": "harmonic-color-style",
+      "polarity": "negative",
+      "variantAxis": "style",
+      "intent": "The counterfixture that stops metal's suppression from being read as 'any non-jazz style'. Hard-rock keeps the colour analyzer ON, so the SAME tab still draws the warning. Only metal is exempt, and only because metal says so.",
+      "source": "harmonic-color/jazz-source.alphatab",
+      "target": "harmonic-color/flattened-tab.alphatab",
+      "map": "harmonic-color/sidecar.json",
+      "bars": "1-8",
+      "style": "hard-rock",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "requiredAdvisoryCodes": ["harmonic-flattening"],
+        "forbiddenAdvisoryCodes": [],
+        "requiredStats": {
+          "analyzers.harmonicColor.enabled": { "equals": true },
+          "analyzers.harmonicColor.flattened": { "minimum": 4 }
+        }
+      }
+    },
+    {
+      "id": "metal-riff-positive",
+      "pairId": "metal-riff-quality",
+      "polarity": "positive",
+      "variantAxis": "target",
       "intent": "A palm-muted root pedal with power-chord stabs: the reduction a metal arranger would actually write. Omitted thirds are correct here and must draw no criticism.",
       "source": "scenarios/metal/source.alphatab",
       "target": "scenarios/metal/positive.alphatab",
@@ -69,12 +137,19 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": [],
-        "advisoriesAbsent": ["idiom.low-density", "harmonic-flattening"]
+        "requiredAdvisoryCodes": [],
+        "forbiddenAdvisoryCodes": ["idiom.low-density", "harmonic-flattening", "gain-voicing", "lead.string-leap"],
+        "requiredStats": {
+          "analyzers.idiom.stats.attackEvents": { "minimum": 8 },
+          "hard.playability.stats.notesAnalyzed": { "minimum": 8 }
+        }
       }
     },
     {
-      "name": "metal-literal-negative",
+      "id": "metal-literal-negative",
+      "pairId": "metal-riff-quality",
+      "polarity": "negative",
+      "variantAxis": "target",
       "intent": "The same chords typed onto the guitar unchanged — piano writing with a pick. Low thirds under high gain, no riff, no mute, no pedal.",
       "source": "scenarios/metal/source.alphatab",
       "target": "scenarios/metal/negative.alphatab",
@@ -84,12 +159,22 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": ["idiom.low-density", "gain-voicing"],
-        "advisoriesAbsent": []
+        "requiredAdvisoryCodes": ["idiom.low-density", "gain-voicing"],
+        "forbiddenAdvisoryCodes": [],
+        "maximumAdvisoryCounts": { "gain-voicing": 1 },
+        "requiredDataFields": {
+          "idiom.low-density": ["style", "score", "threshold", "attackEvents", "missingFeatures"]
+        },
+        "requiredStats": {
+          "analyzers.idiom.stats.attackEvents": { "minimum": 8 }
+        }
       }
     },
     {
-      "name": "blues-lead-positive",
+      "id": "blues-lead-positive",
+      "pairId": "blues-lead-quality",
+      "polarity": "positive",
+      "variantAxis": "target",
       "intent": "A pentatonic lead with bends, slides, vibrato and a repeating call. Blues weights articulation heavily, and this passage is made of it.",
       "source": "scenarios/blues/source.alphatab",
       "target": "scenarios/blues/positive.alphatab",
@@ -99,12 +184,19 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": [],
-        "advisoriesAbsent": ["idiom.low-density", "lead.string-leap"]
+        "requiredAdvisoryCodes": [],
+        "forbiddenAdvisoryCodes": ["idiom.low-density", "lead.string-leap", "gain-voicing"],
+        "requiredStats": {
+          "analyzers.idiom.stats.attackEvents": { "minimum": 8 },
+          "analyzers.idiom.features.leadArticulation.numerator": { "minimum": 1 }
+        }
       }
     },
     {
-      "name": "blues-literal-negative",
+      "id": "blues-literal-negative",
+      "pairId": "blues-lead-quality",
+      "polarity": "negative",
+      "variantAxis": "target",
       "intent": "The same dominant chords transcribed rigidly: no bend, no slide, no vibrato, no phrasing. Every expressive marker the style is built on is absent.",
       "source": "scenarios/blues/source.alphatab",
       "target": "scenarios/blues/negative.alphatab",
@@ -114,12 +206,19 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": ["idiom.low-density"],
-        "advisoriesAbsent": []
+        "requiredAdvisoryCodes": ["idiom.low-density"],
+        "forbiddenAdvisoryCodes": [],
+        "requiredStats": {
+          "analyzers.idiom.features.leadArticulation.numerator": { "equals": 0 },
+          "analyzers.idiom.features.leadArticulation.measured": { "equals": true }
+        }
       }
     },
     {
-      "name": "role-aware-correct",
+      "id": "role-aware-correct",
+      "pairId": "dual-role-assignment",
+      "polarity": "positive",
+      "variantAxis": "roles",
       "intent": "Dual guitar: the melody lives only in the lead track, the roots only in the rhythm track, and both parts are independently playable.",
       "source": "dual/source.alphatab",
       "target": "dual/cover.alphatab",
@@ -132,12 +231,21 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": [],
-        "advisoriesAbsent": []
+        "requiredAdvisoryCodes": [],
+        "forbiddenAdvisoryCodes": ["compare.contour", "lead.string-leap"],
+        "requiredStats": {
+          "analyzers.roles.arrangementMode": { "equals": "dual-guitar" },
+          "analyzers.roles.lead": { "equalsJson": [0] },
+          "analyzers.roles.rhythm": { "equalsJson": [1] },
+          "analyzers.roles.views.harmony": { "equalsJson": [0, 1] }
+        }
       }
     },
     {
-      "name": "role-aware-swapped",
+      "id": "role-aware-swapped",
+      "pairId": "dual-role-assignment",
+      "polarity": "negative",
+      "variantAxis": "roles",
       "intent": "The same two tracks with the roles declared backwards. The melody is still SOMEWHERE in the score, and the aggregate view would happily pass it — the whole point of roles is that this must fail.",
       "source": "dual/source.alphatab",
       "target": "dual/cover.alphatab",
@@ -151,12 +259,21 @@
         "exit": 1,
         "hardPass": false,
         "failReasons": ["compare melodic skeleton"],
-        "advisoriesPresent": [],
-        "advisoriesAbsent": []
+        "requiredAdvisoryCodes": ["compare.contour"],
+        "forbiddenAdvisoryCodes": [],
+        "requiredDataFields": { "compare.contour": ["r"] },
+        "requiredStats": {
+          "analyzers.roles.lead": { "equalsJson": [1] },
+          "analyzers.roles.rhythm": { "equalsJson": [0] },
+          "analyzers.roles.views.harmony": { "equalsJson": [0, 1] }
+        }
       }
     },
     {
-      "name": "sidecar-responsible",
+      "id": "sidecar-responsible",
+      "pairId": "sidecar-free-share",
+      "polarity": "positive",
+      "variantAxis": "map",
       "intent": "Every tab bar is tied to the source. A responsibly mapped arrangement draws no proportion advice.",
       "source": "chaconne-excerpt.alphatab",
       "target": "e2e-tab.alphatab",
@@ -166,12 +283,19 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": [],
-        "advisoriesAbsent": ["sidecar.high-free-share"]
+        "requiredAdvisoryCodes": [],
+        "forbiddenAdvisoryCodes": ["sidecar.high-free-share", "compare.chord-quality", "compare.dropped-notes", "compare.low-density"],
+        "requiredStats": {
+          "analyzers.sidecar.metrics.tabSpace.totalTabBars": { "minimum": 1 },
+          "analyzers.sidecar.metrics.tabSpace.freeTabBars": { "equals": 0 }
+        }
       }
     },
     {
-      "name": "sidecar-excessively-free",
+      "id": "sidecar-excessively-free",
+      "pairId": "sidecar-free-share",
+      "polarity": "negative",
+      "variantAxis": "map",
       "intent": "Half the tab is declared free. The map is entirely VALID and the gate passes — the advisory asks whether that much added material is intended, and does not accuse anyone of evading anything.",
       "source": "chaconne-excerpt.alphatab",
       "target": "e2e-tab.alphatab",
@@ -181,8 +305,66 @@
       "expect": {
         "exit": 0,
         "hardPass": true,
-        "advisoriesPresent": ["sidecar.high-free-share"],
-        "advisoriesAbsent": []
+        "requiredAdvisoryCodes": ["sidecar.high-free-share"],
+        "forbiddenAdvisoryCodes": [],
+        "maximumAdvisoryCounts": { "sidecar.high-free-share": 1 },
+        "requiredDataFields": {
+          "sidecar.high-free-share": ["style", "freeTabBars", "totalTabBars", "freeTabBarShare", "threshold", "range"]
+        },
+        "requiredStats": {
+          "analyzers.sidecar.metrics.tabSpace.freeTabBars": { "minimum": 1 }
+        }
+      }
+    },
+    {
+      "id": "barlocked-shell-positive",
+      "pairId": "barlocked-compare-quality",
+      "polarity": "positive",
+      "variantAxis": "target",
+      "intent": "The ONLY bar-locked pair in the corpus, and it exists to reach the three compare advisories that map mode structurally cannot emit. Shell voicings 1:1 against the source: the skeleton survives, nothing is dropped, and the only thing compare has to say is how the chords were voiced.",
+      "source": "harmonic-color/jazz-source.alphatab",
+      "target": "harmonic-color/shell-tab.alphatab",
+      "map": null,
+      "bars": "1-8",
+      "style": "jazz",
+      "expect": {
+        "exit": 0,
+        "hardPass": true,
+        "requiredAdvisoryCodes": ["compare.chord-quality"],
+        "forbiddenAdvisoryCodes": ["compare.dropped-notes", "compare.low-density", "compare.contour", "idiom.low-density", "harmonic-flattening", "sidecar.high-free-share"],
+        "requiredDataFields": { "compare.chord-quality": ["power", "exact"] },
+        "requiredStats": {
+          "hard.compare.hardGates.melodicSkeleton.ok": { "equals": true },
+          "hard.compare.hardGates.harmonicRoots.ok": { "equals": true }
+        }
+      }
+    },
+    {
+      "id": "barlocked-literal-negative",
+      "pairId": "barlocked-compare-quality",
+      "polarity": "negative",
+      "variantAxis": "target",
+      "intent": "The flattened tab against the SAME source with no map. A 1:1 gate is entitled to notice that a third of the notes are gone and the melodic skeleton with them — this is the debugging fallback behaving as documented, and the three bar-locked-only advisories firing together.",
+      "source": "harmonic-color/jazz-source.alphatab",
+      "target": "harmonic-color/flattened-tab.alphatab",
+      "map": null,
+      "bars": "1-8",
+      "style": "jazz",
+      "expect": {
+        "exit": 1,
+        "hardPass": false,
+        "failReasons": ["compare melodic skeleton"],
+        "requiredAdvisoryCodes": ["compare.dropped-notes", "compare.low-density", "compare.chord-quality", "idiom.low-density"],
+        "forbiddenAdvisoryCodes": ["harmonic-flattening", "sidecar.high-free-share"],
+        "maximumTotalAdvisories": 24,
+        "requiredDataFields": {
+          "compare.dropped-notes": ["bar", "notes"],
+          "compare.low-density": ["percent"]
+        },
+        "requiredStats": {
+          "hard.compare.hardGates.melodicSkeleton.ok": { "equals": false },
+          "hard.compare.soft.density.percent": { "maximum": 99 }
+        }
       }
     }
   ]

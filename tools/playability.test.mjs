@@ -271,6 +271,80 @@ test('C12: the retired pick-speed warning is gone for good', () => {
     'PICK_CEILING_NPS was an invented constant; nothing may resurrect its code');
 });
 
+// ---------------------------------------------------------------------------
+// PTG Wave 6 — the two soft findings the coverage ledger caught with no test
+// ---------------------------------------------------------------------------
+// `gain-voicing` was named in the scenario manifest but asserted by nothing: the
+// only occurrence of the string in any test file was a COMMENT. `policy-fret-span`
+// had neither a test nor a line in the advisory reference. Both are soft, so
+// neither would have failed a gate on the way out — which is exactly why an
+// advisory needs a test that says it fired and a test that says it did not.
+//
+// tools/fixtures/gain-voicing.alphatab isolates one variable per bar:
+//   bar 1  low minor triad  E3+G3+B3   root below G3 WITH a 3rd   -> gain-voicing
+//   bar 2  power chord      E3+B3      root below G3, no 3rd      -> silent
+//   bar 3  the same 3rd, root AT G3    the documented remedy      -> silent
+//   bar 4  fret span 4 (frets 2..6)    legal grip, wide for a policy
+
+test('W6: gain-voicing fires on a low 3rd under HIGH gain, once per grip', () => {
+  const r = run([fix('gain-voicing.alphatab'), '--bars', '1', '--gain', 'high', '--json']);
+  const w = r.json.warnings.filter((x) => x.type === 'gain-voicing');
+  assert.equal(w.length, 1, 'four identical chords are ONE arranging decision, not four findings');
+  assert.equal(w[0].occurrences, 4, 'the repeat count is information; it is just not four findings');
+  assert.equal(w[0].bar, 1);
+  assert.match(w[0].message, /minor 3rd/);
+  assert.deepEqual(r.json.errors, [], 'gain-voicing is advisory — the grip is perfectly playable');
+  assert.equal(r.code, 0, 'a soft finding never fails the process (C7)');
+});
+
+test('W6: gain-voicing is GAIN-sensitive, not a blanket ban on thirds', () => {
+  for (const gain of ['clean', 'crunch']) {
+    const r = run([fix('gain-voicing.alphatab'), '--bars', '1', '--gain', gain, '--json']);
+    assert.deepEqual(r.json.warnings.filter((x) => x.type === 'gain-voicing'), [],
+      `a low 3rd at ${gain} gain is just a chord — distortion is what makes it mud`);
+  }
+});
+
+test('W6: gain-voicing stays silent on a power chord and on the documented remedy', () => {
+  // The negative half. Bar 2 has the same low root and no 3rd; bar 3 has the
+  // same 3rd with the root moved up to G3 — which is precisely what the advisory
+  // tells the arranger to do. Advice that still fires after being taken is noise.
+  for (const bar of ['2', '3']) {
+    const r = run([fix('gain-voicing.alphatab'), '--bars', bar, '--gain', 'high', '--json']);
+    assert.deepEqual(r.json.warnings.filter((x) => x.type === 'gain-voicing'), [],
+      `bar ${bar} must not draw a gain-voicing warning`);
+  }
+});
+
+test('W6: policy-fret-span warns on a wide grip and needs --policy to exist at all', () => {
+  const POLICY = fix('narrow-span-policy.json');
+  const TAB = fix('gain-voicing.alphatab');
+
+  // Bar 4 spans 4 frets: legal on the instrument (maxSpan is 4 below fret 7), and
+  // wide against a policy that prefers 2. That gap is the whole point of the
+  // finding — the instrument says the grip exists, the project says it would
+  // rather not reach that far.
+  const wide = run([TAB, '--bars', '4', '--policy', POLICY, '--json']);
+  const w = wide.json.warnings.filter((x) => x.type === 'policy-fret-span');
+  assert.ok(w.length > 0, `expected policy-fret-span, got ${JSON.stringify(types(wide.json.warnings))}`);
+  assert.match(w[0].message, /spans 4 frets/);
+  assert.match(w[0].message, /preferred 2/);
+  assert.deepEqual(wide.json.errors, [], 'a preferred span is soft; a policy MAX fret is hard');
+  assert.equal(wide.code, 0);
+
+  // Same bar, no policy: the project never stated a preference, so there is
+  // nothing to be over.
+  const noPolicy = run([TAB, '--bars', '4', '--json']);
+  assert.deepEqual(noPolicy.json.warnings.filter((x) => x.type === 'policy-fret-span'), [],
+    'without --policy there is no preferred span to exceed');
+
+  // Same policy, a grip inside the guide. Strictly greater-than: a span that
+  // lands exactly on the preference is within it.
+  const narrow = run([TAB, '--bars', '2', '--policy', POLICY, '--json']);
+  assert.deepEqual(narrow.json.warnings.filter((x) => x.type === 'policy-fret-span'), [],
+    'a span of exactly the preferred 2 is within the preference, not over it');
+});
+
 let failed = 0;
 for (const [name, fn] of tests) {
   try {

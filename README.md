@@ -43,7 +43,9 @@ is the guitar tab plus your verdict on it.
 Verify the toolchain is healthy after cloning or changing anything in `tools/`:
 
 ```
-npm test      # fretboard + analysis + piano-source unit suites
+npm ci        # clean install from the lockfile
+npm test      # every unit + integration suite, including the paired scenario
+              # corpus and the regression lock — each prints its own totals
 npm run smoke # end-to-end run over tools/fixtures/ — expects SMOKE: PASS
 ```
 
@@ -66,9 +68,22 @@ sounding key. `AGENTS.md` has the checklist; `reference/piano-to-guitar-arrangin
 "AlphaTex piano-export hazards" has the one-line checks worth running on every new file.
 
 **Gate A — Plan.** The assistant proposes the arrangement plan — register, gain, tuning /
-transpose, **target tempo, groove, and form** (the section sequence with per-span mode
-`free` / `quote` / `recompose`) — and you sign off before any tab is written. Tempo,
-groove and form are *decisions* at this gate, not inheritances from the source.
+transpose, **style**, **solo or dual guitar**, **target tempo, groove, and form** (the
+section sequence with per-span mode `free` / `quote` / `recompose`) — and you sign off
+before any tab is written. Tempo, groove and form are *decisions* at this gate, not
+inheritances from the source.
+
+**Style** picks the weights the soft advisories grade against — `hard-rock` (the default),
+`metal`, `blues`, `jazz`. It is **soft policy only**: a style can change the advice you
+get and can never change a hard gate result. Jazz is not penalised for lacking metal
+techniques, and metal is not penalised for omitting low-register thirds, because each
+style weights what it actually values. See `docs/specs/style-profile-reference.md`.
+
+**Solo is the default.** A second guitar is opt-in: pass
+`--arrangement-mode dual-guitar --lead 0 --rhythm 1` and the gate grades the melodic
+skeleton against the **lead** track only, root motion against both, and mechanics against
+each part independently. Roles are never inferred — declaring nothing keeps you in solo,
+so a two-track score does not silently become a duet.
 
 **Gate B — Per chunk (the loop).** For each chunk the assistant declares the span's map
 entry (mode + source-bar tie-in), writes the tab bars into `projects/<slug>/cover.alphatab`,
@@ -102,22 +117,62 @@ fallback.
 The digest (`source.json`) sits next to the tab, so `check.mjs` resolves it automatically —
 no `--digest` needed when you run from inside the project folder.
 
+**Audition beyond the editor.** Export the tab to MIDI for a DAW or amp sim — this is the
+path to hearing it with a real guitar tone, because MIDI carries **notes, not tone**:
+```
+node tools/export-midi.mjs projects/<slug>/cover.alphatab --out cover.mid
+```
+It refuses to write over the source even with `--force`, makes overwrite opt-in, and
+writes atomically, so a crash leaves the old file or no file — never a truncated one a DAW
+will cheerfully open. A dual-guitar arrangement arrives as two MIDI tracks. There is also
+an optional offline WAV render (`tools/render-audio.mjs`) that is useful for phrasing,
+form and tempo and **useless for tone**; it says so on every run.
+
 **Final — Assemble.** The approved chunks are stitched into the complete tab and given
 one last full-length `check.mjs` + audition.
 
 ### The one command to remember
 ```
-cd projects/<slug> && node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean]
+cd projects/<slug> && node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-<last> [--transpose N] [--gain high|crunch|clean] [--style hard-rock|metal|blues|jazz]
 ```
 (`history.mjs check` runs the `check.mjs` gate and versions the result; run bare `check.mjs`
 only for the `--bars`-only debugging fallback.)
 (`source.json` auto-resolves next to `cover.alphatab`; pass `--digest <path>` only to override.)
-Exit `0` = no hard failure, `1` = a hard gate failed, `2` = usage / IO error. Soft
-findings (tone advisories, reduction density, dropped notes, chord quality, contour) are
-printed but never fail the gate. `--map` switches the gate into per-span mode: `quote`
-spans enforce in-order skeleton + root motion, `recompose` spans enforce root motion
-only, `free` spans (added material) enforce nothing. `--transpose N` means the tab is
-written N semitones above the source — derive N from the key you chose at Gate A.
+
+**Exit `0`** = no hard failure, **`1`** = a hard gate failed, **`2`** = malformed input,
+bad configuration or an operational failure. `--map` switches the gate into per-span mode:
+`quote` spans enforce in-order skeleton + root motion, `recompose` spans enforce root
+motion only, `free` spans (added material) enforce nothing. `--transpose N` means the tab
+is written N semitones above the source — derive N from the key you chose at Gate A.
+
+### Hard versus soft
+
+**Hard** findings fail the gate and exit `1`: syntax and bar-fill errors, mechanical
+impossibilities (an unreachable grip, a 3-note non-adjacent attack, a fret that does not
+exist, a broken tie), and the fidelity gate's melodic-skeleton / harmonic-root / melody-
+contract obligations.
+
+**Soft** findings never fail anything. They are questions addressed to the arranger, and
+the arranger owns the answer — fingering suggestions, guitar-idiom density, harmonic
+colour loss, sidecar proportion, pick demand, gain-aware voicing, reduction density,
+dropped notes, chord quality, contour. `check.mjs --json` groups them under five keys
+(`playability`, `compare`, `fingering`, `idiom`, `sidecar`), always present, always arrays.
+
+A passing arrangement should produce **few enough findings to read** — the calibration
+corpus enforces at most 12, and at most 4 of any one code. If you see more, something is
+miscalibrated; say so rather than working around it. Every code is documented in
+`docs/specs/advisory-reference.md`. `--warnings-as-errors` is the opt-in route to a
+zero-warning policy.
+
+### Project configuration
+
+Drop a `config.json` next to the tab (`projects/<slug>/config.json`) to state the
+instrument and the defaults for that song — fret count, string count, style, gain. One
+precedence rule everywhere: **CLI flag > nearest `config.json` > built-in default**
+(22 frets, 6 strings, `hard-rock`, `high` gain, `solo`). `check.mjs --json` reports a
+`provenance` map saying *why* each resolved value is what it is. A `--policy
+guitar-policy.json` is a different question and both stay in force: the instrument limit
+says the fret does not exist; the project policy says you chose not to go there.
 
 ## What lives where
 
@@ -183,5 +238,14 @@ independent parties, not asserted.
 - **`reference/`** — the craft library: AlphaTex language and piano reading,
   electric-guitar voice, rock-riff construction, piano-to-guitar arranging, fretboard,
   playability, theory, tunings, and the Canon Rock case study.
+- **`docs/specs/`** — the frozen contracts and the evidence behind them:
+  `advisory-reference.md` (every soft finding, what it means, what it is sensitive to),
+  `style-profile-reference.md` (the four styles and what each weights),
+  `upgrade-contracts.md` + `wave3-6-addendum.md` (C1–C15 and A1–A6),
+  `wave6-advisory-coverage.md` (which fixture proves each code, both halves),
+  `wave6-regression-lock.md` (what may never change without a decision).
 - **`tools/fixtures/` + `tools/smoke.mjs`** — the regression corpus. Every fixture is named
   for what it tests and its contract is enforced by the smoke runner, not by a comment.
+  `tools/fixtures/scenarios/manifest.json` is the **paired calibration corpus**: each
+  scenario belongs to a pair that declares the one dimension it varies, so a difference in
+  the advice can only come from that dimension.

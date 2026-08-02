@@ -178,8 +178,10 @@ stronger guarantee than shipping a zero.
 **Calibrated thresholds.** `warnBelow` is not a guess: it was measured against
 `tools/fixtures/idiom/*` and set so the piano-literal fixture warns in every
 style while idiomatic writing stays quiet in the style that claims it.
-hard-rock 2.5, metal 3.0, blues 2.5, jazz 2.5. Wave 6 re-runs this calibration
-against the paired scenario fixtures.
+hard-rock 2.5, metal 3.0, blues 2.5, jazz 2.5. Wave 6 **re-ran** this calibration
+against the paired scenario fixtures and changed no threshold: every style's
+idiomatic fixture stays quiet and every style's literal fixture warns, at the
+values above. See `docs/specs/wave6-advisory-coverage.md`.
 
 ---
 
@@ -258,6 +260,42 @@ free" is ill-defined and is not computed.
 * Views: `lead` for melodic skeleton / contour / ordering; `union(lead, rhythm)`
   for root motion and pitch-class coverage; `allGuitar` for mechanical checks.
 * Roles are never inferred when configuration is explicit (C15).
+
+---
+
+## A5.1 — Wave 6 implementation status
+
+Wave 6 was the validation and calibration wave: it added no analyzer and changed
+no threshold. What it produced is evidence, and three documents that say what the
+evidence is.
+
+**Complete.**
+
+* Paired scenario corpus with declared axes — `tools/fixtures/scenarios/manifest.json`
+  at `schemaVersion 2`, 14 scenarios in 7 pairs across the `target`, `style`,
+  `map` and `roles` axes, enforced by `tools/lib/scenarios.test.mjs`.
+* Advisory coverage ledger — `docs/specs/wave6-advisory-coverage.md`. Every code
+  now has a triggering and a non-triggering fixture; the four that had none at
+  the start of the wave (`compare.dropped-notes`, `compare.low-density`,
+  `compare.chord-quality`, `policy-fret-span`) and the one asserted only by a
+  comment (`gain-voicing`) all have both halves.
+* Regression lock — `docs/specs/wave6-regression-lock.md` and
+  `tools/regression-lock.test.mjs`: exit-code table, defaults, anti-vacuity,
+  the §A.2 pcset narrowing, a determinism matrix, and a C15 no-mutation sweep
+  across all 15 user-facing analysis commands.
+* Baseline record — `docs/specs/wave6-baseline.md`.
+* Documentation reconciled against actual `--help` output for every CLI.
+
+**Deliberately not done.**
+
+* No `configuration`-axis pair exists in the manifest. The two claims that axis
+  would have carried — "solo is the default" and "declaring correct dual roles
+  changes nothing" — are runner-level invariants instead, because expressing them
+  as a pair would have required a scenario that is a byte-for-byte copy of
+  another with a different `id`. A copy is not a comparison.
+* `techniqueBias` stays reserved and empty (Wave 3 §7.4). No subshape was frozen
+  in Wave 6 either, and accepting keys into an unspecified object is how an
+  unspecified object acquires semantics by accident.
 
 ---
 

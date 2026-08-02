@@ -134,9 +134,17 @@ for confirmation. `data.r` carries the magnitude.
 
 ### `compare.dropped-notes`, `compare.low-density`, `compare.chord-quality`
 
-Bar-locked mode only, all **informational**. A rock reduction is supposed to be
+**Bar-locked mode only** — with `--map`, compare speaks per entry and these three
+are not computed at all. All **informational**. A rock reduction is supposed to be
 sparse (`AGENTS.md`: "Low density is expected and good"), and a power chord
 renders both major and minor correctly.
+
+`compare.dropped-notes` is emitted **once per bar**, so a consumer can locate the
+losses; `data.notes` keeps every pitch-class name even when the prose truncates
+the list at eight. It is exempt from the corpus's per-code deduplication ceiling
+for that reason. `compare.low-density` carries `data.percent` (source notes
+retained) and only fires below 100%. `compare.chord-quality` carries
+`data.power` / `data.exact`.
 
 ### `pick-demand.hard` / `.expert` / `.avoid` — *tools/playability.mjs*
 
@@ -146,10 +154,51 @@ of attacks, not once per beat. Never gates.
 
 ### Native playability warnings (`type`, not `code`)
 
-`sustain`, `gain-voicing`, `non-adjacent-dyad`, `harmonic-node-extended`,
-`position-jump-slow`. These predate the advisory contract and keep their native
-shape. `gain-voicing` is deduplicated per distinct low-third grip and carries
-`occurrences`.
+These predate the advisory contract and keep their native `{type, message, bar, …}`
+shape (C3 forbids retro-fitting them). All six are soft.
+
+| `type` | Fires when | Notes |
+|---|---|---|
+| `sustain` | a note is held past the guitar's decay with no `{lr}`, `{tp}`, `{v}` or re-attack | **per bar by contract** — a reader wants to know which bars |
+| `gain-voicing` | a 3rd sounds over a root **below G3** under **high** gain | deduplicated per distinct low-third grip, carries `occurrences` |
+| `non-adjacent-dyad` | two struck notes on non-adjacent strings, no brush/arpeggio | hybrid picking is an ordinary technique, so this is a decision, not a defect. **Three or more** is a hard error |
+| `harmonic-node-extended` | a natural harmonic at fret 4 / 9 / 16 / 24 | the reliable nodes (5/7/12/19) are silent; anywhere else is a hard error |
+| `position-jump-slow` | the hand shifts more than 5 frets, but with time to do it | the same shift under time pressure is playability's hard `position-jump` |
+| `policy-fret-span` | a grip spans more than the project policy's `preferredFretSpan` | needs `--policy` to exist at all; **strictly greater-than**, so a span landing exactly on the preference is within it |
+
+`policy-fret-span` is the only soft member of the `policy-*` family — the other
+six (`policy-fast-attack`, `policy-max-simultaneous`, `policy-max-fret`,
+`policy-brush`, `policy-roll`, `policy-mute`, `policy-rapid-grip`) are hard errors
+that exit `1`. A *preferred* span is a preference; a policy **maximum** is a rule.
+
+---
+
+## What each code is sensitive to
+
+If a finding reads wrong, this table says which knob to reach for. **Nothing here
+moves a hard gate except roles**, and roles move it only through the lead view,
+which is the documented point of roles.
+
+| Code | Style | Gain | Roles | `--map` | `--policy` | Safe to ignore deliberately? |
+|---|---|---|---|---|---|---|
+| `fingering.better-fingering` | – | – | – | – | – | **Often.** It costs the *hand*, not the *voice*: the same pitch in two positions is two instruments |
+| `fingering.position-jump` | – | – | – | – | – | Yes, if the shift is the phrasing you want |
+| `fingering.stretch` | – | – | – | – | – | Yes, if your hand covers it |
+| `lead.string-leap` | – | – | **yes** | – | – | Yes, if the leap is the gesture. Check `data.considered` first — it lists every suppressor that was tested |
+| `idiom.low-density` | **yes** | – | – | – | – | Only after checking the style is right. Grading blues against hard-rock weights is where most false-feeling advice comes from |
+| `harmonic-flattening` | **yes** (metal disables it) | **yes** (a low 3rd under high gain is exempt; a lost 7th never is) | – | **map only** | – | Yes for a deliberate power-chord reduction — but it needs *sustained* loss to fire at all |
+| `sidecar.high-free-share` | **yes** | – | – | **map only** | – | **Usually.** A cover with an intro, a solo and an outro is supposed to have a high free share |
+| `compare.contour` | – | – | **yes** | – | – | Yes — inverting a line is a legitimate arranging choice; it asks for confirmation |
+| `compare.dropped-notes` | – | – | – | **bar-locked only** | – | Yes. Reduction is the job |
+| `compare.low-density` | – | – | – | **bar-locked only** | – | Yes — informational. "Low density is expected and good" |
+| `compare.chord-quality` | – | – | – | **bar-locked only** | – | Yes — informational, and a missing 3rd is never a miss |
+| `pick-demand.*` | **yes** | – | – | – | – | Your call; it is the reference's table, not a verdict on you |
+| `sustain` | – | – | – | – | – | Yes for a deliberately decaying note |
+| `gain-voicing` | indirect (via a profile's `defaultGain`) | **yes** (`high` only) | – | – | – | Yes if you want the mud. The remedy is to move the 3rd up an octave or drop it |
+| `non-adjacent-dyad` | – | – | – | – | – | Yes if you are hybrid picking |
+| `harmonic-node-extended` | – | – | – | – | – | Yes if your instrument speaks there |
+| `position-jump-slow` | – | – | – | – | – | Yes |
+| `policy-fret-span` | – | – | – | – | **yes** | Yes — it is *your* policy |
 
 ---
 

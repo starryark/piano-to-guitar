@@ -180,15 +180,15 @@ below for detail.
 | **tab-events** | `node tools/tab-events.mjs <file.alphatab> [--bars N-M] [--json]` | **Parser-grounded event inspector** (PTG-native): what alphaTab ACTUALLY parsed, not what the AlphaTex text appears to mean. Per bar/onset: MIDI+name, string/fret, duration, tie origin/destination, ATTACK vs CONTINUATION (chain sounding duration on heads), brush/arpeggio, hammer/pull/slide, vibrato/let-ring, tuplet ratio — plus a text-vs-model tie audit (`!! N tie-shaped token(s) parsed as fresh attacks`). **Mandatory whenever ties, cross-bar sustains, or unusual effects are introduced.** `0` ok, `1` parse fail, `2` usage. |
 | **validate** | `node tools/validate.mjs [--strict] <tab.alphatab>` | AlphaTex syntax + per-voice bar-fill. `1` on error; `--strict` makes fill warnings fatal (`check.mjs` always uses `--strict`). |
 | **playability** | `node tools/playability.mjs <tab> [--bars N-M] [--gain high\|crunch\|clean] [--policy <guitar-policy.json>] [--max-fret N] [--warnings-as-errors]` | Mechanical + gain/tonal check. Emits `errors[]` (hard) **and** `warnings[]` (soft). **Exit `0` when `errors[]` is empty (warnings do NOT fail it), `1` on any hard error, `2` on usage/IO.** Default gain `high` (a policy's `gain` applies when `--gain` is absent). **`--max-fret N`** sets the instrument's fret count (`--max-fret` > nearest `config.json` > 22); exceeding it is a hard `fret-range` error. **`--policy`** adds project texture constraints — a *separate*, usually stricter ceiling (`policy-max-fret`), `fastAttackMaxNotes` at/below `fastAttackThreshold` beats, `maxSimultaneousNotes`, brush/roll/mute bans, rapid-repeated-grip, preferred fret span (soft). **Tie integrity is always on**: a tie-shaped token that parsed into a fresh attack (`tie-without-origin`) or a pitch-changing chain is an error. Soft advisories include `non-adjacent-dyad` (hybrid picking), `harmonic-node-extended` (frets 4/9/16/24), `pick-demand.hard\|expert\|avoid` (the reference's tempo × subdivision table, never gating), `sustain`, `gain-voicing`, `position-jump-slow`. **`--warnings-as-errors`** escalates soft advisories into `errors[]` for zero-warning approval policies. |
-| **fingering** | `node tools/fingering.mjs <tab> [--bars N-M] [--max-fret N] [--json]` | **Phrase-level fingering analyzer** (PTG-native, Wave 2). Asks what the per-beat checks cannot: *given the pitches already committed to, is there a better way for a HAND to play this phrase?* Beam-limited Viterbi DP over phrase windows (a phrase ends at a rest or after a note ≥ 2 beats), costing hand-station shifts **time-aware** (the same shift costs 8× between 16ths as after a half note), string crossings/skips, stretch past the 4-fret CAGED window and high positions, minus anchored common tones and genuinely useful open strings. **It never rewrites the tab** — the output is a recommendation with a stated reason. Technique is protected: harmonics / ties / let-ring / dead notes are **pinned**; bends, palm mutes and vibrato are **filtered** to positions that still permit the technique; a hammer/pull or slide pair may move only **together, on one string**. A **written open string is never traded for a fretted position** (one-directional — fretted → open stays available, since that is the useful-open-string case). Emits `fingering.better-fingering`, `fingering.position-jump`, `fingering.stretch` — each *only* where a cheaper legal alternative actually exists, and repeated identical findings collapse into one carrying `data.occurrences`, so an already-idiomatic riff draws silence. Soft-only: exit `0` always, `2` on usage/IO/parse. **Point it at the TAB, not the source:** a staff with no string tuning (every piano `\staff { score }`) has no fingering at all, and is skipped with a reason rather than guessed at. Standard tuning only (a non-6-string staff is likewise skipped). |
+| **fingering** | `node tools/fingering.mjs <tab> [--bars N-M] [--max-fret N] [--arrangement-mode solo\|dual-guitar] [--lead 0,2] [--rhythm 1,3] [--json]` | **Phrase-level fingering analyzer** (PTG-native, Wave 2). Asks what the per-beat checks cannot: *given the pitches already committed to, is there a better way for a HAND to play this phrase?* Beam-limited Viterbi DP over phrase windows (a phrase ends at a rest or after a note ≥ 2 beats), costing hand-station shifts **time-aware** (the same shift costs 8× between 16ths as after a half note), string crossings/skips, stretch past the 4-fret CAGED window and high positions, minus anchored common tones and genuinely useful open strings. **It never rewrites the tab** — the output is a recommendation with a stated reason. Technique is protected: harmonics / ties / let-ring / dead notes are **pinned**; bends, palm mutes and vibrato are **filtered** to positions that still permit the technique; a hammer/pull or slide pair may move only **together, on one string**. A **written open string is never traded for a fretted position** (one-directional — fretted → open stays available, since that is the useful-open-string case). Emits `fingering.better-fingering`, `fingering.position-jump`, `fingering.stretch` — each *only* where a cheaper legal alternative actually exists, and repeated identical findings collapse into one carrying `data.occurrences`, so an already-idiomatic riff draws silence. Soft-only: exit `0` always, `2` on usage/IO/parse. **Point it at the TAB, not the source:** a staff with no string tuning (every piano `\staff { score }`) has no fingering at all, and is skipped with a reason rather than guessed at. Standard tuning only (a non-6-string staff is likewise skipped). |
 | **idiom** | `node tools/idiom.mjs <tab> [--bars N-M] [--style NAME] [--json]` | **Guitar-idiom density** (PTG-native, Wave 3). Asks whether a passage BEHAVES like guitar music, judged by the chosen style's weights — power chords, octaves, shell voicings, pedal tones, palm-muted runs, lead articulation, recurring riff cells, syncopation, fragmentation, and literal block-chord density as negative pressure. Every stylistic opinion lives in `reference/styles/*.json`; this tool only measures, which is why a zero-weighted feature (jazz's palm muting) cannot move a score in either direction. Emits `idiom.low-density`, at most once per run. **"Not measured" is never "measured zero"**: a single-note line has no grips to classify, so grip features drop out of BOTH sides of the ratio, and a passage below the style's `minAttacks` reports `score: null` rather than a confident 0. Soft-only: exit `0` always, `2` on usage/parse/unknown style. |
-| **sidecar-audit** | `node tools/sidecar-audit.mjs --digest <source.json> --map <sidecar.json> [--bars N-M] [--style NAME] [--json]` | **Reads the correspondence map as a whole** (PTG-native, Wave 4). Uses the GATE's own sidecar validator, so it can never report on a map `compare.mjs` would refuse. Reports TWO DISJOINT SPACES (contract C10): tab space (quote/recompose/contract/free bars, free share) and source space (bars protected by quote/contract, bars only under recompose, never referenced, referenced more than once) plus melody-skeleton coverage. **`free` exists in tab space and NOWHERE else** — a free span has no `sourceBars` by construction, so "what share of the source is free" is ill-formed and is not computed. Every source figure is a SET: a bar quoted three times is ONE bar of coverage. Emits `sidecar.high-free-share`. Soft-only: `0` / `2`. |
+| **sidecar-audit** | `node tools/sidecar-audit.mjs --digest <source.json> --map <sidecar.json> [--bars N-M] [--style NAME] [--contract <melody-contract.json>] [--json]` | **Reads the correspondence map as a whole** (PTG-native, Wave 4). Uses the GATE's own sidecar validator, so it can never report on a map `compare.mjs` would refuse. Reports TWO DISJOINT SPACES (contract C10): tab space (quote/recompose/contract/free bars, free share) and source space (bars protected by quote/contract, bars only under recompose, never referenced, referenced more than once) plus melody-skeleton coverage. **`free` exists in tab space and NOWHERE else** — a free span has no `sourceBars` by construction, so "what share of the source is free" is ill-formed and is not computed. Every source figure is a SET: a bar quoted three times is ONE bar of coverage. Emits `sidecar.high-free-share`. Soft-only: `0` / `2`. |
 | **export-midi** | `node tools/export-midi.mjs <tab> --out <file.mid> [--force] [--single-track] [--json]` | **Standard MIDI export** (PTG-native, Wave 5) — the path into a DAW or amp sim. A dual-guitar arrangement arrives as two MIDI tracks. Refuses to write over the source (even with `--force`), never creates parent directories, makes overwrite opt-in, and writes atomically via a temp file in the destination dir — a crash leaves the old file or no file, never a truncated one a DAW will cheerfully open. `0` ok, `2` usage/parse/IO. **Exports NOTES, not TONE.** |
-| **render-audio** | `node tools/render-audio.mjs <tab> --out <file.wav> [--soundfont <f.sf2>] [--force] [--json]` | **OPTIONAL** offline audio (PTG-native, Wave 5). Renders to WAV in Node with no new dependency — alphaTab ships its own SoundFont. Useful for phrasing, form and tempo; **useless for tone**, and it says so on every run (C15). See `docs/specs/audio-rendering-decision.md`. `0` / `2`. |
+| **render-audio** | `node tools/render-audio.mjs <tab> --out <file.wav> [--soundfont <f.sf2>] [--sample-rate N] [--force] [--json]` | **OPTIONAL** offline audio (PTG-native, Wave 5). Renders to WAV in Node with no new dependency — alphaTab ships its own SoundFont. Useful for phrasing, form and tempo; **useless for tone**, and it says so on every run (C15). See `docs/specs/audio-rendering-decision.md`. `0` / `2`. |
 | **compare** | `node tools/compare.mjs <tab> <digest.json> --bars N-M [--transpose N] [--json] [--map <sidecar.json>] [--contract <melody-contract.json>] [--style NAME] [--gain …] [--arrangement-mode …] [--lead …] [--rhythm …]` | **The fidelity gate.** `--bars N-M` is always required (scopes the tab range). Without `--map`: bar-locked 1:1 — HARD on melodic-skeleton + harmonic-root coverage. With `--map <sidecar.json>`: per-entry, mode-aware — `quote` enforces in-order skeleton + root motion, `recompose` enforces root motion only, `free` enforces nothing (added material), **`contract`** enforces a melody-contract phrase (octave-exact pitches under relocation, phrase order, minimum sounding durations, DISTINCT repeated attacks, required gaps, forbidden textures) plus root motion, **`contract-recompose`** the same with harmony relaxed. The contract file comes from `--contract` or the sidecar's top-level `"contract"` path and is fully validated before any gate runs — invalid/vacuous = exit 2, and a contract span reports non-zero obligation totals or FAILS (anti-vacuity). SOFT in all modes: chord quality, density %, dropped notes, contour. `0` all hard gates pass, `1` any hard-fail, `2` IO/usage or a digest missing required fields. |
-| **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--style …] [--arrangement-mode …] [--lead 0,2] [--rhythm 1,3] [--digest …] [--max-fret N] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. **Digest resolution:** the co-located `projects/<slug>/source.json` auto-resolves when you run from inside the project dir (`node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-N`); pass `--digest projects/<slug>/source.json` explicitly when running from repo root. |
+| **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--style …] [--arrangement-mode …] [--lead 0,2] [--rhythm 1,3] [--digest …] [--contract <melody-contract.json>] [--policy <guitar-policy.json>] [--max-fret N] [--warnings-as-errors] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. **Digest resolution:** the co-located `projects/<slug>/source.json` auto-resolves when you run from inside the project dir (`node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-N`); pass `--digest projects/<slug>/source.json` explicitly when running from repo root. |
 | **history** | `node tools/history.mjs <check\|snap\|verdict\|final-review\|list\|diff\|show\|restore\|export> …` | **The per-project tab version store** (PTG-native). `history.mjs check <tab> [check-args…]` is the Gate-B command: it wraps `check.mjs` (same report + exit code) and de-dup-snapshots each gated iteration of `cover.alphatab`+`sidecar.json` — **plus the melody contract, guitar policy, machine gate report, and foreground.json in force** — into `projects/<slug>/history/`, recording `contractHash`/`policyHash` so an old PASS stays reproducible after a contract edit (an edit is a distinct iteration by construction). `snap` checkpoints without gating; `verdict <APPROVED\|REVISE:tag> [--recognizability A] [--playability-review A]` annotates the latest version (+ a `sessions.md` stub); **`final-review <tab>`** assembles the end-of-project evidence (themes, sections, relocations, fastest events, tuplets, long arrivals, multi-note attacks, tie audit, per-chunk gate/verdict status, contract drift) without replacing the human audition; `list` / `diff <a> [b]` (bar-aware) / `show` / `restore <seq>` (non-destructive) / `export` manage the store. Exit `0`/`1` (mirrors check) / `2` usage. The store lives inside the gitignored project dir — local by construction. |
-| **smoke** | `npm run smoke` | End-to-end toolchain health check (16 checks) over `tools/fixtures/`. Run after a clone or any change to `tools/`. `npm test` runs the fretboard + analysis + piano-source + ties + foreground + contract + sidecar + project-config + pick-demand + fingering + playability + history unit suites. |
+| **smoke** | `npm run smoke` | End-to-end toolchain health check over `tools/fixtures/` — every style profile, both arrangement modes, MIDI validity, and a repeated full-gate run diffed byte for byte. Run after a clone or any change to `tools/`. **`npm test`** runs every unit and integration suite in `tools/` and `tools/lib/`, including the paired **scenario corpus** (`tools/lib/scenarios.test.mjs`) and the **regression lock** (`tools/regression-lock.test.mjs`). Both commands print their own totals; this table deliberately does not restate a count that would go stale. |
 
 **`--transpose N` convention:** N = the tab is written N semitones **above** the source
 (a source in E♭ played on a guitar in E is `--transpose 1`). Comparison happens in source
@@ -240,8 +240,8 @@ transposes.** If you propose a transposition, argue it from the fretboard, not f
   already well-fingered riff draws total silence. A suggestion also never proposes something a
   hard gate would reject: candidates are re-checked against `isPlayableVoicing`, against the
   3+-non-adjacent-string pick-reachability error, and against playability's >5-fret/16th
-  `position-jump`. `soft.fingering` in `check.mjs --json` stays `[]` until **Wave 3** wires the
-  engine into the gate pipeline — the library and its CLI are the Wave 2 deliverable.
+  `position-jump`. The engine **is** wired into the gate pipeline: `soft.fingering` in
+  `check.mjs --json` carries `fingering.*` and `lead.*` findings on every run.
   **Two traps found while building it, both now pinned by tests.** (1) A staff carries a
   `stringTuning` only when it is a FRETTED staff; a piano `\staff { score }` reports none and
   its notes come back `string:-1, fret:-1`. Defaulting that to "6 strings" produced an
@@ -315,6 +315,80 @@ transposes.** If you propose a transposition, argue it from the fretboard, not f
 
 ---
 
+## The soft channel, and the rules for adding to it
+
+`check.mjs --json` always emits **five** soft arrays (C4), in this order, whether
+or not anything ran: `playability`, `compare`, `fingering`, `idiom`, `sidecar`.
+An empty array means *the stage produced nothing*. A stage that could not run is
+an operational failure — exit `2` — never an empty array.
+
+* `soft.playability` keeps playability's **native** `{type, message, bar, …}`
+  shape; it predates the advisory contract and C3 forbids retro-fitting it.
+* The other four are C3 advisories: `{code, severity, message, track?, staff?,
+  bar?, beat?, data?}`.
+* `lead.*` rides in `soft.fingering` by design (addendum §A4) — same question,
+  same hand, same CLI. A sixth soft key would break every consumer that
+  feature-detects on the five.
+
+Every code, its evidence fields, and what it is sensitive to lives in
+**`docs/specs/advisory-reference.md`**. The ledger of which fixture proves each
+one lives in **`docs/specs/wave6-advisory-coverage.md`**.
+
+**Which knobs move which findings.** Style moves `idiom.low-density`,
+`harmonic-flattening`, `sidecar.high-free-share` and `pick-demand.*`. Gain moves
+`gain-voicing` and `harmonic-flattening`. Roles move `lead.string-leap`,
+`compare.contour` and the **hard** melodic-skeleton gate. `--map` decides whether
+you get the map-only advisories (`harmonic-flattening`, `sidecar.*`) or the
+bar-locked-only ones (`compare.dropped-notes`, `compare.low-density`,
+`compare.chord-quality`). **Nothing but roles ever moves a hard gate.**
+
+### If you add or change a soft rule
+
+1. **Both halves, always.** A triggering fixture *and* a non-triggering one. A
+   corpus of positives proves only that the tools are loud. This is C11.6 and it
+   is not negotiable.
+2. **Assert the code, never the prose.** Wording is free to improve; a `code` is
+   a promise. There is no prose assertion anywhere in the scenario corpus.
+3. **Carry evidence.** Every C3 advisory needs a non-empty `data` object, and the
+   scenario corpus can demand named fields inside it.
+4. **Deduplicate to a region.** One root problem is one finding with an
+   `occurrences` count, not fourteen lines. The corpus caps any one code at 4 per
+   run; `sustain` and `compare.dropped-notes` are exempt because their repetition
+   is per-bar *by contract* — a reader wants to know which bars.
+5. **Prove it analysed something.** `0/0` is a PASS by construction, so a scenario
+   states a `requiredStats` floor (`analyzers.idiom.stats.attackEvents`,
+   `hard.playability.stats.notesAnalyzed`, …). A verdict over zero events is not
+   evidence.
+6. **Fixtures adapt to analyzers, not the reverse.** Never tune a threshold to
+   make a corpus test pass. Changing one requires a musically credible false
+   positive or negative, a minimal reproduction, a counterfixture proving the
+   correction does not overgeneralize, and unchanged hard behaviour.
+
+### The paired scenario corpus
+
+`tools/fixtures/scenarios/manifest.json` drives real `check.mjs` runs through
+`tools/lib/scenarios.test.mjs`. Every scenario belongs to exactly one **pair**,
+and the pair declares the **one** dimension it varies:
+
+| `variantAxis` | members share | members vary |
+|---|---|---|
+| `target` | source, map, style, gain, mode, roles, bars | the target tab |
+| `style` | source, target, map, mode, roles, bars | the style profile |
+| `map` | source, target, style, gain, mode, roles, bars | the sidecar |
+| `roles` | source, target, map, style, gain, bars | lead / rhythm |
+| `configuration` | source, target, map, style, bars | any other run flag |
+
+The runner enforces that before `check.mjs` runs once. A pair that varies two
+things at a time cannot attribute its own result, so it is a schema error rather
+than a confusing advisory diff. `polarity` says what a member claims —
+`positive` (stay quiet), `negative` (speak), `comparison` (neither; exists to be
+diffed) — and every pair needs at least one positive and one non-positive.
+
+`map: null` means bar-locked and must be **written**. An omitted key is a schema
+error, so "I forgot the map" can never read as "I meant bar-locked".
+
+---
+
 ## Vendoring provenance
 
 The gate tools are **vendored from `abc-to-guitar@ba7e29c`** — a snapshot, not a live
@@ -339,7 +413,17 @@ Piano-to-guitar/
 ├─ package.json     deps: @coderline/alphatab ONLY
 ├─ docs/            the vendor-neutral instruction set (any CLI reads these)
 │   ├─ workflow.md          the gated procedure (Step 0 / Gate A / Gate B / Final)
-│   └─ gate-templates.md    copy-paste gate presentation templates
+│   ├─ gate-templates.md    copy-paste gate presentation templates
+│   └─ specs/               the frozen contracts and the evidence behind them
+│       ├─ upgrade-contracts.md        C1–C15, authoritative
+│       ├─ wave3-6-addendum.md         A1–A6, what C1–C15 left open
+│       ├─ advisory-reference.md       every soft finding, what it means
+│       ├─ style-profile-reference.md  the four styles and what they weight
+│       ├─ tooling.md                  per-tool detail
+│       ├─ audio-rendering-decision.md why render-audio is optional
+│       ├─ wave6-baseline.md           the state validation started from
+│       ├─ wave6-advisory-coverage.md  the coverage ledger (every code, both halves)
+│       └─ wave6-regression-lock.md    what may never change without a decision
 ├─ .claude/skills/piano-to-guitar/   SKILL.md — thin pointer → docs/workflow.md
 ├─ reference/       the craft library you read to do the work
 │   ├─ alphatex-language.md         the AlphaTex you write (source + tab)
@@ -360,9 +444,16 @@ Piano-to-guitar/
 │   │               contract.mjs (melody-contract schema + validator),
 │   │               advisory.mjs (the C3 soft-finding shape), sidecar.mjs (C8),
 │   │               project-config.mjs (C5 precedence), pick-demand.mjs (C12),
-│   │               fingering.mjs (Wave 2 phrase-level fingering DP)
+│   │               fingering.mjs (phrase-level fingering DP + lead motion),
+│   │               style-profile.mjs (C6 loader), idiom.mjs (idiom density),
+│   │               harmonic-color.mjs (colour preservation),
+│   │               sidecar-audit.mjs (C10 map metrics),
+│   │               track-roles.mjs (A5 lead/rhythm views),
+│   │               midi-export.mjs + audio-render.mjs (the audition path)
 │   ├─ history.mjs  the per-project tab version store (PTG-native; wraps check.mjs)
 │   ├─ fixtures/    song-neutral regression corpus (see tools/smoke.mjs)
+│   │   └─ scenarios/manifest.json   the paired calibration corpus
+│   ├─ regression-lock.test.mjs   the compatibility floor (see docs/specs/)
 │   └─ smoke.mjs    end-to-end health check
 ├─ projects/        one folder per song — you work inside these. ALL song content is
 │   │               LOCAL: everything under a <slug>/ is gitignored; only this README ships.

@@ -45,6 +45,7 @@ import {
   greedyFingering,
   currentPathCost,
   assertPitchPreserved,
+  collapseAcrossPhrases,
   noteRules,
   positionOf,
   maxShiftOf,
@@ -721,6 +722,62 @@ test('an empty score analyses to nothing rather than throwing', () => {
   assert.deepEqual(result.phrases, []);
   assert.deepEqual(result.advisories, []);
   assert.equal(result.stats.events, 0);
+});
+
+// ---------------------------------------------------------------------------
+// Run-level dedup: both halves
+// ---------------------------------------------------------------------------
+// The positive half — the same problem in many phrases becoming one finding —
+// only reproduces at length, so it lives in `tools/scale.test.mjs` against the
+// 200-bar fixture. What belongs HERE is the half that has no length requirement
+// and the worse failure mode: two DIFFERENT problems must never merge. An
+// over-eager key silently deletes findings, and a deleted finding leaves nothing
+// behind to notice.
+
+const adv = (code, track, data) => ({ code, track, message: `${code} on track ${track}`, data });
+
+test('identical problems in different phrases collapse into one with a count', () => {
+  const out = collapseAcrossPhrases([
+    adv('fingering.better-fingering', 0, { phrase: 0, bars: [1, 4], improvement: 2.1, reason: 'x', occurrences: 1 }),
+    adv('fingering.better-fingering', 0, { phrase: 1, bars: [5, 8], improvement: 2.1, reason: 'x', occurrences: 1 }),
+    adv('fingering.better-fingering', 0, { phrase: 2, bars: [9, 12], improvement: 2.1, reason: 'x', occurrences: 1 }),
+  ]);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].data.occurrences, 3);
+  assert.deepEqual(out[0].data.bars, [1, 4], 'the FIRST occurrence keeps the floor');
+  assert.match(out[0].message, /recurs in 2 other place/,
+    'a collapsed finding must say so, or "bars 1-4" reads as the only place it happened');
+});
+
+test('different problems never merge, however similar they look', () => {
+  const distinct = [
+    // Same code and track, different reason: two different problems.
+    adv('fingering.better-fingering', 0, { phrase: 0, bars: [1, 4], improvement: 2.1, reason: 'shift', occurrences: 1 }),
+    adv('fingering.better-fingering', 0, { phrase: 1, bars: [5, 8], improvement: 2.1, reason: 'stretch', occurrences: 1 }),
+    // Same data, different track: one hand each.
+    adv('fingering.better-fingering', 1, { phrase: 2, bars: [1, 4], improvement: 2.1, reason: 'shift', occurrences: 1 }),
+    // Same everything but the numbers.
+    adv('fingering.better-fingering', 0, { phrase: 3, bars: [9, 12], improvement: 9.9, reason: 'shift', occurrences: 1 }),
+    // A different code entirely.
+    adv('fingering.position-jump', 0, { fromPosition: 12, toPosition: 5, occurrences: 1 }),
+  ];
+  const out = collapseAcrossPhrases(distinct);
+  assert.equal(out.length, distinct.length, 'five distinct problems must stay five findings');
+  for (const a of out) {
+    assert.equal(a.data.occurrences, 1);
+    assert.doesNotMatch(a.message, /recurs in/, 'a lone finding must not claim repeats');
+  }
+});
+
+test('collapse does not depend on the order data keys were written in', () => {
+  // §A6: two advisories describing the same problem must key the same whether
+  // the analyzer happened to build `{a, b}` or `{b, a}`.
+  const out = collapseAcrossPhrases([
+    adv('fingering.stretch', 0, { span: 6, suggestedSpan: 4, occurrences: 1 }),
+    adv('fingering.stretch', 0, { suggestedSpan: 4, span: 6, occurrences: 1 }),
+  ]);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].data.occurrences, 2);
 });
 
 let failed = 0;

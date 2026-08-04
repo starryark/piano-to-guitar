@@ -1174,6 +1174,7 @@ export function analyzeFingering(score, opts = {}) {
             improvement: report.improvement,
             changes: report.changes.length,
             reason: report.reason,
+            occurrences: 1,
           },
         },
       ));
@@ -1183,7 +1184,7 @@ export function analyzeFingering(score, opts = {}) {
 
   return {
     phrases: reports,
-    advisories,
+    advisories: collapseAcrossPhrases(advisories),
     stats: {
       phrases: reports.length,
       events: eventCount,
@@ -1217,6 +1218,63 @@ function reasonFor(report) {
       + `(${current.crossings} -> ${suggested.crossings} string crossings)`;
   }
   return 'it lowers the total hand cost across the phrase';
+}
+
+/**
+ * The same doctrine one level up: ONE finding per distinct problem, across the
+ * WHOLE run rather than within one phrase.
+ *
+ * `locatedAdvisories` already dedupes inside a phrase, and that was enough while
+ * every fixture was a few bars long. It is not enough for real material. A
+ * 200-bar cover built from one repeated four-bar loop segments into ~50 phrases
+ * that pose the IDENTICAL question — same reason, same hand cost, same number of
+ * notes moved — and the analyzer reported it 32 times. Thirty-two copies of one
+ * sentence is how the finding gets scrolled past, which is the exact failure
+ * AGENTS.md forbids: "one root problem is one finding with an `occurrences`
+ * count, not fourteen lines."
+ *
+ * A problem's identity is its `data` MINUS where it happened. `phrase` and
+ * `bars` are location; everything else — the reason, the costs, the fret
+ * positions, the spans — is the problem. Two phrases agreeing on all of the
+ * latter are one finding, and the first one keeps the floor.
+ *
+ * The payload stays O(1) on purpose. Listing every bar would trade thirty-two
+ * advisories for one advisory carrying a thirty-two-element array, which is the
+ * same growth wearing a different hat: at 2000 bars it is a 300-element array
+ * inside a "deduplicated" finding. `occurrences` is a number, and a number does
+ * not grow.
+ *
+ * Exported for the same reason `assertPitchPreserved` is: the dangerous failure
+ * here is not collapsing too little but collapsing too MUCH, and a finding that
+ * disappears into another finding's count leaves no trace to notice. Both halves
+ * are pinned in `fingering.test.mjs`.
+ */
+export function collapseAcrossPhrases(advisories) {
+  const LOCATION_KEYS = new Set(['phrase', 'bars', 'occurrences']);
+  const firstSeen = new Map();
+  const out = [];
+  for (const a of advisories) {
+    const identity = Object.entries(a.data ?? {})
+      .filter(([k]) => !LOCATION_KEYS.has(k))
+      .sort(([x], [y]) => (x < y ? -1 : 1));           // §A6: key order is not data
+    const key = `${a.code}|${a.track ?? ''}|${JSON.stringify(identity)}`;
+    const prior = firstSeen.get(key);
+    if (prior) {
+      prior.data.occurrences += a.data?.occurrences ?? 1;
+      continue;
+    }
+    firstSeen.set(key, a);
+    out.push(a);
+  }
+  // Said once the count is known, so the reader is never left thinking the
+  // repeats happened inside the bars the message names.
+  for (const a of out) {
+    if ((a.data?.occurrences ?? 1) > 1) {
+      a.message += ` The same problem recurs in ${a.data.occurrences - 1} other place(s); `
+        + 'this is the first.';
+    }
+  }
+  return out;
 }
 
 /**

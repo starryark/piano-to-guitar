@@ -37,7 +37,8 @@ is the guitar tab plus your verdict on it.
 
 - **Node.js** (ESM) with the one dependency installed — `npm install`
   (`@coderline/alphatab` is the only entry in `dependencies`)
-- Works on Windows (PowerShell or Bash), macOS, Linux
+- Works on Windows (PowerShell or Bash), macOS, Linux — CI runs the full suite and
+  smoke on all three × Node 22 and 24, so this is a result rather than a claim
 - **No Python.** Unlike the predecessor, there is no Python runtime in this project.
 
 Verify the toolchain is healthy after cloning or changing anything in `tools/`:

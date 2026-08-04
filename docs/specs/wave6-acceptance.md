@@ -115,18 +115,37 @@ per-run. This is not a threshold change: no threshold moved, no hard result
 changed, and the fix implements a rule AGENTS.md and `fingering.mjs`'s own
 comments already stated.
 
-## Platform verification
+## Platform verification — the README's claim is now a result
 
-**Verified:** Windows 11 / Node 24.14.0, the environment above.
+The README has claimed "Windows, macOS, Linux" throughout, and until this point
+that was an assertion. `.github/workflows/ci.yml` exists to test exactly it:
+3 operating systems × Node 22 and 24, plus a cross-process smoke-determinism
+diff and a working-tree-clean check.
 
-**Not yet verified:** macOS and Linux, and Node 22. The README has claimed
-"Windows, macOS, Linux" throughout, and until Wave 6 that was an assertion rather
-than a result. `.github/workflows/ci.yml` was added to test exactly that claim —
-3 operating systems × Node 22 and 24, plus a cross-process smoke-determinism diff
-and a working-tree-clean check.
+**Run 1** (`8137b02`) — 0 of 6 rows green:
 
-**That workflow has never executed.** It runs on first push to the remote. If a
-row fails, the honest fix is to narrow the README's claim, not to delete the row.
+| Row | Result |
+|---|---|
+| windows-latest / node 22, 24 | `npm test` and smoke PASSED; failed the working-tree step |
+| ubuntu-latest / node 22, 24 | **`npm test` FAILED** — `compare.mjs produced no JSON` |
+| macos-latest / node 22, 24 | **`npm test` FAILED** — same |
+
+Two independent defects, both found only because the workflow finally ran:
+
+1. **Async-stdout truncation on POSIX** — the serious one. Every CLI could cut
+   off its own output on Linux and macOS. See "What the scale fixture found" in
+   `docs/specs/wave6-performance.md`; fixed in `tools/lib/emit.mjs`.
+2. **The working-tree step failed itself.** `git status --porcelain > dirty.txt`
+   created `dirty.txt` before git ran, so git reported `?? dirty.txt`. A false
+   positive about its own artefact, on its first-ever execution.
+
+**Run 2** (`9d2f8b4`) — **6 of 6 rows green**: ubuntu, macos and windows ×
+Node 22 and 24, each running `npm ci`, `npm test`, `npm run smoke`, the
+cross-process determinism diff and the working-tree check.
+
+The README's platform claim did not need narrowing. It needed the toolchain
+fixed, and the row that would have justified narrowing it was a real bug in the
+tools rather than a real limit on the platform.
 
 ## Deferred, and why
 

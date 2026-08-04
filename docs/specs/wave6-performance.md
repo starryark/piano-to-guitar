@@ -11,6 +11,7 @@ Everything below was run, not predicted.
 | | |
 |---|---|
 | Environment | Windows 11 Pro 10.0.26200, Node v24.14.0, npm 11.12.1 |
+| Cross-platform | CI green on ubuntu, macos and windows × Node 22 and 24 (run `9d2f8b4`) |
 | Fixture | `tools/fixtures/scale/` — 192 source bars → 200 tab bars, 2 tracks |
 | Harness | `npm run perf` (report), `tools/scale.test.mjs` (gate) |
 

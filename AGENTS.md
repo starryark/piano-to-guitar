@@ -188,7 +188,8 @@ below for detail.
 | **compare** | `node tools/compare.mjs <tab> <digest.json> --bars N-M [--transpose N] [--json] [--map <sidecar.json>] [--contract <melody-contract.json>] [--style NAME] [--gain …] [--arrangement-mode …] [--lead …] [--rhythm …]` | **The fidelity gate.** `--bars N-M` is always required (scopes the tab range). Without `--map`: bar-locked 1:1 — HARD on melodic-skeleton + harmonic-root coverage. With `--map <sidecar.json>`: per-entry, mode-aware — `quote` enforces in-order skeleton + root motion, `recompose` enforces root motion only, `free` enforces nothing (added material), **`contract`** enforces a melody-contract phrase (octave-exact pitches under relocation, phrase order, minimum sounding durations, DISTINCT repeated attacks, required gaps, forbidden textures) plus root motion, **`contract-recompose`** the same with harmony relaxed. The contract file comes from `--contract` or the sidecar's top-level `"contract"` path and is fully validated before any gate runs — invalid/vacuous = exit 2, and a contract span reports non-zero obligation totals or FAILS (anti-vacuity). SOFT in all modes: chord quality, density %, dropped notes, contour. `0` all hard gates pass, `1` any hard-fail, `2` IO/usage or a digest missing required fields. |
 | **check** | `node tools/check.mjs <tab> --bars N-M [--map <sidecar.json>] [--transpose N] [--gain …] [--style …] [--arrangement-mode …] [--lead 0,2] [--rhythm 1,3] [--digest …] [--contract <melody-contract.json>] [--policy <guitar-policy.json>] [--max-fret N] [--warnings-as-errors] [--json]` | **The one consolidated gate.** Runs validate --strict → playability → compare (bar-locked or sidecar-mode-aware), prints one report. Exits nonzero iff any HARD gate fails. **`--bars N-M` is required on every run** (it scopes the tab range); **`--map <sidecar>` selects correspondence-aware MODE and is mandatory for a cover** — a cover expands 2–4× (57 source bars → 210 tab bars in the corpus), so source and tab bar numbers do not line up and a bar-locked 1:1 gate (`--bars` without `--map`) is a debugging fallback only. **Digest resolution:** the co-located `projects/<slug>/source.json` auto-resolves when you run from inside the project dir (`node ../../tools/check.mjs cover.alphatab --map sidecar.json --bars 1-N`); pass `--digest projects/<slug>/source.json` explicitly when running from repo root. |
 | **history** | `node tools/history.mjs <check\|snap\|verdict\|final-review\|list\|diff\|show\|restore\|export> …` | **The per-project tab version store** (PTG-native). `history.mjs check <tab> [check-args…]` is the Gate-B command: it wraps `check.mjs` (same report + exit code) and de-dup-snapshots each gated iteration of `cover.alphatab`+`sidecar.json` — **plus the melody contract, guitar policy, machine gate report, and foreground.json in force** — into `projects/<slug>/history/`, recording `contractHash`/`policyHash` so an old PASS stays reproducible after a contract edit (an edit is a distinct iteration by construction). `snap` checkpoints without gating; `verdict <APPROVED\|REVISE:tag> [--recognizability A] [--playability-review A]` annotates the latest version (+ a `sessions.md` stub); **`final-review <tab>`** assembles the end-of-project evidence (themes, sections, relocations, fastest events, tuplets, long arrivals, multi-note attacks, tie audit, per-chunk gate/verdict status, contract drift) without replacing the human audition; `list` / `diff <a> [b]` (bar-aware) / `show` / `restore <seq>` (non-destructive) / `export` manage the store. Exit `0`/`1` (mirrors check) / `2` usage. The store lives inside the gitignored project dir — local by construction. |
-| **smoke** | `npm run smoke` | End-to-end toolchain health check over `tools/fixtures/` — every style profile, both arrangement modes, MIDI validity, and a repeated full-gate run diffed byte for byte. Run after a clone or any change to `tools/`. **`npm test`** runs every unit and integration suite in `tools/` and `tools/lib/`, including the paired **scenario corpus** (`tools/lib/scenarios.test.mjs`) and the **regression lock** (`tools/regression-lock.test.mjs`). Both commands print their own totals; this table deliberately does not restate a count that would go stale. |
+| **smoke** | `npm run smoke` | End-to-end toolchain health check over `tools/fixtures/` — every style profile, both arrangement modes, MIDI validity, and a repeated full-gate run diffed byte for byte. Run after a clone or any change to `tools/`. **`npm test`** runs every unit and integration suite in `tools/` and `tools/lib/`, including the paired **scenario corpus** (`tools/lib/scenarios.test.mjs`), the **regression lock** (`tools/regression-lock.test.mjs`) and the **scale suite** (`tools/scale.test.mjs`). Both commands print their own totals; this table deliberately does not restate a count that would go stale. |
+| **perf** | `npm run perf [-- --repeat N] [--json]` | **Stage timings over the 200-bar scale fixture** (PTG-native): parse, validate, playability, compare, fingering, idiom, sidecar-audit and the full gate, plus a digest-growth table. A **report, not a gate** — it asserts nothing and cannot fail a build, because a wall-clock threshold passes on a quiet laptop and fails on a busy CI runner. The scaling claims that ARE asserted live in `tools/scale.test.mjs` and are counts and bytes, never clocks. Observed numbers: `docs/specs/wave6-performance.md`. `0` measured, `2` usage/IO. |
 
 **`--transpose N` convention:** N = the tab is written N semitones **above** the source
 (a source in E♭ played on a guitar in E is `--transpose 1`). Comparison happens in source
@@ -355,6 +356,12 @@ bar-locked-only ones (`compare.dropped-notes`, `compare.low-density`,
    `occurrences` count, not fourteen lines. The corpus caps any one code at 4 per
    run; `sustain` and `compare.dropped-notes` are exempt because their repetition
    is per-bar *by contract* — a reader wants to know which bars.
+   **Dedup is a whole-run property, not a per-window one, and the evidence must
+   stay O(1).** Both halves were learned the hard way at 200 bars:
+   `fingering.better-fingering` deduplicated inside a phrase and so emitted 32
+   copies of one finding across 32 phrases, and collapsing those into a single
+   finding carrying a 32-element `bars` array would have been the same explosion
+   in a better hat. `tools/scale.test.mjs` checks both; a short fixture cannot.
 5. **Prove it analysed something.** `0/0` is a PASS by construction, so a scenario
    states a `requiredStats` floor (`analyzers.idiom.stats.attackEvents`,
    `hard.playability.stats.notesAnalyzed`, …). A verdict over zero events is not
@@ -423,7 +430,9 @@ Piano-to-guitar/
 │       ├─ audio-rendering-decision.md why render-audio is optional
 │       ├─ wave6-baseline.md           the state validation started from
 │       ├─ wave6-advisory-coverage.md  the coverage ledger (every code, both halves)
-│       └─ wave6-regression-lock.md    what may never change without a decision
+│       ├─ wave6-regression-lock.md    what may never change without a decision
+│       ├─ wave6-performance.md        stage timings, retention, what scale found
+│       └─ wave6-acceptance.md         the end-of-wave observed results
 ├─ .claude/skills/piano-to-guitar/   SKILL.md — thin pointer → docs/workflow.md
 ├─ reference/       the craft library you read to do the work
 │   ├─ alphatex-language.md         the AlphaTex you write (source + tab)
@@ -452,8 +461,12 @@ Piano-to-guitar/
 │   │               midi-export.mjs + audio-render.mjs (the audition path)
 │   ├─ history.mjs  the per-project tab version store (PTG-native; wraps check.mjs)
 │   ├─ fixtures/    song-neutral regression corpus (see tools/smoke.mjs)
-│   │   └─ scenarios/manifest.json   the paired calibration corpus
+│   │   ├─ scenarios/manifest.json   the paired calibration corpus
+│   │   └─ scale/generate.mjs        the 200-bar fixture's derivation — edit THIS,
+│   │                                never the .alphatab it writes
 │   ├─ regression-lock.test.mjs   the compatibility floor (see docs/specs/)
+│   ├─ scale.test.mjs   does it still behave at 200 bars? (counts, never clocks)
+│   ├─ perf.mjs     stage timings — a report, not a gate
 │   └─ smoke.mjs    end-to-end health check
 ├─ projects/        one folder per song — you work inside these. ALL song content is
 │   │               LOCAL: everything under a <slug>/ is gitignored; only this README ships.

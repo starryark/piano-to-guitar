@@ -33,7 +33,7 @@ tools are loud.
 
 | Code | Owner | Tier | Positive | Negative | Style | Gain | Role | Map | Required `data` | Dedup scope | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| `fingering.better-fingering` | `lib/fingering.mjs` | B | `fingering.test.mjs` (greedy-trap) | `fingering.test.mjs` (fingering-clean) | – | – | – | – | `phrase, bars, currentCost, suggestedCost, improvement, changes, reason` | per phrase | **covered** |
+| `fingering.better-fingering` | `lib/fingering.mjs` | B | `fingering.test.mjs` (greedy-trap) | `fingering.test.mjs` (fingering-clean) | – | – | – | – | `phrase, bars, currentCost, suggestedCost, improvement, changes, reason, occurrences` | identical suggestion collapses across phrases (`scale.test.mjs`) | **covered** |
 | `fingering.position-jump` | `lib/fingering.mjs` | B | `fingering.test.mjs` | `fingering.test.mjs` | – | – | – | – | `fromPosition, toPosition, suggestedFrom, suggestedTo, gapBeats, occurrences` | identical jump collapses to `occurrences` | **covered** |
 | `fingering.stretch` | `lib/fingering.mjs` | B | `fingering.test.mjs` (fingering-stretch) | `fingering.test.mjs` | – | – | – | – | `span, suggestedSpan, minFret, maxFret, occurrences` | identical stretch collapses | **covered** |
 | `lead.string-leap` | `lib/fingering.mjs` | A | `lead-motion.test.mjs`, `check.test.mjs` | `lead-motion.test.mjs` (rest/slide/tie/let-ring/legato), scenario `blues-lead-positive` forbids it | – | – | **yes** (lead view) | – | `fromString, toString, strings, fromBar, toBar, fromNote, toNote, semitones, gapBeats, voice, considered, occurrences` | identical leap collapses | **covered** |

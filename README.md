@@ -45,9 +45,16 @@ Verify the toolchain is healthy after cloning or changing anything in `tools/`:
 ```
 npm ci        # clean install from the lockfile
 npm test      # every unit + integration suite, including the paired scenario
-              # corpus and the regression lock — each prints its own totals
+              # corpus, the regression lock and the 200-bar scale suite —
+              # each prints its own totals
 npm run smoke # end-to-end run over tools/fixtures/ — expects SMOKE: PASS
 ```
+
+`npm run perf` is a fourth, optional command: stage-by-stage timings over the
+scale fixture. It is a **report and asserts nothing** — a wall-clock threshold
+passes on a quiet laptop and fails on a busy CI runner, so the scaling claims
+that are actually enforced are counts and bytes in `tools/scale.test.mjs`.
+Observed numbers and what they mean: `docs/specs/wave6-performance.md`.
 
 ## Arranging a piece
 

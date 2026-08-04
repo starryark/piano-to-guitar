@@ -44,11 +44,19 @@ clears both an absolute and a relative floor, so ties and rounding wins are
 silent.
 
 `data`: `phrase`, `bars`, `currentCost`, `suggestedCost`, `improvement`,
-`changes`, `reason`.
+`changes`, `reason`, `occurrences`.
 
 **Not automatically a defect.** The same pitch in two positions is two different
 voices (`reference/guitar-fretboard.md` → "Where a pitch sounds best"). This
 costs the *hand*, not the *voice*.
+
+**One finding per distinct problem, across the whole run.** A cover built from a
+repeated riff poses the identical question in every phrase — same reason, same
+costs, same number of notes moved. Those collapse into the FIRST phrase's
+finding, and `data.occurrences` carries the count; `phrase` and `bars` therefore
+locate the first occurrence, not all of them. Until the 200-bar scale fixture
+existed this collapse only happened *within* a phrase, and a long tab drew 32
+copies of one sentence (`tools/scale.test.mjs`, `docs/specs/wave6-performance.md`).
 
 ### `fingering.position-jump` — *tools/lib/fingering.mjs*
 

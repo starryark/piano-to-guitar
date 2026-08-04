@@ -95,6 +95,26 @@ covers structurally.
 | Codes with negative coverage | 20 |
 | Codes with **no** coverage at the Wave 6 baseline | 5 — now all covered |
 
+## §10.4 performance and scale — added after the table above
+
+The matrix and determinism halves of Plan.md §10.4 shipped with the rest of
+Wave 6. The **performance measurement** and **memory-and-scale fixture** halves
+did not, and were completed afterwards on this branch:
+`tools/fixtures/scale/` (192 source bars → 200 tab bars, 2 tracks, generated),
+`tools/scale.test.mjs` (11 claims, 4.5 s, no wall-clock assertions) and
+`npm run perf` (a report). Full detail, including the two things the fixture
+found, is in **`docs/specs/wave6-performance.md`**.
+
+Re-measured with it in place: `npm test` exits `0` in **116.9 s across 24
+suites**, `npm run smoke` still `SMOKE: PASS (21 checks)`. Still one
+dependency, `package-lock.json` still untouched.
+
+One defect was fixed as a result — `fingering.better-fingering` emitted 32
+identical advisories over 200 bars because its dedup was per-phrase rather than
+per-run. This is not a threshold change: no threshold moved, no hard result
+changed, and the fix implements a rule AGENTS.md and `fingering.mjs`'s own
+comments already stated.
+
 ## Platform verification
 
 **Verified:** Windows 11 / Node 24.14.0, the environment above.

@@ -116,6 +116,7 @@ runs.
 | Guarantee | File |
 |---|---|
 | Exit codes, defaults, anti-vacuity, §A.2, determinism matrix, C15 sweep | `tools/regression-lock.test.mjs` |
+| Behaviour at length: linear retention, bounded riff keys, advisory dedup across the whole run, determinism at 200 bars | `tools/scale.test.mjs` (see `docs/specs/wave6-performance.md`) |
 | Per-scenario expectations, pair invariants, advisory budgets | `tools/lib/scenarios.test.mjs` |
 | Configuration resolution and provenance, soft-key shape (C4) | `tools/check.test.mjs` |
 | Hard mechanical findings, gain/policy advisories, exit semantics per finding | `tools/playability.test.mjs` |

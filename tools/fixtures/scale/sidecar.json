@@ -1,0 +1,45 @@
+{
+  "song": "scale fixture — quote, recompose and free spans over 200 tab bars",
+  "entries": [
+    {
+      "mode": "quote",
+      "tabBars": [
+        1,
+        64
+      ],
+      "sourceBars": [
+        1,
+        64
+      ]
+    },
+    {
+      "mode": "recompose",
+      "tabBars": [
+        65,
+        128
+      ],
+      "sourceBars": [
+        65,
+        128
+      ]
+    },
+    {
+      "mode": "quote",
+      "tabBars": [
+        129,
+        192
+      ],
+      "sourceBars": [
+        129,
+        192
+      ]
+    },
+    {
+      "mode": "free",
+      "tabBars": [
+        193,
+        200
+      ]
+    }
+  ]
+}

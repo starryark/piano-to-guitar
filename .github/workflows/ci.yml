@@ -52,21 +52,25 @@ jobs:
       - name: Smoke is deterministic across processes
         shell: bash
         run: |
-          npm run smoke > smoke-1.txt
-          npm run smoke > smoke-2.txt
-          diff smoke-1.txt smoke-2.txt && echo "smoke output identical across runs"
+          npm run smoke > "$RUNNER_TEMP/smoke-1.txt"
+          npm run smoke > "$RUNNER_TEMP/smoke-2.txt"
+          diff "$RUNNER_TEMP/smoke-1.txt" "$RUNNER_TEMP/smoke-2.txt" \
+            && echo "smoke output identical across runs"
 
       # An analysis command must not write to what it reads, and no suite may
       # leave an artefact behind. `out/` is gitignored scratch; anything else
       # appearing here is a tool that mutated the tree.
+      # Nothing is written into the repo: `> dirty.txt` created the file BEFORE
+      # git ran, so git dutifully reported `?? dirty.txt` and this step failed
+      # itself on every platform. Its first-ever execution was a false positive
+      # about its own artefact.
       - name: Working tree is unchanged
         shell: bash
         run: |
-          rm -f smoke-1.txt smoke-2.txt
-          git status --porcelain > dirty.txt
-          if [ -s dirty.txt ]; then
+          dirty="$(git status --porcelain)"
+          if [ -n "$dirty" ]; then
             echo "::error::the test run modified tracked files:"
-            cat dirty.txt
+            echo "$dirty"
             exit 1
           fi
           echo "working tree clean"

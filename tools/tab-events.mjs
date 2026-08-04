@@ -29,6 +29,7 @@
 import * as fs from 'node:fs';
 import { loadTex, midiToName, QUARTER_TICKS } from './lib/score-utils.mjs';
 import { collectTieChains, auditTieIntents } from './lib/ties.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // ---- CLI --------------------------------------------------------------------
 function parseArgs(argv) {
@@ -41,7 +42,7 @@ function parseArgs(argv) {
     else if (a.startsWith('--bars=')) bars = a.slice('--bars='.length);
     else if (a === '--json') json = true;
     else if (a.startsWith('--')) {
-      console.error(`Unknown flag: ${a}`);
+      emitErr(`Unknown flag: ${a}`);
       process.exit(2);
     } else positional.push(a);
   }
@@ -50,11 +51,11 @@ function parseArgs(argv) {
 
 const { file, bars, json } = parseArgs(process.argv.slice(2));
 if (!file) {
-  console.error('Usage: node tools/tab-events.mjs <file.alphatab> [--bars N-M] [--json]');
+  emitErr('Usage: node tools/tab-events.mjs <file.alphatab> [--bars N-M] [--json]');
   process.exit(2);
 }
 if (!fs.existsSync(file)) {
-  console.error(`No file at "${file}"`);
+  emitErr(`No file at "${file}"`);
   process.exit(2);
 }
 
@@ -62,7 +63,7 @@ let range = null;
 if (bars !== null) {
   const m = /^(\d+)(?:-(\d+))?$/.exec(String(bars).trim());
   if (!m) {
-    console.error(`Bad --bars "${bars}"; expected N or N-M`);
+    emitErr(`Bad --bars "${bars}"; expected N or N-M`);
     process.exit(2);
   }
   const lo = Number(m[1]);
@@ -90,9 +91,9 @@ if (!loaded.ok) {
   } catch { /* fall through to the error report below */ }
 }
 if (!loaded.ok) {
-  console.error(`Cannot parse "${file}":`);
+  emitErr(`Cannot parse "${file}":`);
   for (const e of (loaded.errors ?? []).slice(0, 8)) {
-    console.error(`  ${e.severity ?? 'error'} line ${e.line ?? '?'}: ${e.message}`);
+    emitErr(`  ${e.severity ?? 'error'} line ${e.line ?? '?'}: ${e.message}`);
   }
   process.exit(1);
 }
@@ -199,7 +200,7 @@ if (json) {
     bars: orderedBars.map((b) => ({ bar: b, events: barsOut.get(b) })),
     tieIntentAudit: intent,
   };
-  console.log(JSON.stringify(out, null, 2));
+  emit(JSON.stringify(out, null, 2));
   process.exit(0);
 }
 
@@ -213,9 +214,9 @@ for (const b of orderedBars) {
     if (ev.grace) beatBits.push(`grace=${ev.grace}`);
     if (ev.percussion) beatBits.push('PERCUSSION');
     const beatTail = beatBits.length ? `  ${beatBits.join(' ')}` : '';
-    console.log(`bar ${b} onset ${fmt2(ev.onset)}${loc}${beatTail}`);
+    emit(`bar ${b} onset ${fmt2(ev.onset)}${loc}${beatTail}`);
     if (ev.rest) {
-      console.log(`  REST duration ${fmt2(ev.duration)}`);
+      emit(`  REST duration ${fmt2(ev.duration)}`);
       continue;
     }
     for (const n of ev.notes) {
@@ -234,15 +235,15 @@ for (const b of orderedBars) {
         'slideIn', 'slideOut', 'dead', 'ghost', 'palmMute']) {
         if (n[k] !== undefined) bits.push(n[k] === true ? k : `${k}=${n[k]}`);
       }
-      console.log(`  ${bits.join(' ')}`);
+      emit(`  ${bits.join(' ')}`);
     }
   }
 }
 if (normalized) {
-  console.log('\n(note: file needed piano-source normalization before it parsed)');
+  emit('\n(note: file needed piano-source normalization before it parsed)');
 }
 if (intent.dropped > 0) {
-  console.log(`\n!! ${intent.dropped} tie-shaped token(s) in the text parsed as fresh attacks ` +
+  emit(`\n!! ${intent.dropped} tie-shaped token(s) in the text parsed as fresh attacks ` +
     `(${intent.textTieTokens} tie tokens vs ${intent.parsedTieDestinations} parsed tie ` +
     'destinations). Each is a reattack — or an open-string attack — the author never wrote. ' +
     'Find them: every note above shows ATTACK vs CONTINUATION.');

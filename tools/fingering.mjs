@@ -29,6 +29,7 @@
 import { loadTex } from './lib/score-utils.mjs';
 import { resolveConfig } from './lib/project-config.mjs';
 import { analyzeFingering, analyzeLeadStringLeaps } from './lib/fingering.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -69,10 +70,10 @@ const {
 /** Every failure route out of this tool is exit 2 (C2). */
 function fail(...messages) {
   if (json) {
-    console.log(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
+    emit(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
   }
-  for (const m of messages) console.error(m);
-  if (!json) console.error(USAGE);
+  for (const m of messages) emitErr(m);
+  if (!json) emitErr(USAGE);
   process.exit(2);
 }
 
@@ -171,7 +172,7 @@ const out = {
 };
 
 if (json) {
-  console.log(JSON.stringify(out, null, 2));
+  emit(JSON.stringify(out, null, 2));
   process.exit(0);
 }
 
@@ -256,5 +257,5 @@ if (advisories.length) {
   L.push('      pitch sounds best"). Adopt a suggestion only if its tone is the one you want.');
 }
 
-console.log(L.join('\n'));
+emit(L.join('\n'));
 process.exit(0);

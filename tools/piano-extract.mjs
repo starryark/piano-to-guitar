@@ -36,6 +36,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { extractDigest, renderMap } from './lib/analysis.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(SCRIPT_DIR, '..');
@@ -53,21 +54,21 @@ function parseArgs(args) {
     if (arg === '--out' || arg.startsWith('--out=')) {
       const value = arg === '--out' ? (args[++i] ?? '') : arg.slice('--out='.length);
       if (!value) {
-        console.error('!! --out requires a directory');
+        emitErr('!! --out requires a directory');
         return null;
       }
       outDir = value;
     } else if (arg === '--manifest' || arg.startsWith('--manifest=')) {
       const value = arg === '--manifest' ? (args[++i] ?? '') : arg.slice('--manifest='.length);
       if (!value) {
-        console.error('!! --manifest requires a file');
+        emitErr('!! --manifest requires a file');
         return null;
       }
       manifest = value;
     } else if (arg.startsWith('--')) {
       // Never silently treat an unknown flag as an input path — that would
       // report "not found: --bogus" and hide the real mistake.
-      console.error(`!! unknown flag: ${arg}`);
+      emitErr(`!! unknown flag: ${arg}`);
       return null;
     } else {
       files.push(arg);
@@ -83,11 +84,11 @@ function loadManifest(manifestPath) {
   try {
     parsed = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   } catch (e) {
-    console.error(`!! manifest unreadable: ${e.message}`);
+    emitErr(`!! manifest unreadable: ${e.message}`);
     return null;
   }
   if (!parsed || !Array.isArray(parsed.sources) || parsed.sources.length === 0) {
-    console.error('!! manifest must carry a non-empty "sources" array');
+    emitErr('!! manifest must carry a non-empty "sources" array');
     return null;
   }
   const baseDir = path.dirname(path.resolve(manifestPath));
@@ -95,7 +96,7 @@ function loadManifest(manifestPath) {
   for (let i = 0; i < parsed.sources.length; i++) {
     const s = parsed.sources[i];
     if (!s || typeof s !== 'object' || typeof s.file !== 'string' || !s.file) {
-      console.error(`!! manifest source ${i} missing "file"`);
+      emitErr(`!! manifest source ${i} missing "file"`);
       return null;
     }
     out.push({
@@ -124,7 +125,7 @@ if (parsed.manifest) {
   parsed.files.push(...manifestEntries.map((e) => e.file));
 }
 if (!parsed.files.length) {
-  console.error(USAGE);
+  emitErr(USAGE);
   process.exit(2);
 }
 
@@ -136,7 +137,7 @@ let rc = 0;
 for (const arg of parsed.files) {
   const file = path.resolve(arg);
   if (!fs.existsSync(file)) {
-    console.error(`!! not found: ${file}`);
+    emitErr(`!! not found: ${file}`);
     rc = 1;
     continue;
   }
@@ -146,9 +147,9 @@ for (const arg of parsed.files) {
   try {
     ({ digest, preferFlat, normalizer } = await extractDigest(file));
   } catch (e) {
-    console.error(`!! failed on ${file}: ${e.message}`);
+    emitErr(`!! failed on ${file}: ${e.message}`);
     for (const d of (e.diagnostics || []).slice(0, 8)) {
-      console.error(`   ${d.severity} ${d.code ?? ''} line ${d.line ?? '?'}: ${d.message}`);
+      emitErr(`   ${d.severity} ${d.code ?? ''} line ${d.line ?? '?'}: ${d.message}`);
     }
     rc = 1;
     continue;
@@ -174,24 +175,24 @@ for (const arg of parsed.files) {
   const total = digest.bars.length;
   const skel = digest.bars.filter((b) => (b.melodySkeleton || []).length).length;
   const root = digest.bars.filter((b) => b.harmony && b.harmony.root).length;
-  console.log(
+  emit(
     `${path.basename(file)}: ${total} bars -> ${display(jsonPath)}, ${display(mapPath)}`);
-  console.log(
+  emit(
     `   key ${digest.key} (declared ${digest.keyDeclared}${digest.keyDisagrees ? ' — DISAGREES, not trusted' : ''})`
     + `  |  meter ${digest.meterInitial}  |  tempo ${digest.tempoInitial}`);
-  console.log(`   melodySkeleton: ${skel}/${total} bars   harmony.root: ${root}/${total} bars`);
+  emit(`   melodySkeleton: ${skel}/${total} bars   harmony.root: ${root}/${total} bars`);
   if (normalizer && normalizer.available) {
-    console.log(`   source normalizer: applied — ${normalizer.rewrites} rewrite(s), `
+    emit(`   source normalizer: applied — ${normalizer.rewrites} rewrite(s), `
       + `${normalizer.skipped} skipped  |  encoding ${normalizer.encoding}`);
   } else {
-    console.log('   source normalizer: tools/lib/piano-source.mjs not present — raw text parsed');
+    emit('   source normalizer: tools/lib/piano-source.mjs not present — raw text parsed');
   }
   if (total === 0 || skel === 0 || root === 0) {
-    console.error('!! VACUOUS DIGEST: a gate-critical field is empty across the whole score. '
+    emitErr('!! VACUOUS DIGEST: a gate-critical field is empty across the whole score. '
       + 'compare.mjs would report a fail-open PASS on this. Refusing to call it a success.');
     rc = 1;
   } else if (skel < total || root < total) {
-    console.error(`!! ${total - skel} bar(s) without a melodySkeleton and ${total - root} without a `
+    emitErr(`!! ${total - skel} bar(s) without a melodySkeleton and ${total - root} without a `
       + 'harmony.root. Those bars are unprotected by the fidelity gate — check the bar map.');
   }
 }
@@ -204,7 +205,7 @@ if (manifestEntries && rc === 0) {
     manifest: path.basename(parsed.manifest),
     sources: reportEntries,
   }, null, 2)}\n`, 'utf8');
-  console.log(`source set: ${reportEntries.length} source(s) -> ${display(reportPath)}`);
+  emit(`source set: ${reportEntries.length} source(s) -> ${display(reportPath)}`);
 }
 
 process.exit(rc);

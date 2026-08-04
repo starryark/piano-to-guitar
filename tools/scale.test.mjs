@@ -323,7 +323,75 @@ test('two full-length gate runs are byte-identical', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 7. The export path at length
+// 7. Output survives the pipe (the defect the first CI run found)
+// ---------------------------------------------------------------------------
+// On POSIX, stdout to a PIPE is asynchronous and `process.exit()` discards
+// whatever has not been drained. On Windows pipes are synchronous, so the same
+// code is correct — which is how this survived to Wave 6 with a Windows-only
+// validation history. At 200 bars `compare --json` emits 163 kB and
+// `tab-events --json` 947 kB, and every ubuntu and macos CI row failed with
+// "compare.mjs produced no JSON" while both windows rows passed.
+//
+// Two tests, because one of them cannot fail on this machine. The behavioural
+// check below is the real proof and it only bites where the bug can occur; the
+// source-level rule fails identically everywhere, so a Windows-only run still
+// catches a tool that reverts to console.log.
+
+test('no CLI writes through console.log or console.error', () => {
+  const clis = fs.readdirSync(TOOLS)
+    .filter((f) => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
+  assert.ok(clis.length > 10, `only found ${clis.length} CLIs — the glob is wrong`);
+  const offenders = [];
+  for (const f of clis) {
+    const src = fs.readFileSync(path.join(TOOLS, f), 'utf8');
+    for (const m of src.matchAll(/console\.(log|error)\(/g)) {
+      offenders.push(`${f}: console.${m[1]}(`);
+    }
+  }
+  assert.deepEqual(offenders, [],
+    'these writes are asynchronous on a POSIX pipe and process.exit() drops them.\n'
+    + 'Use emit / emitErr from tools/lib/emit.mjs instead.');
+});
+
+test('a tool piped and a tool redirected produce the same bytes', () => {
+  // The one that would have caught it: capture each big producer through a pipe
+  // (async on POSIX) and into a file (always synchronous), and compare. A
+  // truncating tool differs; a correct one cannot.
+  // The last row is the half a "one big write" framing would miss: tab-events in
+  // human mode prints thousands of SHORT lines. Nothing there exceeds the pipe
+  // buffer on its own, but 264 kB of it queues up just the same, and exiting
+  // drops the queue. The condition is total undrained output, not write size.
+  const cases = [
+    ['compare-json', true, [tool('compare.mjs'), fix('cover.alphatab'), DIGEST, '--bars', '1-200',
+      '--map', fix('sidecar.json'), '--arrangement-mode', 'dual-guitar',
+      '--lead', '0', '--rhythm', '1', '--json']],
+    ['fingering-json', true, [tool('fingering.mjs'), fix('cover.alphatab'), '--bars', '1-200',
+      '--arrangement-mode', 'dual-guitar', '--lead', '0', '--rhythm', '1', '--json']],
+    ['tab-events-json', true, [tool('tab-events.mjs'), fix('cover.alphatab'), '--bars', '1-200', '--json']],
+    ['tab-events-human', false, [tool('tab-events.mjs'), fix('cover.alphatab'), '--bars', '1-200']],
+  ];
+  for (const [name, isJson, args] of cases) {
+    const piped = run(args);
+    const target = path.join(OUT, `${name}.stdout`);
+    const fd = fs.openSync(target, 'w');
+    try {
+      spawnSync(process.execPath, args, { cwd: ROOT, stdio: ['ignore', fd, 'pipe'] });
+    } finally {
+      fs.closeSync(fd);
+    }
+    const redirected = fs.readFileSync(target, 'utf8');
+    assert.ok(redirected.length > 60_000,
+      `${name} emitted only ${redirected.length} bytes — too small to prove anything about a pipe`);
+    assert.equal(piped.stdout.length, redirected.length,
+      `${name} lost ${redirected.length - piped.stdout.length} byte(s) through a pipe`);
+    if (isJson) {
+      assert.doesNotThrow(() => JSON.parse(piped.stdout), `${name} piped output is not valid JSON`);
+    }
+  }
+});
+
+// ---------------------------------------------------------------------------
+// 8. The export path at length
 // ---------------------------------------------------------------------------
 
 test('MIDI export handles 200 bars × 2 tracks and writes one file', () => {

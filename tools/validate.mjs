@@ -12,18 +12,19 @@
 //      bars were previously unvalidated past the first voice.
 import { loadTex, walkBeats, midiToName, barFillOk } from './lib/score-utils.mjs';  // PTG: barFillOk replaces inline sum
 import { STRING_COUNT } from './lib/fretboard.mjs';
+import { emit, emitErr } from './lib/emit.mjs';  // PTG: synchronous stdio
 
 const args = process.argv.slice(2);
 const strict = args.includes('--strict');
 const file = args.find((a) => !a.startsWith('--'));
 if (!file) {
-  console.error('Usage: node tools/validate.mjs [--strict] <file.alphatab>');
+  emitErr('Usage: node tools/validate.mjs [--strict] <file.alphatab>');
   process.exit(2);
 }
 
 const result = loadTex(file);
 if (!result.ok) {
-  console.log(JSON.stringify({ ok: false, file, errors: result.errors }, null, 2));
+  emit(JSON.stringify({ ok: false, file, errors: result.errors }, null, 2));
   process.exit(1);
 }
 
@@ -100,5 +101,5 @@ const stats = {
 };
 
 const ok = warnings.length === 0 || !strict;
-console.log(JSON.stringify({ ok, file, stats, warnings }, null, 2));
+emit(JSON.stringify({ ok, file, stats, warnings }, null, 2));
 process.exit(ok ? 0 : 1);

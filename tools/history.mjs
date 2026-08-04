@@ -36,6 +36,7 @@ import { createHash } from 'node:crypto';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { emit, emitErr } from './lib/emit.mjs';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const CHECK = path.join(TOOLS_DIR, 'check.mjs');
@@ -53,8 +54,8 @@ const USAGE =
   '  export <seq> <path> [--project D]';
 
 function die(code, msg) {
-  if (msg) console.error(`history: ${msg}`);
-  else console.error(USAGE);
+  if (msg) emitErr(`history: ${msg}`);
+  else emitErr(USAGE);
   process.exit(code);
 }
 
@@ -314,9 +315,9 @@ function cmdCheck(argv) {
     contractPath, policyPath, report: machine,
   });
   if (cap.created) {
-    console.log(`\nhistory: saved seq ${cap.entry.seq} (${cap.entry.files.cover}) — gate ${gate.ok ? 'PASS' : 'FAIL'}`);
+    emit(`\nhistory: saved seq ${cap.entry.seq} (${cap.entry.files.cover}) — gate ${gate.ok ? 'PASS' : 'FAIL'}`);
   } else {
-    console.log(`\nhistory: unchanged since seq ${cap.seq} (${cap.short}) — no snapshot`);
+    emit(`\nhistory: unchanged since seq ${cap.seq} (${cap.short}) — no snapshot`);
   }
   process.exit(plain.status ?? 0);
 }
@@ -334,8 +335,8 @@ function cmdSnap(argv) {
   const { flags } = parseFlags(argv, ['note', 'project']);
   const p = resolveProject(flags);
   const cap = capture(p, { note: flags.note ? String(flags.note) : '' });
-  if (cap.created) console.log(`history: saved seq ${cap.entry.seq} (${cap.entry.files.cover}) — checkpoint`);
-  else console.log(`history: unchanged since seq ${cap.seq} (${cap.short}) — no snapshot`);
+  if (cap.created) emit(`history: saved seq ${cap.entry.seq} (${cap.entry.files.cover}) — checkpoint`);
+  else emit(`history: unchanged since seq ${cap.seq} (${cap.short}) — no snapshot`);
   process.exit(0);
 }
 
@@ -344,7 +345,7 @@ function cmdVerdict(argv) {
   const call = positional[0];
   if (!call) die(2, 'verdict needs a call: APPROVED or REVISE:<tag>');
   if (!/^(APPROVED|REVISE(:[\w-]+)?)$/i.test(call)) {
-    console.error(`history: note — "${call}" is not APPROVED/REVISE:<tag> (recorded as-is)`);
+    emitErr(`history: note — "${call}" is not APPROVED/REVISE:<tag> (recorded as-is)`);
   }
   const p = resolveProject(flags);
   const entries = loadEntries(p.log);
@@ -366,7 +367,7 @@ function cmdVerdict(argv) {
     const stub = `- ${date} [history seq ${target.seq}${barsStr}] ${call}${noteStr}\n`;
     fs.appendFileSync(p.sessions, stub);
   }
-  console.log(`history: seq ${target.seq} verdict = ${call}${flags['no-log'] ? '' : ' (logged to sessions.md)'}`);
+  emit(`history: seq ${target.seq} verdict = ${call}${flags['no-log'] ? '' : ' (logged to sessions.md)'}`);
   process.exit(0);
 }
 
@@ -374,7 +375,7 @@ function cmdList(argv) {
   const { flags } = parseFlags(argv, ['project']);
   const p = resolveProject(flags);
   const entries = loadEntries(p.log);
-  if (!entries.length) { console.log('history: no versions yet.'); process.exit(0); }
+  if (!entries.length) { emit('history: no versions yet.'); process.exit(0); }
   const all = !!flags.all;
   const rows = [];
   let hidden = 0;
@@ -385,15 +386,15 @@ function cmdList(argv) {
     rows.push(e);
   });
   const gateStr = (e) => (e.gate == null ? 'snap' : e.gate.ok ? 'PASS' : 'FAIL');
-  console.log('seq   when              bars     gate  verdict         note');
+  emit('seq   when              bars     gate  verdict         note');
   for (const e of rows) {
     const when = e.ts.slice(0, 16).replace('T', ' ');
     const bars = (e.bars ?? '-').padEnd(7);
     const verdict = (e.verdict ?? '-').padEnd(14);
     const note = e.note ? truncTokens(e.note, 8) : '';
-    console.log(`${pad(e.seq)}  ${when}  ${bars}  ${gateStr(e).padEnd(4)}  ${verdict}  ${note}`);
+    emit(`${pad(e.seq)}  ${when}  ${bars}  ${gateStr(e).padEnd(4)}  ${verdict}  ${note}`);
   }
-  if (hidden) console.log(`… ${hidden} intermediate capture(s) hidden — pass --all to show`);
+  if (hidden) emit(`… ${hidden} intermediate capture(s) hidden — pass --all to show`);
   process.exit(0);
 }
 
@@ -423,14 +424,14 @@ function cmdDiff(argv) {
   const inRange = (barNum) => !range || (barNum >= range.lo && barNum <= range.hi);
 
   const a = toBars(A.text), b = toBars(B.text);
-  console.log(`diff ${A.label} -> ${B.label}   (bar 1 includes the header preamble)`);
+  emit(`diff ${A.label} -> ${B.label}   (bar 1 includes the header preamble)`);
   let changes = 0;
   const report = (barNum, oldTok, newTok, kind) => {
     if (!inRange(barNum)) return;
     changes++;
-    if (kind === 'removed') console.log(`  bar ${barNum} removed: ${truncTokens(oldTok)}`);
-    else if (kind === 'added') console.log(`  bar ${barNum} added:   ${truncTokens(newTok)}`);
-    else console.log(`  bar ${barNum}: ${truncTokens(oldTok)}  ->  ${truncTokens(newTok)}`);
+    if (kind === 'removed') emit(`  bar ${barNum} removed: ${truncTokens(oldTok)}`);
+    else if (kind === 'added') emit(`  bar ${barNum} added:   ${truncTokens(newTok)}`);
+    else emit(`  bar ${barNum}: ${truncTokens(oldTok)}  ->  ${truncTokens(newTok)}`);
   };
 
   if (a.length === b.length) {
@@ -455,7 +456,7 @@ function cmdDiff(argv) {
     for (const [pa, pb] of pairs) { emitGap(pa, pb); ai = pa + 1; bi = pb + 1; }
     emitGap(a.length, b.length);
   }
-  if (!changes) console.log('  (no bar differences' + (range ? ' in range' : '') + ')');
+  if (!changes) emit('  (no bar differences' + (range ? ' in range' : '') + ')');
   process.exit(0);
 }
 
@@ -465,10 +466,10 @@ function cmdShow(argv) {
   const p = resolveProject(flags);
   const entries = loadEntries(p.log);
   const e = findEntry(entries, positional[0]);
-  console.log(JSON.stringify(e, null, 2));
+  emit(JSON.stringify(e, null, 2));
   if (flags.tab) {
-    console.log('\n--- tab ---');
-    console.log(fs.readFileSync(path.join(p.historyDir, e.files.cover), 'utf8'));
+    emit('\n--- tab ---');
+    emit(fs.readFileSync(path.join(p.historyDir, e.files.cover), 'utf8'));
   }
   process.exit(0);
 }
@@ -480,15 +481,15 @@ function cmdRestore(argv) {
   const entries = loadEntries(p.log);
   const e = findEntry(entries, positional[0]);
   if (!flags.yes) {
-    console.log(`history: would restore seq ${e.seq} (${e.files.cover})${e.files.sidecar ? ' + sidecar' : ''} over cover.alphatab.`);
-    console.log('history: the current state is auto-snapshotted first. Re-run with --yes to apply.');
+    emit(`history: would restore seq ${e.seq} (${e.files.cover})${e.files.sidecar ? ' + sidecar' : ''} over cover.alphatab.`);
+    emit('history: the current state is auto-snapshotted first. Re-run with --yes to apply.');
     process.exit(0);
   }
   // Non-destructive: snapshot the current working state before overwriting it.
   capture(p, { note: `auto-snapshot before restore of seq ${e.seq}` });
   fs.copyFileSync(path.join(p.historyDir, e.files.cover), p.cover);
   if (e.files.sidecar) fs.copyFileSync(path.join(p.historyDir, e.files.sidecar), p.sidecar);
-  console.log(`history: restored seq ${e.seq} to cover.alphatab${e.files.sidecar ? ' + sidecar.json' : ''} (previous state saved first).`);
+  emit(`history: restored seq ${e.seq} to cover.alphatab${e.files.sidecar ? ' + sidecar.json' : ''} (previous state saved first).`);
   process.exit(0);
 }
 
@@ -501,7 +502,7 @@ function cmdExport(argv) {
   const dest = positional[1];
   fs.mkdirSync(path.dirname(path.resolve(dest)), { recursive: true });
   fs.copyFileSync(path.join(p.historyDir, e.files.cover), dest);
-  console.log(`history: exported seq ${e.seq} -> ${dest}`);
+  emit(`history: exported seq ${e.seq} -> ${dest}`);
   process.exit(0);
 }
 
@@ -626,7 +627,7 @@ function cmdFinalReview(argv) {
   };
 
   if (json) {
-    console.log(JSON.stringify(report, null, 2));
+    emit(JSON.stringify(report, null, 2));
     process.exit(0);
   }
   const L = [];
@@ -665,7 +666,7 @@ function cmdFinalReview(argv) {
   }
   L.push('');
   L.push('  This assembles the evidence; the final audition and verdict stay human.');
-  console.log(L.join('\n'));
+  emit(L.join('\n'));
   process.exit(0);
 }
 

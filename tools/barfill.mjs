@@ -24,17 +24,18 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { loadTex, barFillOk } from './lib/score-utils.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 const USAGE = 'Usage: node tools/barfill.mjs <file.alphatab> [--bars N-M] | ' +
   '--frag "<alphatex beats>" [--ts N/M] | --stdin [--ts N/M]';
 
 function fail(msg) {
-  console.error(`barfill: ${msg}`);
+  emitErr(`barfill: ${msg}`);
   process.exit(2);
 }
 
 function usageFail() {
-  console.error(USAGE);
+  emitErr(USAGE);
   process.exit(2);
 }
 
@@ -132,8 +133,8 @@ if (file) {
 }
 
 if (!loaded.ok) {
-  console.error(`barfill: fragment/file did not parse:`);
-  for (const e of loaded.errors || []) console.error(`  ${e.severity} ${e.message}`);
+  emitErr(`barfill: fragment/file did not parse:`);
+  for (const e of loaded.errors || []) emitErr(`  ${e.severity} ${e.message}`);
   process.exit(2);
 }
 
@@ -176,17 +177,17 @@ if (json) {
     ...(file ? { file } : { frag: label }),
     bars: rows.map(({ bar, voice, actual, expected, delta, dir, ok }) => ({ bar, voice, actual, expected, delta, dir, ok })),
   };
-  console.log(JSON.stringify(out, null, 2));
+  emit(JSON.stringify(out, null, 2));
   process.exit(mismatches.length === 0 ? 0 : 1);
 }
 
 for (const r of rows) {
   const voiceSeg = r.multiVoice ? ` voice ${r.voice}:` : ':';
   const status = r.ok ? 'OK' : `MISMATCH (${r.dir} by ${Math.abs(r.delta)} ticks)`;
-  console.log(
+  emit(
     `bar ${r.bar}${voiceSeg} ${r.actual} ticks (${(r.actual / 960).toFixed(2)}) / ` +
     `expected ${r.expected} (${(r.expected / 960).toFixed(2)}) in ${r.num}/${r.den}  ${status}`
   );
 }
-console.log(`barfill: ${rows.length} bar(s) checked, ${mismatches.length} mismatch(es)`);
+emit(`barfill: ${rows.length} bar(s) checked, ${mismatches.length} mismatch(es)`);
 process.exit(mismatches.length === 0 ? 0 : 1);

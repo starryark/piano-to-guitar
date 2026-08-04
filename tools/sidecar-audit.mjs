@@ -29,6 +29,7 @@ import { loadSidecar, validateSidecar } from './lib/sidecar.mjs';
 import { loadStyleProfile } from './lib/style-profile.mjs';
 import { resolveConfig } from './lib/project-config.mjs';
 import { auditSidecar } from './lib/sidecar-audit.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -68,9 +69,9 @@ const { digest: digestPath, map: mapPath, bars, style: styleArg, contract: contr
 
 /** Every failure route out of this tool is exit 2 (C2). */
 function fail(...messages) {
-  if (json) console.log(JSON.stringify({ ok: false, errors: messages }, null, 2));
-  for (const m of messages) console.error(m);
-  if (!json) console.error(USAGE);
+  if (json) emit(JSON.stringify({ ok: false, errors: messages }, null, 2));
+  for (const m of messages) emitErr(m);
+  if (!json) emitErr(USAGE);
   process.exit(2);
 }
 
@@ -157,7 +158,7 @@ const out = {
 };
 
 if (json) {
-  console.log(JSON.stringify(out, null, 2));
+  emit(JSON.stringify(out, null, 2));
   process.exit(0);
 }
 
@@ -218,5 +219,5 @@ if (result.advisories.length) {
   L.push('      and an outro is supposed to have a high free share.');
 }
 
-console.log(L.join('\n'));
+emit(L.join('\n'));
 process.exit(0);

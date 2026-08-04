@@ -43,6 +43,7 @@ import {
   STAFF_KIND,
 } from './lib/piano-source.mjs';
 import { midiToName, QUARTER_TICKS } from './lib/score-utils.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // The guitar's sounding window in standard tuning: low E2 (40) .. E5 (76) at
 // fret 12 on the high E string. Notes outside it must be folded or dropped, and
@@ -61,8 +62,8 @@ function hasKeyEvidence(sounding, pitchedNoteCount) {
 }
 
 function usage(msg) {
-  if (msg) console.error(msg);
-  console.error('Usage: node tools/piano-validate.mjs <source.alphatab>');
+  if (msg) emitErr(msg);
+  emitErr('Usage: node tools/piano-validate.mjs <source.alphatab>');
   process.exit(2);
 }
 
@@ -118,7 +119,7 @@ const parse = {
 };
 
 if (!loaded.ok) {
-  console.log(JSON.stringify({
+  emit(JSON.stringify({
     ok: false, file, encoding: loaded.encoding, normalization, parse,
     flags: [...flags, {
       type: 'parse',
@@ -432,5 +433,5 @@ const report = {
   flags,
 };
 
-console.log(JSON.stringify(report, null, 2));
+emit(JSON.stringify(report, null, 2));
 process.exit(0);

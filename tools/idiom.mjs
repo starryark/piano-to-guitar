@@ -27,6 +27,7 @@ import { loadTex } from './lib/score-utils.mjs';
 import { resolveConfig } from './lib/project-config.mjs';
 import { loadStyleProfile } from './lib/style-profile.mjs';
 import { analyzeIdiomDensity, FEATURE_ORDER } from './lib/idiom.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 // §A1: an absent flag stays `undefined`. `resolveConfig` is the ONLY place a
@@ -56,10 +57,10 @@ const { bars, style: styleArg, json, file } = parseArgs(process.argv.slice(2));
 /** Every failure route out of this tool is exit 2 (C2). */
 function fail(...messages) {
   if (json) {
-    console.log(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
+    emit(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
   }
-  for (const m of messages) console.error(m);
-  if (!json) console.error(USAGE);
+  for (const m of messages) emitErr(m);
+  if (!json) emitErr(USAGE);
   process.exit(2);
 }
 
@@ -130,7 +131,7 @@ const out = {
 };
 
 if (json) {
-  console.log(JSON.stringify(out, null, 2));
+  emit(JSON.stringify(out, null, 2));
   process.exit(0);
 }
 
@@ -195,5 +196,5 @@ if (result.advisories.length) {
   L.push('      to change, and `--style` is how.');
 }
 
-console.log(L.join('\n'));
+emit(L.join('\n'));
 process.exit(0);

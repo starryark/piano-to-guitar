@@ -16,17 +16,18 @@
 import { OPEN, MAX_FRET, positionsFor } from './lib/fretboard.mjs';
 import { midiToName } from './lib/score-utils.mjs';
 import { nameToPc } from './lib/analysis.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 const USAGE = 'Usage: node tools/fret.mjs <fret>.<string> | <NoteName> [--maxfret N] | ' +
   '<fret>.<string>… --pcset <n>… --root <name>';
 
 function fail(msg) {
-  console.error(`fret.mjs: ${msg}`);
+  emitErr(`fret.mjs: ${msg}`);
   process.exit(2);
 }
 
 function usageFail() {
-  console.error(USAGE);
+  emitErr(USAGE);
   process.exit(2);
 }
 
@@ -104,7 +105,7 @@ if (flags.pcset !== null) {
   const inSet = lowPc === rootPc || pcset.has(lowPc);
   const sortedPcs = [...pcset].sort((a, b) => a - b);
 
-  console.log(
+  emit(
     `lowest ${lowest.fret}.${lowest.string} = ${midiToName(lowest.midi)} (pc ${lowPc}); ` +
     `root ${flags.root} (pc ${rootPc}), pcset {${sortedPcs.join(',')}} -> ` +
     `${inSet ? 'IN SET (OK)' : 'NOT IN SET (FAIL)'}`
@@ -135,10 +136,10 @@ if (fsMatch) {
   let line = `${fret}.${string} = ${name} (pc ${midiPc})`;
   if (fret > maxFret) {
     line += ` [OUT OF RANGE: fret ${fret} > maxfret ${maxFret}]`;
-    console.log(line);
+    emit(line);
     process.exit(1);
   }
-  console.log(line);
+  emit(line);
   process.exit(0);
 } else if (nameMatch) {
   // ---- REVERSE mode -------------------------------------------------------
@@ -151,7 +152,7 @@ if (fsMatch) {
   const positions = positionsFor(midi, { maxFret });
   const header = `${tok} (midi ${midi}, pc ${pcv}):`;
   if (positions.length === 0) {
-    console.log(
+    emit(
       `${header} no playable position (out of range on a 6-string standard-tuned guitar, maxfret ${maxFret})`
     );
     process.exit(1);
@@ -163,7 +164,7 @@ if (fsMatch) {
     const hidden = positionsFor(midi, { maxFret: MAX_FRET }).length - positions.length;
     if (hidden > 0) hiddenNote = `  (${hidden} position(s) above maxfret ${maxFret} hidden)`;
   }
-  console.log(`${header} ${list}${hiddenNote}`);
+  emit(`${header} ${list}${hiddenNote}`);
   process.exit(0);
 } else {
   usageFail();

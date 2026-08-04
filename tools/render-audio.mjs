@@ -25,6 +25,7 @@ import * as fs from 'node:fs';
 import path from 'node:path';
 import { loadTex } from './lib/score-utils.mjs';
 import { BUNDLED_SOUNDFONT, DEFAULT_SAMPLE_RATE, pcmToWav, renderScoreToPcm } from './lib/audio-render.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -55,9 +56,9 @@ const USAGE = 'Usage: node tools/render-audio.mjs <tab.alphatab> --out <file.wav
 const { file, out: outArg, soundFont, sampleRate: rateArg, force, json } = parseArgs(process.argv.slice(2));
 
 function fail(...messages) {
-  if (json) console.log(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
-  for (const m of messages) console.error(m);
-  if (!json) console.error(USAGE);
+  if (json) emit(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
+  for (const m of messages) emitErr(m);
+  if (!json) emitErr(USAGE);
   process.exit(2);
 }
 
@@ -127,18 +128,18 @@ const result = {
 };
 
 if (json) {
-  console.log(JSON.stringify(result, null, 2));
+  emit(JSON.stringify(result, null, 2));
   process.exit(0);
 }
 
-console.log(`AUDIO RENDER  ${file}`);
-console.log(`              -> ${outPath}`);
-console.log(`              ${wav.seconds.toFixed(2)}s, ${pcm.sampleRate} Hz, `
+emit(`AUDIO RENDER  ${file}`);
+emit(`              -> ${outPath}`);
+emit(`              ${wav.seconds.toFixed(2)}s, ${pcm.sampleRate} Hz, `
   + `${pcm.channels} channel(s), ${wav.buffer.length} bytes`);
-console.log(`              soundfont ${pcm.soundFont}${result.bundledSoundFont ? ' (bundled)' : ''}`);
-console.log('');
-console.log('NOTE  This is a General MIDI render of the NOTES. It is useful for phrasing, form');
-console.log('      and tempo, and it is NOT a tone reference: it says nothing about gain,');
-console.log('      cabinet response, pickup choice or pick attack. Judge those through an amp');
-console.log('      sim fed by tools/export-midi.mjs, or by playing it.');
+emit(`              soundfont ${pcm.soundFont}${result.bundledSoundFont ? ' (bundled)' : ''}`);
+emit('');
+emit('NOTE  This is a General MIDI render of the NOTES. It is useful for phrasing, form');
+emit('      and tempo, and it is NOT a tone reference: it says nothing about gain,');
+emit('      cabinet response, pickup choice or pick attack. Judge those through an amp');
+emit('      sim fed by tools/export-midi.mjs, or by playing it.');
 process.exit(0);

@@ -96,6 +96,25 @@ Separately: **`export-midi` refuses to write over the source with or without
 `--force`**, and exits `2` when asked to. Overwriting a score with its own MIDI
 render is unrecoverable, so `--force` must not reach that path.
 
+## A tool never truncates its own output
+
+Every CLI under `tools/` writes through `emit` / `emitErr`
+(`tools/lib/emit.mjs`), never `console.log` / `console.error`. On POSIX,
+stdout to a **pipe** is asynchronous and `process.exit()` discards whatever has
+not been drained; on Windows pipes are synchronous, so the same code is correct
+there and the defect is invisible.
+
+That asymmetry cost every ubuntu and macos row of the first CI run:
+`check.mjs` reported "compare.mjs produced no JSON" for output that was simply
+cut off at 163 kB. The exit code was right and the JSON was merely short, which
+is why nothing above the tool boundary can catch it.
+
+**Frozen:** no CLI contains `console.log(` or `console.error(`, and each large
+producer emits identical bytes through a pipe and through a redirect. The first
+is a portable rule that fails on any platform; the second is the behavioural
+proof, and it can only fail where the bug exists. Both are in
+`tools/scale.test.mjs`; the full account is `docs/specs/wave6-performance.md`.
+
 ## Deterministic output (A6)
 
 Two runs of the same command produce byte-identical stdout. Pinned across a

@@ -153,7 +153,55 @@ carries a 32-element `bars` array would be the same growth wearing a better hat
 `occurrences` is a number, and a number does not grow. `scale.test.mjs` asserts
 no advisory's `data` carries an array longer than 16.
 
-### 2. Playability's native warnings scale per place — pinned, not changed
+### 2. Every tool silently truncated its own output on Linux and macOS — FIXED
+
+This is the serious one, and it took the scale fixture *and* the first CI run
+together to surface.
+
+On POSIX, `process.stdout` is **asynchronous when it is a pipe** — which is what
+it is whenever `check.mjs` spawns a sub-tool, a test captures a CLI, or a human
+types `| jq`. `process.exit()` does not wait for queued writes; whatever has not
+been drained is discarded. On Windows pipes are synchronous, so identical code
+is correct there.
+
+Both conditions had to break at once, and until now neither did: validation had
+only ever run on Windows, and every fixture was small enough to fit inside the
+pipe buffer (~64 kB on Linux, often 16 kB on macOS). At 200 bars,
+`compare.mjs --json` emits 163 kB, `fingering.mjs` 148 kB and `tab-events.mjs`
+947 kB.
+
+The first CI run reported `compare.mjs produced no JSON` on **all four ubuntu
+and macos rows**, and passed both windows rows. The JSON was not malformed. It
+was cut off mid-write, and `check.mjs` exited `2` because it could not parse
+what arrived.
+
+A gate that truncates its own verdict on the platforms half the world uses is
+the most serious defect this toolchain can carry, and nothing above the tool
+boundary can detect it: the exit code is right and the JSON is merely short.
+
+Fixed by `tools/lib/emit.mjs` — `emit` / `emitErr`, drop-in replacements for
+`console.log` / `console.error` (they go through `util.format`, which is what
+console itself uses) that write synchronously and do not return until the OS has
+every byte. **176 write sites across 19 CLIs.** The exits stay exactly where
+they were; by the time one runs, the bytes are already out.
+
+**The first framing of this fix was wrong, and the second test caught it.**
+"One write larger than the pipe buffer" describes `compare --json` but misses
+`tab-events` in human mode: thousands of *short* lines, none remarkable on its
+own, 264 kB queued all the same. The condition is total undrained output at the
+moment of exit, not the size of any single write — which is why every write in
+these CLIs goes through `emit`, not just the large ones.
+
+Guarded two ways in `scale.test.mjs`, deliberately:
+
+* **Behavioural** — each large producer is run into a pipe and into a file, and
+  the byte counts must match. This is the real proof, and it can only fail where
+  the bug can occur.
+* **Source-level** — no CLI under `tools/` may contain `console.log(` or
+  `console.error(`. This fails identically on every platform, so a Windows-only
+  run still catches a tool that reverts.
+
+### 3. Playability's native warnings scale per place — pinned, not changed
 
 The same run produced 17 `position-jump-slow` warnings over 2,620 notes. Those
 are **not** C3 advisories: `soft.playability` keeps playability's native shape
@@ -182,6 +230,8 @@ Eleven claims, none of them timed:
 | no C3 advisory code exceeds 4 per run at 200 bars | advisory explosions |
 | a repeated problem is ONE finding with `occurrences`, and no `data` array exceeds 16 entries | advisory explosions, in both forms |
 | native playability warnings name distinct bars | per-place growth, not per-note |
+| no CLI contains `console.log(` / `console.error(` | async-stdout truncation, portably |
+| piped bytes == redirected bytes for every large producer | async-stdout truncation, where it can actually happen |
 | the gate exits 0 with all 4 spans graded and no runtime error on stderr | recursive traversal |
 | a 1-64 window is a strict subset of the 1-200 window | `--bars` still scopes at length |
 | two full-length runs are byte-identical | determinism (A6) survives length |

@@ -19,6 +19,7 @@
 
 import * as fs from 'node:fs';
 import { loadContract, validateContract } from './lib/contract.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 function parseArgs(argv) {
   let digest = null;
@@ -30,7 +31,7 @@ function parseArgs(argv) {
     else if (a.startsWith('--digest=')) digest = a.slice('--digest='.length);
     else if (a === '--json') json = true;
     else if (a.startsWith('--')) {
-      console.error(`Unknown flag: ${a}`);
+      emitErr(`Unknown flag: ${a}`);
       process.exit(2);
     } else positional.push(a);
   }
@@ -39,13 +40,13 @@ function parseArgs(argv) {
 
 const { file, digest: digestPath, json } = parseArgs(process.argv.slice(2));
 if (!file) {
-  console.error('Usage: node tools/contract-validate.mjs <melody-contract.json> [--digest <source.json>] [--json]');
+  emitErr('Usage: node tools/contract-validate.mjs <melody-contract.json> [--digest <source.json>] [--json]');
   process.exit(2);
 }
 
 const loaded = loadContract(file);
 if (!loaded.ok) {
-  console.error(loaded.errors[0].message);
+  emitErr(loaded.errors[0].message);
   process.exit(2);
 }
 
@@ -54,7 +55,7 @@ if (digestPath) {
   try {
     digest = JSON.parse(fs.readFileSync(digestPath, 'utf8'));
   } catch (e) {
-    console.error(`Cannot read digest "${digestPath}": ${e.message}`);
+    emitErr(`Cannot read digest "${digestPath}": ${e.message}`);
     process.exit(2);
   }
 }
@@ -62,7 +63,7 @@ if (digestPath) {
 const result = validateContract(loaded.contract, digest);
 
 if (json) {
-  console.log(JSON.stringify({ ok: result.ok, file, digest: digestPath, ...result }, null, 2));
+  emit(JSON.stringify({ ok: result.ok, file, digest: digestPath, ...result }, null, 2));
   process.exit(result.ok ? 0 : 1);
 }
 
@@ -81,5 +82,5 @@ for (const e of result.errors) L.push(`  ERROR  ${e.where}: ${e.message}`);
 for (const w of result.warnings) L.push(`  warn   ${w.where}: ${w.message}`);
 L.push('');
 L.push(result.ok ? 'CONTRACT: VALID' : `CONTRACT: INVALID — ${result.errors.length} error(s)`);
-console.log(L.join('\n'));
+emit(L.join('\n'));
 process.exit(result.ok ? 0 : 1);

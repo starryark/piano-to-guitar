@@ -17,6 +17,7 @@
 
 import * as fs from 'node:fs';
 import { extractDigest } from './lib/analysis.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 function parseArgs(argv) {
   let json = false;
@@ -24,7 +25,7 @@ function parseArgs(argv) {
   for (const a of argv) {
     if (a === '--json') json = true;
     else if (a.startsWith('--')) {
-      console.error(`Unknown flag: ${a}`);
+      emitErr(`Unknown flag: ${a}`);
       process.exit(2);
     } else positional.push(a);
   }
@@ -33,11 +34,11 @@ function parseArgs(argv) {
 
 const { file, json } = parseArgs(process.argv.slice(2));
 if (!file) {
-  console.error('Usage: node tools/source-profile.mjs <source.alphatab> [--json]');
+  emitErr('Usage: node tools/source-profile.mjs <source.alphatab> [--json]');
   process.exit(2);
 }
 if (!fs.existsSync(file)) {
-  console.error(`No file at "${file}"`);
+  emitErr(`No file at "${file}"`);
   process.exit(2);
 }
 
@@ -45,9 +46,9 @@ let digest;
 try {
   ({ digest } = await extractDigest(file));
 } catch (e) {
-  console.error(`Cannot parse "${file}": ${e.message}`);
+  emitErr(`Cannot parse "${file}": ${e.message}`);
   for (const d of (e.diagnostics || []).slice(0, 8)) {
-    console.error(`  ${d.severity} line ${d.line ?? '?'}: ${d.message}`);
+    emitErr(`  ${d.severity} line ${d.line ?? '?'}: ${d.message}`);
   }
   process.exit(1);
 }
@@ -56,7 +57,7 @@ const profile = digest.sourceProfile;
 const ta = digest.tieAudit;
 
 if (json) {
-  console.log(JSON.stringify({
+  emit(JSON.stringify({
     ok: true,
     file,
     song: digest.song,
@@ -109,5 +110,5 @@ if (profile.kind === 'noisy-transcription') {
 } else {
   L.push('  VERDICT: clean notation — the digest skeleton is a trustworthy fidelity authority.');
 }
-console.log(L.join('\n'));
+emit(L.join('\n'));
 process.exit(0);

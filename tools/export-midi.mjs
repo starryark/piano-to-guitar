@@ -35,6 +35,7 @@ import * as fs from 'node:fs';
 import path from 'node:path';
 import { loadTex } from './lib/score-utils.mjs';
 import { scoreToMidi } from './lib/midi-export.mjs';
+import { emit, emitErr } from './lib/emit.mjs';
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -62,9 +63,9 @@ const { file, out: outArg, force, singleTrack, json } = parseArgs(process.argv.s
 
 /** Every failure route out of this tool is exit 2 (C2). */
 function fail(...messages) {
-  if (json) console.log(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
-  for (const m of messages) console.error(m);
-  if (!json) console.error(USAGE);
+  if (json) emit(JSON.stringify({ ok: false, file: file ?? null, errors: messages }, null, 2));
+  for (const m of messages) emitErr(m);
+  if (!json) emitErr(USAGE);
   process.exit(2);
 }
 
@@ -137,16 +138,16 @@ const result = {
 };
 
 if (json) {
-  console.log(JSON.stringify(result, null, 2));
+  emit(JSON.stringify(result, null, 2));
   process.exit(0);
 }
 
-console.log(`MIDI EXPORT  ${file}`);
-console.log(`             -> ${outPath}`);
-console.log(`             ${midi.bytes.length} bytes, ${midi.tracks} MIDI track(s) `
+emit(`MIDI EXPORT  ${file}`);
+emit(`             -> ${outPath}`);
+emit(`             ${midi.bytes.length} bytes, ${midi.tracks} MIDI track(s) `
   + `from ${loaded.score.tracks.length} score track(s), format ${midi.format}`);
-console.log('');
-console.log('NOTE  This exports NOTES, not TONE. General MIDI playback of this file says nothing');
-console.log('      about gain, cabinet response or pickup choice — route it through an amp sim or');
-console.log('      a guitar VST to judge those. See docs/specs/audio-rendering-decision.md.');
+emit('');
+emit('NOTE  This exports NOTES, not TONE. General MIDI playback of this file says nothing');
+emit('      about gain, cabinet response or pickup choice — route it through an amp sim or');
+emit('      a guitar VST to judge those. See docs/specs/audio-rendering-decision.md.');
 process.exit(0);

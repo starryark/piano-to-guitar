@@ -90,6 +90,7 @@ import { loadStyleProfile } from './lib/style-profile.mjs';
 import { resolveConfig } from './lib/project-config.mjs';
 // PTG (Wave 5, contract C9): which tracks a given question may look at.
 import { resolveTrackRoles, sameView, trackFilter } from './lib/track-roles.mjs';
+import { emit, emitErr } from './lib/emit.mjs';  // PTG: synchronous stdio
 
 // ---- CLI ------------------------------------------------------------------
 function parseArgs(argv) {
@@ -141,7 +142,7 @@ function parseTrackList(spec, flag) {
   const parts = String(spec).split(',').map((s) => s.trim()).filter((s) => s !== '');
   const out = parts.map(Number);
   if (!out.length || out.some((n) => !Number.isInteger(n) || n < 0)) {
-    console.error(`Bad ${flag} "${spec}"; expected a comma-separated list of track indices, e.g. 0,2`);
+    emitErr(`Bad ${flag} "${spec}"; expected a comma-separated list of track indices, e.g. 0,2`);
     process.exit(2);
   }
   return out;
@@ -151,7 +152,7 @@ function parseTrackList(spec, flag) {
 function parseBarRange(spec) {
   const m = /^(\d+)(?:-(\d+))?$/.exec(String(spec).trim());
   if (!m) {
-    console.error(`Bad --bars "${spec}"; expected N or N-M`);
+    emitErr(`Bad --bars "${spec}"; expected N or N-M`);
     process.exit(2);
   }
   const lo = Number(m[1]);
@@ -165,11 +166,11 @@ const {
   arrangementMode: modeArg, lead: leadArg, rhythm: rhythmArg,
 } = parseArgs(process.argv.slice(2));
 if (!file || !digestPath || !bars) {
-  console.error('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>] [--style NAME] [--gain high|crunch|clean] [--arrangement-mode solo|dual-guitar] [--lead 0,2] [--rhythm 1,3]');
+  emitErr('Usage: node tools/compare.mjs <tab.alphatab> <digest.json> --bars N-M [--transpose N] [--json] [--map <file>] [--contract <melody-contract.json>] [--style NAME] [--gain high|crunch|clean] [--arrangement-mode solo|dual-guitar] [--lead 0,2] [--rhythm 1,3]');
   process.exit(2);
 }
 if (!Number.isFinite(transpose)) {
-  console.error(`Bad --transpose; expected an integer semitone offset`);
+  emitErr(`Bad --transpose; expected an integer semitone offset`);
   process.exit(2);
 }
 const range = parseBarRange(bars);
@@ -187,12 +188,12 @@ const cliOverrides = {
   rhythm: parseTrackList(rhythmArg, '--rhythm'),
 };
 const cfgStage1 = resolveConfig({ anchorPath: file, cli: cliOverrides });
-if (!cfgStage1.ok) { console.error(cfgStage1.errors.join('\n')); process.exit(2); }
+if (!cfgStage1.ok) { emitErr(cfgStage1.errors.join('\n')); process.exit(2); }
 const loadedStyle = loadStyleProfile(cfgStage1.style);
-if (!loadedStyle.ok) { console.error(loadedStyle.errors.join('\n')); process.exit(2); }
+if (!loadedStyle.ok) { emitErr(loadedStyle.errors.join('\n')); process.exit(2); }
 const styleProfile = loadedStyle.profile;
 const cfg = resolveConfig({ anchorPath: file, cli: cliOverrides, styleProfile });
-if (!cfg.ok) { console.error(cfg.errors.join('\n')); process.exit(2); }
+if (!cfg.ok) { emitErr(cfg.errors.join('\n')); process.exit(2); }
 
 // ---- pitch-class helpers --------------------------------------------------
 const pc = (midi) => (((midi % 12) + 12) % 12);
@@ -216,7 +217,7 @@ let digest;
 try {
   digest = JSON.parse(fs.readFileSync(digestPath, 'utf8'));
 } catch (e) {
-  console.error(`Cannot read digest "${digestPath}": ${e.message}`);
+  emitErr(`Cannot read digest "${digestPath}": ${e.message}`);
   process.exit(2);
 }
 
@@ -224,12 +225,12 @@ let loaded;
 try {
   loaded = loadTex(file);
 } catch (e) {
-  console.error(`Cannot read tab "${file}": ${e.message}`);
+  emitErr(`Cannot read tab "${file}": ${e.message}`);
   process.exit(2);
 }
 if (!loaded.ok) {
   const out = { ok: false, file, digest: digestPath, bars, transpose, errors: loaded.errors };
-  console.log(JSON.stringify(out, null, 2));
+  emit(JSON.stringify(out, null, 2));
   process.exit(2);
 }
 const { score } = loaded;
@@ -239,7 +240,7 @@ const { score } = loaded;
 // once you know how many tracks there are. A role assignment that names a track
 // the score does not have is exit 2 — not a silently ignored line of config.
 const resolvedRoles = resolveTrackRoles(score, cfg);
-if (!resolvedRoles.ok) { console.error(resolvedRoles.errors.join('\n')); process.exit(2); }
+if (!resolvedRoles.ok) { emitErr(resolvedRoles.errors.join('\n')); process.exit(2); }
 const roles = resolvedRoles.roles;
 
 // ---- collect the tab, per bar, in SOURCE pitch space ----------------------
@@ -353,7 +354,7 @@ const digestByBar = new Map(digest.bars.map((b) => [b.bar, b]));
 // bar-aligned loop below is skipped entirely when --map is present, so its
 // behavior is byte-identical when --map is absent.
 function mapUsage(msg) {
-  console.error(`compare: ${msg}`);
+  emitErr(`compare: ${msg}`);
   process.exit(2);
 }
 
@@ -808,7 +809,7 @@ if (mapPath) {
   };
 
   if (json) {
-    console.log(JSON.stringify(mapResult, null, 2));
+    emit(JSON.stringify(mapResult, null, 2));
     process.exit(mapOk ? 0 : 1);
   }
 
@@ -842,7 +843,7 @@ if (mapPath) {
   for (const a of harmonicColor.advisories) {
     lines.push(`  ~ [${a.code}] ${a.message}`);
   }
-  console.log(lines.join('\n'));
+  emit(lines.join('\n'));
   process.exit(mapOk ? 0 : 1);
 }
 
@@ -963,7 +964,7 @@ for (let b = range.lo; b <= range.hi; b++) {
 const missingSkeletonKey = barsInRange.filter((b) => !('melodySkeleton' in b));
 const missingHarmonyKey = barsInRange.filter((b) => !('harmony' in b));
 if (barsInRange.length && (missingSkeletonKey.length || missingHarmonyKey.length)) {
-  console.error(
+  emitErr(
     `compare: digest ${digestPath} is missing required per-bar fields ` +
     `(${missingSkeletonKey.length} bar(s) without melodySkeleton, ` +
     `${missingHarmonyKey.length} without harmony). The fidelity gate cannot ` +
@@ -1000,7 +1001,7 @@ const result = {
 
 // ---- output ---------------------------------------------------------------
 if (json) {
-  console.log(JSON.stringify(result, null, 2));
+  emit(JSON.stringify(result, null, 2));
   process.exit(ok ? 0 : 1);
 }
 
@@ -1031,5 +1032,5 @@ if (failures.length) {
   lines.push(`  failures           ${failures[0].message}`);
   for (const f of failures.slice(1)) lines.push(`                     ${f.message}`);
 }
-console.log(lines.join('\n'));
+emit(lines.join('\n'));
 process.exit(ok ? 0 : 1);

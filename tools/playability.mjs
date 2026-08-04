@@ -59,6 +59,7 @@
 import * as at from '@coderline/alphatab';
 import * as fs from 'node:fs';
 import { loadTex, midiToName, QUARTER_TICKS } from './lib/score-utils.mjs';
+import { emit, emitErr } from './lib/emit.mjs';  // PTG: synchronous stdio
 import {
   fromAlphaTabNote,
   spanOf,
@@ -164,28 +165,28 @@ function loadPolicy(policyPath) {
   try {
     parsed = JSON.parse(fs.readFileSync(policyPath, 'utf8'));
   } catch (e) {
-    console.error(`Cannot read policy "${policyPath}": ${e.message}`);
+    emitErr(`Cannot read policy "${policyPath}": ${e.message}`);
     process.exit(2);
   }
   for (const k of Object.keys(parsed)) {
     if (!POLICY_KEYS.has(k)) {
-      console.error(`Unknown policy key "${k}" in ${policyPath} (known: ${[...POLICY_KEYS].join(', ')})`);
+      emitErr(`Unknown policy key "${k}" in ${policyPath} (known: ${[...POLICY_KEYS].join(', ')})`);
       process.exit(2);
     }
   }
   if (parsed.tuning !== undefined && parsed.tuning !== 'standard') {
-    console.error(`policy tuning "${parsed.tuning}" unsupported — this toolchain is standard-tuning-first`);
+    emitErr(`policy tuning "${parsed.tuning}" unsupported — this toolchain is standard-tuning-first`);
     process.exit(2);
   }
   for (const k of ['maxFret', 'fastAttackMaxNotes', 'maxSimultaneousNotes', 'preferredFretSpan']) {
     if (parsed[k] !== undefined && (!Number.isInteger(parsed[k]) || parsed[k] < 1)) {
-      console.error(`policy ${k} must be a positive integer, got ${parsed[k]}`);
+      emitErr(`policy ${k} must be a positive integer, got ${parsed[k]}`);
       process.exit(2);
     }
   }
   if (parsed.fastAttackThreshold !== undefined
     && (!Number.isFinite(parsed.fastAttackThreshold) || parsed.fastAttackThreshold <= 0)) {
-    console.error(`policy fastAttackThreshold must be > 0 beats, got ${parsed.fastAttackThreshold}`);
+    emitErr(`policy fastAttackThreshold must be > 0 beats, got ${parsed.fastAttackThreshold}`);
     process.exit(2);
   }
   return parsed;
@@ -196,7 +197,7 @@ function parseBarRange(spec) {
   if (!spec) return null;
   const m = /^(\d+)(?:-(\d+))?$/.exec(String(spec).trim());
   if (!m) {
-    console.error(`Bad --bars "${spec}"; expected N or N-M`);
+    emitErr(`Bad --bars "${spec}"; expected N or N-M`);
     process.exit(2);
   }
   const lo = Number(m[1]);
@@ -208,7 +209,7 @@ const {
   bars, gain: gainArg, policy: policyPath, maxFret: maxFretArg, warningsAsErrors, file,
 } = parseArgs(process.argv.slice(2));
 if (!file) {
-  console.error('Usage: node tools/playability.mjs <file.alphatab> [--bars N-M] '
+  emitErr('Usage: node tools/playability.mjs <file.alphatab> [--bars N-M] '
     + '[--gain high|crunch|clean] [--policy guitar-policy.json] [--max-fret N] '
     + '[--warnings-as-errors]');
   process.exit(2);
@@ -217,7 +218,7 @@ if (!file) {
 const policy = policyPath ? loadPolicy(policyPath) : null;
 const gain = gainArg ?? policy?.gain ?? 'high';
 if (!['high', 'crunch', 'clean'].includes(gain)) {
-  console.error(`Bad --gain "${gain}"; expected high|crunch|clean`);
+  emitErr(`Bad --gain "${gain}"; expected high|crunch|clean`);
   process.exit(2);
 }
 
@@ -242,7 +243,7 @@ if (!['high', 'crunch', 'clean'].includes(gain)) {
 // A note above BOTH reports both findings. That is correct, not duplication:
 // one says the fret is not there, the other says the project said not to.
 if (maxFretArg !== null && !/^\d+$/.test(String(maxFretArg).trim())) {
-  console.error(`Bad --max-fret "${maxFretArg}"; expected a positive integer`);
+  emitErr(`Bad --max-fret "${maxFretArg}"; expected a positive integer`);
   process.exit(2);
 }
 const config = resolveConfig({
@@ -252,7 +253,7 @@ const config = resolveConfig({
 if (!config.ok) {
   // Fail closed, exit 2 — same doctrine as loadPolicy() above: a typo in a
   // config file must never silently weaken a gate.
-  for (const e of config.errors) console.error(e);
+  for (const e of config.errors) emitErr(e);
   process.exit(2);
 }
 // Named apart from fretboard.mjs's `MAX_FRET`/`DEFAULT_MAX_FRET` on purpose:
@@ -265,7 +266,7 @@ const inRange = (barNum1) => !range || (barNum1 >= range.lo && barNum1 <= range.
 // ---- load -----------------------------------------------------------------
 const loaded = loadTex(file);
 if (!loaded.ok) {
-  console.log(JSON.stringify({ ok: false, file, gain, bars: bars ?? null, errors: loaded.errors, warnings: [] }, null, 2));
+  emit(JSON.stringify({ ok: false, file, gain, bars: bars ?? null, errors: loaded.errors, warnings: [] }, null, 2));
   process.exit(1);
 }
 const { score } = loaded;
@@ -837,5 +838,5 @@ const out = {
   errors,
   warnings,
 };
-console.log(JSON.stringify(out, null, 2));
+emit(JSON.stringify(out, null, 2));
 process.exit(ok ? 0 : 1);

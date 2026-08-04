@@ -24,6 +24,7 @@ import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { emit } from './lib/emit.mjs';
 
 const TOOLS = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.dirname(TOOLS);
@@ -654,13 +655,13 @@ check('determinism: the full gate produces byte-identical JSON twice', () => {
 const width = Math.max(...results.map((r) => r.name.length));
 for (const r of results) {
   const tag = r.ok ? 'ok  ' : 'FAIL';
-  console.log(`${tag}  ${r.name.padEnd(width)}  ${r.detail}`);
+  emit(`${tag}  ${r.name.padEnd(width)}  ${r.detail}`);
 }
-console.log();
+emit();
 if (failed === 0) {
-  console.log(`SMOKE: PASS  (${results.length} checks)`);
+  emit(`SMOKE: PASS  (${results.length} checks)`);
   process.exit(0);
 } else {
-  console.log(`SMOKE: FAIL  (${failed} of ${results.length} checks failed)`);
+  emit(`SMOKE: FAIL  (${failed} of ${results.length} checks failed)`);
   process.exit(1);
 }

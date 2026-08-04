@@ -74,6 +74,7 @@ import { loadStyleProfile } from './lib/style-profile.mjs';
 // limits down to playability explicitly — so the two stages can never disagree
 // about which guitar is being checked.
 import { resolveConfig } from './lib/project-config.mjs';
+import { emit, emitErr } from './lib/emit.mjs';  // PTG: synchronous stdio
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.dirname(TOOLS_DIR);
@@ -138,8 +139,8 @@ function parseArgs(argv) {
 }
 
 function usage(msg) {
-  if (msg) console.error(msg);
-  console.error(
+  if (msg) emitErr(msg);
+  emitErr(
     'Usage: node tools/check.mjs <tab.alphatab> --bars N-M ' +
     '[--transpose N] [--gain high|crunch|clean] [--style hard-rock|metal|blues|jazz] ' +
     '[--arrangement-mode solo|dual-guitar] [--lead 0,2] [--rhythm 1,3] ' +
@@ -605,7 +606,7 @@ const machine = {
 };
 
 if (json) {
-  console.log(JSON.stringify(machine, null, 2));
+  emit(JSON.stringify(machine, null, 2));
   process.exit(gateOk ? 0 : 1);
 }
 
@@ -759,6 +760,6 @@ if (softLines.length) {
 
 L.push('');
 L.push(gateOk ? 'GATE: PASS' : `GATE: FAIL — ${hardFailReasons.join(', ')}`);
-console.log(L.join('\n'));
+emit(L.join('\n'));
 
 process.exit(gateOk ? 0 : 1);

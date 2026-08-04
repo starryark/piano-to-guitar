@@ -252,6 +252,16 @@ transposes.** If you propose a transposition, argue it from the fretboard, not f
   on a repeated fretted note but never on a repeated open one, so the optimizer wanted to
   **fret an open-string riff** — cheaper by the numbers, wrong by the ear. Both are the same
   failure mode: a cost model answering confidently about something it was never looking at.
+- **CLIs write with `emit`/`emitErr`, never `console.log`/`console.error`.**
+  `tools/lib/emit.mjs` writes synchronously. On POSIX, stdout to a **pipe** is
+  asynchronous — which is what it is when `check.mjs` spawns a sub-tool, a test
+  captures a CLI, or you type `| jq` — and `process.exit()` discards whatever has
+  not drained. On Windows pipes are synchronous, so the bug is invisible there:
+  the first CI run failed every ubuntu and macos row with "compare.mjs produced no
+  JSON" for 163 kB of output that was merely cut short, and passed both Windows
+  rows. It is not only large single writes — thousands of short lines queue just
+  as much, so **every** write in a CLI goes through `emit`. `tools/scale.test.mjs`
+  enforces both the rule and the behaviour.
 - **The hard gates fail open by construction — 0/0 is a PASS, so always assert non-zero
   totals** (`compare.mjs` refuses a digest missing `melodySkeleton`/`harmony`; `smoke.mjs`
   asserts non-zero totals). See `docs/gate-templates.md` (the "0/0 covered/total is a

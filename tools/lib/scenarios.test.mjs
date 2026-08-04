@@ -46,6 +46,7 @@ import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateManifestSchema, validatePairInvariants } from './scenario-manifest.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -60,49 +61,11 @@ const CHECK = path.join(ROOT, 'tools', 'check.mjs');
 const CHILD_TIMEOUT_MS = 120_000;
 
 // ---------------------------------------------------------------------------
-// Manifest schema (fail closed)
+// Configuration
 // ---------------------------------------------------------------------------
-// A typo in a fixture must never read as a default. Every key is listed; an
-// unknown one is an error, not an ignored extra.
-
-const SCENARIO_KEYS = new Set([
-  'id', 'pairId', 'polarity', 'variantAxis', 'intent',
-  'source', 'target', 'map', 'bars', 'style', 'gain',
-  'arrangementMode', 'lead', 'rhythm', 'policy', 'maxFret', 'transpose',
-  'expect',
-]);
-const EXPECT_KEYS = new Set([
-  'exit', 'hardPass', 'failReasons',
-  'requiredAdvisoryCodes', 'forbiddenAdvisoryCodes',
-  'maximumTotalAdvisories', 'maximumAdvisoryCounts',
-  'requiredDataFields', 'requiredStats',
-]);
-const POLARITIES = new Set(['positive', 'negative', 'comparison']);
-const STAT_OPS = new Set(['minimum', 'maximum', 'equals', 'equalsJson']);
-
-/** Which fields a pair on each axis must SHARE, and which it must VARY. */
-const AXES = {
-  target: {
-    shared: ['source', 'map', 'style', 'gain', 'arrangementMode', 'lead', 'rhythm', 'bars', 'policy'],
-    varied: ['target'],
-  },
-  style: {
-    shared: ['source', 'target', 'map', 'arrangementMode', 'lead', 'rhythm', 'bars', 'policy'],
-    varied: ['style'],
-  },
-  map: {
-    shared: ['source', 'target', 'style', 'gain', 'arrangementMode', 'lead', 'rhythm', 'bars', 'policy'],
-    varied: ['map'],
-  },
-  roles: {
-    shared: ['source', 'target', 'map', 'style', 'gain', 'arrangementMode', 'bars', 'policy'],
-    varied: ['lead', 'rhythm'],
-  },
-  configuration: {
-    shared: ['source', 'target', 'map', 'style', 'bars'],
-    varied: ['gain', 'arrangementMode', 'lead', 'rhythm', 'policy', 'maxFret', 'transpose'],
-  },
-};
+// The schema and the pair invariants live in tools/lib/scenario-manifest.mjs, so
+// that proving they fail closed does not require running the whole corpus once
+// per case. See tools/scenario-harness.test.mjs.
 
 // Codes whose repetition is per-bar BY CONTRACT, and so exempt from the
 // deduplication ceiling. Both predate C3 and both are located findings: a reader
@@ -264,168 +227,15 @@ const test = (name, fn) => tests.push([name, fn]);
 // ---------------------------------------------------------------------------
 
 test('manifest: schema is fail-closed and every path it names exists', () => {
-  assert.equal(manifest.schemaVersion, 2, 'this runner reads schemaVersion 2');
-  assert.ok(Array.isArray(manifest.scenarios) && manifest.scenarios.length >= 8,
-    'a calibration corpus of fewer than 8 scenarios is not a corpus');
-
-  const ids = new Set();
-  for (const s of manifest.scenarios) {
-    const where = s.id ?? '(scenario with no id)';
-
-    for (const key of Object.keys(s)) {
-      assert.ok(SCENARIO_KEYS.has(key), `${where}: unknown scenario field "${key}"`);
-    }
-    for (const key of ['id', 'pairId', 'polarity', 'variantAxis', 'intent', 'source', 'target', 'bars', 'style']) {
-      assert.equal(typeof s[key], 'string', `${where}: "${key}" must be a string`);
-      assert.notEqual(s[key].trim(), '', `${where}: "${key}" must not be empty`);
-    }
-    assert.ok(!ids.has(s.id), `duplicate scenario id: ${s.id}`);
-    ids.add(s.id);
-
-    assert.ok(POLARITIES.has(s.polarity),
-      `${where}: polarity "${s.polarity}" is not one of ${[...POLARITIES].join('|')}`);
-    assert.ok(Object.hasOwn(AXES, s.variantAxis),
-      `${where}: variantAxis "${s.variantAxis}" is not one of ${Object.keys(AXES).join('|')}`);
-    assert.ok(s.intent.length > 20, `${where}: every scenario states its musical intent`);
-
-    // `map: null` means bar-locked and must be WRITTEN. An omitted key would let
-    // a forgotten map read as a deliberate one.
-    assert.ok(Object.hasOwn(s, 'map'), `${where}: "map" is required — write null for bar-locked`);
-    assert.ok(s.map === null || typeof s.map === 'string', `${where}: "map" must be a string or null`);
-
-    for (const key of ['source', 'target', 'map', 'policy']) {
-      if (s[key] === null || s[key] === undefined) continue;
-      assert.ok(fs.existsSync(path.join(FIX, s[key])), `${where}: missing ${key} "${s[key]}"`);
-    }
-    assert.ok(/^\d+(-\d+)?$/.test(s.bars), `${where}: bad bars "${s.bars}"`);
-
-    for (const key of ['lead', 'rhythm']) {
-      if (s[key] === undefined) continue;
-      assert.ok(Array.isArray(s[key]) && s[key].length > 0
-        && s[key].every((i) => Number.isInteger(i) && i >= 0),
-        `${where}: "${key}" must be a non-empty array of track indices`);
-    }
-    if (s.lead && s.rhythm) {
-      const overlap = s.lead.filter((i) => s.rhythm.includes(i));
-      assert.equal(overlap.length, 0, `${where}: track(s) ${overlap} declared both lead and rhythm`);
-    }
-    assert.ok((s.lead === undefined) === (s.rhythm === undefined),
-      `${where}: lead and rhythm are declared together or not at all`);
-    if (s.arrangementMode !== undefined) {
-      assert.ok(['solo', 'dual-guitar'].includes(s.arrangementMode),
-        `${where}: bad arrangementMode "${s.arrangementMode}"`);
-    }
-
-    // --- expectations ---
-    const e = s.expect;
-    assert.ok(e && typeof e === 'object', `${where}: missing "expect"`);
-    for (const key of Object.keys(e)) {
-      assert.ok(EXPECT_KEYS.has(key), `${where}: unknown expectation field "${key}"`);
-    }
-    assert.ok([0, 1].includes(e.exit), `${where}: expect.exit must be 0 or 1 (2 is an operational failure)`);
-    assert.equal(typeof e.hardPass, 'boolean', `${where}: expect.hardPass must be a boolean`);
-    assert.equal(e.exit === 0, e.hardPass,
-      `${where}: exit ${e.exit} contradicts hardPass ${e.hardPass} — exit 0 IS the hard pass (C7)`);
-
-    for (const key of ['requiredAdvisoryCodes', 'forbiddenAdvisoryCodes']) {
-      assert.ok(Array.isArray(e[key]), `${where}: expect.${key} must be an array`);
-      assert.ok(e[key].every((c) => typeof c === 'string' && c.trim() !== ''),
-        `${where}: expect.${key} must contain non-empty strings`);
-    }
-    const overlap = e.requiredAdvisoryCodes.filter((c) => e.forbiddenAdvisoryCodes.includes(c));
-    assert.equal(overlap.length, 0,
-      `${where}: code(s) ${overlap.join(', ')} are both required and forbidden`);
-
-    if (e.failReasons !== undefined) {
-      assert.ok(Array.isArray(e.failReasons) && e.failReasons.every((r) => typeof r === 'string'),
-        `${where}: expect.failReasons must be an array of strings`);
-      assert.ok(e.hardPass === false || e.failReasons.length === 0,
-        `${where}: a passing scenario cannot declare fail reasons`);
-    }
-    assert.ok(e.hardPass || (e.failReasons ?? []).length > 0,
-      `${where}: a failing scenario must name the hard gate it fails, so a DIFFERENT failure cannot pass this test`);
-
-    if (e.maximumTotalAdvisories !== undefined) {
-      assert.ok(Number.isInteger(e.maximumTotalAdvisories) && e.maximumTotalAdvisories >= 0,
-        `${where}: expect.maximumTotalAdvisories must be a non-negative integer`);
-    }
-    for (const [code, n] of Object.entries(e.maximumAdvisoryCounts ?? {})) {
-      assert.ok(Number.isInteger(n) && n >= 0,
-        `${where}: expect.maximumAdvisoryCounts["${code}"] must be a non-negative integer`);
-      assert.ok(!e.forbiddenAdvisoryCodes.includes(code),
-        `${where}: "${code}" is forbidden, so a count ceiling for it says nothing`);
-    }
-    for (const [code, fields] of Object.entries(e.requiredDataFields ?? {})) {
-      assert.ok(Array.isArray(fields) && fields.length > 0 && fields.every((f) => typeof f === 'string'),
-        `${where}: expect.requiredDataFields["${code}"] must be a non-empty array of field names`);
-      assert.ok(e.requiredAdvisoryCodes.includes(code),
-        `${where}: data fields demanded of "${code}", which the scenario never requires — `
-        + 'an advisory that does not fire would satisfy this vacuously');
-    }
-    for (const [dotted, rule] of Object.entries(e.requiredStats ?? {})) {
-      assert.ok(rule && typeof rule === 'object' && Object.keys(rule).length > 0,
-        `${where}: expect.requiredStats["${dotted}"] must state at least one comparison`);
-      for (const op of Object.keys(rule)) {
-        assert.ok(STAT_OPS.has(op),
-          `${where}: expect.requiredStats["${dotted}"] has unknown comparison "${op}"`);
-      }
-    }
-  }
+  // The rules live in ./scenario-manifest.mjs so that tools/scenario-harness.test.mjs
+  // can feed ~30 deliberately broken corpora through them in milliseconds. Proving
+  // a schema fails closed is worthless if the proof is too slow to run.
+  validateManifestSchema(manifest, { fixturesDir: FIX });
 });
 
 test('manifest: every pair varies exactly the dimension it declares', () => {
-  const pairs = new Map();
-  for (const s of manifest.scenarios) {
-    if (!pairs.has(s.pairId)) pairs.set(s.pairId, []);
-    pairs.get(s.pairId).push(s);
-  }
-
-  for (const [pairId, members] of pairs) {
-    assert.ok(members.length >= 2,
-      `pair "${pairId}" has one member — nothing to compare it against`);
-
-    const axis = members[0].variantAxis;
-    for (const m of members) {
-      assert.equal(m.variantAxis, axis,
-        `pair "${pairId}": member ${m.id} declares axis "${m.variantAxis}", the pair is "${axis}"`);
-    }
-
-    // Every pair needs someone claiming silence and someone claiming a signal.
-    // Two positives prove only that the tools are quiet.
-    assert.ok(members.some((m) => m.polarity === 'positive'),
-      `pair "${pairId}": no member claims the toolchain should stay quiet`);
-    assert.ok(members.some((m) => m.polarity !== 'positive'),
-      `pair "${pairId}": every member is positive — nothing is being contrasted`);
-
-    const seenPolarity = new Map();
-    for (const m of members) {
-      const key = `${m.polarity}:${JSON.stringify(AXES[axis].varied.map((f) => m[f] ?? null))}`;
-      assert.ok(!seenPolarity.has(key),
-        `pair "${pairId}": ${m.id} and ${seenPolarity.get(key)} are the same polarity AND the same `
-        + `variant — one of them is a copy, not a comparison`);
-      seenPolarity.set(key, m.id);
-    }
-
-    const { shared, varied } = AXES[axis];
-    const norm = (v) => JSON.stringify(v ?? null);
-    for (const field of shared) {
-      const values = new Set(members.map((m) => norm(m[field])));
-      assert.equal(values.size, 1,
-        `pair "${pairId}" varies "${axis}", so every member must share "${field}" — `
-        + `found ${[...values].join(' vs ')}\n  members: ${members.map((m) => m.id).join(', ')}`);
-    }
-    const variedDiffers = varied.some((field) =>
-      new Set(members.map((m) => norm(m[field]))).size > 1);
-    assert.ok(variedDiffers,
-      `pair "${pairId}" declares axis "${axis}" but no member differs in ${varied.join('/')} — `
-      + 'the pair varies nothing and proves nothing');
-  }
-
-  // The corpus as a whole has to exercise more than one axis, or "pairing" has
-  // quietly collapsed back into "two targets".
-  const axes = new Set(manifest.scenarios.map((s) => s.variantAxis));
-  assert.ok(axes.size >= 4,
-    `the corpus exercises only ${[...axes].join(', ')} — style, map and role calibration need their own axes`);
+  const pairs = validatePairInvariants(manifest);
+  assert.ok(pairs.size >= 6, `only ${pairs.size} pairs — the corpus has thinned out`);
 });
 
 // ---------------------------------------------------------------------------

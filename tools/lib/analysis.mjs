@@ -38,7 +38,7 @@
 //    staff or track index, and never from a track name (the corpus has Korean
 //    track names).
 //  * The declared key signature lies (Canon Rock 1 declares \ks c while
-//    sounding in E). `key` is inferred from pitch content; the declared value
+//    sounding in D). `key` is inferred from pitch content; the declared value
 //    is reported alongside it as `keyDeclared` and never used for anything.
 
 import * as alphaTab from '@coderline/alphatab';

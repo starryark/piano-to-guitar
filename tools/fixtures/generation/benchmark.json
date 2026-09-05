@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "description": "Original short synthetic exercises for generation plumbing; not a musical-quality or trained-model benchmark.",
+  "cases": [
+    { "id": "quarter-melody", "compositionId": "ptg-original-eg-exercise-v1", "split": "test", "rightsBasis": "original-synthetic-exercise", "source": "source.alphatab", "plan": "plan.json", "ir": "ir.json" },
+    { "id": "changing-meter", "compositionId": "ptg-original-changing-meter-v1", "split": "test", "rightsBasis": "original-synthetic-exercise", "source": "mixed-source.alphatab", "plan": "mixed-plan.json", "ir": "mixed-ir.json" }
+  ]
+}

@@ -36,3 +36,13 @@ Gate a chunk from inside the project (digest resolves automatically from the co-
 ```
 cd projects/<slug> && node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-N
 ```
+
+## Optional generation runs
+
+`plan.json`, `plan.lock.json`, `model.json`, and `generation/<run>/` can live inside
+the song folder alongside the ordinary project files. They remain local and
+gitignored. Each generation run retains requests, responses, source/plan snapshots,
+IR, fingering, AlphaTex, gate evidence and per-attempt history. Record each actual
+human verdict with `history.mjs verdict --project <passing-attempt-directory>` and
+reference it in the song's `sessions.md`. Keep these directories for provenance.
+See [structured generation](../docs/specs/generation.md) for the full procedure.

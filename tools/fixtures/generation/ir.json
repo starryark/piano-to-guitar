@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "section": "E phrase",
+  "tabBars": [1, 1],
+  "events": [
+    { "bar": 1, "beat": 0, "duration": { "value": 4, "dots": 0 }, "pitches": [64], "techniques": [] },
+    { "bar": 1, "beat": 1, "duration": { "value": 4, "dots": 0 }, "pitches": [66], "techniques": [] },
+    { "bar": 1, "beat": 2, "duration": { "value": 4, "dots": 0 }, "pitches": [67], "techniques": [] },
+    { "bar": 1, "beat": 3, "duration": { "value": 4, "dots": 0 }, "pitches": [64], "techniques": [] }
+  ],
+  "deliberateLosses": [],
+  "additions": []
+}

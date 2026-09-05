@@ -16,9 +16,10 @@ groove. A **fidelity gate** enforces exactly that skeleton; every other departur
 each chunk against a reference recording and decide whether it's good. No arrangement is
 ever finalized without your ear on it.
 
-This repo is a **toolchain, not a piece of music**. It ships no example arrangement on
-purpose: every musical decision is derived from the source in front of you, never
-inherited from a previous one.
+This repo is a **toolchain, not a piece of music**. Every musical decision is derived
+from the source in front of you. The older song-named files in this checkout have
+unspecified provenance; they are not a cleared arrangement or training library.
+See the [provenance ledger](docs/specs/provenance.md).
 
 **One language, one parser, one dependency.** The source piano score is stored in
 AlphaTex directly — the same format the guitar tab is written in — so the whole
@@ -35,7 +36,7 @@ is the guitar tab plus your verdict on it.
 
 ## Requirements
 
-- **Node.js** (ESM) with the one dependency installed — `npm install`
+- **Node.js 22 or 24** (ESM; `.nvmrc` selects 24) with the one dependency installed — `npm install`
   (`@coderline/alphatab` is the only entry in `dependencies`)
 - Works on Windows (PowerShell or Bash), macOS, Linux — CI runs the full suite and
   smoke on all three × Node 22 and 24, so this is a result rather than a claim
@@ -58,6 +59,13 @@ that are actually enforced are counts and bytes in `tools/scale.test.mjs`.
 Observed numbers and what they mean: `docs/specs/wave6-performance.md`.
 
 ## Arranging a piece
+
+An optional [structured generation path](docs/specs/generation.md) adds a versioned
+prompt, locked Gate A plan, typed guitar IR, deterministic AlphaTex compilation and
+gate-feedback repair. It supports offline response replay or a caller-supplied model
+adapter, records provenance with history, and still requires human audition and approval.
+`npm run test:generation` verifies it; `npm run benchmark:generation -- --out out/generation-benchmark`
+runs its synthetic offline benchmark. The standard workflow below is unchanged.
 
 Each song lives in its own folder under `projects/<slug>/`, with standardized filenames so
 every command is identical across projects. Create `projects/<slug>/` and drop your piano

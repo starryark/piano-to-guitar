@@ -56,6 +56,13 @@ then defer to the human's verdict.
 
 ## Workflow
 
+The optional [structured generation workflow](specs/generation.md) uses the same
+Gate A approval and Gate B audition rules. It adds a hashed plan lock, a typed guitar
+IR compiler, versioned model requests and repair feedback. Do not invent approval
+text to create a lock, change locked modes to improve a score, or treat a generated
+PASS as an APPROVED verdict. Later chunks require the preceding passing history
+snapshot's human approval. Ordinary hand-authored AlphaTex remains supported.
+
 ### Step 0 — INGEST (once per source file)
 
 ```

@@ -1,0 +1,9 @@
+\title "Generation fixture: original changing-meter exercise"
+\tempo 120
+.
+\track "Piano"
+\staff {score}
+\ts (3 4)
+E4.4 G4.4 B4.4 |
+\ts (5 8) \tempo 104
+A4.4 G4.4 E4.8 |

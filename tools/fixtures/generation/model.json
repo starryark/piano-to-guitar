@@ -1,0 +1,7 @@
+{
+  "provider": "offline-fixture",
+  "modelId": "scripted-responses-v1",
+  "modelRevision": "1",
+  "tokenizerRevision": "unsupported",
+  "sampling": { "temperature": "unsupported", "topP": "unsupported", "seed": "unsupported" }
+}

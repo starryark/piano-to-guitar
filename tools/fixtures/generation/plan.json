@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "title": "Generation fixture: original E and G note exercise",
+  "transpose": 0,
+  "tuning": [64, 59, 55, 50, 45, 40],
+  "maxFret": 22,
+  "style": "hard-rock",
+  "gain": "high",
+  "groove": "straight quarter-note melody",
+  "bars": [
+    { "bar": 1, "meter": [4, 4], "tempo": 120 },
+    { "bar": 2, "meter": [4, 4], "tempo": 120 }
+  ],
+  "sidecar": {
+    "song": "Original E and G note exercise",
+    "entries": [
+      { "tabBars": [1, 1], "sourceBars": [1, 1], "mode": "quote", "note": "E phrase: state the melody" },
+      { "tabBars": [2, 2], "sourceBars": [2, 2], "mode": "quote", "note": "G phrase: answer the melody" }
+    ]
+  }
+}

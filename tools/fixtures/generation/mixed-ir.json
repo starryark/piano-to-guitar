@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "section": "changing meter",
+  "tabBars": [1, 2],
+  "events": [
+    { "bar": 1, "beat": 0, "duration": { "value": 4, "dots": 0 }, "pitches": [64], "techniques": [] },
+    { "bar": 1, "beat": 1, "duration": { "value": 4, "dots": 0 }, "pitches": [67], "techniques": [] },
+    { "bar": 1, "beat": 2, "duration": { "value": 4, "dots": 0 }, "pitches": [71], "techniques": [] },
+    { "bar": 2, "beat": 0, "duration": { "value": 4, "dots": 0 }, "pitches": [69], "techniques": [] },
+    { "bar": 2, "beat": 1, "duration": { "value": 4, "dots": 0 }, "pitches": [67], "techniques": [] },
+    { "bar": 2, "beat": 2, "duration": { "value": 8, "dots": 0 }, "pitches": [64], "techniques": [] }
+  ],
+  "deliberateLosses": [],
+  "additions": []
+}

@@ -101,6 +101,11 @@ zero. The signed `±N` becomes `check.mjs --transpose N`.
 The **Mode** column is the sidecar contract: `free` = no fidelity gate on that
 span (added material — the guitar's own contribution); `quote` = in-order
 skeleton + root motion protected; `recompose` = root motion only protected.
+When using `llm-arrange.mjs`, include the full approved form and each bar's meter
+and tempo in `plan.json`, then record the actual approval and printed lock hash in
+`sessions.md`. The generator cannot revise modes or source correspondence. See
+[the generation schema and commands](specs/generation.md).
+
 Each span becomes one entry in the sidecar you later pass to
 `check.mjs --map`. Additions are first-class — `free` spans are named here at
 the gate, not smuggled in later.

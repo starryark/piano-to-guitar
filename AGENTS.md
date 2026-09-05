@@ -19,8 +19,9 @@ is shown to the human until `check.mjs` passes. Follow **`docs/workflow.md`** fo
 workflow (templates in **`docs/gate-templates.md`**); this file is the orientation you read
 first.
 
-**This repo is a toolchain, not a piece of music.** It ships no example arrangement on
-purpose. Everything below is a rule you apply to *the source in front of you* — where a
+**This repo is a toolchain, not a piece of music.** Older song-named files in the tree
+have unspecified provenance (see `docs/specs/provenance.md`); they are not a cleared
+arrangement or training library. Everything below applies to *the source in front of you* — where a
 number appears, it is the magnitude to expect, not a value to reuse. Derive every
 musical decision from `projects/<slug>/source-map.md`; never inherit one from a previous
 arrangement.
@@ -35,7 +36,15 @@ Environment: Windows, PowerShell + Bash both available. Node ESM (`"type":"modul
 **One runtime (Node) and one dependency (`@coderline/alphatab`).** No Python, no second
 parser, no source-format conversion layer — they were deleted on purpose when this project
 forked (see "Vendoring provenance" below). The source format is AlphaTex throughout;
-input in any other format is rejected at every tool boundary.
+source input in any other format is rejected at every source-tool boundary.
+
+**Optional structured generation:** `tools/llm-arrange.mjs` records a versioned
+prompt and model provenance, accepts typed guitar Arrangement IR, compiles it to
+AlphaTex, and repairs through `history.mjs check`. This is an output representation,
+not a second source parser. Read `docs/specs/generation.md` before using it. The
+approved plan, sidecar modes, source evidence and prior approved prefix are locked;
+model responses cannot weaken them. Machine PASS is still not human approval.
+Offline replay needs no model service; live adapters are explicitly caller-selected.
 
 ---
 

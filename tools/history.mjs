@@ -124,11 +124,25 @@ function capture(p, {
   const contractBytes = hasContract ? fs.readFileSync(contractPath) : Buffer.alloc(0);
   const hasPolicy = policyPath && fs.existsSync(policyPath);
   const policyBytes = hasPolicy ? fs.readFileSync(policyPath) : Buffer.alloc(0);
+  // Optional generation provenance is bound to exact candidate/map bytes.
+  // A subsequent hand edit must not inherit the previous model's attribution.
+  let generationBytes = null;
+  const generationPath = path.join(p.projectDir, 'generation.json');
+  if (fs.existsSync(generationPath)) {
+    const bytes = fs.readFileSync(generationPath);
+    let metadata;
+    try { metadata = JSON.parse(bytes.toString('utf8')); }
+    catch { die(2, `invalid generation provenance at ${generationPath}`); }
+    if (metadata.coverSha256 === createHash('sha256').update(coverBytes).digest('hex')
+      && metadata.sidecarSha256 === createHash('sha256').update(sidecarBytes).digest('hex')) generationBytes = bytes;
+  }
   const SEP = Buffer.from([0]);
-  const hash = createHash('sha256')
+  const hasher = createHash('sha256')
     .update(coverBytes).update(SEP).update(sidecarBytes)
-    .update(SEP).update(contractBytes).update(SEP).update(policyBytes)
-    .digest('hex');
+    .update(SEP).update(contractBytes).update(SEP).update(policyBytes);
+  // Preserve legacy dedup hashes exactly when generation was not used.
+  if (generationBytes) hasher.update(SEP).update(generationBytes);
+  const hash = hasher.digest('hex');
 
   const entries = loadEntries(p.log);
   const last = entries[entries.length - 1] ?? null;
@@ -177,6 +191,11 @@ function capture(p, {
       policy: policyName, report: reportName, foreground: foregroundName,
     },
   };
+  if (generationBytes) {
+    entry.files.generation = `${pad(seq)}-${short}.generation.json`;
+    entry.generationHash = createHash('sha256').update(generationBytes).digest('hex');
+    fs.writeFileSync(path.join(p.historyDir, entry.files.generation), generationBytes);
+  }
   fs.appendFileSync(p.log, JSON.stringify(entry) + '\n');
   return { created: true, entry };
 }
@@ -248,7 +267,7 @@ function cmdCheck(argv) {
   // `history.mjs check --max-fret 24 cover.alphatab` took "24" for the tab.
   // Any check.mjs flag that consumes a value MUST be listed here.
   const VALUE = new Set(['--bars', '--map', '--transpose', '--gain', '--digest',
-    '--contract', '--policy', '--style', '--max-fret']);
+    '--contract', '--policy', '--style', '--max-fret', '--arrangement-mode', '--lead', '--rhythm']);
   const passthrough = [];
   let note = '', bars = null, map = null, tab = null, contract = null, policy = null;
   for (let i = 0; i < argv.length; i++) {

@@ -7,7 +7,8 @@ copy-paste presentation templates referenced below live in `docs/gate-templates.
 
 You are a guitarist-arranger making a **rock cover**, not a transcriber. The
 human is the evaluator; machines check before the human listens. You reduce and
-re-voice a piano piece (its source written in AlphaTex) for electric guitar —
+re-voice a piano piece or a band score (MusicXML imported to AlphaTex by
+`tools/score-import.mjs`, or AlphaTex directly) for electric guitar —
 **one guitar by default**, or two when the human approves a dual-guitar
 arrangement at Gate A — `tools/check.mjs` gates every chunk, the human auditions
 (open the `.alphatab` in VS Code with the alphaTab extension and plays it, A/B
@@ -45,6 +46,7 @@ then defer to the human's verdict.
 | Task | Read |
 |---|---|
 | Reading the source (at ingest, always) | `reference/alphatex-piano-reading.md` |
+| A band score: which part becomes what on one guitar | `reference/piano-to-guitar-arranging.md` → "Arranging from a band score" |
 | Writing any tab (always) | `reference/alphatex-language.md` |
 | The plan: piano→guitar reduction + technique palette | `reference/piano-to-guitar-arranging.md` + `reference/electric-guitar-voice.md` |
 | Riffs, licks, rhythm-guitar idioms | `reference/rock-riff-construction.md` |
@@ -65,6 +67,30 @@ snapshot's human approval. Ordinary hand-authored AlphaTex remains supported.
 
 ### Step 0 — INGEST (once per source file)
 
+**If the score arrived as MusicXML** (`.mxl` / `.musicxml` / `.xml` — piano or a whole
+band), import it first. This is the only step that reads anything but AlphaTex:
+
+```
+node tools/score-import.mjs <score.mxl> --project <slug>   # exit 0 = converted AND verified
+# writes projects/<slug>/: source.alphatab (concert pitch), source-roles.json (PROPOSED
+# melody carriers — multi-part scores only), import-report.md (tracks table + evidence),
+# original.mxl, sidecar.json
+```
+
+A solo-piano score gets no `source-roles.json`: its tune is its top voice, which the
+digest's register heuristic already reads, and the rest of Step 0 is exactly the
+AlphaTex workflow.
+
+Read `import-report.md` before anything else: the tracks table (register, `mono`,
+`step`, role), the proposed melody carrier per section with its runner-up, the
+transposition check (must read `ok`), and the repairs it made. Exit `1` means the
+conversion could not be verified and nothing was written — report the mismatch, do
+not hand-convert around it. `--tracks 0,2,7` keeps a subset (rarely needed: percussion
+and accompaniment are handled by the analysis, and dropping a part can drop a melody
+carrier).
+
+Then, for every source:
+
 ```
 node tools/piano-validate.mjs projects/<slug>/source.alphatab   # exit 0 + rewrites count (AT218 -1.N tokens normalized)
 node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>   # writes projects/<slug>/source.json + source-map.md
@@ -79,6 +105,17 @@ piano-only mix and on the full mix) ingest together through a manifest:
 (schema: `{ "sources": [{ "file": "…", "role": "pitched-reference", "weight": 1 }, …] }`).
 Cross-source agreement raises foreground confidence later; disagreement stays
 visible — it is never silently resolved.
+
+**Band scores: the melody is designated, not guessed.** `piano-extract` applies
+`projects/<slug>/source-roles.json` automatically (and says so). Each span names the
+track(s) that carry the tune; the digest's melody, skeleton and contour come from those
+tracks, and harmony from the others. The import only PROPOSES the spans, from line
+statistics. Before Gate A: open `source.alphatab` in VS Code, **solo each named track
+and its runner-up**, fix any span whose carrier is wrong (a pickup in the previous
+section, a duet where two tracks share the line, an interlude led by a synth hook),
+set `"status": "reviewed"`, and re-run `piano-extract`. The bar map prefixes every
+contour with its source — `t0:` designated track, `reg:` register heuristic,
+`(rests)` designated line silent — so a wrong carrier is visible at a glance.
 
 Initialize the empty **sidecar** now, at ingest, so the schema is never re-invented
 mid-session: `projects/<slug>/sidecar.json` = `{ "song": "<name>", "entries": [] }`.
@@ -106,6 +143,9 @@ default; a wrong answer here silently mis-shapes everything downstream.
       **note counts**, not semitones).
 - [ ] Which voice is the melody (`melodyVoice`/`bassVoice`, chosen by register).
       If this looks wrong, STOP — the gate would grade against the wrong line.
+- [ ] **Band score:** which track carries the melody in each section
+      (`source-roles.json`, proposed by the import). Audition the named tracks solo;
+      the roles file must be `"reviewed"` before Gate A is presented as final.
 - [ ] Pickup bar? (`pickup`; bar ids are positional, `sourceBarNumber` is the
       score's).
 - [ ] Repeated material (`duplicateRanges[]`) — and **diff** the ranges, a
@@ -182,6 +222,11 @@ Present the plan table from `docs/gate-templates.md`. Fill every row from the ma
 - **Technique palette** — per `reference/piano-to-guitar-arranging.md` +
   `reference/electric-guitar-voice.md`.
 - **Deliberate losses** — what the reduction drops and why (Rule 4).
+- **Melody carriers (band scores)** — fill the source-tracks block from
+  `docs/gate-templates.md`: which track carries the tune in each section, what the
+  guitar takes from every other part (bass line, counter-melody, hook, groove), and
+  what it drops. This is where a band score becomes one guitar part — see
+  `reference/piano-to-guitar-arranging.md` → "Arranging from a band score".
 - **Source reliability** — fill the source-reliability block from
   `docs/gate-templates.md`: transcription kind, pitched-performance groups,
   excluded tracks, the foreground authority (digest skeleton vs reviewed
@@ -371,8 +416,32 @@ summarize what was approved and when, drawn from the log.
   disagrees" — that case is a `contract` span.
 - **A noisy source requires a reviewed foreground contract before drafting.**
 
+## Doctrine for band scores (multi-instrument MusicXML)
+
+- **The tune is what a listener follows, not what sits highest.** In a band score that
+  is usually the vocal-substitute instrument (a clarinet, a synth lead), and it can
+  change hands between sections. Designate it per span in `source-roles.json`.
+- **The import's carrier proposal is evidence; the audition decides.** It ranks tracks
+  by presence × one-note-at-a-time × stepwise motion, which separates a sung line from
+  an arpeggio or a pad — and still misses duets, call-and-response and pickups.
+- **A section with no carrier is real.** Where the designated line rests, the digest
+  melody rests (`melodyRests`): plan that span `recompose` or `free`, never `quote`.
+  The import never proposes that on its own: a section where no track reads as a
+  melodic line is left uncovered (register heuristic, `reg:`), and declaring
+  `"tracks": []` is a human decision.
+- **Harmony comes from the accompaniment** (`"harmony": "accompaniment"`), so the gate
+  protects the chord the band plays, not the chord the tune's long notes imply.
+- **Everything is concert pitch after import.** A clarinet part reads a tone lower
+  than its printed page; that is correct.
+- **The other parts are the guitar's raw material, not obligations.** Bass line,
+  counter-melodies, hooks and the drum groove are what the one guitar draws on
+  between and under melody notes — each use is named at Gate A, each omission is a
+  deliberate loss.
+
 ## Remember
 
+- [ ] MusicXML source: `score-import.mjs` exited 0 (verified); `import-report.md` read;
+      `source-roles.json` reviewed (status `"reviewed"`) and `piano-extract` re-run
 - [ ] Ingest ran (validate → extract → source-profile → audition in VS Code); read
       `projects/<slug>/source-map.md`, not the raw `.alphatab`
 - [ ] On a noisy transcription: foreground reviewed, melody contract written and

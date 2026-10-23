@@ -1,6 +1,7 @@
 # Piano to Guitar Arranging
 
-The reduction craft: how to get from a two-staff piano AlphaTex source to a single electric
+The reduction craft: how to get from a two-staff piano AlphaTex source — or a band score,
+see [Arranging from a band score](#arranging-from-a-band-score) — to a single electric
 guitar part that sounds like it was written for the instrument. Read this before writing
 any bar of an arrangement, and re-read [The translation table](#the-translation-table)
 whenever a specific piano gesture has you stuck. For *why* the guitar behaves this way see
@@ -325,6 +326,47 @@ ladder, not with the key.
 The Drop-D question is decided by the folded bass line, not by taste: if the lowest
 structural note fits above E2 after octave-folding, **standard tuning wins** — see
 [tunings.md](tunings.md) for the full test.
+
+## Arranging from a band score
+
+A band score (MusicXML with clarinet, horn, piano, guitars, synths, bass, drums — imported
+by `tools/score-import.mjs`) hands you more than a piano score does, and more to throw
+away. The [reduction ladder](#the-reduction-ladder) and the [density budget](#density-budget)
+still decide every bar; what changes is where each rung's material comes from. Decide the
+mapping once, at Gate A (the source-tracks block in `docs/gate-templates.md`), from
+`import-report.md`'s role column:
+
+| Source part (import-report role) | What it becomes on one guitar |
+|---|---|
+| The melody carrier (`melodic line`, named in `source-roles.json`) | **The lead line — the product.** A vocal-range line (concert C4–C5) sits at frets 5–15 of strings 1–3, the guitar's singing register: keep it at pitch. |
+| Bass (`bass`) | Roots on downbeats and under sustained melody notes, low strings, palm-muted under gain. Keep the bass player's *rhythm* — a pushed eighth before the barline is the groove — not every passing note. |
+| Comping (`chords`: piano, rhythm guitar) | The harmony the gate protects. Under the melody: one dyad on the beat. In melody rests: the chord as a hit or strum in the band's rhythm. |
+| A second `melodic line` that is not the carrier (horn answer, synth hook, string line) | **Fills in the melody's rests** — call and response, one counter-line at a time, only where the tune breathes. |
+| `arpeggio/figure` (picked or harp-like accompaniment) | The verse texture under a sparse melody (let-ring, clean or crunch), or the intro. Never under a busy melody. |
+| `pad` | Discard as sound; keep as evidence — the steadiest chord in the bar. |
+| `percussion` | The Groove plan: kick and snare placement become palm-mute and accent patterns. Never notes. |
+
+**The carrier decides the section's role.** A verse carried by a soft instrument wants a
+clean or crunch lead with sparse root support. A full-band chorus wants the melody in
+octaves or double-stops with power-chord hits on the kick accents. An instrumental
+interlude led by a synth or horn hook is the guitar's showcase: play the hook as a riff
+(often the most idiomatic material in the song). A section the source already gives to a
+guitar solo is already guitar language — stay close to it.
+
+**Priority inside a bar** is the density budget applied to a band: melody first; when the
+melody sustains or rests, spend the second voice on the bass root (downbeat) *or* the
+counter-line (rest) — not both; chords only where the melody leaves room. A bar that
+plays the tune, the bass line and the horn answer at once is a piano reduction in
+disguise.
+
+**Register.** High hooks (flute, synth lead above E5) drop an octave or move to frets
+12–17 of string 1; a low carrier (cello, trombone) goes up an octave. Move whole phrases,
+never note by note.
+
+**Articulation is a gift a piano score never gives.** A horn swell → a volume swell or a
+bend into the note; a legato string line → slides and hammer-ons; staccato brass hits →
+palm-muted stabs; a sung held note → vibrato. Read the carrier's phrasing in its own part
+(solo it in `source.alphatab`), then translate it.
 
 ## Arranging from a noisy transcription (Basic Pitch and friends)
 

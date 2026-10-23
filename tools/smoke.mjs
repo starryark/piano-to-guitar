@@ -336,6 +336,41 @@ check('source-profile: percussion excluded structurally; noise classified', () =
 });
 
 // ---------------------------------------------------------------------------
+// 11b. MusicXML import: verified AlphaTex, concert pitch, roles steer melody
+// ---------------------------------------------------------------------------
+// The ensemble fixture trips every import hazard (tie-before-transpose, the
+// r.256 forward-gap placeholder, a score-defined drum kit) and puts a piano
+// chord ABOVE the tune. The import must verify itself, and the digest built
+// from it must take bar 1's melody from the clarinet the roles file names —
+// not from the piano the register heuristic would pick.
+
+check('score-import: MusicXML -> verified AlphaTex; source-roles steer the melody', () => {
+  const dir = path.join(SMOKE_OUT, 'import');
+  const imp = node([tool('score-import.mjs'), fix('musicxml/ensemble.musicxml'), '--out', dir]);
+  assert(imp.code === 0, `score-import exit ${imp.code}: ${imp.out}`);
+  assert(/round trip exact over \d+ attack/.test(imp.out), 'import must report a verified round trip');
+  const tex = fs.readFileSync(path.join(dir, 'source.alphatab'), 'utf8');
+  assert(!/r\.256/.test(tex), 'a forward-gap placeholder leaked into the AlphaTex');
+  const ex = node([tool('piano-extract.mjs'), path.join(dir, 'source.alphatab'), '--out', dir]);
+  assert(ex.code === 0, `piano-extract exit ${ex.code}: ${ex.out}`);
+  const d = JSON.parse(fs.readFileSync(path.join(dir, 'source.json'), 'utf8'));
+  const bar1 = d.bars[0].melody.map((n) => n.name).join(' ');
+  assert(bar1 === 'E4 F4 G4 A4', `bar 1 melody should be the clarinet (concert E4 F4 G4 A4), got "${bar1}"`);
+  assert(d.sourceProfile.kind === 'clean-notation', `ensemble notation misread as ${d.sourceProfile.kind}`);
+  // Solo piano: one pitched part, so NO roles file — the top voice is the tune,
+  // and a chordal intro must keep its top line rather than "rest".
+  const pdir = path.join(SMOKE_OUT, 'import-piano');
+  assert(node([tool('score-import.mjs'), fix('musicxml/piano.musicxml'), '--out', pdir]).code === 0, 'piano import failed');
+  assert(!fs.existsSync(path.join(pdir, 'source-roles.json')), 'a one-part score must get no source-roles.json');
+  assert(node([tool('piano-extract.mjs'), path.join(pdir, 'source.alphatab'), '--out', pdir]).code === 0, 'piano extract failed');
+  const p = JSON.parse(fs.readFileSync(path.join(pdir, 'source.json'), 'utf8'));
+  const intro = p.bars[0].melody.map((n) => n.name).join(' ');
+  assert(intro === 'D5 E5', `solo-piano intro should keep its chord tops, got "${intro}"`);
+  return `clarinet carries bar 1 (${bar1}); ${d.sourceRoles.melody.length} roles span(s); clean-notation; `
+    + `solo piano: no roles file, intro top line ${intro}`;
+});
+
+// ---------------------------------------------------------------------------
 // 12. foreground pipeline: extract -> foreground.json + foreground-map.md
 // ---------------------------------------------------------------------------
 // End-to-end over the CLI (not the library): the false-high-octave fixture's

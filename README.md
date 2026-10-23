@@ -25,7 +25,8 @@ See the [provenance ledger](docs/specs/provenance.md).
 AlphaTex directly — the same format the guitar tab is written in — so the whole
 source-format machinery of the predecessor project (a second parser, MusicXML converters,
 a Python runtime, a MuseScore normalizer) is gone. Node ESM plus `@coderline/alphatab`,
-nothing else. The vendored gate tools are a snapshot from `abc-to-guitar@ba7e29c` (not a
+nothing else. MusicXML scores come in through a single import step built on alphaTab's own
+MusicXML importer (`tools/score-import.mjs`) — not a second parser. The vendored gate tools are a snapshot from `abc-to-guitar@ba7e29c` (not a
 live dependency); local edits are marked `// PTG:`. See `AGENTS.md` → "Vendoring
 provenance" for detail.
 
@@ -68,8 +69,20 @@ adapter, records provenance with history, and still requires human audition and 
 runs its synthetic offline benchmark. The standard workflow below is unchanged.
 
 Each song lives in its own folder under `projects/<slug>/`, with standardized filenames so
-every command is identical across projects. Create `projects/<slug>/` and drop your piano
-AlphaTex export in as `source.alphatab`, then:
+every command is identical across projects.
+
+**Starting from MusicXML** (`.mxl`, `.musicxml`, `.xml` — a piano score or a whole band):
+```
+node tools/score-import.mjs path/to/song.mxl --project <slug>
+```
+That creates `projects/<slug>/source.alphatab` (every part at concert pitch), verifies the
+conversion note by note (it writes nothing if it cannot), and writes `import-report.md` plus
+a **proposed** `source-roles.json` — which track carries the melody in each section. On a
+band score, audition those tracks and confirm the roles before planning: the melody of a
+band score is rarely its highest voice.
+
+**Starting from AlphaTex**: create `projects/<slug>/` and drop your piano AlphaTex export in
+as `source.alphatab`. Either way, then:
 
 **Step 0 — Ingest.** Validate the source, extract the digest, audition the source.
 ```
@@ -77,7 +90,8 @@ node tools/piano-validate.mjs projects/<slug>/source.alphatab                   
 node tools/piano-extract.mjs  projects/<slug>/source.alphatab --out projects/<slug>   # writes source.json + source-map.md
 # Audition: open projects/<slug>/source.alphatab in VS Code (alphaTab extension) and play it
 ```
-Read `projects/<slug>/source-map.md` (the human-readable bar map), not the raw AlphaTex file,
+Read `projects/<slug>/source-map.md` (the human-readable bar map, ending in a lead sheet of
+the melody with its rhythm and chords), not the raw AlphaTex file,
 and establish the source's properties from it — key, meter changes, range, which voice
 carries the melody, repeats, encoding, and whether the declared `\ks` agrees with the
 sounding key. `AGENTS.md` has the checklist; `reference/piano-to-guitar-arranging.md` →

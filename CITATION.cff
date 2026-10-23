@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this toolchain in your work, please cite it as below."
+title: "piano-to-guitar: arrange piano sheet music and MusicXML band scores into playable electric guitar tabs"
+type: software
+authors:
+  - given-names: Yangyi
+    family-names: Liu
+    alias: starryark
+repository-code: "https://github.com/starryark/piano-to-guitar"
+abstract: >-
+  A Node.js toolchain that arranges a piano score or a multi-instrument band
+  score (MusicXML or AlphaTex) into a playable solo electric-guitar tab in
+  AlphaTex, with machine gates for guitar playability and melodic and harmonic
+  fidelity, and a human-in-the-loop workflow designed for AI coding agents.
+keywords:
+  - guitar tablature
+  - piano to guitar
+  - MusicXML
+  - music arrangement
+  - alphaTab
+  - AlphaTex
+  - electric guitar
+  - LLM agents
+version: "1.0.0"

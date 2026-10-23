@@ -1,0 +1,42 @@
+# piano-to-guitar
+
+> Node.js toolchain that arranges a piano score or a multi-instrument band score (MusicXML .mxl/.musicxml/.xml, or AlphaTex) into a playable solo electric-guitar tab written in AlphaTex (alphaTab), with machine gates for guitar playability and melodic/harmonic fidelity, and a human-in-the-loop workflow designed for AI coding agents (Claude Code, Codex, Cursor, any LLM agent).
+
+Key facts:
+
+- Input: MusicXML via `tools/score-import.mjs` (verified conversion, concert pitch, melody-carrier proposal per section), or AlphaTex directly. Output: an AlphaTex guitar tab (`cover.alphatab`), plus MIDI and WAV exports.
+- One runtime (Node.js 22 or 24) and one dependency (`@coderline/alphatab`); Windows, macOS, Linux.
+- Workflow: Step 0 import and analysis -> Gate A arrangement plan (human approval) -> Gate B per chunk of at most 8 bars (`check.mjs` must PASS, then a human audition and verdict) -> final review.
+- The gate checks syntax and bar fill, playability (fret span, one note per string, pick reachability, position jumps, ties) and fidelity (melody skeleton and chord roots per mapped section). Everything else is a soft advisory.
+- An arranger, not a transcriber: reduction and added material are expected and named at the gates.
+- Agents start with AGENTS.md, then docs/workflow.md. Song projects live in the gitignored projects/ folder.
+
+## Start here
+
+- [README](https://github.com/starryark/piano-to-guitar/blob/main/README.md): what the project is, quick start, FAQ
+- [AGENTS.md](https://github.com/starryark/piano-to-guitar/blob/main/AGENTS.md): canonical orientation for coding agents (tools, exit codes, contracts, hazards)
+- [docs/workflow.md](https://github.com/starryark/piano-to-guitar/blob/main/docs/workflow.md): the gated procedure, step by step
+- [docs/gate-templates.md](https://github.com/starryark/piano-to-guitar/blob/main/docs/gate-templates.md): copy-paste templates for the plan and per-chunk presentations
+
+## Tools
+
+- [tools/score-import.mjs](https://github.com/starryark/piano-to-guitar/blob/main/tools/score-import.mjs): MusicXML -> verified AlphaTex source, import report, proposed source-roles.json
+- [tools/piano-extract.mjs](https://github.com/starryark/piano-to-guitar/blob/main/tools/piano-extract.mjs): source -> digest (source.json) and bar map with lead sheet (source-map.md)
+- [tools/check.mjs](https://github.com/starryark/piano-to-guitar/blob/main/tools/check.mjs): the consolidated gate (validate -> playability -> compare)
+- [tools/history.mjs](https://github.com/starryark/piano-to-guitar/blob/main/tools/history.mjs): Gate-B command; per-song version history, verdicts, final review
+- [tools/fret.mjs](https://github.com/starryark/piano-to-guitar/blob/main/tools/fret.mjs): pitch <-> fret.string lookup
+- [tools/export-midi.mjs](https://github.com/starryark/piano-to-guitar/blob/main/tools/export-midi.mjs): tab -> MIDI for a DAW or amp sim
+
+## Craft references
+
+- [Piano to guitar arranging](https://github.com/starryark/piano-to-guitar/blob/main/reference/piano-to-guitar-arranging.md): the reduction ladder, translation table, arranging from a band score
+- [Guitar playability](https://github.com/starryark/piano-to-guitar/blob/main/reference/guitar-playability.md): hard mechanical constraints
+- [Electric guitar voice](https://github.com/starryark/piano-to-guitar/blob/main/reference/electric-guitar-voice.md): gain, register, sustain
+- [AlphaTex language](https://github.com/starryark/piano-to-guitar/blob/main/reference/alphatex-language.md): the tab format, with verified gotchas
+- [Chunk authoring cheatsheet](https://github.com/starryark/piano-to-guitar/blob/main/reference/chunk-authoring-cheatsheet.md): rules to keep open while writing a bar
+
+## Optional
+
+- [Advisory reference](https://github.com/starryark/piano-to-guitar/blob/main/docs/specs/advisory-reference.md): every soft finding and what it means
+- [Structured generation](https://github.com/starryark/piano-to-guitar/blob/main/docs/specs/generation.md): locked plans, Arrangement IR, model provenance
+- [Provenance ledger](https://github.com/starryark/piano-to-guitar/blob/main/docs/specs/provenance.md): what is and is not cleared in this repo

@@ -497,7 +497,9 @@ for the audit and the `<pitch>`/`<transpose>` rewrite of the concert-pitch norma
 Piano-to-guitar/
 ├─ AGENTS.md        this file — the canonical, vendor-neutral orientation (read first)
 ├─ CLAUDE.md        thin pointer → AGENTS.md (Claude Code auto-loads it)
-├─ README.md        human quickstart
+├─ README.md        human quickstart (summary, quick start, FAQ)
+├─ llms.txt         LLM-facing index of the repo (llmstxt.org format)
+├─ CITATION.cff     citation metadata ("Cite this repository")
 ├─ package.json     deps: @coderline/alphatab ONLY
 ├─ docs/            the vendor-neutral instruction set (any CLI reads these)
 │   ├─ workflow.md          the gated procedure (Step 0 / Gate A / Gate B / Final)

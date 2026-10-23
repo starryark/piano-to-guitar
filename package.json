@@ -6,9 +6,37 @@
   "engines": {
     "node": "^22.0.0 || ^24.0.0"
   },
-  "description": "Arrange a piano score written in AlphaTex into a playable solo electric-guitar rock cover in AlphaTex.",
+  "description": "Arrange piano sheet music or a MusicXML band score into a playable solo electric guitar tab (AlphaTex / alphaTab), with playability and fidelity gates and a human-in-the-loop workflow for AI coding agents.",
+  "keywords": [
+    "guitar",
+    "guitar-tab",
+    "tablature",
+    "electric-guitar",
+    "piano",
+    "piano-to-guitar",
+    "sheet-music",
+    "musicxml",
+    "mxl",
+    "alphatab",
+    "alphatex",
+    "music-arrangement",
+    "music-notation",
+    "midi",
+    "llm",
+    "ai-agent",
+    "claude-code"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/starryark/piano-to-guitar.git"
+  },
+  "homepage": "https://github.com/starryark/piano-to-guitar#readme",
+  "bugs": {
+    "url": "https://github.com/starryark/piano-to-guitar/issues"
+  },
+  "author": "Yangyi Liu (https://github.com/starryark)",
   "scripts": {
-    "test": "node tools/lib/fretboard.test.mjs && node tools/lib/analysis.test.mjs && node tools/lib/piano-source.test.mjs && node tools/lib/ties.test.mjs && node tools/lib/foreground.test.mjs && node tools/lib/contract.test.mjs && node tools/lib/sidecar.test.mjs && node tools/lib/project-config.test.mjs && node tools/lib/pick-demand.test.mjs && node tools/lib/fingering.test.mjs && node tools/lib/style-profile.test.mjs && node tools/lib/idiom.test.mjs && node tools/lib/lead-motion.test.mjs && node tools/lib/sidecar-audit.test.mjs && node tools/lib/harmonic-color.test.mjs && node tools/lib/track-roles.test.mjs && node tools/lib/midi-export.test.mjs && node tools/lib/scenarios.test.mjs && node tools/scenario-harness.test.mjs && node tools/check.test.mjs && node tools/playability.test.mjs && node tools/regression-lock.test.mjs && node tools/scale.test.mjs && node tools/history.test.mjs && node --test tools/generation.test.mjs",
+    "test": "node tools/lib/fretboard.test.mjs && node tools/lib/analysis.test.mjs && node tools/lib/ensemble-sources.test.mjs && node tools/lib/piano-source.test.mjs && node tools/lib/ties.test.mjs && node tools/lib/foreground.test.mjs && node tools/lib/contract.test.mjs && node tools/lib/sidecar.test.mjs && node tools/lib/project-config.test.mjs && node tools/lib/pick-demand.test.mjs && node tools/lib/fingering.test.mjs && node tools/lib/style-profile.test.mjs && node tools/lib/idiom.test.mjs && node tools/lib/lead-motion.test.mjs && node tools/lib/sidecar-audit.test.mjs && node tools/lib/harmonic-color.test.mjs && node tools/lib/track-roles.test.mjs && node tools/lib/midi-export.test.mjs && node tools/lib/scenarios.test.mjs && node tools/scenario-harness.test.mjs && node tools/score-import.test.mjs && node tools/check.test.mjs && node tools/playability.test.mjs && node tools/regression-lock.test.mjs && node tools/scale.test.mjs && node tools/history.test.mjs && node --test tools/generation.test.mjs",
     "smoke": "node tools/smoke.mjs",
     "perf": "node tools/perf.mjs",
     "test:generation": "node --test tools/generation.test.mjs",

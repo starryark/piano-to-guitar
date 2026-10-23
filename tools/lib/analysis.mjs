@@ -46,6 +46,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { QUARTER_TICKS } from './score-utils.mjs';
 import { collectTieChains, buildTieAudit } from './ties.mjs';
+import { spanForBar, validateRoles, readRolesFile, rolesPathFor } from './source-roles.mjs';
 
 export { QUARTER_TICKS };
 
@@ -802,6 +803,12 @@ export async function loadPianoScore(file) {
 }
 
 const ARPEGGIO_BRUSH = new Set([3, 4]); // BrushType.ArpeggioUp / ArpeggioDown
+// PTG: foregroundEvidence note -> staff index. The digest contract carries
+// track + voice per gesture note, but voice indices are only unique per staff
+// in AlphaTex (both hands of a grand staff may use voice 0), and the source
+// profile must tell "two voices of one staff" from "two hands". A WeakMap keeps
+// that out of the serialized digest, so no digest byte changes.
+const GESTURE_NOTE_STAFF = new WeakMap();
 // alphaTab spells the enum `Ottavia` (sic) — Regular === 2, i.e. NO octave
 // transposition. Anything else is a real 8va/8vb/15ma sign. Comparing against
 // 0 or a truthiness test would flag every bar in the corpus.
@@ -809,8 +816,10 @@ const OTTAVA_REGULAR = 2;
 
 /** Read a single bar (across every track/staff/voice) into a raw record.
  *  `tieInfo` is the score-wide tie-chain index from collectTieChains —
- *  optional so unit tests can call readBar without it (raw fragment view). */
-function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
+ *  optional so unit tests can call readBar without it (raw fragment view).
+ *  `roles` is a validated source-roles object (tools/lib/source-roles.mjs) or
+ *  null; null reproduces the roles-free behaviour exactly. */
+function readBar(score, barIndex, state, preferFlat, tieInfo = null, roles = null) {
   const mb = score.masterBars[barIndex];
   const timeNum = mb.timeSignatureNumerator;
   const timeDen = mb.timeSignatureDenominator;
@@ -844,6 +853,9 @@ function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
 
   for (let t = 0; t < score.tracks.length; t++) {
     const track = score.tracks[t];
+    // PTG: a roles file may exclude a pitched track outright (sound effects,
+    // a click) — it is then invisible to every field below, like percussion.
+    if (roles && roles.excludeTracks.includes(t)) continue;
     for (const staff of track.staves) {
       // PTG: Percussion articulations expose a synthetic realValue (commonly
       // MIDI 0 / C-1). Treating that as pitched material makes a drum voice
@@ -938,10 +950,39 @@ function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
   };
   let trebleV = null;
   let bassV = null;
+  const byRegister = (vs) => [...vs].sort((a, b) => cmpTuple([-meanMidi(a), a], [-meanMidi(b), b]));
   if (presentVoices.length) {
-    const ranked = [...presentVoices].sort((a, b) => cmpTuple([-meanMidi(a), a], [-meanMidi(b), b]));
+    const ranked = byRegister(presentVoices);
     trebleV = ranked[0];
     bassV = ranked[ranked.length - 1];
+  }
+
+  // PTG: designated melody (source-roles.json). In a multi-instrument score
+  // the highest voice is often a piano figure or a pad, not the line a
+  // listener follows. A span names the track(s) that carry it; the melody is
+  // the highest voice OF THOSE TRACKS, and a span whose tracks are silent in
+  // this bar means the melody RESTS here — never "fall back to whatever is on
+  // top". Harmony ("accompaniment") then reads the other tracks, so the
+  // melody's sustained notes cannot widen the protected pcset (§A.2).
+  const span = roles ? spanForBar(roles, barIndex + 1) : null;
+  let melodySource = roles ? 'register' : undefined;
+  let harmonyVoices = voices;
+  if (span) {
+    const designated = presentVoices.filter((v) => span.tracks.includes(voiceMeta.get(v).track));
+    trebleV = designated.length ? byRegister(designated)[0] : null;
+    melodySource = designated.length ? 'designated' : 'designated-rest';
+    if (roles.harmony === 'accompaniment' && span.tracks.length) {
+      // voices[i] is the record of presentVoices[i] (its `voice` field is the
+      // staff-local index, so the global id comes from presentVoices).
+      const accIds = presentVoices.filter((v) => !span.tracks.includes(voiceMeta.get(v).track));
+      if (accIds.length) {
+        harmonyVoices = voices.filter((_, i) => accIds.includes(presentVoices[i]));
+        const ranked = byRegister(accIds);
+        bassV = ranked[ranked.length - 1];
+      } else {
+        melodySource = 'designated-solo'; // the line plays alone; harmony from it
+      }
+    }
   }
 
   // §2.2 (Improve_Plan): coalesce ties BEFORE interpreting attacks. A tie
@@ -1006,7 +1047,7 @@ function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
   // harmonic stratum. Tie-free sources take the else-branch unchanged.
   const halfA = []; // onset in [0, halfBeats)
   const halfB = []; // onset in [halfBeats, barBeats]
-  for (const v of voices) {
+  for (const v of harmonyVoices) { // PTG: === voices unless a roles file names the melody
     const chainMerged = new Map(); // tieChainId -> { midi, beats, onset }
     for (const n of v.notes) {
       allPcs.push(mod12(n.midi));
@@ -1108,7 +1149,7 @@ function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
       displacement = round4(onset - normalizedOnset);
       confidence = round4(Math.max(0, 1 - Math.abs(displacement)));
     }
-    const notes = group.map(({ n, track, voice }) => {
+    const notes = group.map(({ n, track, staff, voice }) => {
       const out = {
         midi: n.midi,
         name: n.name,
@@ -1116,6 +1157,7 @@ function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
         track,
         voice,
       };
+      GESTURE_NOTE_STAFF.set(out, staff); // PTG: for the profile, never serialized
       if (n.tieChainId) {
         out.tieChainId = n.tieChainId;
         out.fragments = n.notatedFragments;
@@ -1162,6 +1204,7 @@ function readBar(score, barIndex, state, preferFlat, tieInfo = null) {
       voices,
       melodyVoice: trebleV,
       bassVoice: bassV,
+      melodySource,
       melody: melody.map(slim),
       melodySkeleton: skeleton.map(slim),
       bass: bass.map(slim),
@@ -1190,6 +1233,8 @@ function finalizeBar(rec) {
     voices: rec.voices,
     melodyVoice: rec.melodyVoice,
     bassVoice: rec.bassVoice,
+    // PTG: present only when a roles file was applied (byte-identical otherwise).
+    ...(rec.melodySource !== undefined ? { melodySource: rec.melodySource } : {}),
     melody: rec.melody,
     melodySkeleton: rec.melodySkeleton,
     bass: rec.bass,
@@ -1351,13 +1396,22 @@ export function buildSourceProfile(score, barRecords, tieAudit) {
       const durations = notes.map((n) => n.duration).filter((d) => d > 0);
       if (durations.length >= 2
         && Math.max(...durations) >= 4 * Math.min(...durations)) mixedDurationGestures++;
+      // PTG: fragmentation = one performance scattered across the VOICES OF
+      // ONE STAFF (how Basic Pitch / MIDI import splits a part). Same-register
+      // co-attacks on different staves (a pianist's two hands) or different
+      // tracks (clarinet over piano, horn under guitar) are ordinary notation.
+      // Counting those made every clean ensemble score — and clean piano with
+      // overlapping hands — "noisy" (measured: a 9-part MuseScore export at
+      // 69% "fragmented", engraved solo-piano scores at 19-23%). Every noisy
+      // fixture and transcription in the repo still classifies noisy.
       let fragmented = false;
       for (let i = 0; i < notes.length; i++) {
         for (let j = i + 1; j < notes.length; j++) {
           const a = notes[i];
           const b = notes[j];
           if (Math.abs(a.midi - b.midi) <= FRAG_REGISTER_SEMITONES
-            && (a.track !== b.track || a.voice !== b.voice)) fragmented = true;
+            && a.track === b.track && a.voice !== b.voice
+            && GESTURE_NOTE_STAFF.get(a) === GESTURE_NOTE_STAFF.get(b)) fragmented = true;
         }
       }
       if (fragmented) fragmentedGestures++;
@@ -1404,6 +1458,11 @@ export function buildSourceProfile(score, barRecords, tieAudit) {
  */
 export function buildDigest(score, meta = {}) {
   const nBars = score.masterBars.length;
+  // PTG: meta.roles = a source-roles object (raw or validated); null/absent
+  // keeps every field byte-identical to the roles-free digest.
+  const roles = meta.roles
+    ? validateRoles(meta.roles, { trackCount: score.tracks.length, barCount: nBars })
+    : null;
 
   // Score-wide tie-chain index (Improve_Plan §2.2): built once, consumed by
   // every readBar (coalesced attacks) and by the digest-level tieAudit.
@@ -1411,8 +1470,13 @@ export function buildDigest(score, meta = {}) {
 
   // --- pass 1: duration-weighted pitch-class histogram, for key inference ----
   const weights = new Array(12).fill(0);
-  for (const track of score.tracks) {
+  for (const [t, track] of score.tracks.entries()) {
+    // PTG: a drum hit's realValue is its articulation id, not a pitch — a GM
+    // kit (kick 36, hi-hat 42) would vote C and F# into the key. Skip
+    // percussion and roles-excluded tracks, as readBar does.
+    if (track.isPercussion || (roles && roles.excludeTracks.includes(t))) continue;
     for (const staff of track.staves) {
+      if (staff.isPercussion) continue;
       for (const bar of staff.bars) {
         for (const voice of bar.voices) {
           for (const beat of voice.beats) {
@@ -1446,7 +1510,7 @@ export function buildDigest(score, meta = {}) {
   let hasPickup = false;
 
   for (let i = 0; i < nBars; i++) {
-    const { record, flatNotes } = readBar(score, i, state, preferFlat, tieInfo);
+    const { record, flatNotes } = readBar(score, i, state, preferFlat, tieInfo, roles);
     record.bar = i + 1;
     // Bar identity is POSITIONAL — detectSections/detectDuplicates index by
     // position, so any other numbering desynchronises every downstream range.
@@ -1532,8 +1596,24 @@ export function buildDigest(score, meta = {}) {
     // A tie chain in this bar crosses a gap of silence, changes pitch, or has
     // no reachable origin (§2.2). The evidence is in digest.tieAudit.anomalies.
     if (tieAnomalyBars.has(rec.bar)) flags.push('tieAnomaly');
+    // PTG: the designated melody track(s) are silent here — no melody to
+    // quote; plan the bar as recompose/free (or move the span).
+    if (rec.melodySource === 'designated-rest') flags.push('melodyRests');
     rec.flags = flags;
   }
+
+  const sourceRoles = roles ? {
+    file: meta.rolesFile ?? null,
+    status: roles.status,
+    harmony: roles.harmony,
+    excludeTracks: roles.excludeTracks,
+    melody: roles.melody.map((s) => ({
+      bars: s.bars,
+      tracks: s.tracks,
+      trackNames: s.tracks.map((t) => score.tracks[t]?.name ?? `Track ${t + 1}`),
+      ...(s.note ? { note: s.note } : {}),
+    })),
+  } : null;
 
   return {
     song: meta.song || score.title || meta.stem || '',
@@ -1565,11 +1645,15 @@ export function buildDigest(score, meta = {}) {
     harmonicLoop,
     tieAudit,
     sourceProfile: buildSourceProfile(score, barRecords, tieAudit),
+    ...(sourceRoles ? { sourceRoles } : {}),
   };
 }
 
-/** One call: path -> { digest, preferFlat, normalizer } (or throws). */
-export async function extractDigest(file) {
+/** One call: path -> { digest, preferFlat, normalizer } (or throws).
+ *  PTG: opts.rolesFile applies a source-roles.json (see source-roles.mjs);
+ *  CLIs resolve it with resolveRolesFile(). A bad roles file throws a
+ *  RolesError (exitCode 2) — it is never silently ignored. */
+export async function extractDigest(file, opts = {}) {
   const loaded = await loadPianoScore(file);
   if (!loaded.ok) {
     const err = new Error(`cannot parse ${file}`);
@@ -1577,6 +1661,7 @@ export async function extractDigest(file) {
     throw err;
   }
   const stem = path.basename(file).replace(/\.[^.]+$/, '');
+  const rolesFile = opts.rolesFile ?? null;
   const digest = buildDigest(loaded.score, {
     sourceFile: path.basename(file),
     stem,
@@ -1584,8 +1669,24 @@ export async function extractDigest(file) {
     // The NORMALIZED text is what actually parsed — the tie-intent audit must
     // compare like with like (the raw text's -1.N tokens never reach the model).
     sourceText: loaded.normalized,
+    roles: rolesFile ? readRolesFile(rolesFile) : null,
+    rolesFile: rolesFile ? path.basename(rolesFile) : null,
   });
-  return { digest, preferFlat: digest.keyFifths < 0, normalizer: loaded.normalizer };
+  return { digest, preferFlat: digest.keyFifths < 0, normalizer: loaded.normalizer, rolesFile };
+}
+
+/**
+ * PTG: which roles file a CLI should apply to `sourceFile`.
+ *   flag === false      -> none (--no-roles)
+ *   flag is a string    -> that file (--roles <file>); must exist
+ *   flag === undefined  -> <dir>/<stem>-roles.json if it exists (source.alphatab
+ *                          -> source-roles.json, written by score-import.mjs)
+ */
+export function resolveRolesFile(sourceFile, flag) {
+  if (flag === false) return null;
+  if (typeof flag === 'string') return path.resolve(flag);
+  const auto = rolesPathFor(sourceFile);
+  return fs.existsSync(auto) ? auto : null;
 }
 
 // --------------------------------------------------------------------------- //
@@ -1686,10 +1787,19 @@ export function renderMap(digest, preferFlat) {
   }
   const topVote = (m) => (m.size
     ? [...m.entries()].sort((a, b) => (b[1] - a[1]) || (a[0] - b[0]))[0][0] : '?');
-  lines.push(
-    `- Melody voice: **${topVote(melVotes)}**  |  Bass voice: **${topVote(bassVotes)}**  `
-    + '(chosen by sounding register, not voice/staff/track id)  |  '
-    + `Pickup bar: **${digest.pickup ? 'yes' : 'no'}**`);
+  const roles = digest.sourceRoles;
+  if (roles) {
+    // PTG: a roles file names the melody track per span (see Melody carriers).
+    lines.push(
+      `- Melody: **designated by \`${roles.file ?? 'source-roles'}\`** (status **${roles.status}**, `
+      + `harmony from **${roles.harmony}**)  |  Bass voice: **${topVote(bassVotes)}**  |  `
+      + `Pickup bar: **${digest.pickup ? 'yes' : 'no'}**`);
+  } else {
+    lines.push(
+      `- Melody voice: **${topVote(melVotes)}**  |  Bass voice: **${topVote(bassVotes)}**  `
+      + '(chosen by sounding register, not voice/staff/track id)  |  '
+      + `Pickup bar: **${digest.pickup ? 'yes' : 'no'}**`);
+  }
   lines.push(
     `- Range deficit: **${rd.belowLowCount}** note(s) below guitar low, `
     + `**${rd.aboveHighCount}** above guitar high`);
@@ -1734,6 +1844,24 @@ export function renderMap(digest, preferFlat) {
         + 'not perceptual truth — review the foreground evidence before drafting, and do not '
         + 'declare source-tied spans `free` just because the extractor disagrees.');
     }
+    lines.push('');
+  }
+
+  if (roles) {
+    lines.push('## Melody carriers (source-roles)');
+    lines.push('');
+    const proposal = roles.status === 'reviewed' ? ''
+      : ' — a PROPOSAL until a human auditions the named tracks at Gate A and marks it reviewed';
+    lines.push(`Status **${roles.status}**${proposal}. Bars outside every span use the `
+      + 'register heuristic (`reg:` in the bar table).');
+    lines.push('');
+    lines.push('| bars | melody track(s) | note |');
+    lines.push('|---|---|---|');
+    for (const s of roles.melody) {
+      lines.push(`| ${s.bars[0]}-${s.bars[1]} | ${s.tracks.map((t, i) => `${t} ${s.trackNames[i]}`).join(' + ') || '— rests —'} `
+        + `| ${s.note ?? ''} |`);
+    }
+    if (roles.excludeTracks.length) lines.push('', `Excluded from analysis: tracks ${roles.excludeTracks.join(', ')}.`);
     lines.push('');
   }
 
@@ -1785,7 +1913,8 @@ export function renderMap(digest, preferFlat) {
   lines.push('|---|---|---|---|---|---|---|');
   for (const b of digest.bars) {
     const chord = b.harmony ? b.harmony.symbol : '';
-    const contour = contourString(b.melodySkeleton);
+    const tag = melodyTag(b);
+    const contour = `${tag}${contourString(b.melodySkeleton)}`;
     const bassNames = [...new Set((b.bassFolded || []).map((n) => n.name))].join(' ');
     const flags = (b.flags || []).join(',');
     const tempo = b.tempoChanged ? `${b.tempo}*` : String(b.tempo);
@@ -1793,5 +1922,57 @@ export function renderMap(digest, preferFlat) {
       `| ${b.bar} | ${b.timeSig} | ${tempo} | ${chord} | ${contour} | ${bassNames} | ${flags} |`);
   }
   lines.push('');
+  lines.push(...renderLeadSheet(digest));
   return lines.join('\n');
+}
+
+/** PTG: `t0: ` / `reg: ` / `(rests) ` prefix for a bar whose melody a roles file governs. */
+function melodyTag(b) {
+  if (b.melodySource === undefined) return '';
+  if (b.melodySource === 'register') return 'reg: ';
+  if (b.melodySource === 'designated-rest') return '(rests) ';
+  const track = b.melodyVoice === null || b.melodyVoice === undefined ? '?' : Math.floor(b.melodyVoice / 100);
+  return b.melodySource === 'designated-solo' ? `t${track} solo: ` : `t${track}: `;
+}
+
+// Quarter-note beats -> AlphaTex duration token (dotted where exact).
+const DURATION_TOKENS = [
+  [4, '1'], [3, '2d'], [2, '2'], [1.5, '4d'], [1, '4'], [0.75, '8d'], [0.5, '8'],
+  [0.375, '16d'], [0.25, '16'], [0.125, '32'], [0.0625, '64'],
+];
+function durationToken(beats) {
+  const hit = DURATION_TOKENS.find(([b]) => Math.abs(b - beats) < 1e-3);
+  if (hit) return hit[1];
+  return `(${Math.round(beats * 1000) / 1000}b)`; // tuplet or tie-merged length, in beats
+}
+
+/**
+ * PTG: the lead sheet — every melody attack with its rhythm, plus the bar's
+ * chord (the gate's harmony, rooted on the true bass) and both half-bar
+ * chords. The bar table above carries only the skeleton contour; writing a
+ * tab needs the full line. Tokens read like AlphaTex (`Eb4.8 r.16 F4.4d`;
+ * `C4.(1.75b)` = a tuplet or tie-merged length in beats). A note sustained
+ * past the barline shows its full sounding length. Half-bar chords use the
+ * sustained-note stratum and can name an inversion or a passing sonority —
+ * read them as evidence next to the bar chord, not instead of it.
+ */
+function renderLeadSheet(digest) {
+  const out = ['## Lead sheet (melody with rhythm; bar chord and half-bar chords)', ''];
+  out.push('| bar | chord | half-bars | melody |');
+  out.push('|---|---|---|---|');
+  for (const b of digest.bars) {
+    const spans = (b.harmonySpans || []).map((h) => (h ? h.symbol : '–'));
+    const halves = spans.length === 2 && spans[0] === spans[1] ? spans[0] : spans.join(' · ');
+    const chords = `${b.harmony ? b.harmony.symbol : '–'} | ${halves || '–'}`;
+    const tokens = [];
+    let pos = 0;
+    for (const n of b.melody || []) {
+      if (n.onset > pos + 1e-3) tokens.push(`r.${durationToken(n.onset - pos)}`);
+      tokens.push(`${n.name}.${durationToken(n.beats)}`);
+      pos = Math.max(pos, n.onset + n.beats);
+    }
+    out.push(`| ${b.bar} | ${chords || '–'} | ${melodyTag(b)}${tokens.join(' ') || '—'} |`);
+  }
+  out.push('');
+  return out;
 }

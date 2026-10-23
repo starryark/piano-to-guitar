@@ -9,6 +9,12 @@ out/
 projects/*
 !projects/README.md
 
+# A score dropped at the repo root on its way into a project is the same kind of
+# input (score-import.mjs copies it to projects/<slug>/original.<ext>). Root only:
+# tools/fixtures/musicxml/ holds the synthetic, tracked fixtures.
+/*.mxl
+/*.musicxml
+
 # The corpus is READ-ONLY input (often copyrighted piano scores), not part of the
 # toolchain. Clone supplies their own; tests that read it simply skip if absent.
 CanonRock/

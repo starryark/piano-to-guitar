@@ -1,7 +1,95 @@
-# Piano-to-guitar
+# piano-to-guitar — turn piano sheet music or a MusicXML band score into a playable electric guitar tab
 
-Arrange a piano **AlphaTex** score into a **playable solo electric-guitar rock cover** in
-**AlphaTex** — built chunk by chunk, with a human judging every chunk.
+[![CI](https://github.com/starryark/piano-to-guitar/actions/workflows/ci.yml/badge.svg)](https://github.com/starryark/piano-to-guitar/actions/workflows/ci.yml)
+![Node 22 | 24](https://img.shields.io/badge/node-22%20%7C%2024-339933)
+![Input: MusicXML · AlphaTex](https://img.shields.io/badge/input-MusicXML%20%C2%B7%20AlphaTex-blue)
+![Output: guitar tab · MIDI](https://img.shields.io/badge/output-guitar%20tab%20%C2%B7%20MIDI-orange)
+
+**piano-to-guitar** arranges a **piano score or a full band score** — **MusicXML**
+(`.mxl`, `.musicxml`, `.xml` from MuseScore, Sibelius, Finale, Dorico…) or **AlphaTex** —
+into a **playable solo electric-guitar tab** written in AlphaTex (rendered by
+[alphaTab](https://alphatab.net), exportable to MIDI). It is a Node.js toolchain built for
+**AI coding agents** (Claude Code, Codex, Cursor or any LLM agent) working *with* a human
+guitarist: the tools find the melody and the chords, choose strings and frets, and
+machine-check every bar for playability and fidelity to the original **before** a human
+listens and approves it.
+
+If you are looking for a *piano to guitar tab converter*, a way to turn *sheet music into
+guitar tabs*, a *MusicXML to guitar tablature* tool, or an *AI that arranges a song for
+solo guitar* — this is that, done as an arranger would do it rather than as a
+note-for-note transcription.
+
+## What it does
+
+- **Imports MusicXML, verified.** One command converts `.mxl`/`.musicxml` with alphaTab's
+  own importer, rewrites transposing instruments (B♭ clarinet, F horn, guitar) to concert
+  pitch, repairs three silent conversion bugs, and proves the result note by note — it
+  writes nothing it cannot verify. ([`tools/score-import.mjs`](tools/score-import.mjs))
+- **Finds the melody in a band score.** Proposes which instrument carries the tune in each
+  section (clarinet verse, synth hook, guitar solo) from line statistics, for a human to
+  confirm. Solo piano needs no setup.
+- **Analyses the music.** Key, meter, tempo, sections, repeats, chords per half bar, range,
+  and a **lead sheet** (melody with rhythm + chords) in a readable bar map.
+- **Gates every bar.** Syntax and bar-fill, guitar **playability** (fret span, one note
+  per string, pick reachability, position jumps, ties), and **fidelity** (the melody's
+  skeleton and the chord roots, per section) — one command, one PASS/FAIL.
+- **Advises like a guitarist.** Phrase-level fingering suggestions, guitar-idiom density
+  by style (hard rock, metal, blues, jazz), pick-demand by tempo.
+- **Keeps every take.** A per-song version history with diff and restore; MIDI export for
+  an amp sim; an optional WAV render.
+- **Agent-ready.** [`AGENTS.md`](AGENTS.md) + [`docs/workflow.md`](docs/workflow.md) are a
+  vendor-neutral operating manual any coding agent can follow; [`llms.txt`](llms.txt)
+  indexes the repo for LLMs.
+
+## Quick start
+
+```
+npm ci                                                        # Node 22/24, one dependency (alphaTab)
+node tools/score-import.mjs song.mxl --project my-song        # MusicXML -> projects/my-song/source.alphatab
+node tools/piano-extract.mjs projects/my-song/source.alphatab --out projects/my-song   # digest + bar map + lead sheet
+# plan the arrangement (Gate A), write projects/my-song/cover.alphatab chunk by chunk, then:
+cd projects/my-song && node ../../tools/history.mjs check cover.alphatab --map sidecar.json --bars 1-8
+node ../../tools/export-midi.mjs cover.alphatab --out cover.mid  # hear it in a DAW / amp sim
+```
+
+Open any `.alphatab` file in VS Code with the alphaTab extension to see and play the tab.
+The full procedure is below ("Arranging a piece") and in [`docs/workflow.md`](docs/workflow.md).
+
+## FAQ
+
+### How do I convert piano sheet music to guitar tabs?
+Export the score as MusicXML from your notation program (MuseScore: *File → Export →
+MusicXML*), run `tools/score-import.mjs`, and follow the gated workflow: the toolchain
+reads the melody and harmony, an arranger (you, or an AI agent with you) writes the guitar
+part, and `check.mjs` refuses any bar that is unplayable or loses the tune.
+
+### Can it read a MusicXML (`.mxl`) file with many instruments, not just piano?
+Yes. Band scores are the main case it was built for: every part is imported at concert
+pitch, drums are kept for reference but never treated as notes, and `source-roles.json`
+names the instrument that carries the melody in each section so the analysis does not
+mistake a pad or a piano figure for the tune.
+
+### Can an AI / LLM agent arrange a song for guitar with this?
+Yes — that is the intended setup. An agent reads `AGENTS.md`, runs the tools, proposes an
+arrangement plan, writes the tab chunk by chunk, and may only show a chunk once the gate
+passes. A human approves the plan and auditions every chunk; a machine PASS is never
+treated as approval. An optional structured-generation path records model provenance
+([`docs/specs/generation.md`](docs/specs/generation.md)).
+
+### Is it a one-click automatic converter?
+No, deliberately. A literal piano-to-guitar transcription is unplayable or sounds like a
+piano on a fretboard. The tools do the mechanical work (import, analysis, fingering,
+checking); the musical decisions — key, texture, what to drop — are made at two human
+gates.
+
+### What does the output look like, and what guitar techniques does it use?
+A standard-tuned six-string tab in AlphaTex (also shown as standard notation), with
+let-ring, palm muting, vibrato, hammer-ons/pull-offs, slides, bends, double-stops and
+power chords where the arrangement calls for them. It exports to MIDI and renders to WAV.
+
+### Which formats and platforms are supported?
+Input: MusicXML (partwise, compressed or not) and AlphaTex. Output: AlphaTex, MIDI, WAV.
+Node.js 22 or 24 on Windows, macOS and Linux (CI runs all six combinations).
 
 ## The philosophy
 
@@ -25,7 +113,8 @@ See the [provenance ledger](docs/specs/provenance.md).
 AlphaTex directly — the same format the guitar tab is written in — so the whole
 source-format machinery of the predecessor project (a second parser, MusicXML converters,
 a Python runtime, a MuseScore normalizer) is gone. Node ESM plus `@coderline/alphatab`,
-nothing else. The vendored gate tools are a snapshot from `abc-to-guitar@ba7e29c` (not a
+nothing else. MusicXML scores come in through a single import step built on alphaTab's own
+MusicXML importer (`tools/score-import.mjs`) — not a second parser. The vendored gate tools are a snapshot from `abc-to-guitar@ba7e29c` (not a
 live dependency); local edits are marked `// PTG:`. See `AGENTS.md` → "Vendoring
 provenance" for detail.
 
@@ -68,8 +157,20 @@ adapter, records provenance with history, and still requires human audition and 
 runs its synthetic offline benchmark. The standard workflow below is unchanged.
 
 Each song lives in its own folder under `projects/<slug>/`, with standardized filenames so
-every command is identical across projects. Create `projects/<slug>/` and drop your piano
-AlphaTex export in as `source.alphatab`, then:
+every command is identical across projects.
+
+**Starting from MusicXML** (`.mxl`, `.musicxml`, `.xml` — a piano score or a whole band):
+```
+node tools/score-import.mjs path/to/song.mxl --project <slug>
+```
+That creates `projects/<slug>/source.alphatab` (every part at concert pitch), verifies the
+conversion note by note (it writes nothing if it cannot), and writes `import-report.md` plus
+a **proposed** `source-roles.json` — which track carries the melody in each section. On a
+band score, audition those tracks and confirm the roles before planning: the melody of a
+band score is rarely its highest voice.
+
+**Starting from AlphaTex**: create `projects/<slug>/` and drop your piano AlphaTex export in
+as `source.alphatab`. Either way, then:
 
 **Step 0 — Ingest.** Validate the source, extract the digest, audition the source.
 ```
@@ -77,7 +178,8 @@ node tools/piano-validate.mjs projects/<slug>/source.alphatab                   
 node tools/piano-extract.mjs  projects/<slug>/source.alphatab --out projects/<slug>   # writes source.json + source-map.md
 # Audition: open projects/<slug>/source.alphatab in VS Code (alphaTab extension) and play it
 ```
-Read `projects/<slug>/source-map.md` (the human-readable bar map), not the raw AlphaTex file,
+Read `projects/<slug>/source-map.md` (the human-readable bar map, ending in a lead sheet of
+the melody with its rhythm and chords), not the raw AlphaTex file,
 and establish the source's properties from it — key, meter changes, range, which voice
 carries the melody, repeats, encoding, and whether the declared `\ks` agrees with the
 sounding key. `AGENTS.md` has the checklist; `reference/piano-to-guitar-arranging.md` →

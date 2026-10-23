@@ -43,6 +43,27 @@ waiting at this gate.
 Approve to start drafting chunk 1 (bars <N>-<M>)?
 ```
 
+### Gate A — Source-tracks block (band scores: fill from import-report.md + source-roles.json)
+
+Present this with the arrangement plan whenever the source has more than one pitched
+part. The melody rows are the load-bearing ones: the gate grades `quote` spans against
+whatever `source-roles.json` names.
+
+```
+## Source tracks: <song>
+
+| Track | Part (role from import-report) | Becomes on guitar |
+|---|---|---|
+| <n> | <name> (<melodic line \| chords \| pad \| arpeggio/figure \| bass \| percussion>) | <lead line \| bass notes on downbeats \| fills in melody rests \| groove reference \| dropped — why> |
+
+| Source bars | Melody carrier (reviewed) | How it was confirmed |
+|---|---|---|
+| <a-b> | <track n name \| — rests — > | <auditioned solo; runner-up <track> rejected because …> |
+
+source-roles.json status: <reviewed>  ·  harmony from: <accompaniment \| all>
+Transposition check (import-report): <ok \| SUSPICIOUS — resolved how>
+```
+
 ### Gate A — Source-reliability block (fill from source-profile.mjs + foreground-map.md)
 
 Present this with the arrangement plan whenever the source is an automatic

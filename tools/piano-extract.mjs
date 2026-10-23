@@ -3,6 +3,7 @@
 //
 //   node tools/piano-extract.mjs <file.alphatab> [more.alphatab ...] [--out <dir>]
 //   node tools/piano-extract.mjs --manifest <source-set.json> --out <dir>
+//   [--roles <source-roles.json> | --no-roles]
 //
 // Writes analysis/<stem>.json (the DIGEST — the contract tools/compare.mjs
 // consumes) and analysis/<stem>-map.md (the human-readable bar map you read
@@ -17,6 +18,13 @@
 // digests recording file → digest → role/weight, so downstream cross-source
 // analysis (tools/foreground.mjs) knows what to agree or disagree about.
 // Disagreement between sources is DATA to surface, never resolved silently.
+//
+// SOURCE ROLES (PTG): a multi-instrument source names its melody track(s)
+// per bar span in <stem>-roles.json next to the source — source.alphatab ->
+// source-roles.json, proposed by tools/score-import.mjs and reviewed at Gate A
+// (schema: tools/lib/source-roles.mjs). It is applied AUTOMATICALLY when
+// present, and every run says so; --roles <file> picks another file,
+// --no-roles ignores it. A malformed roles file is exit 2, never skipped.
 //
 // Exit: 0 clean, 1 any failure, 2 usage.
 //
@@ -35,19 +43,20 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { extractDigest, renderMap } from './lib/analysis.mjs';
+import { extractDigest, renderMap, resolveRolesFile } from './lib/analysis.mjs';
 import { emit, emitErr } from './lib/emit.mjs';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(SCRIPT_DIR, '..');
 const ANALYSIS_DIR = path.join(PROJECT_ROOT, 'analysis');
 
-const USAGE = 'Usage: node tools/piano-extract.mjs <file.alphatab> [more...] [--out <dir>]\n'
+const USAGE = 'Usage: node tools/piano-extract.mjs <file.alphatab> [more...] [--out <dir>] [--roles <file> | --no-roles]\n'
   + '       node tools/piano-extract.mjs --manifest <source-set.json> --out <dir>';
 
 function parseArgs(args) {
   let outDir = ANALYSIS_DIR;
   let manifest = null;
+  let roles; // undefined = auto-discover <stem>-roles.json; false = none; string = file
   const files = [];
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -65,6 +74,15 @@ function parseArgs(args) {
         return null;
       }
       manifest = value;
+    } else if (arg === '--roles' || arg.startsWith('--roles=')) {
+      const value = arg === '--roles' ? (args[++i] ?? '') : arg.slice('--roles='.length);
+      if (!value) {
+        emitErr('!! --roles requires a file');
+        return null;
+      }
+      roles = value;
+    } else if (arg === '--no-roles') {
+      roles = false;
     } else if (arg.startsWith('--')) {
       // Never silently treat an unknown flag as an input path — that would
       // report "not found: --bogus" and hide the real mistake.
@@ -74,7 +92,7 @@ function parseArgs(args) {
       files.push(arg);
     }
   }
-  return { outDir, files, manifest };
+  return { outDir, files, manifest, roles };
 }
 
 /** Load + fail-closed-validate a source-set manifest. Returns normalized
@@ -144,9 +162,19 @@ for (const arg of parsed.files) {
   let digest;
   let preferFlat;
   let normalizer;
+  let rolesFile;
   try {
-    ({ digest, preferFlat, normalizer } = await extractDigest(file));
+    rolesFile = resolveRolesFile(file, parsed.roles);
+    if (rolesFile && !fs.existsSync(rolesFile)) {
+      emitErr(`!! roles file not found: ${rolesFile}`);
+      process.exit(2);
+    }
+    ({ digest, preferFlat, normalizer } = await extractDigest(file, { rolesFile }));
   } catch (e) {
+    if (Number.isInteger(e.exitCode)) { // a bad roles file: fail closed, as usage
+      emitErr(`!! ${e.message}`);
+      process.exit(e.exitCode);
+    }
     emitErr(`!! failed on ${file}: ${e.message}`);
     for (const d of (e.diagnostics || []).slice(0, 8)) {
       emitErr(`   ${d.severity} ${d.code ?? ''} line ${d.line ?? '?'}: ${d.message}`);
@@ -181,6 +209,19 @@ for (const arg of parsed.files) {
     `   key ${digest.key} (declared ${digest.keyDeclared}${digest.keyDisagrees ? ' — DISAGREES, not trusted' : ''})`
     + `  |  meter ${digest.meterInitial}  |  tempo ${digest.tempoInitial}`);
   emit(`   melodySkeleton: ${skel}/${total} bars   harmony.root: ${root}/${total} bars`);
+  if (digest.sourceRoles) {
+    const sr = digest.sourceRoles;
+    const rests = digest.bars.filter((b) => b.melodySource === 'designated-rest').length;
+    const reg = digest.bars.filter((b) => b.melodySource === 'register').length;
+    emit(`   melody roles: ${display(rolesFile)} (${sr.status}) — ${sr.melody.length} span(s), harmony from ${sr.harmony}`
+      + `${rests ? `, ${rests} bar(s) where the designated line rests` : ''}${reg ? `, ${reg} bar(s) by register` : ''}`);
+    if (sr.status !== 'reviewed') {
+      emit('   (roles are PROPOSED — confirm them at Gate A, set "status": "reviewed", re-run)');
+    }
+  } else if ((digest.partCount ?? 1) - (digest.sourceProfile?.excludedTracks?.length ?? 0) > 1) {
+    emit(`   melody: highest sounding voice (${parsed.roles === false ? '--no-roles' : 'no roles file'}) — on a multi-instrument source, `
+      + 'name the melody track(s) in source-roles.json (tools/score-import.mjs proposes one)');
+  }
   if (normalizer && normalizer.available) {
     emit(`   source normalizer: applied — ${normalizer.rewrites} rewrite(s), `
       + `${normalizer.skipped} skipped  |  encoding ${normalizer.encoding}`);

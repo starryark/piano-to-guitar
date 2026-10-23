@@ -5,8 +5,9 @@ file first.** It orients you; the step-by-step gated procedure lives in **`docs/
 and its copy-paste presentation templates in **`docs/gate-templates.md`**. Read those before
 you touch a tab.
 
-You are a **guitarist-arranger**, not a transcriber. This project turns a piano **AlphaTex**
-source into a **playable solo electric-guitar rock cover** also written in **AlphaTex**,
+You are a **guitarist-arranger**, not a transcriber. This project turns a piano score or a
+multi-instrument band score — **MusicXML** (imported by `tools/score-import.mjs`) or
+**AlphaTex** — into a **playable solo electric-guitar rock cover** written in **AlphaTex**,
 built **chunk by chunk under human supervision**. The job is **recomposition with a
 protected skeleton**: quoted spans protect melody, recomposed spans protect root motion,
 and additions are first-class and named at the gate. A fidelity gate enforces exactly
@@ -34,9 +35,18 @@ an A/B, open its `.alphatab` in VS Code (alphaTab extension) and play it.
 
 Environment: Windows, PowerShell + Bash both available. Node ESM (`"type":"module"`).
 **One runtime (Node) and one dependency (`@coderline/alphatab`).** No Python, no second
-parser, no source-format conversion layer — they were deleted on purpose when this project
-forked (see "Vendoring provenance" below). The source format is AlphaTex throughout;
-source input in any other format is rejected at every source-tool boundary.
+parser — they were deleted on purpose when this project forked (see "Vendoring
+provenance" below). The source format is AlphaTex throughout; source input in any other
+format is rejected at every source-tool boundary.
+
+**MusicXML enters through one door, before Step 0.** Scores usually arrive as MusicXML
+(`.mxl` / `.musicxml` / `.xml`) — sometimes solo piano, often a whole band. Run
+`node tools/score-import.mjs <file> --project <slug>`: it converts with **alphaTab's own**
+MusicXML importer and AlphaTex exporter (still one parser), repairs three silent
+conversion hazards, **proves** the result (note-count audit + attack-by-attack round
+trip — it writes nothing if either fails), writes every part at **concert pitch**, and
+proposes `source-roles.json` — which track carries the melody in each section. Every tool
+after it still reads only `projects/<slug>/source.alphatab`.
 
 **Optional structured generation:** `tools/llm-arrange.mjs` records a versioned
 prompt and model provenance, accepts typed guitar Arrangement IR, compiles it to
@@ -123,12 +133,17 @@ and by smoke check #2 (the bound asserted at the tool level).
 
 ## The workflow (one heartbeat: `check.mjs`)
 
-1. **Step 0 — Ingest** a `projects/<slug>/source.alphatab`: `piano-validate.mjs` →
-   `piano-extract.mjs` → `source-profile.mjs` → audition the source (open its `.alphatab`
-   in VS Code, alphaTab extension). Read the generated `projects/<slug>/source-map.md`,
-   never the raw AlphaTex. Establish the source's properties (below) before planning
-   anything. **If the profile says noisy transcription**: run `foreground.mjs`, review
-   the ambiguous bars, and lock a `melody-contract.json` before drafting.
+1. **Step 0 — Ingest** a `projects/<slug>/source.alphatab` (from MusicXML:
+   `score-import.mjs` writes it, plus `import-report.md` and a proposed
+   `source-roles.json`): `piano-validate.mjs` → `piano-extract.mjs` (applies
+   `source-roles.json` automatically) → `source-profile.mjs` → audition the source (open
+   its `.alphatab` in VS Code, alphaTab extension; solo each proposed melody track). Read
+   the generated `projects/<slug>/source-map.md` — its **Lead sheet** section has the full
+   melody rhythm and chords — never the raw AlphaTex. Establish the source's properties
+   (below) before planning anything. **If the profile says noisy transcription**: run
+   `foreground.mjs`, review the ambiguous bars, and lock a `melody-contract.json` before
+   drafting. **If it is a band score**: confirm or correct the melody carriers in
+   `source-roles.json` at Gate A, mark it `"reviewed"`, and re-extract.
 2. **Gate A — Plan** the arrangement — register, gain, key/transpose, **target tempo,
    groove, and form** — and get the human's sign-off. Tempo, groove and form are Gate A
    *decisions* (proposed, then locked on approval), not inheritances from the source.
@@ -161,6 +176,8 @@ default worth assuming; a wrong answer here silently mis-shapes everything downs
 | Tempo changes | per-bar `tempoChanged`. A mid-song `\tempo` needs approval at Gate A. **Never trust the first `\tempo` directive** — corpus files declare a second `\tempo` that silently overwrites the first (e.g. `\tempo 100` then `\tempo 25`; 25 is what plays) |
 | Pitch range vs the guitar's, and what falls outside | `pitchRange`, `guitarRange`, `rangeDeficit` (**note counts** above/below the window, not semitones) |
 | Which voice is the melody | `melodyVoice` / `bassVoice` per bar — derived from sounding register. **Piano voice indices are staff-global** (staff 0 uses voices 0–3, staff 1 uses voices 4–7 in `canon-in-d-hard`); never key logic off a voice or staff index, use sounding register. If melody/bass looks wrong, stop: everything downstream is graded against it |
+| **Band score? Which track carries the melody, section by section?** | `import-report.md` (tracks table: register, `mono`, `step`, role) and the proposed `source-roles.json`. In a multi-instrument score the highest voice is usually a pad or a piano figure, not the tune — the map's bar table prefixes each contour with its source (`t0:` designated track, `reg:` register heuristic, `(rests)`). Audition the named tracks solo; correct the spans; mark `"reviewed"` |
+| Transposing instruments | none survive import: `score-import.mjs` rewrites B♭ clarinet, F horn, octave-transposing guitar parts to **concert pitch** before alphaTab parses them (see "Non-obvious facts"). Its transposition check must read `ok` |
 | Pickup bar? | `pickup`. Bar ids are positional; `sourceBarNumber` is the score's own numbering |
 | Repeated material | `duplicateRanges[]` — arrange once, then *vary* the return |
 | Sections | `sections[]` |
@@ -181,8 +198,9 @@ below for detail.
 
 | Tool | Command | Exit contract |
 |---|---|---|
+| **score-import** | `node tools/score-import.mjs <score.mxl\|.musicxml\|.xml> --project <slug> [--tracks 0,2,7] [--title "Name"] [--force] [--json]` (or `--out <dir>`) | **The MusicXML door** (PTG-native; library `tools/lib/score-import.mjs`). alphaTab imports, three hazards are repaired (transposed parts → concert pitch so ties link; `<forward>` gap placeholders → real rests; a score-defined drum kit → GM), a per-part `<note>` **count** audit against the XML and an attack-by-attack **round trip** of the exported AlphaTex must both pass. Writes `source.alphatab`, `source-roles.json` (PROPOSED melody carrier per section, from line statistics — never names; multi-part scores only, since a solo piano's tune is its top voice), `import-report.md`/`.json` (tracks table, roles evidence, transposition check, repairs), `original.<ext>`, and an empty `sidecar.json` if absent. Refuses to overwrite `source.alphatab`/`source-roles.json` without `--force`. `0` imported and verified, `1` verification failed (nothing written), `2` usage/IO. |
 | **piano-validate** | `node tools/piano-validate.mjs <source.alphatab>` | Source-side validator. Normalizes in memory, parses, reports rewrites/skips, flags a `\ks` that disagrees with the sounding key. `0` clean, `1` any error (incl. "still fails after normalization"), `2` usage. **The AT218 check (§A.1):** exit `0` with `rewrites: N` means the normalizer handled the `-1.<str>.<dur>` tokens. |
-| **piano-extract** | `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug>` | Writes `projects/<slug>/source.json` (the **digest** — the contract `compare` consumes) + `projects/<slug>/source-map.md` (human-readable bar map). The `--out <dir>` flag targets the project folder; because the source stem is `source`, the outputs land as `source.json` / `source-map.md` automatically. **Multi-source ingest:** `--manifest <source-set.json>` extracts several independent transcriptions of the same piece (`{ sources: [{file, role, weight}] }`) and writes a `source-set.report.json` alongside the digests. |
+| **piano-extract** | `node tools/piano-extract.mjs projects/<slug>/source.alphatab --out projects/<slug> [--roles <file> \| --no-roles]` | Writes `projects/<slug>/source.json` (the **digest** — the contract `compare` consumes) + `projects/<slug>/source-map.md` (human-readable bar map, ending in a **Lead sheet**: every melody attack with its rhythm, the bar chord and both half-bar chords). **Source roles:** a `source-roles.json` next to the source is applied automatically and every run says so — the melody comes from the designated track(s), harmony from the other tracks; a malformed roles file is exit 2. The `--out <dir>` flag targets the project folder; because the source stem is `source`, the outputs land as `source.json` / `source-map.md` automatically. **Multi-source ingest:** `--manifest <source-set.json>` extracts several independent transcriptions of the same piece (`{ sources: [{file, role, weight}] }`) and writes a `source-set.report.json` alongside the digests. |
 | **source-profile** | `node tools/source-profile.mjs <source.alphatab> [--json]` | **Gate A source-reliability report** (PTG-native). Classifies the source as clean notation vs noisy automatic transcription from STRUCTURE (voice fragmentation, isolated octave artifacts, tied microfragments, off-grid onsets), groups tracks/voices that are fragments of ONE performance, and excludes percussion on structural evidence (unpitched staff / channel 10 / articulation map) — never the track name. Exit `0` when parsed, `1` parse fail, `2` usage. A report, not a gate. |
 | **foreground** | `node tools/foreground.mjs <digest.json> [more-digests…] [--out <dir>] [--bars N-M]` | **Perceptual-foreground candidates** (PTG-native). Scores candidate melody lines per bar from the digest's attack graph — continuity, recurrence across returning bars, cross-source agreement, rhythm, contour — and writes `foreground.json` + `foreground-map.md` with ALTERNATIVES and confidence, never a silent decision. Extra digests = independent transcriptions of the same piece; agreement raises confidence, disagreement stays visible. Ambiguous bars are listed for Gate A. Exit `0` ok, `1` unusable digest, `2` usage. |
 | **contract-validate** | `node tools/contract-validate.mjs <melody-contract.json> [--digest <source.json>] [--json]` | **Melody-contract validator** (PTG-native; schema in `tools/lib/contract.mjs`). Fails closed on contradictions, nonexistent bars, impossible relocated pitches, invalid duration policies, relocation groups cutting a phrase without justification, required events whose only evidence is a tied continuation, and vacuous contracts. `0` valid, `1` invalid, `2` usage/IO. |
@@ -332,6 +350,47 @@ transposes.** If you propose a transposition, argue it from the fretboard, not f
   (validated by `contract-validate.mjs`), and gate those spans with sidecar mode
   `contract`. `free` means added material, never "the extractor disagrees." The
   doctrine list lives in `docs/workflow.md` → "Doctrine for noisy transcriptions".
+- **MusicXML import hazards — three, all silent, all repaired and pinned by
+  `tools/score-import.test.mjs` in both halves** (the raw alphaTab path reproduces each
+  defect; if a raw-path test ever fails, alphaTab fixed it upstream — re-evaluate the
+  repair, do not just delete the test):
+  1. *Ties on transposing parts.* alphaTab resolves `<tied>` **before** applying
+     `<transpose>`, so a tie-stop's written pitch is matched against tie-starts already
+     stored at sounding pitch: the tie links to a stale start or to none, and
+     `Note.finish()` copies the wrong origin's pitch onto the note. Measured on the first
+     real band score: 66 of 469 ties wrong (wrong pitch, lost tie, or both). Guitar parts
+     (`<octave-change>-1`) are transposing parts too. The importer rewrites those parts
+     to concert pitch in the XML text and drops `<transpose>` — the source shows every
+     part at concert pitch, which is what an arranger wants anyway.
+  2. *Forward-gap placeholders.* A voice entering mid-bar (`<backup>`/`<forward>`) gets one
+     empty placeholder beat; the AlphaTex exporter writes it as `r.256`, so the re-parsed
+     voice starts 15 ticks into the bar instead of on beat 3. The older song-named
+     `.alphatab` files in this repo were converted without the repair — grep for `r.256`.
+  3. *Score-defined drum kits* export as "Snare (hit)" on every hit; the importer maps
+     each instrument to alphaTab's GM articulation with the same output note.
+- **Melody designation (`source-roles.json`, schema in `tools/lib/source-roles.mjs`).**
+  On a band score, `foreground.mjs` cannot settle the melody either (103 of 106 bars
+  "ambiguous" on the first real one — every instrument is a plausible line), so a
+  reviewed roles file is the authority: per source-bar span, which track(s) carry the
+  tune. Where they are silent the melody **rests** (`melodyRests` flag) — the digest never
+  falls back to whatever is on top. Bars no span covers keep the register heuristic
+  (`reg:` in the map): the import leaves a section uncovered when no track reads as a
+  melodic line (a chordal intro), and writes **no roles file at all** for a one-part
+  score (solo piano), whose top voice is its tune. `harmony: "accompaniment"` (default) reads chord,
+  root and bass from the other tracks, so the tune's long notes cannot widen the pcset
+  (§A.2). The digest records `sourceRoles` and a per-bar `melodySource` **only** when a
+  roles file is applied — every roles-free digest is byte-identical to before.
+- **Source-profile fragmentation is a same-STAFF phenomenon.** Basic Pitch scatters one
+  performance across the voices of one staff; a pianist's two hands, or a clarinet over
+  a piano, attacking in one register is ordinary notation. Counting cross-staff and
+  cross-track co-attacks made every clean ensemble score, and engraved solo piano with
+  overlapping hands, read "noisy" (a 9-part MuseScore export at 69% "fragmented"). Every
+  noisy fixture and transcription in the repo still classifies noisy. **Residual risk:**
+  close divisi written as two voices of one staff (horns 1+2) still counts — the first
+  real band score sits at 9.4%, just under the 10% "medium" line. If an import reads
+  noisy on fragmentation alone, read `noiseSignals` before accepting the verdict.
+- **Key inference ignores percussion.** A drum hit's `realValue` is its articulation id
+  (kick 36, hi-hat 42), which used to vote C and F♯ into the key histogram.
 
 ---
 
@@ -425,7 +484,10 @@ pulled **deliberately**, never auto-synced. Every vendored file carries the head
 so a future reader can see at a glance what diverges from upstream. The source-format
 machinery of the predecessor (a second parser, MusicXML converters, a Python runtime, a
 MuseScore normalizer) was **deleted, not ported** — a piano score lives natively in
-AlphaTex here, so none of it was needed.
+AlphaTex here, so none of it was needed. MusicXML input came back later as a single
+import step built on **alphaTab's own** MusicXML importer (`tools/score-import.mjs`), not
+as a second parser: the only XML the toolchain reads itself is a per-part note *count*
+for the audit and the `<pitch>`/`<transpose>` rewrite of the concert-pitch normalizer.
 
 ---
 
@@ -435,7 +497,9 @@ AlphaTex here, so none of it was needed.
 Piano-to-guitar/
 ├─ AGENTS.md        this file — the canonical, vendor-neutral orientation (read first)
 ├─ CLAUDE.md        thin pointer → AGENTS.md (Claude Code auto-loads it)
-├─ README.md        human quickstart
+├─ README.md        human quickstart (summary, quick start, FAQ)
+├─ llms.txt         LLM-facing index of the repo (llmstxt.org format)
+├─ CITATION.cff     citation metadata ("Cite this repository")
 ├─ package.json     deps: @coderline/alphatab ONLY
 ├─ docs/            the vendor-neutral instruction set (any CLI reads these)
 │   ├─ workflow.md          the gated procedure (Step 0 / Gate A / Gate B / Final)
@@ -477,9 +541,12 @@ Piano-to-guitar/
 │   │               harmonic-color.mjs (colour preservation),
 │   │               sidecar-audit.mjs (C10 map metrics),
 │   │               track-roles.mjs (A5 lead/rhythm views),
-│   │               midi-export.mjs + audio-render.mjs (the audition path)
+│   │               midi-export.mjs + audio-render.mjs (the audition path),
+│   │               score-import.mjs (the MusicXML door), source-roles.mjs (roles schema)
+│   ├─ score-import.mjs  MusicXML -> verified source.alphatab + proposed source-roles.json
 │   ├─ history.mjs  the per-project tab version store (PTG-native; wraps check.mjs)
 │   ├─ fixtures/    song-neutral regression corpus (see tools/smoke.mjs)
+│   │   ├─ musicxml/ensemble.musicxml  trips every import hazard (its header says how)
 │   │   ├─ scenarios/manifest.json   the paired calibration corpus
 │   │   └─ scale/generate.mjs        the 200-bar fixture's derivation — edit THIS,
 │   │                                never the .alphatab it writes
@@ -491,6 +558,9 @@ Piano-to-guitar/
 │   │               LOCAL: everything under a <slug>/ is gitignored; only this README ships.
 │   ├─ README.md               how a project folder is laid out (the only tracked file here)
 │   └─ <slug>/                 one project folder per song (local; never committed)
+│       ├─ original.mxl           the MusicXML as received (score-import copies it here)
+│       ├─ import-report.md       tracks table, proposed melody carriers, repairs, audits
+│       ├─ source-roles.json      melody carrier per span — PROPOSED by import, reviewed at Gate A
 │       ├─ source.alphatab        the piano source being arranged (often copyrighted; yours)
 │       ├─ source.json            generated digest
 │       ├─ source-map.md          generated bar map
